@@ -25,8 +25,7 @@ mvn install
 
 #### 使用说明
 1. 简单小示例
-
-代码如下：
+- 代码如下：
 ```java
 public class XpdfTest {
     public static void main(String[] args) throws IOException {
@@ -72,20 +71,20 @@ public class XpdfTest {
     }
 }
 ```
-效果如下：
+
+- 效果如下：
 ![avatar][pdf]
 
 2. 使用说明（三步走）
-
-一、 构建组件（以文本为例）
+- 一、 构建组件（以文本为例）
 ```java
 XpdfText xpdfText = PdfUtil.Text.build("字体路径", "文本内容");
 ```
-二、 构建页面
+- 二、 构建页面
 ```java
 XpdfPage xpdfPage = PdfUtil.Page.build(xpdfText);
 ```
-三、 构建文档
+- 三、 构建文档
 ```java
 // 创建
 PdfUtil.create("文档输出路径", xpdfPage);
