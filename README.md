@@ -4,6 +4,7 @@
 一个基于pdfbox构建的工具包，极大降低使用门槛，以组件化的形式进行构建，简单、易用，一个简单示例即可掌握使用方法，人人都是pdf的构建高手
 
 #### 软件架构
+
 ![avatar][architecture]
 
 ##### 组件化的形式组成：
@@ -25,7 +26,7 @@ mvn install
 
 #### 使用说明
 1. 简单小示例
-- 代码如下：
+> 代码如下：
 ```java
 public class XpdfTest {
     public static void main(String[] args) throws IOException {
@@ -72,19 +73,20 @@ public class XpdfTest {
 }
 ```
 
-- 效果如下：
+> 效果如下：
+
 ![avatar][pdf]
 
 2. 使用说明（三步走）
-- 一、 构建组件（以文本为例）
+> 一、 构建组件（以文本为例）
 ```java
 XpdfText xpdfText = PdfUtil.Text.build("字体路径", "文本内容");
 ```
-- 二、 构建页面
+> 二、 构建页面
 ```java
 XpdfPage xpdfPage = PdfUtil.Page.build(xpdfText);
 ```
-- 三、 构建文档
+> 三、 构建文档
 ```java
 // 创建
 PdfUtil.create("文档输出路径", xpdfPage);
