@@ -31,7 +31,7 @@ mvn install
 public class XpdfTest {
     public static void main(String[] args) throws IOException {
         final String fontPath = "C:\\Windows\\Fonts\\STSONG.TTF";
-        final String textPath1 = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
+        final String outputPath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
         // 创建pdf
         PdfUtil.create(
                 outputPath
