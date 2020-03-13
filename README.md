@@ -31,7 +31,7 @@
 
 #### 安装教程
 ```cmd
-mvn install
+mvn clean install
 ```
 
 #### 使用说明
