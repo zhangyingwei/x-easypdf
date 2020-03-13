@@ -10,6 +10,9 @@ import wiki.xsx.core.pdf.doc.XpdfDocument;
 import wiki.xsx.core.pdf.doc.XpdfPage;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * pdf工具类
@@ -26,7 +29,17 @@ public class PdfUtil {
      * @throws IOException IO异常
      */
     public static void create(String outputPath, XpdfPage...pages) throws IOException {
-        new XpdfDocument().addPage(pages).save(outputPath);
+        new XpdfDocument().addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 创建pdf
+     * @param outputStream 文件输出流
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void create(OutputStream outputStream, XpdfPage...pages) throws IOException {
+        new XpdfDocument().addPage(pages).save(outputStream);
     }
 
     /**
@@ -37,7 +50,18 @@ public class PdfUtil {
      * @throws IOException IO异常
      */
     public static void append(String sourcePath, String outputPath, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).addPage(pages).save(outputPath);
+        new XpdfDocument(sourcePath).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 追加pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void append(String sourcePath, OutputStream outputStream, XpdfPage...pages) throws IOException {
+        new XpdfDocument(sourcePath).addPage(pages).save(outputStream);
     }
 
     /**

@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,10 +72,10 @@ public class XpdfDocument {
 
     /**
      * 保存（页面构建）
-     * @param path 保存路径
+     * @param outputStream 文件输出流
      * @throws IOException IO异常
      */
-    public void save(String path) throws IOException {
+    public void save(OutputStream outputStream) throws IOException {
         // 定义pdfBox页面列表
         List<PDPage> pageList;
         // 遍历pdf页面列表
@@ -93,7 +94,7 @@ public class XpdfDocument {
             }
         }
         // 保存文档
-        this.document.save(new File(path));
+        this.document.save(outputStream);
         // 关闭文档
         this.document.close();
     }
