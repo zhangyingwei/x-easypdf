@@ -248,45 +248,65 @@ public class XpdfText implements XpdfComponent {
         PDPageContentStream stream = null;
         // 居左样式
         if (this.param.getStyle()==null||this.param.getStyle()== XpdfTextStyle.LEFT) {
-            // 循环文本输入
+            // 遍历文本输入
             for (String text : list) {
+                // 分页检查，并居左写入文本
                 stream = this.writeTextWithLeft(document, page, this.checkPage(page, stream), text);
+                // 当前文本行索引自增
                 lineIndex++;
+                // 当前页面文本最后一行索引自增
                 this.lastLineIndex++;
             }
+            //如果内容流不为空，则结束文本写入，并重置Y轴起始坐标
             if (stream!=null) {
+                // 结束文本写入
                 stream.endText();
+                // 如果文本列表大于0，则重置Y轴起始坐标
                 if (list.size()>0) {
+                    // 重置Y轴起始坐标
                     this.param.setBeginY(
+                            // Y轴起始坐标 = Y轴起始坐标 - (当前页面文本最后一行索引 - 1) * (字体大小 + 行间距) - 行间距
                             this.param.getBeginY() - (this.lastLineIndex - 1)  * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()
                     );
                 }
             }
             // 居中样式
         }else if (this.param.getStyle()== XpdfTextStyle.CENTER) {
-            // 循环文本输入
+            // 遍历文本输入
             for (String text : list) {
+                // 分页检查
                 stream = this.checkPage(page, stream);
+                // 判断是否为最后一行
                 if (lineIndex==totalLineIndex) {
+                    // 居中写入文本
                     stream = this.writeTextWithCenter(document, page, stream, text, true);
                 }else {
+                    // 居中写入文本
                     stream = this.writeTextWithCenter(document, page, stream, text, false);
+                    // 当前文本行索引自增
                     lineIndex++;
+                    // 当前页面文本最后一行索引自增
                     this.lastLineIndex++;
                 }
             }
         // 居右样式
         }else {
-            // 循环文本输入
+            // 遍历文本输入
             for (String text : list) {
+                // 分页检查，并居右写入文本
                 stream = this.writeTextWithRight(document, page, this.checkPage(page, stream), text);
+                // 当前文本行索引自增
                 lineIndex++;
+                // 当前页面文本最后一行索引自增
                 this.lastLineIndex++;
             }
+            // 如果文本列表大于0，则重置Y轴起始坐标
             if (list.size()>0) {
+                // Y轴起始坐标 = Y轴起始坐标 + 字体大小 + 行间距，由于之前多减一行，所以现在加回来
                 this.param.setBeginY(this.param.getBeginY() + this.param.getFontSize() + this.param.getLeading());
             }
         }
+        // 如果内容流不为空，则关闭内容流，并重置文档页面Y轴坐标
         if (stream!=null) {
             // 关闭内容流
             stream.close();
@@ -305,20 +325,28 @@ public class XpdfText implements XpdfComponent {
     private PDPageContentStream checkPage(XpdfPage page, PDPageContentStream stream) throws IOException {
         // 分页检查
         if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()) <= this.param.getMarginBottom()) {
+            // 如果内容流不为空，则关闭并设置为空
             if (stream!=null) {
+                // 如果文本样式为居右样式，则结束文本写入
                 if (this.param.getStyle()!=XpdfTextStyle.RIGHT) {
+                    // 结束文本写入
                     stream.endText();
                 }
+                // 关闭内容流
                 stream.close();
+                // 设置内容流为空
                 stream = null;
             }
-            // 开启新页
+            // 添加新页面
             page.getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
             // 重置页面X轴Y轴起始坐标
-            this.param.setBeginX(this.param.getMarginLeft())
-                    .setBeginY(
-                            this.param.getMaxHeight() - this.param.getMarginTop() -  this.param.getFontSize() - this.param.getLeading()
-                    );
+            this.param.setBeginX(
+                    // X轴起始坐标 = 左边距
+                    this.param.getMarginLeft()
+            ).setBeginY(
+                    // Y轴起始坐标 = 页面高度 - 上边距 - 字体大小 - 行间距
+                    this.param.getMaxHeight() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading()
+            );
         }
         return stream;
     }
@@ -338,8 +366,11 @@ public class XpdfText implements XpdfComponent {
             PDPageContentStream stream,
             String text
     ) throws IOException {
+        // 如果内容流为空，则初始化内容流
         if (stream==null) {
+            // 重置当前页面文本最后一行索引为0
             this.lastLineIndex = 0;
+            // 初始化内容流
             stream = this.initPageContentStream(document, page);
             // 开启文本输入
             stream.beginText();
@@ -370,25 +401,34 @@ public class XpdfText implements XpdfComponent {
             String text,
             boolean isLastLine
     ) throws IOException {
+        // 如果内容流为空，则初始化内容流
         if (stream==null) {
+            // 重置当前页面文本最后一行索引为0
             this.lastLineIndex = 0;
+            // 初始化内容流
             stream = this.initPageContentStream(document, page);
             // 开启文本输入
             stream.beginText();
             // 设置文本定位
             stream.newLineAtOffset(this.param.getBeginX(), this.param.getBeginY());
         }
+        // 如果是最后一行，则重置文本定位
         if (isLastLine) {
             // 设置文本定位
             stream.newLineAtOffset(
+                    // X轴坐标 = (页面宽度 - 左边距 - 右边距 - 文本真实宽度) /2
                     (this.param.getMaxWidth()  - this.param.getMarginLeft() - this.param.getMarginRight() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000)) / 2,
+                    // Y轴坐标 = 0
                     0
             );
             // 文本输入
             stream.showText(text);
+            // 结束文本写入
             stream.endText();
+            // 重置Y轴起始坐标
             this.param.setBeginY(
-                    this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading())
+                    // Y轴起始坐标 = Y轴起始坐标 - 当前页面文本最后一行索引 * (字体大小 + 行间距) - 行间距
+                    this.param.getBeginY() - this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()
             );
         }else {
             // 文本输入
@@ -414,21 +454,27 @@ public class XpdfText implements XpdfComponent {
             PDPageContentStream stream,
             String text
     ) throws IOException {
+        // 如果内容流为空，则初始化内容流
         if (stream==null) {
+            // 重置当前页面文本最后一行索引为0
             this.lastLineIndex = 0;
+            // 初始化内容流
             stream = this.initPageContentStream(document, page);
         }
         // 开启文本输入
         stream.beginText();
         // 设置文本定位
         stream.newLineAtOffset(
+                // X轴坐标 = 页面宽度 - 文本真实宽度 - 右边距
                 (this.param.getMaxWidth() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000) - this.param.getMarginRight()),
+                // Y轴坐标 = Y轴起始坐标
                 this.param.getBeginY()
         );
         // 文本输入
         stream.showText(text);
+        // 结束文本写入
         stream.endText();
-        // 重置Y轴坐标
+        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体大小 - 行间距
         this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
         return stream;
     }
@@ -447,7 +493,7 @@ public class XpdfText implements XpdfComponent {
         List<String> lineList = new ArrayList<>(200);
         // 定义临时文本
         String tempText;
-        // 计算每个字的真实宽度
+        // 计算文本真实宽度
         float realWidth = fontSize * font.getStringWidth(text) / 1000;
         // 计算总行数（估计）
         int count = (int) (lineWidth / realWidth);
