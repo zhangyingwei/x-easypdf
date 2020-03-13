@@ -1,7 +1,19 @@
 # xpdf
 
+<p align="center">
+    <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
+    <img src="https://img.shields.io/badge/Current%20Version-v1.0.0-brightgreen" />
+    <img src="https://img.shields.io/:License-apache-yellowgreen.svg" />
+    <a href='https://gitee.com/xsxgit/xpdf/stargazers'>
+        <img src='https://gitee.com/xsxgit/xpdf/badge/star.svg?theme=dark' alt='star' />
+    </a>
+</p>
+
 #### 介绍
 由于itext是商业收费的，所以xpdf诞生了。xpdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单、易用，3分钟即可上手，人人都是pdf的构建高手
+
+#### API文档
+https://apidoc.gitee.com/xsxgit/xpdf
 
 #### 特性
 1. 简单易用
