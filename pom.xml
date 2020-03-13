@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wiki.xsx</groupId>
     <artifactId>xpdf</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>xpdf</name>
     <url>http://www.xsx.wiki</url>
