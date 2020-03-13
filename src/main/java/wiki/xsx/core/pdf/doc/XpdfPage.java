@@ -31,16 +31,32 @@ public class XpdfPage {
      * pdfBox最新页面当前Y轴坐标
      */
     private Float pageY;
-
+    /**
+     * pdfBox页面尺寸
+     */
+    private PDRectangle pageSize = PDRectangle.A4;
     /**
      * 包含的pdfBox页面列表
      */
     private List<PDPage> pageList = new ArrayList<>(10);
-
     /**
      * pdf组件列表
      */
     private List<XpdfComponent> componentList = new ArrayList<>(10);
+
+    /**
+     * 无参构造
+     */
+    public XpdfPage() {
+    }
+
+    /**
+     * 有参构造
+     * @param pageSize pdfBox页面尺寸
+     */
+    public XpdfPage(PDRectangle pageSize) {
+        this.pageSize = pageSize;
+    }
 
     /**
      * 添加pdf组件
@@ -73,7 +89,7 @@ public class XpdfPage {
      */
     public XpdfPage build(XpdfDocument document, PDRectangle pageSize) throws IOException {
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
-        this.pageList.add(pageSize==null?new PDPage(PDRectangle.A4):new PDPage(pageSize));
+        this.pageList.add(pageSize==null?new PDPage(this.pageSize):new PDPage(pageSize));
         // 遍历组件列表
         for (XpdfComponent component : componentList) {
             // 组件绘制

@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.util;
 
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XpdfComponent;
 import wiki.xsx.core.pdf.component.line.XpdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XpdfLine;
@@ -50,6 +51,16 @@ public class PdfUtil {
          */
         public static XpdfPage build(XpdfComponent...components) {
             return new XpdfPage().addComponent(components);
+        }
+
+        /**
+         * 创建页面
+         * @param pageSize pdfBox页面尺寸
+         * @param components 组件
+         * @return 返回pdf页面组件
+         */
+        public static XpdfPage build(PDRectangle pageSize, XpdfComponent...components) {
+            return new XpdfPage(pageSize).addComponent(components);
         }
     }
 
