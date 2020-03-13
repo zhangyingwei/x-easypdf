@@ -3,7 +3,7 @@
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
     <img src="https://img.shields.io/badge/Current%20Version-v1.0.0-brightgreen" />
-    <img src="https://img.shields.io/:License-apache-yellowgreen.svg" />
+    <img src="https://img.shields.io/:License-MulanPSL-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/xpdf/stargazers'>
         <img src='https://gitee.com/xsxgit/xpdf/badge/star.svg?theme=dark' alt='star' />
     </a>
