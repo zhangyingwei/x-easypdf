@@ -2,12 +2,15 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v1.0.0-brightgreen" />
+    <img src="https://img.shields.io/badge/Current%20Version-v1.0.1-brightgreen" />
     <img src="https://img.shields.io/:License-MulanPSL-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/xpdf/stargazers'>
         <img src='https://gitee.com/xsxgit/xpdf/badge/star.svg?theme=dark' alt='star' />
     </a>
 </p>
+
+#### 更新说明
+第一个版本已基本完善，后面将会以版本进行迭代更新，master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本1.0.1
 
 #### 介绍
 由于itext是商业收费的，所以xpdf诞生了。xpdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单、易用，3分钟即可上手，人人都是pdf的构建高手
