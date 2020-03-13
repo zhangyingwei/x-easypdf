@@ -2,9 +2,7 @@ package wiki.xsx.core.pdf.doc;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XpdfComponent;
 
@@ -48,6 +46,14 @@ public class XpdfPage {
      * 无参构造
      */
     public XpdfPage() {
+    }
+
+    /**
+     * 有参构造
+     * @param page pdfBox页面
+     */
+    public XpdfPage(PDPage page) {
+        this.pageList.add(page);
     }
 
     /**
@@ -104,21 +110,5 @@ public class XpdfPage {
      */
     public PDPage getLastPage() {
         return this.pageList.isEmpty()?null:this.pageList.get(this.pageList.size()-1);
-    }
-
-    /**
-     * 根据pdfBox文档初始化
-     * @param document pdfBox文档
-     * @return 返回pdf页面
-     */
-    protected XpdfPage initWithDocument(PDDocument document) {
-        // 获取pdfBox页面树
-        PDPageTree pages = document.getPages();
-        // 遍历pdfBox页面树
-        for (PDPage page : pages) {
-            // 添加pdfBox页面
-            this.pageList.add(page);
-        }
-        return this;
     }
 }

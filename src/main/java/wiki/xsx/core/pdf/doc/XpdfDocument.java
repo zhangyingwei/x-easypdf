@@ -2,12 +2,13 @@ package wiki.xsx.core.pdf.doc;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageTree;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +40,15 @@ public class XpdfDocument {
      * @throws IOException IO异常
      */
     public XpdfDocument(String filePath) throws IOException {
+        // 读取pdfBox文档
         this.document = PDDocument.load(new File(filePath));
+        // 获取pdfBox页面树
+        PDPageTree pages = this.document.getPages();
+        // 遍历pdfBox页面树
+        for (PDPage page : pages) {
+            // 添加pdfBox页面
+            this.pageList.add(new XpdfPage(page));
+        }
     }
 
     /**
@@ -48,24 +57,28 @@ public class XpdfDocument {
      * @return 返回pdf文档
      */
     public XpdfDocument addPage(XpdfPage ...pages) {
-        this.pageList.addAll(Arrays.asList(pages));
+        // 添加页面
+        Collections.addAll(this.pageList, pages);
         return this;
     }
 
     /**
      * 插入pdf页面
      * @param index 页面索引
-     * @param page pdf页面
+     * @param pages pdf页面
      * @return 返回pdf文档
      */
-    public XpdfDocument insertPage(int index, XpdfPage page) {
+    public XpdfDocument insertPage(int index, XpdfPage ...pages) {
         // 如果pdf页面列表数量大于索引，则插入页面，否则添加页面
-        if (this.pageList.size()>index) {
-            // 插入页面
-            this.pageList.add(index, page);
+        if (this.pageList.size()>=index) {
+            // 遍历pdf页面
+            for (XpdfPage page : pages) {
+                // 插入页面
+                this.pageList.add(Math.max(index, 0), page);
+            }
         }else {
             // 添加页面
-            this.pageList.add(page);
+            this.addPage(pages);
         }
         return this;
     }
@@ -76,6 +89,8 @@ public class XpdfDocument {
      * @throws IOException IO异常
      */
     public void save(OutputStream outputStream) throws IOException {
+        // 定义任务文档
+        PDDocument target = new PDDocument();
         // 定义pdfBox页面列表
         List<PDPage> pageList;
         // 遍历pdf页面列表
@@ -89,13 +104,15 @@ public class XpdfDocument {
             pageList = xpdfPage.getPageList();
             // 遍历pdfBox页面列表
             for (PDPage page : pageList) {
-                // pdfBox文档添加页面
-                this.document.addPage(page);
+                // 任务文档添加页面
+                target.addPage(page);
             }
         }
-        // 保存文档
-        this.document.save(outputStream);
-        // 关闭文档
+        // 保存任务文档
+        target.save(outputStream);
+        // 关闭任务文档
+        target.close();
+        // 关闭pdfBox文档
         this.document.close();
     }
 

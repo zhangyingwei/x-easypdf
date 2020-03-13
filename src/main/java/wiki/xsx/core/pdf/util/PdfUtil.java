@@ -65,6 +65,30 @@ public class PdfUtil {
     }
 
     /**
+     * 插入pdf页面
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param index pdf页面索引
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void insert(String sourcePath, String outputPath, int index, XpdfPage...pages) throws IOException {
+        new XpdfDocument(sourcePath).insertPage(index, pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 插入pdf页面
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param index pdf页面索引
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void insert(String sourcePath, OutputStream outputStream, int index, XpdfPage...pages) throws IOException {
+        new XpdfDocument(sourcePath).insertPage(index, pages).save(outputStream);
+    }
+
+    /**
      * 页面组件
      */
     public static class Page {
