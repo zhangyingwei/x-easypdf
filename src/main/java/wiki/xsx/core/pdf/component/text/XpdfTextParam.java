@@ -7,10 +7,12 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XpdfDocument;
 import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.util.TextUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * pdf文本参数
@@ -66,6 +68,10 @@ public class XpdfTextParam {
      */
     private String text;
     /**
+     * 拆分后的待添加文本列表
+     */
+    private List<String> splitTextList;
+    /**
      * 文本样式（居左、居中、居右）
      */
     private XpdfTextStyle style;
@@ -118,6 +124,20 @@ public class XpdfTextParam {
                     this.maxHeight - this.marginTop - this.fontSize - this.leading :
                     // 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
                     page.getPageY() - this.marginTop - this.fontSize - this.leading;
+        }
+        // 如果拆分后的待添加文本列表未初始化，则进行初始化
+        if (this.splitTextList==null) {
+            // 初始化待添加文本列表
+            this.splitTextList =  TextUtil.splitLines(
+                    // 待输入文本
+                    this.text,
+                    // 行宽度 = 页面宽度 - 左边距 - 右边距
+                    this.maxWidth - this.marginLeft - this.marginRight,
+                    // 字体
+                    this.font,
+                    // 字体大小
+                    this.fontSize
+            );
         }
     }
 }

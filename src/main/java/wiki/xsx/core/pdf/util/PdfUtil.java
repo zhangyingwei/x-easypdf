@@ -5,6 +5,7 @@ import wiki.xsx.core.pdf.component.XpdfComponent;
 import wiki.xsx.core.pdf.component.line.XpdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XpdfLine;
 import wiki.xsx.core.pdf.component.line.XpdfSolidSplitLine;
+import wiki.xsx.core.pdf.component.mark.XpdfWatermark;
 import wiki.xsx.core.pdf.component.text.XpdfText;
 import wiki.xsx.core.pdf.doc.XpdfDocument;
 import wiki.xsx.core.pdf.doc.XpdfPage;
@@ -34,12 +35,34 @@ public class PdfUtil {
 
     /**
      * 创建pdf
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void create(String outputPath, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
+        new XpdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 创建pdf
      * @param outputStream 文件输出流
      * @param pages pdf页面
      * @throws IOException IO异常
      */
     public static void create(OutputStream outputStream, XpdfPage...pages) throws IOException {
         new XpdfDocument().addPage(pages).save(outputStream);
+    }
+
+    /**
+     * 创建pdf
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void create(OutputStream outputStream, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
+        new XpdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
     }
 
     /**
@@ -56,12 +79,36 @@ public class PdfUtil {
     /**
      * 追加pdf
      * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void append(String sourcePath, String outputPath, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
+        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 追加pdf
+     * @param sourcePath 源文件路径
      * @param outputStream 文件输出流
      * @param pages pdf页面
      * @throws IOException IO异常
      */
     public static void append(String sourcePath, OutputStream outputStream, XpdfPage...pages) throws IOException {
         new XpdfDocument(sourcePath).addPage(pages).save(outputStream);
+    }
+
+    /**
+     * 追加pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void append(String sourcePath, OutputStream outputStream, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
+        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
     }
 
     /**
@@ -79,6 +126,19 @@ public class PdfUtil {
     /**
      * 插入pdf页面
      * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param index pdf页面索引
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void insert(String sourcePath, String outputPath, XpdfWatermark globalWatermark, int index, XpdfPage...pages) throws IOException {
+        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 插入pdf页面
+     * @param sourcePath 源文件路径
      * @param outputStream 文件输出流
      * @param index pdf页面索引
      * @param pages pdf页面
@@ -86,6 +146,19 @@ public class PdfUtil {
      */
     public static void insert(String sourcePath, OutputStream outputStream, int index, XpdfPage...pages) throws IOException {
         new XpdfDocument(sourcePath).insertPage(index, pages).save(outputStream);
+    }
+
+    /**
+     * 插入pdf页面
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param index pdf页面索引
+     * @param pages pdf页面
+     * @throws IOException IO异常
+     */
+    public static void insert(String sourcePath, OutputStream outputStream, XpdfWatermark globalWatermark, int index, XpdfPage...pages) throws IOException {
+        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(outputStream);
     }
 
     /**
@@ -103,12 +176,59 @@ public class PdfUtil {
 
         /**
          * 创建页面
+         * @param components 组件
+         * @param watermark 页面水印组件
+         * @return 返回pdf页面组件
+         */
+        public static XpdfPage build(XpdfWatermark watermark, XpdfComponent...components) {
+            return new XpdfPage().setWatermark(watermark).addComponent(components);
+        }
+
+        /**
+         * 创建页面
          * @param pageSize pdfBox页面尺寸
          * @param components 组件
          * @return 返回pdf页面组件
          */
         public static XpdfPage build(PDRectangle pageSize, XpdfComponent...components) {
             return new XpdfPage(pageSize).addComponent(components);
+        }
+
+        /**
+         * 创建页面
+         * @param pageSize pdfBox页面尺寸
+         * @param watermark 页面水印组件
+         * @param components 组件
+         * @return 返回pdf页面组件
+         */
+        public static XpdfPage build(PDRectangle pageSize, XpdfWatermark watermark, XpdfComponent...components) {
+            return new XpdfPage(pageSize).setWatermark(watermark).addComponent(components);
+        }
+    }
+
+    /**
+     * 页面水印组件
+     */
+    public static class Watermark {
+        /**
+         * 创建页面水印
+         * @param fontPath 字体路径
+         * @param text 水印文本
+         * @return 返回pdf页面水印组件
+         */
+        public static XpdfWatermark build(String fontPath, String text) {
+            return new XpdfWatermark(fontPath, text);
+        }
+
+        /**
+         * 创建页面水印
+         * @param fontPath 字体路径
+         * @param fontSize 字体大小
+         * @param text 水印文本
+         * @return 返回pdf页面水印组件
+         */
+        public static XpdfWatermark build(String fontPath, float fontSize, String text) {
+            return new XpdfWatermark(fontPath, fontSize, text);
         }
     }
 

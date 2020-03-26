@@ -2,13 +2,11 @@ package wiki.xsx.core.pdf.component.text;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XpdfComponent;
 import wiki.xsx.core.pdf.doc.XpdfDocument;
 import wiki.xsx.core.pdf.doc.XpdfPage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -229,19 +227,10 @@ public class XpdfText implements XpdfComponent {
     private void doDraw(XpdfDocument document, XpdfPage page) throws IOException {
         // 参数初始化
         this.param.init(document, page);
-        // 拆分文本行
-        List<String> list = this.splitLines(
-                // 待输入文本
-                this.param.getText(),
-                // 行宽度 = 页面宽度 - 左边距 - 右边距
-                this.param.getMaxWidth() - this.param.getMarginLeft() - this.param.getMarginRight(),
-                // 字体
-                this.param.getFont(),
-                // 字体大小
-                this.param.getFontSize()
-        );
+        // 拆分后的待添加文本列表
+        List<String> splitTextList = this.param.getSplitTextList();
         // 文本总行数索引
-        int totalLineIndex = list.size() - 1;
+        int totalLineIndex = splitTextList.size() - 1;
         // 当前文本行索引
         int lineIndex = 0;
         // 定义内容流
@@ -249,20 +238,24 @@ public class XpdfText implements XpdfComponent {
         // 居左样式
         if (this.param.getStyle()==null||this.param.getStyle()== XpdfTextStyle.LEFT) {
             // 遍历文本输入
-            for (String text : list) {
+            for (String text : splitTextList) {
                 // 分页检查，并居左写入文本
                 stream = this.writeTextWithLeft(document, page, this.checkPage(page, stream), text);
                 // 当前文本行索引自增
                 lineIndex++;
                 // 当前页面文本最后一行索引自增
                 this.lastLineIndex++;
+                if (lineIndex>=totalLineIndex) {
+                    float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000;
+                    page.setPageX(page.getPageX()==null?textWidth:textWidth+page.getPageX());
+                }
             }
             //如果内容流不为空，则结束文本写入，并重置Y轴起始坐标
             if (stream!=null) {
                 // 结束文本写入
                 stream.endText();
-                // 如果文本列表大于0，则重置Y轴起始坐标
-                if (list.size()>0) {
+                // 如果文本总行数索引大于-1，则重置Y轴起始坐标
+                if (totalLineIndex>-1) {
                     // 重置Y轴起始坐标
                     this.param.setBeginY(
                             // Y轴起始坐标 = Y轴起始坐标 - (当前页面文本最后一行索引 - 1) * (字体大小 + 行间距) - 行间距
@@ -273,13 +266,15 @@ public class XpdfText implements XpdfComponent {
             // 居中样式
         }else if (this.param.getStyle()== XpdfTextStyle.CENTER) {
             // 遍历文本输入
-            for (String text : list) {
+            for (String text : splitTextList) {
                 // 分页检查
                 stream = this.checkPage(page, stream);
                 // 判断是否为最后一行
-                if (lineIndex==totalLineIndex) {
+                if (lineIndex>=totalLineIndex) {
                     // 居中写入文本
                     stream = this.writeTextWithCenter(document, page, stream, text, true);
+                    float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000;
+                    page.setPageX(page.getPageX()==null?textWidth:textWidth+page.getPageX());
                 }else {
                     // 居中写入文本
                     stream = this.writeTextWithCenter(document, page, stream, text, false);
@@ -292,16 +287,20 @@ public class XpdfText implements XpdfComponent {
         // 居右样式
         }else {
             // 遍历文本输入
-            for (String text : list) {
+            for (String text : splitTextList) {
                 // 分页检查，并居右写入文本
                 stream = this.writeTextWithRight(document, page, this.checkPage(page, stream), text);
                 // 当前文本行索引自增
                 lineIndex++;
                 // 当前页面文本最后一行索引自增
                 this.lastLineIndex++;
+                if (lineIndex>=totalLineIndex) {
+                    float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000;
+                    page.setPageX(page.getPageX()==null?textWidth:textWidth+page.getPageX());
+                }
             }
-            // 如果文本列表大于0，则重置Y轴起始坐标
-            if (list.size()>0) {
+            // 如果文本总行数索引大于-1，则重置Y轴起始坐标
+            if (totalLineIndex>-1) {
                 // Y轴起始坐标 = Y轴起始坐标 + 字体大小 + 行间距，由于之前多减一行，所以现在加回来
                 this.param.setBeginY(this.param.getBeginY() + this.param.getFontSize() + this.param.getLeading());
             }
@@ -479,47 +478,5 @@ public class XpdfText implements XpdfComponent {
         return stream;
     }
 
-    /**
-     * 拆分文本段落（换行）
-     * @param text 待输入文本
-     * @param lineWidth 行宽度
-     * @param font 字体
-     * @param fontSize 字体大小
-     * @return 返回文本列表
-     * @throws IOException IO异常
-     */
-    private List<String> splitLines(String text, float lineWidth, PDFont font, float fontSize) throws IOException {
-        // 定义文本列表
-        List<String> lineList = new ArrayList<>(200);
-        // 定义临时文本
-        String tempText;
-        // 计算文本真实宽度
-        float realWidth = fontSize * font.getStringWidth(text) / 1000;
-        // 计算总行数（估计）
-        int count = (int) (lineWidth / realWidth);
-        // 计算的总行数与文本长度取最小值
-        count = Math.min(count, text.length());
-        // 定义开始索引
-        int beginIndex = 0;
-        // 循环文本
-        for (int i = count, len = text.length(); i <= len; i++) {
-            // 截取临时文本
-            tempText = text.substring(beginIndex, i);
-            // 计算当前文本真实宽度
-            realWidth = fontSize * font.getStringWidth(tempText) / 1000;
-            // 如果真实宽度大于行宽度，则减少一个字符
-            if (realWidth>lineWidth) {
-                // 加入文本列表
-                lineList.add(text.substring(beginIndex, i - 1));
-                // 重置开始索引
-                beginIndex = i - 1;
-            }
-            // 如果当前索引等于文本长度，则直接加入文本列表
-            if (i==len) {
-                // 加入文本列表
-                lineList.add(text.substring(beginIndex, i));
-            }
-        }
-        return lineList;
-    }
+
 }

@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XpdfComponent;
+import wiki.xsx.core.pdf.component.mark.XpdfWatermark;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +42,14 @@ public class XpdfPage {
      * pdf组件列表
      */
     private List<XpdfComponent> componentList = new ArrayList<>(10);
+    /**
+     * 页面水印
+     */
+    private XpdfWatermark watermark;
+    /**
+     * 是否允许添加水印
+     */
+    private boolean allowWatermark = true;
 
     /**
      * 无参构造
@@ -65,9 +74,19 @@ public class XpdfPage {
     }
 
     /**
+     * 设置是否允许添加水印
+     * @param allowWatermark 是否允许添加水印
+     * @return 返回pdf页面
+     */
+    public XpdfPage setAllowWatermark(boolean allowWatermark) {
+        this.allowWatermark = allowWatermark;
+        return this;
+    }
+
+    /**
      * 添加pdf组件
      * @param components pdf组件
-     * @return 返回pdf文档
+     * @return 返回pdf页面
      */
     public XpdfPage addComponent(XpdfComponent...components) {
         // 如果组件不为空，则添加组件
@@ -79,8 +98,8 @@ public class XpdfPage {
     }
 
     /**
-     * 构建pdf文档
-     * @return 返回pdf文档
+     * 构建pdf页面
+     * @return 返回pdf页面
      * @throws IOException IO异常
      */
     public XpdfPage build(XpdfDocument document) throws IOException {
@@ -88,9 +107,9 @@ public class XpdfPage {
     }
 
     /**
-     * 构建pdf文档
+     * 构建pdf页面
      * @param pageSize 页面尺寸
-     * @return 返回pdf文档
+     * @return 返回pdf页面
      * @throws IOException IO异常
      */
     public XpdfPage build(XpdfDocument document, PDRectangle pageSize) throws IOException {

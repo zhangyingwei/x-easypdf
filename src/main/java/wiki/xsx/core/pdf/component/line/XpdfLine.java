@@ -1,11 +1,15 @@
 package wiki.xsx.core.pdf.component.line;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.component.XpdfComponent;
 import wiki.xsx.core.pdf.doc.XpdfDocument;
 import wiki.xsx.core.pdf.doc.XpdfPage;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * 线条组件
@@ -38,6 +42,18 @@ public class XpdfLine implements XpdfComponent {
      */
     public XpdfLine(String fontPath, float beginX, float beginY, float endX, float endY) {
         this.param.setFontPath(fontPath).setBeginX(beginX).setBeginY(beginY).setEndX(endX).setEndY(endY);
+    }
+
+    /**
+     * 有参构造
+     * @param font 字体
+     * @param beginX 页面X轴起始坐标
+     * @param beginY 页面Y轴起始坐标
+     * @param endX 页面X轴结束坐标
+     * @param endY 页面Y轴结束坐标
+     */
+    public XpdfLine(PDFont font, float beginX, float beginY, float endX, float endY) {
+        this.param.setFont(font).setBeginX(beginX).setBeginY(beginY).setEndX(endX).setEndY(endY);
     }
 
     /**
@@ -93,7 +109,16 @@ public class XpdfLine implements XpdfComponent {
         }
         // 字体判断
         if (this.param.getFont()==null) {
-            throw new RuntimeException("font can not null");
+            if (this.param.getFontPath()==null) {
+                throw new RuntimeException("font can not null");
+            }
+            // 设置字体
+            this.param.setFont(
+                    PDType0Font.load(
+                            document.getDocument(),
+                            Files.newInputStream(Paths.get(this.param.getFontPath()))
+                    )
+            );
         }
         // 初始化内容流
         PDPageContentStream contentStream = this.initStream(document, page);

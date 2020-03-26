@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.doc;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
+import wiki.xsx.core.pdf.component.mark.XpdfWatermark;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,10 @@ public class XpdfDocument {
      * pdf页面列表
      */
     private List<XpdfPage> pageList = new ArrayList<>(10);
+    /**
+     * 全局页面水印
+     */
+    private XpdfWatermark globalWatermark;
 
     /**
      * 无参构造方法
@@ -84,6 +89,16 @@ public class XpdfDocument {
     }
 
     /**
+     * 设置文档水印（每个页面都将添加水印）
+     * @param globalWatermark 页面水印
+     * @return 返回pdf文档
+     */
+    public XpdfDocument setGlobalWatermark(XpdfWatermark globalWatermark) {
+        this.globalWatermark = globalWatermark;
+        return this;
+    }
+
+    /**
      * 保存（页面构建）
      * @param outputStream 文件输出流
      * @throws IOException IO异常
@@ -106,6 +121,15 @@ public class XpdfDocument {
             for (PDPage page : pageList) {
                 // 任务文档添加页面
                 target.addPage(page);
+            }
+            // 如果页面水印不为空，则进行页面水印绘制
+            if (xpdfPage.getWatermark()!=null) {
+                // 绘制页面水印
+                xpdfPage.getWatermark().draw(this, xpdfPage);
+            // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
+            }else if (this.globalWatermark !=null&&xpdfPage.isAllowWatermark()) {
+                // 绘制页面水印
+                this.globalWatermark.draw(this, xpdfPage);
             }
         }
         // 保存任务文档
