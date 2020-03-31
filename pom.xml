@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>wiki.xsx</groupId>
-    <artifactId>xpdf</artifactId>
+    <artifactId>x-easypdf</artifactId>
     <version>1.1.0</version>
     <packaging>jar</packaging>
-    <name>xpdf</name>
+    <name>x-easypdf</name>
     <url>http://www.xsx.wiki</url>
     <description>a util for pdf</description>
 
@@ -26,9 +26,9 @@
         </license>
     </licenses>
     <scm>
-        <url>https://gitee.com/xsxgit/xpdf</url>
-        <connection>git@gitee.com:xsxgit/xpdf.git</connection>
-        <developerConnection>https://gitee.com/xsxgit/xpdf.git</developerConnection>
+        <url>https://gitee.com/xsxgit/x-easypdf</url>
+        <connection>git@gitee.com:xsxgit/x-easypdf.git</connection>
+        <developerConnection>https://gitee.com/xsxgit/x-easypdf.git</developerConnection>
     </scm>
     <developers>
         <developer>
