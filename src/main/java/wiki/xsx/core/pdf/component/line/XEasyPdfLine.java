@@ -1,30 +1,45 @@
 package wiki.xsx.core.pdf.component.line;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import wiki.xsx.core.pdf.component.XpdfComponent;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * 线条组件
  * @author xsx
  * @date 2020/3/4
  * @since 1.8
+ * <p>
+ * Copyright (c) 2020 xsx All Rights Reserved.
+ * x-easypdf is licensed under the Mulan PSL v1.
+ * You can use this software according to the terms and conditions of the Mulan PSL v1.
+ * You may obtain a copy of Mulan PSL v1 at:
+ * http://license.coscl.org.cn/MulanPSL
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v1 for more details.
+ * </p>
  */
-public class XpdfLine implements XpdfComponent {
+public class XEasyPdfLine implements XEasyPdfComponent {
 
     /**
      * 线条参数
      */
-    private XpdfLineParam param = new XpdfLineParam();
+    private XEasyPdfLineParam param = new XEasyPdfLineParam();
 
     /**
      * 有参构造
      * @param param 线条参数
      */
-    public XpdfLine(XpdfLineParam param) {
+    public XEasyPdfLine(XEasyPdfLineParam param) {
         this.param = param;
     }
 
@@ -36,8 +51,20 @@ public class XpdfLine implements XpdfComponent {
      * @param endX 页面X轴结束坐标
      * @param endY 页面Y轴结束坐标
      */
-    public XpdfLine(String fontPath, float beginX, float beginY, float endX, float endY) {
+    public XEasyPdfLine(String fontPath, float beginX, float beginY, float endX, float endY) {
         this.param.setFontPath(fontPath).setBeginX(beginX).setBeginY(beginY).setEndX(endX).setEndY(endY);
+    }
+
+    /**
+     * 有参构造
+     * @param font 字体
+     * @param beginX 页面X轴起始坐标
+     * @param beginY 页面Y轴起始坐标
+     * @param endX 页面X轴结束坐标
+     * @param endY 页面Y轴结束坐标
+     */
+    public XEasyPdfLine(PDFont font, float beginX, float beginY, float endX, float endY) {
+        this.param.setFont(font).setBeginX(beginX).setBeginY(beginY).setEndX(endX).setEndY(endY);
     }
 
     /**
@@ -48,7 +75,7 @@ public class XpdfLine implements XpdfComponent {
      * @param endY 页面Y轴结束坐标
      * @return 返回线条组件
      */
-    public XpdfLine setPosition(float beginX, float beginY, float endX, float endY) {
+    public XEasyPdfLine setPosition(float beginX, float beginY, float endX, float endY) {
         this.param.setBeginX(beginX).setBeginY(beginY).setEndX(endX).setEndY(endY);
         return this;
     }
@@ -58,18 +85,18 @@ public class XpdfLine implements XpdfComponent {
      * @param lineWidth 线条宽度
      * @return 返回线条组件
      */
-    public XpdfLine setLineWidth(float lineWidth) {
+    public XEasyPdfLine setLineWidth(float lineWidth) {
         this.param.setLineWidth(lineWidth);
         return this;
     }
 
     /**
      * 设置线条线型
-     * @param lineCapStyle 线条线型
+     * @param XEasyPdfLineCapStyle 线条线型
      * @return 返回线条组件
      */
-    public XpdfLine setLineCapStyle(LineCapStyle lineCapStyle) {
-        this.param.setLineCapStyle(lineCapStyle);
+    public XEasyPdfLine setLineCapStyle(XEasyPdfLineCapStyle XEasyPdfLineCapStyle) {
+        this.param.setStyle(XEasyPdfLineCapStyle);
         return this;
     }
 
@@ -81,7 +108,7 @@ public class XpdfLine implements XpdfComponent {
      * @throws IOException IO异常
      */
     @Override
-    public void draw(XpdfDocument document, XpdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // X轴Y轴起始结束坐标判断
         if (
                 this.param.getBeginX()==null ||
@@ -93,7 +120,16 @@ public class XpdfLine implements XpdfComponent {
         }
         // 字体判断
         if (this.param.getFont()==null) {
-            throw new RuntimeException("font can not null");
+            if (this.param.getFontPath()==null) {
+                throw new RuntimeException("font can not null");
+            }
+            // 设置字体
+            this.param.setFont(
+                    PDType0Font.load(
+                            document.getDocument(),
+                            Files.newInputStream(Paths.get(this.param.getFontPath()))
+                    )
+            );
         }
         // 初始化内容流
         PDPageContentStream contentStream = this.initStream(document, page);
@@ -113,7 +149,7 @@ public class XpdfLine implements XpdfComponent {
      * @return 返回内容流
      * @throws IOException IO异常
      */
-    private PDPageContentStream initStream(XpdfDocument document, XpdfPage page) throws IOException {
+    private PDPageContentStream initStream(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
                 document.getDocument(),
@@ -127,7 +163,7 @@ public class XpdfLine implements XpdfComponent {
         // 设置线宽
         contentStream.setLineWidth(this.param.getLineWidth());
         // 设置线型
-        contentStream.setLineCapStyle(this.param.getLineCapStyle().getType());
+        contentStream.setLineCapStyle(this.param.getStyle().getType());
         return contentStream;
     }
 }

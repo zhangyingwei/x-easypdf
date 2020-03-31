@@ -5,22 +5,35 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.TextUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * pdf文本参数
  * @author xsx
  * @date 2020/3/9
  * @since 1.8
+ * <p>
+ * Copyright (c) 2020 xsx All Rights Reserved.
+ * x-easypdf is licensed under the Mulan PSL v1.
+ * You can use this software according to the terms and conditions of the Mulan PSL v1.
+ * You may obtain a copy of Mulan PSL v1 at:
+ * http://license.coscl.org.cn/MulanPSL
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v1 for more details.
+ * </p>
  */
 @Data
 @Accessors(chain = true)
-public class XpdfTextParam {
+public class XEasyPdfTextParam {
     /**
      * 字体路径
      */
@@ -66,9 +79,13 @@ public class XpdfTextParam {
      */
     private String text;
     /**
+     * 拆分后的待添加文本列表
+     */
+    private List<String> splitTextList;
+    /**
      * 文本样式（居左、居中、居右）
      */
-    private XpdfTextStyle style;
+    private XEasyPdfTextStyle style;
     /**
      * 页面X轴起始坐标
      */
@@ -84,7 +101,7 @@ public class XpdfTextParam {
      * @param page pdf页面
      * @throws IOException IO异常
      */
-    public void init(XpdfDocument document, XpdfPage page) throws IOException {
+    public void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果最大宽度未初始化，则进行初始化
@@ -118,6 +135,20 @@ public class XpdfTextParam {
                     this.maxHeight - this.marginTop - this.fontSize - this.leading :
                     // 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
                     page.getPageY() - this.marginTop - this.fontSize - this.leading;
+        }
+        // 如果拆分后的待添加文本列表未初始化，则进行初始化
+        if (this.splitTextList==null) {
+            // 初始化待添加文本列表
+            this.splitTextList =  TextUtil.splitLines(
+                    // 待输入文本
+                    this.text,
+                    // 行宽度 = 页面宽度 - 左边距 - 右边距
+                    this.maxWidth - this.marginLeft - this.marginRight,
+                    // 字体
+                    this.font,
+                    // 字体大小
+                    this.fontSize
+            );
         }
     }
 }
