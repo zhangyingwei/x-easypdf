@@ -110,6 +110,7 @@ public class XEasyPdfPage {
 
     /**
      * 构建pdf页面
+     * @param document pdf文档
      * @return 返回pdf页面
      * @throws IOException IO异常
      */
@@ -119,6 +120,7 @@ public class XEasyPdfPage {
 
     /**
      * 构建pdf页面
+     * @param document pdf文档
      * @param pageSize 页面尺寸
      * @return 返回pdf页面
      * @throws IOException IO异常
