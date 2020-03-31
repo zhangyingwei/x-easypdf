@@ -13,12 +13,12 @@
 第一个版本已基本完善，后面将会以版本进行迭代更新，master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本1.0.1
 
 #### 介绍
-由于xpdf与原有软件重名，现更名为x-easypdf。x-easypdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单、易用，3分钟即可上手，人人都是pdf的构建高手
+x-easypdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单、易用，3分钟即可上手，人人都是pdf的构建高手
 
 #### API文档
 https://apidoc.gitee.com/xsxgit/x-easypdf
 
-### 特性
+#### 特性
 1. 快速上手
 > 花费3分钟看示例，即可掌握使用方法
 2. 自动换行分页
@@ -30,7 +30,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 5. 扩展灵活
 > 只需实现系统提供的接口，即可完成自定义的组件扩展
 
-### 软件架构
+#### 软件架构
 
 ![软件架构](https://images.gitee.com/uploads/images/2020/0331/134211_0652923a_1494292.png "xpdf整体架构.png")
 
@@ -41,6 +41,8 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 > text(文本组件)：已提供，文本写入组件
 
 > line(线条组件)：已提供，线条写入组件
+
+> image(图片组件)：已提供，图片写入组件
 
 > table(表格组件)：未提供，将在下一个版本提供，表格写入组件，cell(单元格)->row(行)->table(表格)
 
@@ -68,24 +70,24 @@ public class XpdfTest {
                         PdfUtil.Text.build(
                                 fontPath,
                                 "Hello World(这是一个DEMO)"
-                        ).setStyle(XpdfTextStyle.CENTER).setFontSize(20F).setMargin(10F)
+                        ).setStyle(XEasyPdfTextStyle.CENTER).setFontSize(20F).setMargin(10F)
                         // 构建文本
                         ,PdfUtil.Text.build(
                                 fontPath,
                                 "        这里是正文（这是一个基于PDFBOX开源工具，专注于PDF文件导出功能，" +
                                         "以组件形式进行拼接，简单、方便，上手及其容易，" +
                                         "目前有TEXT(文本)、LINE(分割线)等组件，后续还会补充更多组件，满足各种需求）。"
-                        ).setStyle(XpdfTextStyle.LEFT).setFontSize(14F).setMargin(10F)
+                        ).setStyle(XEasyPdfTextStyle.LEFT).setFontSize(14F).setMargin(10F)
                         // 构建文本
                         ,PdfUtil.Text.build(
                                 fontPath,
                                 "-- by xsx"
-                        ).setStyle(XpdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
+                        ).setStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
                         // 构建文本
                         ,PdfUtil.Text.build(
                                 fontPath,
                                 "2020.03.12"
-                        ).setStyle(XpdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
+                        ).setStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
                         // 构建实线分割线
                         ,PdfUtil.SplitLine.SolidLine.build(fontPath).setMarginTop(10F)
                         // 构建虚线分割线
@@ -93,7 +95,7 @@ public class XpdfTest {
                         // 构建实线分割线
                         ,PdfUtil.SplitLine.SolidLine.build(fontPath).setMarginTop(10F)
                         // 构建文本
-                        ,PdfUtil.Text.build(fontPath, "完结").setStyle(XpdfTextStyle.CENTER)
+                        ,PdfUtil.Text.build(fontPath, "完结").setStyle(XEasyPdfTextStyle.CENTER)
                 )
         );
     }
