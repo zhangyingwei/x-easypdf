@@ -108,4 +108,4 @@ public class XpdfTest {
 
 2. 使用说明
 
-请查看[wiki](https://gitee.com/xsxgit/xpdf/wikis/pages)
+请查看[wiki](https://gitee.com/xsxgit/x-easypdf/wikis/pages)
