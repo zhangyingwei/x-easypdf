@@ -3,9 +3,9 @@ package wiki.xsx.core.pdf.component.image;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import wiki.xsx.core.pdf.component.XpdfComponent;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.ImageUtil;
 
 import java.awt.*;
@@ -20,7 +20,7 @@ import java.io.InputStream;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -30,19 +30,19 @@ import java.io.InputStream;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XpdfImage implements XpdfComponent {
+public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 图片参数
      */
-    private XpdfImageParam param = new XpdfImageParam();
+    private XEasyPdfImageParam param = new XEasyPdfImageParam();
 
     /**
      * 有参构造
      * @param imageFile 待添加图片
      */
     @SneakyThrows
-    public XpdfImage(File imageFile) {
+    public XEasyPdfImage(File imageFile) {
         this.param.setImageType(ImageUtil.parseType(imageFile)).setImage(ImageUtil.read(imageFile));
     }
 
@@ -52,7 +52,7 @@ public class XpdfImage implements XpdfComponent {
      * @param imageType 待添加图片类型
      */
     @SneakyThrows
-    public XpdfImage(InputStream imageStream, String imageType) {
+    public XEasyPdfImage(InputStream imageStream, String imageType) {
         this.param.setImageType(imageType).setImage(ImageUtil.read(imageStream));
     }
 
@@ -63,7 +63,7 @@ public class XpdfImage implements XpdfComponent {
      * @param height 图片高度
      */
     @SneakyThrows
-    public XpdfImage(File imageFile, int width, int height) {
+    public XEasyPdfImage(File imageFile, int width, int height) {
         this.param.setImageType(ImageUtil.parseType(imageFile))
                 .setImage(ImageUtil.read(imageFile))
                 .setWidth(width)
@@ -78,7 +78,7 @@ public class XpdfImage implements XpdfComponent {
      * @param height 图片高度
      */
     @SneakyThrows
-    public XpdfImage(InputStream imageStream, String imageType, int width, int height) {
+    public XEasyPdfImage(InputStream imageStream, String imageType, int width, int height) {
         this.param.setImageType(imageType)
                 .setImage(ImageUtil.read(imageStream))
                 .setWidth(width)
@@ -94,7 +94,7 @@ public class XpdfImage implements XpdfComponent {
      * @param beginY Y轴起始坐标
      */
     @SneakyThrows
-    public XpdfImage(File imageFile, int width, int height, float beginX, float beginY) {
+    public XEasyPdfImage(File imageFile, int width, int height, float beginX, float beginY) {
         this.param.setImageType(ImageUtil.parseType(imageFile))
                 .setImage(ImageUtil.read(imageFile))
                 .setWidth(width)
@@ -113,7 +113,7 @@ public class XpdfImage implements XpdfComponent {
      * @param beginY Y轴起始坐标
      */
     @SneakyThrows
-    public XpdfImage(InputStream imageStream, String imageType, int width, int height, float beginX, float beginY) {
+    public XEasyPdfImage(InputStream imageStream, String imageType, int width, int height, float beginX, float beginY) {
         this.param.setImageType(imageType)
                 .setImage(ImageUtil.read(imageStream))
                 .setWidth(width)
@@ -128,7 +128,7 @@ public class XpdfImage implements XpdfComponent {
      * @return 返回图片组件
      */
     @SneakyThrows
-    public XpdfImage setImage(File imageFile) {
+    public XEasyPdfImage setImage(File imageFile) {
         this.param.setImageType(ImageUtil.parseType(imageFile)).setImage(ImageUtil.read(imageFile));
         return this;
     }
@@ -140,7 +140,7 @@ public class XpdfImage implements XpdfComponent {
      * @return 返回图片组件
      */
     @SneakyThrows
-    public XpdfImage setImage(InputStream imageStream, String imageType) {
+    public XEasyPdfImage setImage(InputStream imageStream, String imageType) {
         this.param.setImageType(imageType).setImage(ImageUtil.read(imageStream));
         return this;
     }
@@ -150,7 +150,7 @@ public class XpdfImage implements XpdfComponent {
      * @param width 图片宽度
      * @return 返回图片组件
      */
-    public XpdfImage setWidth(int width) {
+    public XEasyPdfImage setWidth(int width) {
         this.param.setWidth(width);
         return this;
     }
@@ -160,7 +160,7 @@ public class XpdfImage implements XpdfComponent {
      * @param height 图片高度
      * @return 返回图片组件
      */
-    public XpdfImage setHeight(int height) {
+    public XEasyPdfImage setHeight(int height) {
         this.param.setHeight(height);
         return this;
     }
@@ -170,7 +170,7 @@ public class XpdfImage implements XpdfComponent {
      * @param enableSelfAdaption 图片大小自适应
      * @return 返回图片组件
      */
-    public XpdfImage setEnableSelfAdaption(boolean enableSelfAdaption) {
+    public XEasyPdfImage setEnableSelfAdaption(boolean enableSelfAdaption) {
         this.param.setEnableSelfAdaption(enableSelfAdaption);
         return this;
     }
@@ -180,7 +180,7 @@ public class XpdfImage implements XpdfComponent {
      * @param margin 边距
      * @return 返回图片组件
      */
-    public XpdfImage setMargin(float margin) {
+    public XEasyPdfImage setMargin(float margin) {
         this.param.setMarginLeft(margin).setMarginRight(margin).setMarginTop(margin).setMarginBottom(margin);
         return this;
     }
@@ -190,7 +190,7 @@ public class XpdfImage implements XpdfComponent {
      * @param margin 边距
      * @return 返回图片组件
      */
-    public XpdfImage setMarginLeft(float margin) {
+    public XEasyPdfImage setMarginLeft(float margin) {
         this.param.setMarginLeft(margin);
         return this;
     }
@@ -200,7 +200,7 @@ public class XpdfImage implements XpdfComponent {
      * @param margin 边距
      * @return 返回图片组件
      */
-    public XpdfImage setMarginRight(float margin) {
+    public XEasyPdfImage setMarginRight(float margin) {
         this.param.setMarginRight(margin);
         return this;
     }
@@ -210,7 +210,7 @@ public class XpdfImage implements XpdfComponent {
      * @param margin 边距
      * @return 返回图片组件
      */
-    public XpdfImage setMarginTop(float margin) {
+    public XEasyPdfImage setMarginTop(float margin) {
         this.param.setMarginTop(margin);
         return this;
     }
@@ -220,7 +220,7 @@ public class XpdfImage implements XpdfComponent {
      * @param margin 边距
      * @return 返回图片组件
      */
-    public XpdfImage setMarginBottom(float margin) {
+    public XEasyPdfImage setMarginBottom(float margin) {
         this.param.setMarginBottom(margin);
         return this;
     }
@@ -231,7 +231,7 @@ public class XpdfImage implements XpdfComponent {
      * @param y 当前页面Y轴坐标
      * @return 返回图片组件
      */
-    public XpdfImage setPosition(float x, float y) {
+    public XEasyPdfImage setPosition(float x, float y) {
         this.param.setBeginX(x).setBeginY(y);
         return this;
     }
@@ -241,7 +241,7 @@ public class XpdfImage implements XpdfComponent {
      * @param scaleMode 缩放模式
      * @return 返回图片组件
      */
-    public XpdfImage setScaleMode(XpdfImage.ScaleMode scaleMode) {
+    public XEasyPdfImage setScaleMode(XEasyPdfImage.ScaleMode scaleMode) {
         this.param.setScaleMode(scaleMode);
         return this;
     }
@@ -251,7 +251,7 @@ public class XpdfImage implements XpdfComponent {
      * @param style 样式
      * @return 返回图片组件
      */
-    public XpdfImage setStyle(XpdfImageStyle style) {
+    public XEasyPdfImage setStyle(XEasyPdfImageStyle style) {
         this.param.setStyle(style);
         return this;
     }
@@ -264,7 +264,7 @@ public class XpdfImage implements XpdfComponent {
      * @throws IOException IO异常
      */
     @Override
-    public void draw(XpdfDocument document, XpdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 初始化pdfBox图片
         PDImageXObject pdImage = this.param.init(document, page);
         // 新建内容流

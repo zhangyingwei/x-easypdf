@@ -1,13 +1,13 @@
-package wiki.xsx.core.pdf.component.text;
+package wiki.xsx.core.pdf.component.line;
 
 /**
- * 文本样式枚举
+ * 线型样式枚举
  * @author xsx
- * @date 2020/3/3
+ * @date 2020/3/4
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -17,17 +17,37 @@ package wiki.xsx.core.pdf.component.text;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public enum XpdfTextStyle {
+public enum XEasyPdfLineCapStyle {
     /**
-     * 居中
+     * 正常
      */
-    CENTER,
+    NORMAL(0),
     /**
-     * 居左
+     * 圆角
      */
-    LEFT,
+    ROUND(1),
     /**
-     * 居右
+     * 方角
      */
-    RIGHT;
+    SQUARE(2);
+    /**
+     * 类型
+     */
+    private int type;
+
+    /**
+     * 有参构造
+     * @param type 类型
+     */
+    XEasyPdfLineCapStyle(int type) {
+        this.type = type;
+    }
+
+    /**
+     * 获取类型
+     * @return 返回类型
+     */
+    public int getType() {
+        return this.type;
+    }
 }

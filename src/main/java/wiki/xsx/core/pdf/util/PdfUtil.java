@@ -1,15 +1,15 @@
 package wiki.xsx.core.pdf.util;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import wiki.xsx.core.pdf.component.XpdfComponent;
-import wiki.xsx.core.pdf.component.image.XpdfImage;
-import wiki.xsx.core.pdf.component.line.XpdfDottedSplitLine;
-import wiki.xsx.core.pdf.component.line.XpdfLine;
-import wiki.xsx.core.pdf.component.line.XpdfSolidSplitLine;
-import wiki.xsx.core.pdf.component.mark.XpdfWatermark;
-import wiki.xsx.core.pdf.component.text.XpdfText;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
+import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
+import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.component.text.XEasyPdfText;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -43,8 +43,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(String outputPath, XpdfPage...pages) throws IOException {
-        new XpdfDocument().addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    public static void create(String outputPath, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument().addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -54,8 +54,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(String outputPath, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
-        new XpdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    public static void create(String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -64,8 +64,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(OutputStream outputStream, XpdfPage...pages) throws IOException {
-        new XpdfDocument().addPage(pages).save(outputStream);
+    public static void create(OutputStream outputStream, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument().addPage(pages).save(outputStream);
     }
 
     /**
@@ -75,8 +75,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(OutputStream outputStream, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
-        new XpdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
+    public static void create(OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
     }
 
     /**
@@ -86,8 +86,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, String outputPath, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    public static void append(String sourcePath, String outputPath, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -98,8 +98,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, String outputPath, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    public static void append(String sourcePath, String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -109,8 +109,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, OutputStream outputStream, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).addPage(pages).save(outputStream);
+    public static void append(String sourcePath, OutputStream outputStream, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).addPage(pages).save(outputStream);
     }
 
     /**
@@ -121,8 +121,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, OutputStream outputStream, XpdfWatermark globalWatermark, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
+    public static void append(String sourcePath, OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
     }
 
     /**
@@ -133,8 +133,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, String outputPath, int index, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).insertPage(index, pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    public static void insert(String sourcePath, String outputPath, int index, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).insertPage(index, pages).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -146,8 +146,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, String outputPath, XpdfWatermark globalWatermark, int index, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(Files.newOutputStream(Paths.get(outputPath)));
+    public static void insert(String sourcePath, String outputPath, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -158,8 +158,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, OutputStream outputStream, int index, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).insertPage(index, pages).save(outputStream);
+    public static void insert(String sourcePath, OutputStream outputStream, int index, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).insertPage(index, pages).save(outputStream);
     }
 
     /**
@@ -171,8 +171,8 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, OutputStream outputStream, XpdfWatermark globalWatermark, int index, XpdfPage...pages) throws IOException {
-        new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(outputStream);
+    public static void insert(String sourcePath, OutputStream outputStream, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(outputStream);
     }
 
     /**
@@ -183,7 +183,7 @@ public class PdfUtil {
      * @throws IOException IO异常
      */
     public static void fill(String templateSourcePath, String outputPath, String fontPath, Map<String, String> formMap) throws IOException {
-        new XpdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(Files.newOutputStream(Paths.get(outputPath)));
+        new XEasyPdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -194,8 +194,8 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(String templateSourcePath, String outputPath, XpdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
-        new XpdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(Files.newOutputStream(Paths.get(outputPath)));
+    public static void fill(String templateSourcePath, String outputPath, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+        new XEasyPdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(Files.newOutputStream(Paths.get(outputPath)));
     }
 
     /**
@@ -206,7 +206,7 @@ public class PdfUtil {
      * @throws IOException IO异常
      */
     public static void fill(String templateSourcePath, OutputStream outputPath, String fontPath, Map<String, String> formMap) throws IOException {
-        new XpdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(outputPath);
+        new XEasyPdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(outputPath);
     }
 
     /**
@@ -217,8 +217,8 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(String templateSourcePath, OutputStream outputPath, XpdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
-        new XpdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(outputPath);
+    public static void fill(String templateSourcePath, OutputStream outputPath, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+        new XEasyPdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(outputPath);
     }
 
     /**
@@ -230,8 +230,8 @@ public class PdfUtil {
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XpdfPage build(XpdfComponent...components) {
-            return new XpdfPage().addComponent(components);
+        public static XEasyPdfPage build(XEasyPdfComponent...components) {
+            return new XEasyPdfPage().addComponent(components);
         }
 
         /**
@@ -240,8 +240,8 @@ public class PdfUtil {
          * @param watermark 页面水印组件
          * @return 返回pdf页面组件
          */
-        public static XpdfPage build(XpdfWatermark watermark, XpdfComponent...components) {
-            return new XpdfPage().setWatermark(watermark).addComponent(components);
+        public static XEasyPdfPage build(XEasyPdfWatermark watermark, XEasyPdfComponent...components) {
+            return new XEasyPdfPage().setWatermark(watermark).addComponent(components);
         }
 
         /**
@@ -250,8 +250,8 @@ public class PdfUtil {
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XpdfPage build(PDRectangle pageSize, XpdfComponent...components) {
-            return new XpdfPage(pageSize).addComponent(components);
+        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfComponent...components) {
+            return new XEasyPdfPage(pageSize).addComponent(components);
         }
 
         /**
@@ -261,8 +261,8 @@ public class PdfUtil {
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XpdfPage build(PDRectangle pageSize, XpdfWatermark watermark, XpdfComponent...components) {
-            return new XpdfPage(pageSize).setWatermark(watermark).addComponent(components);
+        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfWatermark watermark, XEasyPdfComponent...components) {
+            return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
         }
     }
 
@@ -276,8 +276,8 @@ public class PdfUtil {
          * @param text 水印文本
          * @return 返回pdf页面水印组件
          */
-        public static XpdfWatermark build(String fontPath, String text) {
-            return new XpdfWatermark(fontPath, text);
+        public static XEasyPdfWatermark build(String fontPath, String text) {
+            return new XEasyPdfWatermark(fontPath, text);
         }
 
         /**
@@ -287,8 +287,8 @@ public class PdfUtil {
          * @param text 水印文本
          * @return 返回pdf页面水印组件
          */
-        public static XpdfWatermark build(String fontPath, float fontSize, String text) {
-            return new XpdfWatermark(fontPath, fontSize, text);
+        public static XEasyPdfWatermark build(String fontPath, float fontSize, String text) {
+            return new XEasyPdfWatermark(fontPath, fontSize, text);
         }
     }
 
@@ -302,8 +302,8 @@ public class PdfUtil {
          * @param text 待输入文本
          * @return 返回pdf文本组件
          */
-        public static XpdfText build(String fontPath, String text) {
-            return new XpdfText(fontPath, text);
+        public static XEasyPdfText build(String fontPath, String text) {
+            return new XEasyPdfText(fontPath, text);
         }
 
         /**
@@ -313,8 +313,8 @@ public class PdfUtil {
          * @param text 待输入文本
          * @return 返回pdf文本组件
          */
-        public static XpdfText build(String fontPath, float fontSize, String text) {
-            return new XpdfText(fontPath, fontSize, text);
+        public static XEasyPdfText build(String fontPath, float fontSize, String text) {
+            return new XEasyPdfText(fontPath, fontSize, text);
         }
 
         /**
@@ -326,8 +326,8 @@ public class PdfUtil {
          * @param text 待输入文本
          * @return 返回pdf文本组件
          */
-        public static XpdfText build(String fontPath, float fontSize, float beginX, float beginY, String text) {
-            return new XpdfText(fontPath, fontSize, beginX, beginY, text);
+        public static XEasyPdfText build(String fontPath, float fontSize, float beginX, float beginY, String text) {
+            return new XEasyPdfText(fontPath, fontSize, beginX, beginY, text);
         }
 
         /**
@@ -340,8 +340,8 @@ public class PdfUtil {
          * @param text 待输入文本
          * @return 返回pdf文本组件
          */
-        public static XpdfText build(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
-            return new XpdfText(fontPath, fontSize, leading, beginX, beginY, text);
+        public static XEasyPdfText build(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
+            return new XEasyPdfText(fontPath, fontSize, leading, beginX, beginY, text);
         }
     }
 
@@ -358,8 +358,8 @@ public class PdfUtil {
          * @param endY 当前页面Y轴结束坐标
          * @return
          */
-        public static XpdfLine build(String fontPath, float beginX, float beginY, float endX, float endY) {
-            return new XpdfLine(fontPath, beginX, beginY, endX, endY);
+        public static XEasyPdfLine build(String fontPath, float beginX, float beginY, float endX, float endY) {
+            return new XEasyPdfLine(fontPath, beginX, beginY, endX, endY);
         }
     }
 
@@ -376,8 +376,8 @@ public class PdfUtil {
              * @param fontPath 字体路径
              * @return 返回pdf实线分割线组件
              */
-            public static XpdfSolidSplitLine build(String fontPath) {
-                return new XpdfSolidSplitLine(fontPath);
+            public static XEasyPdfSolidSplitLine build(String fontPath) {
+                return new XEasyPdfSolidSplitLine(fontPath);
             }
         }
 
@@ -390,8 +390,8 @@ public class PdfUtil {
              * @param fontPath 字体路径
              * @return 返回pdf虚线分割线组件
              */
-            public static XpdfDottedSplitLine build(String fontPath) {
-                return new XpdfDottedSplitLine(fontPath);
+            public static XEasyPdfDottedSplitLine build(String fontPath) {
+                return new XEasyPdfDottedSplitLine(fontPath);
             }
         }
     }
@@ -405,8 +405,8 @@ public class PdfUtil {
          * @param image 待添加图片
          * @return 返回pdf图片组件
          */
-        public static XpdfImage build(File image) {
-            return new XpdfImage(image);
+        public static XEasyPdfImage build(File image) {
+            return new XEasyPdfImage(image);
         }
 
         /**
@@ -416,8 +416,8 @@ public class PdfUtil {
          * @param height 图片高度
          * @return 返回pdf图片组件
          */
-        public static XpdfImage build(File image, int width, int height) {
-            return new XpdfImage(image, width, height);
+        public static XEasyPdfImage build(File image, int width, int height) {
+            return new XEasyPdfImage(image, width, height);
         }
 
         /**
@@ -429,8 +429,8 @@ public class PdfUtil {
          * @param beginY Y轴起始坐标
          * @return 返回pdf图片组件
          */
-        public static XpdfImage build(File image, int width, int height, float beginX, float beginY) {
-            return new XpdfImage(image, width, height, beginX, beginY);
+        public static XEasyPdfImage build(File image, int width, int height, float beginX, float beginY) {
+            return new XEasyPdfImage(image, width, height, beginX, beginY);
         }
     }
 }

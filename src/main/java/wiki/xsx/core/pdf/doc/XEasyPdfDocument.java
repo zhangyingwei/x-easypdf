@@ -8,7 +8,7 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import wiki.xsx.core.pdf.component.mark.XpdfWatermark;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,7 +23,7 @@ import java.util.*;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -33,7 +33,7 @@ import java.util.*;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XpdfDocument {
+public class XEasyPdfDocument {
     /**
      * pdfBox文档
      */
@@ -41,16 +41,16 @@ public class XpdfDocument {
     /**
      * pdf页面列表
      */
-    private List<XpdfPage> pageList = new ArrayList<>(10);
+    private List<XEasyPdfPage> pageList = new ArrayList<>(10);
     /**
      * 全局页面水印
      */
-    private XpdfWatermark globalWatermark;
+    private XEasyPdfWatermark globalWatermark;
 
     /**
      * 无参构造方法
      */
-    public XpdfDocument() {
+    public XEasyPdfDocument() {
         this.document = new PDDocument();
     }
 
@@ -59,7 +59,7 @@ public class XpdfDocument {
      * @param filePath pdf文件路径
      * @throws IOException IO异常
      */
-    public XpdfDocument(String filePath) throws IOException {
+    public XEasyPdfDocument(String filePath) throws IOException {
         // 读取pdfBox文档
         this.document = PDDocument.load(Files.newInputStream(Paths.get(filePath)));
         // 获取pdfBox页面树
@@ -67,7 +67,7 @@ public class XpdfDocument {
         // 遍历pdfBox页面树
         for (PDPage page : pages) {
             // 添加pdfBox页面
-            this.pageList.add(new XpdfPage(page));
+            this.pageList.add(new XEasyPdfPage(page));
         }
     }
 
@@ -76,7 +76,7 @@ public class XpdfDocument {
      * @param pages pdf页面
      * @return 返回pdf文档
      */
-    public XpdfDocument addPage(XpdfPage ...pages) {
+    public XEasyPdfDocument addPage(XEasyPdfPage...pages) {
         // 添加页面
         Collections.addAll(this.pageList, pages);
         return this;
@@ -88,11 +88,11 @@ public class XpdfDocument {
      * @param pages pdf页面
      * @return 返回pdf文档
      */
-    public XpdfDocument insertPage(int index, XpdfPage ...pages) {
+    public XEasyPdfDocument insertPage(int index, XEasyPdfPage...pages) {
         // 如果pdf页面列表数量大于索引，则插入页面，否则添加页面
         if (this.pageList.size()>=index) {
             // 遍历pdf页面
-            for (XpdfPage page : pages) {
+            for (XEasyPdfPage page : pages) {
                 // 插入页面
                 this.pageList.add(Math.max(index, 0), page);
             }
@@ -108,7 +108,7 @@ public class XpdfDocument {
      * @param globalWatermark 页面水印
      * @return 返回pdf文档
      */
-    public XpdfDocument setGlobalWatermark(XpdfWatermark globalWatermark) {
+    public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
         this.globalWatermark = globalWatermark;
         return this;
     }
@@ -119,7 +119,7 @@ public class XpdfDocument {
      * @return 返回pdf文档
      * @throws IOException IO异常
      */
-    public XpdfDocument fillAcroForm(String fontPath, Map<String, String> formMap) throws IOException {
+    public XEasyPdfDocument fillAcroForm(String fontPath, Map<String, String> formMap) throws IOException {
         // 如果填充表单字典为空，则直接返回
         if (formMap==null||formMap.size()==0) {
             return this;
@@ -169,27 +169,27 @@ public class XpdfDocument {
         // 定义pdfBox页面列表
         List<PDPage> pageList;
         // 遍历pdf页面列表
-        for (XpdfPage xpdfPage : this.pageList) {
+        for (XEasyPdfPage XEasyPdfPage : this.pageList) {
             // 如果pdf页面组件数量大于0，则进行页面构建
-            if (xpdfPage.getComponentList().size()>0) {
+            if (XEasyPdfPage.getComponentList().size()>0) {
                 // pdf页面构建
-                xpdfPage.build(this);
+                XEasyPdfPage.build(this);
             }
             // 初始化pdfBox页面列表
-            pageList = xpdfPage.getPageList();
+            pageList = XEasyPdfPage.getPageList();
             // 遍历pdfBox页面列表
             for (PDPage page : pageList) {
                 // 任务文档添加页面
                 target.addPage(page);
             }
             // 如果页面水印不为空，则进行页面水印绘制
-            if (xpdfPage.getWatermark()!=null) {
+            if (XEasyPdfPage.getWatermark()!=null) {
                 // 绘制页面水印
-                xpdfPage.getWatermark().draw(this, xpdfPage);
+                XEasyPdfPage.getWatermark().draw(this, XEasyPdfPage);
             // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
-            }else if (this.globalWatermark !=null&&xpdfPage.isAllowWatermark()) {
+            }else if (this.globalWatermark !=null&& XEasyPdfPage.isAllowWatermark()) {
                 // 绘制页面水印
-                this.globalWatermark.draw(this, xpdfPage);
+                this.globalWatermark.draw(this, XEasyPdfPage);
             }
         }
         // 保存任务文档
@@ -212,7 +212,7 @@ public class XpdfDocument {
      * 获取pdfBox页面列表
      * @return 返回pdfBox页面列表
      */
-    public List<XpdfPage> getPageList() {
+    public List<XEasyPdfPage> getPageList() {
         return this.pageList;
     }
 }

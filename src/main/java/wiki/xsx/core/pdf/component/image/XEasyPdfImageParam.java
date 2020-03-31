@@ -6,8 +6,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -21,7 +21,7 @@ import java.io.IOException;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -33,7 +33,7 @@ import java.io.IOException;
  */
 @Data
 @Accessors(chain = true)
-public class XpdfImageParam {
+public class XEasyPdfImageParam {
     /**
      * 待添加图片
      */
@@ -73,11 +73,11 @@ public class XpdfImageParam {
     /**
      * 图片缩放模式（默认）
      */
-    private XpdfImage.ScaleMode scaleMode = XpdfImage.ScaleMode.DEFAULT;
+    private XEasyPdfImage.ScaleMode scaleMode = XEasyPdfImage.ScaleMode.DEFAULT;
     /**
      * 图片样式（居左、居中、居右）
      */
-    private XpdfImageStyle style = XpdfImageStyle.CENTER;
+    private XEasyPdfImageStyle style = XEasyPdfImageStyle.CENTER;
     /**
      * 页面X轴起始坐标
      */
@@ -94,7 +94,7 @@ public class XpdfImageParam {
      * @return 返回pdfBox图片对象
      * @throws IOException IO异常
      */
-    public PDImageXObject init(XpdfDocument document, XpdfPage page) throws IOException {
+    public PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 如果图片为空，则抛出异常信息
         if (this.image==null) {
             throw new FileNotFoundException("the image can not be found");
@@ -150,11 +150,11 @@ public class XpdfImageParam {
         // 如果页面X轴起始坐标为空，则初始化
         if (this.beginX==null) {
             // 如果图片样式为空，或图片样式为居中，则初始化页面X轴起始坐标为居中
-            if (this.style==null || this.style==XpdfImageStyle.CENTER) {
+            if (this.style==null || this.style== XEasyPdfImageStyle.CENTER) {
                 // 页面X轴起始坐标 = （页面宽度 - 自定义宽度）/ 2
                 this.beginX = (pageWidth - this.width) / 2;
             // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
-            }else if (this.style==XpdfImageStyle.LEFT) {
+            }else if (this.style== XEasyPdfImageStyle.LEFT) {
                 // 页面X轴起始坐标 = 左边距
                 this.beginX = this.marginLeft;
             // 如果图片样式为居右，则初始化页面X轴起始坐标为居右

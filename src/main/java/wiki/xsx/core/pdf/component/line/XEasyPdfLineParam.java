@@ -11,7 +11,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -23,7 +23,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
  */
 @Data
 @Accessors(chain = true)
-public class XpdfLineParam {
+public class XEasyPdfLineParam {
     /**
      * 字体路径
      */
@@ -75,5 +75,5 @@ public class XpdfLineParam {
     /**
      * 线型
      */
-    private XpdfLineCapStyle xpdfLineCapStyle = XpdfLineCapStyle.NORMAL;
+    private XEasyPdfLineCapStyle style = XEasyPdfLineCapStyle.NORMAL;
 }

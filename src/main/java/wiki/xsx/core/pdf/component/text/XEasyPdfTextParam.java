@@ -5,8 +5,8 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.TextUtil;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.List;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XpdfTextParam {
+public class XEasyPdfTextParam {
     /**
      * 字体路径
      */
@@ -85,7 +85,7 @@ public class XpdfTextParam {
     /**
      * 文本样式（居左、居中、居右）
      */
-    private XpdfTextStyle style;
+    private XEasyPdfTextStyle style;
     /**
      * 页面X轴起始坐标
      */
@@ -101,7 +101,7 @@ public class XpdfTextParam {
      * @param page pdf页面
      * @throws IOException IO异常
      */
-    public void init(XpdfDocument document, XpdfPage page) throws IOException {
+    public void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果最大宽度未初始化，则进行初始化

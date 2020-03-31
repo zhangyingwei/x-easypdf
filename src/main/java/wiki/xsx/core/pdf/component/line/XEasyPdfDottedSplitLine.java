@@ -2,9 +2,9 @@ package wiki.xsx.core.pdf.component.line;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import wiki.xsx.core.pdf.component.XpdfComponent;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +17,7 @@ import java.nio.file.Paths;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -27,12 +27,12 @@ import java.nio.file.Paths;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XpdfDottedSplitLine implements XpdfComponent {
+public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
 
     /**
      * 分割线参数
      */
-    private XpdfLineParam param = new XpdfLineParam();
+    private XEasyPdfLineParam param = new XEasyPdfLineParam();
     /**
      * 点线长度
      */
@@ -46,7 +46,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * 有参构造
      * @param fontPath 字体路径
      */
-    public XpdfDottedSplitLine(String fontPath) {
+    public XEasyPdfDottedSplitLine(String fontPath) {
         this.param.setFontPath(fontPath);
     }
 
@@ -55,7 +55,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setMargin(float margin) {
+    public XEasyPdfDottedSplitLine setMargin(float margin) {
         this.param.setMarginLeft(margin).setMarginRight(margin).setMarginTop(margin).setMarginBottom(margin);
         return this;
     }
@@ -65,7 +65,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setMarginLeft(float margin) {
+    public XEasyPdfDottedSplitLine setMarginLeft(float margin) {
         this.param.setMarginLeft(margin);
         return this;
     }
@@ -75,7 +75,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setMarginRight(float margin) {
+    public XEasyPdfDottedSplitLine setMarginRight(float margin) {
         this.param.setMarginRight(margin);
         return this;
     }
@@ -85,7 +85,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setMarginTop(float margin) {
+    public XEasyPdfDottedSplitLine setMarginTop(float margin) {
         this.param.setMarginTop(margin);
         return this;
     }
@@ -95,7 +95,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setMarginBottom(float margin) {
+    public XEasyPdfDottedSplitLine setMarginBottom(float margin) {
         this.param.setMarginBottom(margin);
         return this;
     }
@@ -105,18 +105,18 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param lineWidth 分割线宽度
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setLineWidth(float lineWidth) {
+    public XEasyPdfDottedSplitLine setLineWidth(float lineWidth) {
         this.param.setLineWidth(lineWidth);
         return this;
     }
 
     /**
      * 设置分割线线型
-     * @param xpdfLineCapStyle 分割线线型
+     * @param XEasyPdfLineCapStyle 分割线线型
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setLineCapStyle(XpdfLineCapStyle xpdfLineCapStyle) {
-        this.param.setXpdfLineCapStyle(xpdfLineCapStyle);
+    public XEasyPdfDottedSplitLine setLineCapStyle(XEasyPdfLineCapStyle XEasyPdfLineCapStyle) {
+        this.param.setStyle(XEasyPdfLineCapStyle);
         return this;
     }
 
@@ -125,7 +125,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param lineLength 点线长度
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setLineLength(float lineLength) {
+    public XEasyPdfDottedSplitLine setLineLength(float lineLength) {
         this.lineLength = lineLength;
         return this;
     }
@@ -135,7 +135,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @param lineSpace 点线间隔
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setLineSpace(float lineSpace) {
+    public XEasyPdfDottedSplitLine setLineSpace(float lineSpace) {
         this.lineSpace = lineSpace;
         return this;
     }
@@ -148,13 +148,13 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * @throws IOException IO异常
      */
     @Override
-    public void draw(XpdfDocument document, XpdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 初始化虚线分割线参数
         this.init(document, page);
         // 定义线条组件
-        XpdfLine xpdfLine;
+        XEasyPdfLine xpdfLine;
         // 初始化线条组件
-        xpdfLine = new XpdfLine(this.param);
+        xpdfLine = new XEasyPdfLine(this.param);
         // 执行画图
         xpdfLine.draw(document, page);
         // 计算点线数量，点线数量 = (pdfBox最新页面宽度 - 左边距 - 右边距) / (点线长度 + 点线间隔)
@@ -173,7 +173,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
                     this.param.getBeginX() + this.lineLength
             );
             // 重新初始化线条组件
-            xpdfLine = new XpdfLine(this.param);
+            xpdfLine = new XEasyPdfLine(this.param);
             // 执行画图
             xpdfLine.draw(document, page);
         }
@@ -185,7 +185,7 @@ public class XpdfDottedSplitLine implements XpdfComponent {
      * 初始化参数
      * @param page pdf页面
      */
-    private void init(XpdfDocument document, XpdfPage page) throws IOException {
+    private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 定义线宽
         float lineWidth = this.param.getLineWidth() / 2;
         // 如果当前页面Y轴坐标不为空，则进行分页判断

@@ -1,18 +1,13 @@
-package wiki.xsx.core.pdf.component;
-
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
-
-import java.io.IOException;
+package wiki.xsx.core.pdf.component.text;
 
 /**
- * pdf组件标记
+ * 文本样式枚举
  * @author xsx
  * @date 2020/3/3
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -22,13 +17,17 @@ import java.io.IOException;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public interface XpdfComponent {
-
+public enum XEasyPdfTextStyle {
     /**
-     * 画图
-     * @param document pdf文档
-     * @param page pdf页面
-     * @throws IOException IO异常
+     * 居中
      */
-    void draw(XpdfDocument document, XpdfPage page) throws IOException;
+    CENTER,
+    /**
+     * 居左
+     */
+    LEFT,
+    /**
+     * 居右
+     */
+    RIGHT;
 }

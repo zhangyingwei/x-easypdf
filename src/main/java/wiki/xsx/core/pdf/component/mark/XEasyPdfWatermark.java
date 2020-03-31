@@ -5,8 +5,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.util.Matrix;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -28,19 +28,19 @@ import java.util.List;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XpdfWatermark {
+public class XEasyPdfWatermark {
 
     /**
      * 页面水印参数
      */
-    private XpdfWatermarkParam param = new XpdfWatermarkParam();
+    private XEasyPdfWatermarkParam param = new XEasyPdfWatermarkParam();
 
     /**
      * 有参构造
      * @param fontPath 字体路径
      * @param text 水印文本
      */
-    public XpdfWatermark(String fontPath, String text) {
+    public XEasyPdfWatermark(String fontPath, String text) {
         this.param.setFontPath(fontPath).setText(text);
     }
 
@@ -50,7 +50,7 @@ public class XpdfWatermark {
      * @param fontSize 字体大小
      * @param text 水印文本
      */
-    public XpdfWatermark(String fontPath, float fontSize, String text) {
+    public XEasyPdfWatermark(String fontPath, float fontSize, String text) {
         this.param.setFontPath(fontPath).setFontSize(fontSize).setText(text);
     }
 
@@ -59,7 +59,7 @@ public class XpdfWatermark {
      * @param font pdfBox字体
      * @return 返回页面水印组件
      */
-    public XpdfWatermark setFont(PDFont font) {
+    public XEasyPdfWatermark setFont(PDFont font) {
         this.param.setFont(font);
         return this;
     }
@@ -69,7 +69,7 @@ public class XpdfWatermark {
      * @param fontSize 字体大小
      * @return 返回页面水印组件
      */
-    public XpdfWatermark setFontSize(Float fontSize) {
+    public XEasyPdfWatermark setFontSize(Float fontSize) {
         this.param.setFontSize(fontSize);
         return this;
     }
@@ -79,7 +79,7 @@ public class XpdfWatermark {
      * @param alpha 文本透明度
      * @return 返回页面水印组件
      */
-    public XpdfWatermark setAlpha(Float alpha) {
+    public XEasyPdfWatermark setAlpha(Float alpha) {
         this.param.setAlpha(alpha);
         return this;
     }
@@ -89,7 +89,7 @@ public class XpdfWatermark {
      * @param radians 文本弧度
      * @return 返回页面水印组件
      */
-    public XpdfWatermark setRadians(Double radians) {
+    public XEasyPdfWatermark setRadians(Double radians) {
         this.param.setRadians(radians);
         return this;
     }
@@ -99,7 +99,7 @@ public class XpdfWatermark {
      * @param text 水印文本
      * @return 返回页面水印组件
      */
-    public XpdfWatermark setText(String text) {
+    public XEasyPdfWatermark setText(String text) {
         this.param.setText(text);
         return this;
     }
@@ -109,7 +109,7 @@ public class XpdfWatermark {
      * @param wordSpace 水印文本间距
      * @return 返回页面水印组件
      */
-    public XpdfWatermark setWordSpace(Float wordSpace) {
+    public XEasyPdfWatermark setWordSpace(Float wordSpace) {
         this.param.setWordSpace(wordSpace);
         return this;
     }
@@ -121,7 +121,7 @@ public class XpdfWatermark {
      * @param page     pdf页面
      * @throws IOException IO异常
      */
-    public void draw(XpdfDocument document, XpdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 初始化水印参数，获取pdfBox扩展图形对象
         PDExtendedGraphicsState state = this.param.init(document, page);
         // 获取pdfBox页面列表
@@ -140,7 +140,7 @@ public class XpdfWatermark {
      * @param state pdfBox扩展图形对象
      * @throws IOException IO异常
      */
-    private void doDraw(XpdfDocument document, PDPage pdPage, PDExtendedGraphicsState state) throws IOException {
+    private void doDraw(XEasyPdfDocument document, PDPage pdPage, PDExtendedGraphicsState state) throws IOException {
         // 定义循环添加次数
         int count = 11;
         // 定义字体颜色

@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import wiki.xsx.core.pdf.component.XpdfComponent;
-import wiki.xsx.core.pdf.component.mark.XpdfWatermark;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XpdfPage {
+public class XEasyPdfPage {
 
     /**
      * pdfBox最新页面当前X轴坐标
@@ -52,11 +52,11 @@ public class XpdfPage {
     /**
      * pdf组件列表
      */
-    private List<XpdfComponent> componentList = new ArrayList<>(10);
+    private List<XEasyPdfComponent> componentList = new ArrayList<>(10);
     /**
      * 页面水印
      */
-    private XpdfWatermark watermark;
+    private XEasyPdfWatermark watermark;
     /**
      * 是否允许添加水印
      */
@@ -65,14 +65,14 @@ public class XpdfPage {
     /**
      * 无参构造
      */
-    public XpdfPage() {
+    public XEasyPdfPage() {
     }
 
     /**
      * 有参构造
      * @param page pdfBox页面
      */
-    public XpdfPage(PDPage page) {
+    public XEasyPdfPage(PDPage page) {
         this.pageList.add(page);
     }
 
@@ -80,7 +80,7 @@ public class XpdfPage {
      * 有参构造
      * @param pageSize pdfBox页面尺寸
      */
-    public XpdfPage(PDRectangle pageSize) {
+    public XEasyPdfPage(PDRectangle pageSize) {
         this.pageSize = pageSize;
     }
 
@@ -89,7 +89,7 @@ public class XpdfPage {
      * @param allowWatermark 是否允许添加水印
      * @return 返回pdf页面
      */
-    public XpdfPage setAllowWatermark(boolean allowWatermark) {
+    public XEasyPdfPage setAllowWatermark(boolean allowWatermark) {
         this.allowWatermark = allowWatermark;
         return this;
     }
@@ -99,7 +99,7 @@ public class XpdfPage {
      * @param components pdf组件
      * @return 返回pdf页面
      */
-    public XpdfPage addComponent(XpdfComponent...components) {
+    public XEasyPdfPage addComponent(XEasyPdfComponent...components) {
         // 如果组件不为空，则添加组件
         if (components!=null) {
             // 添加组件
@@ -113,7 +113,7 @@ public class XpdfPage {
      * @return 返回pdf页面
      * @throws IOException IO异常
      */
-    public XpdfPage build(XpdfDocument document) throws IOException {
+    public XEasyPdfPage build(XEasyPdfDocument document) throws IOException {
         return this.build(document, null);
     }
 
@@ -123,11 +123,11 @@ public class XpdfPage {
      * @return 返回pdf页面
      * @throws IOException IO异常
      */
-    public XpdfPage build(XpdfDocument document, PDRectangle pageSize) throws IOException {
+    public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
         this.pageList.add(pageSize==null?new PDPage(this.pageSize):new PDPage(pageSize));
         // 遍历组件列表
-        for (XpdfComponent component : componentList) {
+        for (XEasyPdfComponent component : this.componentList) {
             // 组件绘制
             component.draw(document, this);
         }

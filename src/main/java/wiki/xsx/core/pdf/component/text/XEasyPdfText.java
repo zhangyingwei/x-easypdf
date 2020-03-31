@@ -2,9 +2,9 @@ package wiki.xsx.core.pdf.component.text;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import wiki.xsx.core.pdf.component.XpdfComponent;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -26,12 +26,12 @@ import java.util.List;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XpdfText implements XpdfComponent {
+public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 文本参数
      */
-    private XpdfTextParam param = new XpdfTextParam();
+    private XEasyPdfTextParam param = new XEasyPdfTextParam();
 
     /**
      * 当前页面文本最后一行索引
@@ -43,7 +43,7 @@ public class XpdfText implements XpdfComponent {
      * @param fontPath 字体路径
      * @param text 待输入文本
      */
-    public XpdfText(String fontPath, String text) {
+    public XEasyPdfText(String fontPath, String text) {
         this.param.setFontPath(fontPath).setText(text);
     }
 
@@ -53,7 +53,7 @@ public class XpdfText implements XpdfComponent {
      * @param fontSize 字体大小
      * @param text 待输入文本
      */
-    public XpdfText(String fontPath, float fontSize, String text) {
+    public XEasyPdfText(String fontPath, float fontSize, String text) {
         this.param.setFontPath(fontPath).setFontSize(fontSize).setText(text);
     }
 
@@ -65,7 +65,7 @@ public class XpdfText implements XpdfComponent {
      * @param beginY 当前页面Y轴起始坐标
      * @param text 待输入文本
      */
-    public XpdfText(String fontPath, float fontSize, float beginX, float beginY, String text) {
+    public XEasyPdfText(String fontPath, float fontSize, float beginX, float beginY, String text) {
         this.param.setFontPath(fontPath).setFontSize(fontSize).setBeginX(beginX).setBeginY(beginY).setText(text);
     }
 
@@ -78,7 +78,7 @@ public class XpdfText implements XpdfComponent {
      * @param beginY 当前页面Y轴起始坐标
      * @param text 待输入文本
      */
-    public XpdfText(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
+    public XEasyPdfText(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
         this.param.setFontPath(fontPath).setFontSize(fontSize).setLeading(leading).setBeginX(beginX).setBeginY(beginY).setText(text);
     }
 
@@ -86,7 +86,7 @@ public class XpdfText implements XpdfComponent {
      * 有参构造
      * @param param 文本参数
      */
-    public XpdfText(XpdfTextParam param) {
+    public XEasyPdfText(XEasyPdfTextParam param) {
         if (param==null) {
             throw new IllegalArgumentException("the param is not invalid");
         }
@@ -98,7 +98,7 @@ public class XpdfText implements XpdfComponent {
      * @param margin 边距
      * @return 返回文本组件
      */
-    public XpdfText setMargin(float margin) {
+    public XEasyPdfText setMargin(float margin) {
         this.param.setMarginLeft(margin).setMarginRight(margin).setMarginTop(margin).setMarginBottom(margin);
         return this;
     }
@@ -108,7 +108,7 @@ public class XpdfText implements XpdfComponent {
      * @param margin 边距
      * @return 返回文本组件
      */
-    public XpdfText setMarginLeft(float margin) {
+    public XEasyPdfText setMarginLeft(float margin) {
         this.param.setMarginLeft(margin);
         return this;
     }
@@ -118,7 +118,7 @@ public class XpdfText implements XpdfComponent {
      * @param margin 边距
      * @return 返回文本组件
      */
-    public XpdfText setMarginRight(float margin) {
+    public XEasyPdfText setMarginRight(float margin) {
         this.param.setMarginRight(margin);
         return this;
     }
@@ -128,7 +128,7 @@ public class XpdfText implements XpdfComponent {
      * @param margin 边距
      * @return 返回文本组件
      */
-    public XpdfText setMarginTop(float margin) {
+    public XEasyPdfText setMarginTop(float margin) {
         this.param.setMarginTop(margin);
         return this;
     }
@@ -138,7 +138,7 @@ public class XpdfText implements XpdfComponent {
      * @param margin 边距
      * @return 返回文本组件
      */
-    public XpdfText setMarginBottom(float margin) {
+    public XEasyPdfText setMarginBottom(float margin) {
         this.param.setMarginBottom(margin);
         return this;
     }
@@ -149,7 +149,7 @@ public class XpdfText implements XpdfComponent {
      * @param y 当前页面Y轴坐标
      * @return 返回文本组件
      */
-    public XpdfText setPosition(float x, float y) {
+    public XEasyPdfText setPosition(float x, float y) {
         this.param.setBeginX(x).setBeginY(y);
         return this;
     }
@@ -159,7 +159,7 @@ public class XpdfText implements XpdfComponent {
      * @param leading 行间距
      * @return 返回文本组件
      */
-    public XpdfText setLeading(float leading) {
+    public XEasyPdfText setLeading(float leading) {
         if (leading>0) {
             this.param.setLeading(leading);
         }
@@ -171,7 +171,7 @@ public class XpdfText implements XpdfComponent {
      * @param fontPath 字体路径
      * @return 返回文本组件
      */
-    public XpdfText setFont(String fontPath) {
+    public XEasyPdfText setFont(String fontPath) {
         this.param.setFontPath(fontPath);
         return this;
     }
@@ -181,7 +181,7 @@ public class XpdfText implements XpdfComponent {
      * @param fontSize 字体大小
      * @return 返回文本组件
      */
-    public XpdfText setFontSize(float fontSize) {
+    public XEasyPdfText setFontSize(float fontSize) {
         this.param.setFontSize(fontSize);
         return this;
     }
@@ -191,7 +191,7 @@ public class XpdfText implements XpdfComponent {
      * @param style 样式
      * @return 返回文本组件
      */
-    public XpdfText setStyle(XpdfTextStyle style) {
+    public XEasyPdfText setStyle(XEasyPdfTextStyle style) {
         this.param.setStyle(style);
         return this;
     }
@@ -204,7 +204,7 @@ public class XpdfText implements XpdfComponent {
      * @throws IOException IO异常
      */
     @Override
-    public void draw(XpdfDocument document, XpdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         this.doDraw(document, page);
     }
 
@@ -214,7 +214,7 @@ public class XpdfText implements XpdfComponent {
      * @return 返回内容流
      * @throws IOException IO异常
      */
-    private PDPageContentStream initPageContentStream(XpdfDocument document, XpdfPage page) throws IOException {
+    private PDPageContentStream initPageContentStream(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
                 document.getDocument(),
@@ -235,7 +235,7 @@ public class XpdfText implements XpdfComponent {
      * @param document pdf文档
      * @throws IOException IO异常
      */
-    private void doDraw(XpdfDocument document, XpdfPage page) throws IOException {
+    private void doDraw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 参数初始化
         this.param.init(document, page);
         // 拆分后的待添加文本列表
@@ -247,7 +247,7 @@ public class XpdfText implements XpdfComponent {
         // 定义内容流
         PDPageContentStream stream = null;
         // 居左样式
-        if (this.param.getStyle()==null||this.param.getStyle()==XpdfTextStyle.LEFT) {
+        if (this.param.getStyle()==null||this.param.getStyle()== XEasyPdfTextStyle.LEFT) {
             // 遍历文本输入
             for (String text : splitTextList) {
                 // 分页检查，并居左写入文本
@@ -275,7 +275,7 @@ public class XpdfText implements XpdfComponent {
                 }
             }
             // 居中样式
-        }else if (this.param.getStyle()==XpdfTextStyle.CENTER) {
+        }else if (this.param.getStyle()== XEasyPdfTextStyle.CENTER) {
             // 遍历文本输入
             for (String text : splitTextList) {
                 // 分页检查
@@ -332,13 +332,13 @@ public class XpdfText implements XpdfComponent {
      * @return 返回内容流
      * @throws IOException IO异常
      */
-    private PDPageContentStream checkPage(XpdfPage page, PDPageContentStream stream) throws IOException {
+    private PDPageContentStream checkPage(XEasyPdfPage page, PDPageContentStream stream) throws IOException {
         // 分页检查
         if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()) <= this.param.getMarginBottom()) {
             // 如果内容流不为空，则关闭并设置为空
             if (stream!=null) {
                 // 如果文本样式为居右样式，则结束文本写入
-                if (this.param.getStyle()!=XpdfTextStyle.RIGHT) {
+                if (this.param.getStyle()!= XEasyPdfTextStyle.RIGHT) {
                     // 结束文本写入
                     stream.endText();
                 }
@@ -371,8 +371,8 @@ public class XpdfText implements XpdfComponent {
      * @throws IOException IO异常
      */
     private PDPageContentStream writeTextWithLeft(
-            XpdfDocument document,
-            XpdfPage page,
+            XEasyPdfDocument document,
+            XEasyPdfPage page,
             PDPageContentStream stream,
             String text
     ) throws IOException {
@@ -405,8 +405,8 @@ public class XpdfText implements XpdfComponent {
      * @throws IOException IO异常
      */
     private PDPageContentStream writeTextWithCenter(
-            XpdfDocument document,
-            XpdfPage page,
+            XEasyPdfDocument document,
+            XEasyPdfPage page,
             PDPageContentStream stream,
             String text,
             boolean isLastLine
@@ -459,8 +459,8 @@ public class XpdfText implements XpdfComponent {
      * @throws IOException IO异常
      */
     private PDPageContentStream writeTextWithRight(
-            XpdfDocument document,
-            XpdfPage page,
+            XEasyPdfDocument document,
+            XEasyPdfPage page,
             PDPageContentStream stream,
             String text
     ) throws IOException {

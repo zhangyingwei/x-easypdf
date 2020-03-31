@@ -5,8 +5,8 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
-import wiki.xsx.core.pdf.doc.XpdfDocument;
-import wiki.xsx.core.pdf.doc.XpdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +19,7 @@ import java.nio.file.Paths;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * xpdf is licensed under the Mulan PSL v1.
+ * x-easypdf is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  * http://license.coscl.org.cn/MulanPSL
@@ -31,7 +31,7 @@ import java.nio.file.Paths;
  */
 @Data
 @Accessors(chain = true)
-public class XpdfWatermarkParam {
+public class XEasyPdfWatermarkParam {
     /**
      * 字体路径
      */
@@ -68,7 +68,7 @@ public class XpdfWatermarkParam {
      * @return 返回pdfBox扩展图形对象
      * @throws IOException IO异常
      */
-    public PDExtendedGraphicsState init(XpdfDocument document, XpdfPage page) throws IOException {
+    public PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
@@ -80,7 +80,7 @@ public class XpdfWatermarkParam {
         // 如果水印文本未初始化，则进行初始化
         if (this.text==null) {
             // 初始化水印文本
-            this.text = "xpdf";
+            this.text = "XEasyPdf";
         }
         // 如果文本间距未初始化，则进行初始化
         if (this.wordSpace==null) {
