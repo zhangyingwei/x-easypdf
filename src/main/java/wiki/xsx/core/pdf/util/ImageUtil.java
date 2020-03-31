@@ -34,6 +34,9 @@ public class ImageUtil {
      * @throws IOException IO异常
      */
     public static BufferedImage read(File imageFile) throws IOException {
+        if (imageFile==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
         return ImageIO.read(imageFile);
     }
 
@@ -44,6 +47,9 @@ public class ImageUtil {
      * @throws IOException IO异常
      */
     public static BufferedImage read(InputStream imageStream) throws IOException {
+        if (imageStream==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
         return ImageIO.read(imageStream);
     }
 
@@ -53,6 +59,9 @@ public class ImageUtil {
      * @return 返回图片类型
      */
     public static String parseType(File imageFile) {
+        if (imageFile==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
         String name = imageFile.getName();
         int dot = imageFile.getName().lastIndexOf('.');
         if (dot==-1) {
@@ -70,6 +79,9 @@ public class ImageUtil {
      * @return 返回缩放后的图片对象
      */
     public static BufferedImage scale(BufferedImage sourceImage, int width, int height, int scaleMode) {
+        if (sourceImage==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
         Image temp = sourceImage.getScaledInstance(width, height, scaleMode);
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
@@ -80,14 +92,19 @@ public class ImageUtil {
 
     /**
      * 转为字节数组
-     * @param image 源图片
+     * @param sourceImage 源图片
      * @param imageType 图片类型
      * @return 返回字节数组
      * @throws IOException IO异常
      */
-    public static byte[] toBytes(BufferedImage image, String imageType) throws IOException {
+    public static byte[] toBytes(BufferedImage sourceImage, String imageType) throws IOException {
+        if (sourceImage==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, imageType, outputStream);
-        return outputStream.toByteArray();
+        ImageIO.write(sourceImage, imageType, outputStream);
+        byte[] bytes = outputStream.toByteArray();
+        outputStream.close();
+        return bytes;
     }
 }

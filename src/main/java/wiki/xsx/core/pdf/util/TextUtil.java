@@ -34,6 +34,11 @@ public class TextUtil {
      * @throws IOException IO异常
      */
     public static List<String> splitLines(String text, float lineWidth, PDFont font, float fontSize) throws IOException {
+        // 如果待输入文本为空，或文本长度为0，则直接返回空列表
+        if (text==null||text.trim().length()==0) {
+            // 返回空列表
+            return new ArrayList<>(0);
+        }
         // 定义文本列表
         List<String> lineList = new ArrayList<>(200);
         // 定义临时文本
