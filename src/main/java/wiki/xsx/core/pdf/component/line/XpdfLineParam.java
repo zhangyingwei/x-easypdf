@@ -75,5 +75,5 @@ public class XpdfLineParam {
     /**
      * 线型
      */
-    private LineCapStyle lineCapStyle = LineCapStyle.NORMAL;
+    private XpdfLineCapStyle xpdfLineCapStyle = XpdfLineCapStyle.NORMAL;
 }

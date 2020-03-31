@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.util;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XpdfComponent;
+import wiki.xsx.core.pdf.component.image.XpdfImage;
 import wiki.xsx.core.pdf.component.line.XpdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XpdfLine;
 import wiki.xsx.core.pdf.component.line.XpdfSolidSplitLine;
@@ -10,10 +11,12 @@ import wiki.xsx.core.pdf.component.text.XpdfText;
 import wiki.xsx.core.pdf.doc.XpdfDocument;
 import wiki.xsx.core.pdf.doc.XpdfPage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 
 /**
  * pdf工具类
@@ -170,6 +173,52 @@ public class PdfUtil {
      */
     public static void insert(String sourcePath, OutputStream outputStream, XpdfWatermark globalWatermark, int index, XpdfPage...pages) throws IOException {
         new XpdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(outputStream);
+    }
+
+    /**
+     * 模板填充
+     * @param templateSourcePath 模板源文件路径
+     * @param outputPath 文件输出路径
+     * @param formMap 表单字典
+     * @throws IOException IO异常
+     */
+    public static void fill(String templateSourcePath, String outputPath, String fontPath, Map<String, String> formMap) throws IOException {
+        new XpdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 模板填充
+     * @param templateSourcePath 模板源文件路径
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param formMap 表单字典
+     * @throws IOException IO异常
+     */
+    public static void fill(String templateSourcePath, String outputPath, XpdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+        new XpdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(Files.newOutputStream(Paths.get(outputPath)));
+    }
+
+    /**
+     * 模板填充
+     * @param templateSourcePath 模板源文件路径
+     * @param outputPath 文件输出流
+     * @param formMap 表单字典
+     * @throws IOException IO异常
+     */
+    public static void fill(String templateSourcePath, OutputStream outputPath, String fontPath, Map<String, String> formMap) throws IOException {
+        new XpdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(outputPath);
+    }
+
+    /**
+     * 模板填充
+     * @param templateSourcePath 模板源文件路径
+     * @param outputPath 文件输出流
+     * @param globalWatermark 全局水印
+     * @param formMap 表单字典
+     * @throws IOException IO异常
+     */
+    public static void fill(String templateSourcePath, OutputStream outputPath, XpdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+        new XpdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(outputPath);
     }
 
     /**
@@ -344,6 +393,44 @@ public class PdfUtil {
             public static XpdfDottedSplitLine build(String fontPath) {
                 return new XpdfDottedSplitLine(fontPath);
             }
+        }
+    }
+
+    /**
+     * 图片组件
+     */
+    public static class Image {
+        /**
+         * 创建图片
+         * @param image 待添加图片
+         * @return 返回pdf图片组件
+         */
+        public static XpdfImage build(File image) {
+            return new XpdfImage(image);
+        }
+
+        /**
+         * 创建图片
+         * @param image 待添加图片
+         * @param width 图片宽度
+         * @param height 图片高度
+         * @return 返回pdf图片组件
+         */
+        public static XpdfImage build(File image, int width, int height) {
+            return new XpdfImage(image, width, height);
+        }
+
+        /**
+         * 创建图片
+         * @param image 待添加图片
+         * @param width 图片宽度
+         * @param height 图片高度
+         * @param beginX X轴起始坐标
+         * @param beginY Y轴起始坐标
+         * @return 返回pdf图片组件
+         */
+        public static XpdfImage build(File image, int width, int height, float beginX, float beginY) {
+            return new XpdfImage(image, width, height, beginX, beginY);
         }
     }
 }

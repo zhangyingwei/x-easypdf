@@ -112,11 +112,11 @@ public class XpdfDottedSplitLine implements XpdfComponent {
 
     /**
      * 设置分割线线型
-     * @param lineCapStyle 分割线线型
+     * @param xpdfLineCapStyle 分割线线型
      * @return 返回虚线分割线组件
      */
-    public XpdfDottedSplitLine setLineCapStyle(LineCapStyle lineCapStyle) {
-        this.param.setLineCapStyle(lineCapStyle);
+    public XpdfDottedSplitLine setLineCapStyle(XpdfLineCapStyle xpdfLineCapStyle) {
+        this.param.setXpdfLineCapStyle(xpdfLineCapStyle);
         return this;
     }
 

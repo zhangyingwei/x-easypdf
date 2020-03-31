@@ -247,7 +247,7 @@ public class XpdfText implements XpdfComponent {
         // 定义内容流
         PDPageContentStream stream = null;
         // 居左样式
-        if (this.param.getStyle()==null||this.param.getStyle()== XpdfTextStyle.LEFT) {
+        if (this.param.getStyle()==null||this.param.getStyle()==XpdfTextStyle.LEFT) {
             // 遍历文本输入
             for (String text : splitTextList) {
                 // 分页检查，并居左写入文本
@@ -275,7 +275,7 @@ public class XpdfText implements XpdfComponent {
                 }
             }
             // 居中样式
-        }else if (this.param.getStyle()== XpdfTextStyle.CENTER) {
+        }else if (this.param.getStyle()==XpdfTextStyle.CENTER) {
             // 遍历文本输入
             for (String text : splitTextList) {
                 // 分页检查

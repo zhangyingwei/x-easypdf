@@ -105,11 +105,11 @@ public class XpdfSolidSplitLine implements XpdfComponent {
 
     /**
      * 设置分割线线型
-     * @param lineCapStyle 分割线线型
+     * @param xpdfLineCapStyle 分割线线型
      * @return 返回实线分割线组件
      */
-    public XpdfSolidSplitLine setLineCapStyle(LineCapStyle lineCapStyle) {
-        this.param.setLineCapStyle(lineCapStyle);
+    public XpdfSolidSplitLine setLineCapStyle(XpdfLineCapStyle xpdfLineCapStyle) {
+        this.param.setXpdfLineCapStyle(xpdfLineCapStyle);
         return this;
     }
 

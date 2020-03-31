@@ -1,16 +1,20 @@
 package wiki.xsx.core.pdf.doc;
 
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import wiki.xsx.core.pdf.component.mark.XpdfWatermark;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * pdf文档
@@ -57,7 +61,7 @@ public class XpdfDocument {
      */
     public XpdfDocument(String filePath) throws IOException {
         // 读取pdfBox文档
-        this.document = PDDocument.load(new File(filePath));
+        this.document = PDDocument.load(Files.newInputStream(Paths.get(filePath)));
         // 获取pdfBox页面树
         PDPageTree pages = this.document.getPages();
         // 遍历pdfBox页面树
@@ -106,6 +110,51 @@ public class XpdfDocument {
      */
     public XpdfDocument setGlobalWatermark(XpdfWatermark globalWatermark) {
         this.globalWatermark = globalWatermark;
+        return this;
+    }
+
+    /**
+     * 填充表单
+     * @param formMap 表单字典
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    public XpdfDocument fillAcroForm(String fontPath, Map<String, String> formMap) throws IOException {
+        // 如果填充表单字典为空，则直接返回
+        if (formMap==null||formMap.size()==0) {
+            return this;
+        }
+        // 定义pdfBox表单字段
+        PDField field;
+        // 获取pdfBox表单
+        PDAcroForm acroForm = this.document.getDocumentCatalog().getAcroForm();
+        // 如果pdfBox表单不为空，则进行填充
+        if (acroForm!=null) {
+            // 定义pdfBox数据源
+            PDResources resources = new PDResources();
+            // 设置字体
+            resources.put(
+                    COSName.getPDFName("AdobeSongStd-Light"),
+                    PDType0Font.load(
+                            this.document,
+                            Files.newInputStream(Paths.get(fontPath))
+                    )
+            );
+            // 设置pdfBox表单默认的数据源
+            acroForm.setDefaultResources(resources);
+            // 获取表单字典键值集合
+            Set<Map.Entry<String, String>> entrySet = formMap.entrySet();
+            // 遍历表单字典
+            for (Map.Entry<String, String> entry : entrySet) {
+                // 获取表单字典中对应的pdfBox表单字段
+                field = acroForm.getField(entry.getKey());
+                // 如果pdfBox表单字段不为空，则填充值
+                if (field!=null) {
+                    // 设置值
+                    field.setValue(entry.getValue());
+                }
+            }
+        }
         return this;
     }
 

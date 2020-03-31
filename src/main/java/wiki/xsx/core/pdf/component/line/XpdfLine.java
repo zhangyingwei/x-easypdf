@@ -92,11 +92,11 @@ public class XpdfLine implements XpdfComponent {
 
     /**
      * 设置线条线型
-     * @param lineCapStyle 线条线型
+     * @param xpdfLineCapStyle 线条线型
      * @return 返回线条组件
      */
-    public XpdfLine setLineCapStyle(LineCapStyle lineCapStyle) {
-        this.param.setLineCapStyle(lineCapStyle);
+    public XpdfLine setLineCapStyle(XpdfLineCapStyle xpdfLineCapStyle) {
+        this.param.setXpdfLineCapStyle(xpdfLineCapStyle);
         return this;
     }
 
@@ -163,7 +163,7 @@ public class XpdfLine implements XpdfComponent {
         // 设置线宽
         contentStream.setLineWidth(this.param.getLineWidth());
         // 设置线型
-        contentStream.setLineCapStyle(this.param.getLineCapStyle().getType());
+        contentStream.setLineCapStyle(this.param.getXpdfLineCapStyle().getType());
         return contentStream;
     }
 }

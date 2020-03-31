@@ -1,9 +1,9 @@
-package wiki.xsx.core.pdf.component.line;
+package wiki.xsx.core.pdf.component.image;
 
 /**
- * 线型样式枚举
+ * 图片样式枚举
  * @author xsx
- * @date 2020/3/4
+ * @date 2020/3/30
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
@@ -17,37 +17,17 @@ package wiki.xsx.core.pdf.component.line;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public enum LineCapStyle {
+public enum  XpdfImageStyle {
     /**
-     * 正常
+     * 居中
      */
-    NORMAL(0),
+    CENTER,
     /**
-     * 圆角
+     * 居左
      */
-    ROUND(1),
+    LEFT,
     /**
-     * 方角
+     * 居右
      */
-    SQUARE(2);
-    /**
-     * 类型
-     */
-    private int type;
-
-    /**
-     * 有参构造
-     * @param type 类型
-     */
-    LineCapStyle(int type) {
-        this.type = type;
-    }
-
-    /**
-     * 获取类型
-     * @return 返回类型
-     */
-    public int getType() {
-        return this.type;
-    }
+    RIGHT;
 }
