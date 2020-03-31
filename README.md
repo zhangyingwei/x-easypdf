@@ -32,7 +32,7 @@ https://apidoc.gitee.com/xsxgit/xpdf
 
 #### 软件架构
 
-![软件架构](https://images.gitee.com/uploads/images/2020/0326/101455_58ae71e8_1494292.png "xpdf整体架构.png")
+![软件架构](https://images.gitee.com/uploads/images/2020/0331/134211_0652923a_1494292.png "xpdf整体架构.png")
 
 1. document(文档)：PDF文档
 2. page(页面)：若干个页面组成PDF文档
