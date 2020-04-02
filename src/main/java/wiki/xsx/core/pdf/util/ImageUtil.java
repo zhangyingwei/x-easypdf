@@ -101,10 +101,9 @@ public class ImageUtil {
         if (sourceImage==null) {
             throw new IllegalArgumentException("Image can not be null");
         }
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(sourceImage, imageType, outputStream);
-        byte[] bytes = outputStream.toByteArray();
-        outputStream.close();
-        return bytes;
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(sourceImage, imageType, outputStream);
+            return outputStream.toByteArray();
+        }
     }
 }

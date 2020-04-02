@@ -7,6 +7,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -216,12 +217,10 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
                 // Y轴起始坐标
                 this.param.getBeginY()
         );
-        // 设置字体
-        this.param.setFont(
-                PDType0Font.load(
-                        document.getDocument(),
-                        Files.newInputStream(Paths.get(this.param.getFontPath()))
-                )
-        );
+        // 读取字体数据流
+        try (InputStream inputStream = Files.newInputStream(Paths.get(this.param.getFontPath()))) {
+            // 设置字体
+            this.param.setFont(PDType0Font.load(document.getDocument(),inputStream));
+        }
     }
 }

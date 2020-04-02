@@ -5,12 +5,14 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -46,6 +48,10 @@ public class XEasyPdfDocument {
      * 全局页面水印
      */
     private XEasyPdfWatermark globalWatermark;
+    /**
+     * pdfBox保护策略
+     */
+    private ProtectionPolicy policy;
 
     /**
      * 无参构造方法
@@ -60,8 +66,28 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument(String filePath) throws IOException {
+        // 读取文件流
+        try (InputStream inputStream = Files.newInputStream(Paths.get(filePath))) {
+            // 读取pdfBox文档
+            this.document = PDDocument.load(inputStream);
+            // 获取pdfBox页面树
+            PDPageTree pages = this.document.getPages();
+            // 遍历pdfBox页面树
+            for (PDPage page : pages) {
+                // 添加pdfBox页面
+                this.pageList.add(new XEasyPdfPage(page));
+            }
+        }
+    }
+
+    /**
+     * 有参构造方法
+     * @param inputStream 数据流
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocument(InputStream inputStream) throws IOException {
         // 读取pdfBox文档
-        this.document = PDDocument.load(Files.newInputStream(Paths.get(filePath)));
+        this.document = PDDocument.load(inputStream);
         // 获取pdfBox页面树
         PDPageTree pages = this.document.getPages();
         // 遍历pdfBox页面树
@@ -69,6 +95,24 @@ public class XEasyPdfDocument {
             // 添加pdfBox页面
             this.pageList.add(new XEasyPdfPage(page));
         }
+    }
+
+    /**
+     * 开启访问权限
+     * @return 返回pdf文档
+     */
+    public XEasyPdfPermission enablePermission() {
+        return new XEasyPdfPermission(this);
+    }
+
+    /**
+     * 设置文档水印（每个页面都将添加水印）
+     * @param globalWatermark 页面水印
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
+        this.globalWatermark = globalWatermark;
+        return this;
     }
 
     /**
@@ -104,16 +148,6 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 设置文档水印（每个页面都将添加水印）
-     * @param globalWatermark 页面水印
-     * @return 返回pdf文档
-     */
-    public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
-        this.globalWatermark = globalWatermark;
-        return this;
-    }
-
-    /**
      * 填充表单
      * @param fontPath 字体路径
      * @param formMap 表单字典
@@ -133,14 +167,14 @@ public class XEasyPdfDocument {
         if (acroForm!=null) {
             // 定义pdfBox数据源
             PDResources resources = new PDResources();
-            // 设置字体
-            resources.put(
-                    COSName.getPDFName("AdobeSongStd-Light"),
-                    PDType0Font.load(
-                            this.document,
-                            Files.newInputStream(Paths.get(fontPath))
-                    )
-            );
+            // 读取字体数据流
+            try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
+                // 设置字体
+                resources.put(
+                        COSName.getPDFName("AdobeSongStd-Light"),
+                        PDType0Font.load(this.document, inputStream)
+                );
+            }
             // 设置pdfBox表单默认的数据源
             acroForm.setDefaultResources(resources);
             // 获取表单字典键值集合
@@ -161,6 +195,17 @@ public class XEasyPdfDocument {
 
     /**
      * 保存（页面构建）
+     * @param outputPath 文件输出路径
+     * @throws IOException IO异常
+     */
+    public void save(String outputPath) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            this.save(outputStream);
+        }
+    }
+
+    /**
+     * 保存（页面构建）
      * @param outputStream 文件输出流
      * @throws IOException IO异常
      */
@@ -170,28 +215,33 @@ public class XEasyPdfDocument {
         // 定义pdfBox页面列表
         List<PDPage> pageList;
         // 遍历pdf页面列表
-        for (XEasyPdfPage XEasyPdfPage : this.pageList) {
+        for (XEasyPdfPage pdfPage : this.pageList) {
             // 如果pdf页面组件数量大于0，则进行页面构建
-            if (XEasyPdfPage.getComponentList().size()>0) {
+            if (pdfPage.getComponentList().size()>0) {
                 // pdf页面构建
-                XEasyPdfPage.build(this);
+                pdfPage.build(this);
             }
             // 初始化pdfBox页面列表
-            pageList = XEasyPdfPage.getPageList();
+            pageList = pdfPage.getPageList();
             // 遍历pdfBox页面列表
             for (PDPage page : pageList) {
                 // 任务文档添加页面
                 target.addPage(page);
             }
             // 如果页面水印不为空，则进行页面水印绘制
-            if (XEasyPdfPage.getWatermark()!=null) {
+            if (pdfPage.getWatermark()!=null) {
                 // 绘制页面水印
-                XEasyPdfPage.getWatermark().draw(this, XEasyPdfPage);
+                pdfPage.getWatermark().draw(this, pdfPage);
             // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
-            }else if (this.globalWatermark !=null&& XEasyPdfPage.isAllowWatermark()) {
+            }else if (this.globalWatermark !=null&&pdfPage.isAllowWatermark()) {
                 // 绘制页面水印
-                this.globalWatermark.draw(this, XEasyPdfPage);
+                this.globalWatermark.draw(this, pdfPage);
             }
+        }
+        // 如果pdfBox保护策略不为空，则进行设置
+        if (this.policy!=null) {
+            // 设置pdf保护策略
+            target.protect(this.policy);
         }
         // 保存任务文档
         target.save(outputStream);
@@ -210,10 +260,18 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 获取pdfBox页面列表
-     * @return 返回pdfBox页面列表
+     * 获取pdf页面列表
+     * @return 返回pdf页面列表
      */
     public List<XEasyPdfPage> getPageList() {
         return this.pageList;
+    }
+
+    /**
+     * 设置pdfBox保护策略
+     * @param policy pdfBox保护策略
+     */
+    protected void setProtectionPolicy(ProtectionPolicy policy) {
+        this.policy = policy;
     }
 }

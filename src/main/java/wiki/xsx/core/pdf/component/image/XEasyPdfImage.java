@@ -49,7 +49,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     /**
      * 有参构造
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型
+     * @param imageType 待添加图片类型（扩展名）
      */
     @SneakyThrows
     public XEasyPdfImage(InputStream imageStream, String imageType) {
@@ -73,7 +73,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     /**
      * 有参构造
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型
+     * @param imageType 待添加图片类型（扩展名）
      * @param width 图片宽度
      * @param height 图片高度
      */
@@ -106,7 +106,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     /**
      * 有参构造
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型
+     * @param imageType 待添加图片类型（扩展名）
      * @param width 图片宽度
      * @param height 图片高度
      * @param beginX X轴起始坐标

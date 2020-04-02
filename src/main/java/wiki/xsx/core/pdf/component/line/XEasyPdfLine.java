@@ -8,6 +8,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -123,13 +124,11 @@ public class XEasyPdfLine implements XEasyPdfComponent {
             if (this.param.getFontPath()==null) {
                 throw new RuntimeException("font can not null");
             }
-            // 设置字体
-            this.param.setFont(
-                    PDType0Font.load(
-                            document.getDocument(),
-                            Files.newInputStream(Paths.get(this.param.getFontPath()))
-                    )
-            );
+            // 读取字体数据流
+            try (InputStream inputStream = Files.newInputStream(Paths.get(this.param.getFontPath()))) {
+                // 设置字体
+                this.param.setFont(PDType0Font.load(document.getDocument(),inputStream));
+            }
         }
         // 初始化内容流
         PDPageContentStream contentStream = this.initStream(document, page);

@@ -9,6 +9,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -71,11 +72,11 @@ public class XEasyPdfWatermarkParam {
     public PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
-            // 初始化字体
-            this.font = PDType0Font.load(
-                    document.getDocument(),
-                    Files.newInputStream(Paths.get(this.fontPath))
-            );
+            // 读取字体数据流
+            try (InputStream inputStream =Files.newInputStream(Paths.get(this.fontPath))) {
+                // 初始化字体
+                this.font = PDType0Font.load(document.getDocument(), inputStream);
+            }
         }
         // 如果水印文本未初始化，则进行初始化
         if (this.text==null) {
@@ -95,6 +96,4 @@ public class XEasyPdfWatermarkParam {
         state.setAlphaSourceFlag(true);
         return state;
     }
-
-
 }
