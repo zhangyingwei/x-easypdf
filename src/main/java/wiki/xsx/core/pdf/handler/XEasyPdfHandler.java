@@ -1,20 +1,20 @@
 package wiki.xsx.core.pdf.handler;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.image.XEasyPdfDefaultImage;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
-import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
-import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
-import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
+import wiki.xsx.core.pdf.component.line.*;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.component.text.XEasyPdfDefaultText;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  * pdf助手
@@ -40,152 +40,28 @@ public class XEasyPdfHandler {
      */
     public static class Document {
         /**
-         * 创建pdf
-         * @param pages pdf页面
-         * @throws IOException IO异常
+         * 构建pdf
          */
-        public static XEasyPdfDocument buildWithCreate(XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument().addPage(pages);
+        public static XEasyPdfDocument build() {
+            return new XEasyPdfDocument();
         }
 
         /**
-         * 创建pdf
-         * @param globalWatermark 全局水印
-         * @param pages pdf页面
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithCreate(XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument().setGlobalWatermark(globalWatermark).addPage(pages);
-        }
-
-        /**
-         * 追加pdf
+         * 构建pdf
          * @param sourcePath 源文件路径
-         * @param pages pdf页面
-         * @throws IOException IO异常
          */
-        public static XEasyPdfDocument buildWithAppend(String sourcePath, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourcePath).addPage(pages);
+        @SneakyThrows
+        public static XEasyPdfDocument build(String sourcePath) {
+            return new XEasyPdfDocument(sourcePath);
         }
 
         /**
-         * 追加pdf
-         * @param sourcePath 源文件路径
-         * @param globalWatermark 全局水印
-         * @param pages pdf页面
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithAppend(String sourcePath, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages);
-        }
-
-        /**
-         * 追加pdf
+         * 构建pdf
          * @param sourceInputStream 源文件数据流
-         * @param pages pdf页面
-         * @throws IOException IO异常
          */
-        public static XEasyPdfDocument buildWithAppend(InputStream sourceInputStream, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourceInputStream).addPage(pages);
-        }
-
-        /**
-         * 追加pdf
-         * @param sourceInputStream 源文件数据流
-         * @param globalWatermark 全局水印
-         * @param pages pdf页面
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithAppend(InputStream sourceInputStream, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).addPage(pages);
-        }
-
-        /**
-         * 插入pdf页面
-         * @param sourcePath 源文件路径
-         * @param index pdf页面索引
-         * @param pages pdf页面
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithInsert(String sourcePath, int index, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourcePath).insertPage(index, pages);
-        }
-
-        /**
-         * 插入pdf页面
-         * @param sourcePath 源文件路径
-         * @param globalWatermark 全局水印
-         * @param index pdf页面索引
-         * @param pages pdf页面
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithInsert(String sourcePath, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages);
-        }
-
-        /**
-         * 插入pdf页面
-         * @param sourceInputStream 源文件数据流
-         * @param index pdf页面索引
-         * @param pages pdf页面
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithInsert(InputStream sourceInputStream, int index, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourceInputStream).insertPage(index, pages);
-        }
-
-        /**
-         * 插入pdf页面
-         * @param sourceInputStream 源文件数据流
-         * @param globalWatermark 全局水印
-         * @param index pdf页面索引
-         * @param pages pdf页面
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithInsert(InputStream sourceInputStream, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
-            return new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).insertPage(index, pages);
-        }
-
-        /**
-         * 模板填充
-         * @param templateSourcePath 模板源文件路径
-         * @param formMap 表单字典
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithFill(String templateSourcePath, String fontPath, Map<String, String> formMap) throws IOException {
-            return new XEasyPdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap);
-        }
-
-        /**
-         * 模板填充
-         * @param templateSourcePath 模板源文件路径
-         * @param globalWatermark 全局水印
-         * @param formMap 表单字典
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithFill(String templateSourcePath, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
-            return new XEasyPdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap);
-        }
-
-        /**
-         * 模板填充
-         * @param templateInputStream 模板源文件数据流
-         * @param formMap 表单字典
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithFill(InputStream templateInputStream, String fontPath, Map<String, String> formMap) throws IOException {
-            return new XEasyPdfDocument(templateInputStream).fillAcroForm(fontPath, formMap);
-        }
-
-        /**
-         * 模板填充
-         * @param templateInputStream 模板源文件数据流
-         * @param globalWatermark 全局水印
-         * @param formMap 表单字典
-         * @throws IOException IO异常
-         */
-        public static XEasyPdfDocument buildWithFill(InputStream templateInputStream, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
-            return new XEasyPdfDocument(templateInputStream).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap);
+        @SneakyThrows
+        public static XEasyPdfDocument build(InputStream sourceInputStream) {
+            return new XEasyPdfDocument(sourceInputStream);
         }
     }
 
@@ -194,7 +70,7 @@ public class XEasyPdfHandler {
      */
     public static class Page {
         /**
-         * 创建页面
+         * 构建页面
          * @param components 组件
          * @return 返回pdf页面组件
          */
@@ -203,7 +79,7 @@ public class XEasyPdfHandler {
         }
 
         /**
-         * 创建页面
+         * 构建页面
          * @param components 组件
          * @param watermark 页面水印组件
          * @return 返回pdf页面组件
@@ -213,7 +89,7 @@ public class XEasyPdfHandler {
         }
 
         /**
-         * 创建页面
+         * 构建页面
          * @param pageSize pdfBox页面尺寸
          * @param components 组件
          * @return 返回pdf页面组件
@@ -223,7 +99,7 @@ public class XEasyPdfHandler {
         }
 
         /**
-         * 创建页面
+         * 构建页面
          * @param pageSize pdfBox页面尺寸
          * @param watermark 页面水印组件
          * @param components 组件
@@ -239,24 +115,24 @@ public class XEasyPdfHandler {
      */
     public static class Watermark {
         /**
-         * 创建页面水印
+         * 构建页面水印
          * @param fontPath 字体路径
          * @param text 水印文本
          * @return 返回pdf页面水印组件
          */
         public static XEasyPdfWatermark build(String fontPath, String text) {
-            return new XEasyPdfWatermark(fontPath, text);
+            return new XEasyPdfDefaultWatermark(fontPath, text);
         }
 
         /**
-         * 创建页面水印
+         * 构建页面水印
          * @param fontPath 字体路径
          * @param fontSize 字体大小
          * @param text 水印文本
          * @return 返回pdf页面水印组件
          */
         public static XEasyPdfWatermark build(String fontPath, float fontSize, String text) {
-            return new XEasyPdfWatermark(fontPath, fontSize, text);
+            return new XEasyPdfDefaultWatermark(fontPath, fontSize, text);
         }
     }
 
@@ -265,28 +141,28 @@ public class XEasyPdfHandler {
      */
     public static class Text {
         /**
-         * 创建文本
+         * 构建文本
          * @param fontPath 字体路径
          * @param text 待输入文本
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, String text) {
-            return new XEasyPdfText(fontPath, text);
+            return new XEasyPdfDefaultText(fontPath, text);
         }
 
         /**
-         * 创建文本
+         * 构建文本
          * @param fontPath 字体路径
          * @param fontSize 字体大小
          * @param text 待输入文本
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, float fontSize, String text) {
-            return new XEasyPdfText(fontPath, fontSize, text);
+            return new XEasyPdfDefaultText(fontPath, fontSize, text);
         }
 
         /**
-         * 创建文本
+         * 构建文本
          * @param fontPath 字体路径
          * @param fontSize 字体大小
          * @param beginX 当前页面X轴起始坐标
@@ -295,11 +171,11 @@ public class XEasyPdfHandler {
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, float fontSize, float beginX, float beginY, String text) {
-            return new XEasyPdfText(fontPath, fontSize, beginX, beginY, text);
+            return new XEasyPdfDefaultText(fontPath, fontSize, beginX, beginY, text);
         }
 
         /**
-         * 创建文本
+         * 构建文本
          * @param fontPath 字体路径
          * @param fontSize 字体大小
          * @param leading 行间距
@@ -309,7 +185,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
-            return new XEasyPdfText(fontPath, fontSize, leading, beginX, beginY, text);
+            return new XEasyPdfDefaultText(fontPath, fontSize, leading, beginX, beginY, text);
         }
     }
 
@@ -318,16 +194,16 @@ public class XEasyPdfHandler {
      */
     public static class Line {
         /**
-         * 创建线条
+         * 构建线条
          * @param fontPath 字体路径
          * @param beginX 当前页面X轴起始坐标
          * @param beginY 当前页面Y轴起始坐标
          * @param endX 当前页面X轴结束坐标
          * @param endY 当前页面Y轴结束坐标
-         * @return
+         * @return 返回pdf线条组件
          */
         public static XEasyPdfLine build(String fontPath, float beginX, float beginY, float endX, float endY) {
-            return new XEasyPdfLine(fontPath, beginX, beginY, endX, endY);
+            return new XEasyPdfDefaultLine(fontPath, beginX, beginY, endX, endY);
         }
     }
 
@@ -340,12 +216,12 @@ public class XEasyPdfHandler {
          */
         public static class SolidLine {
             /**
-             * 创建实线分割线
+             * 构建实线分割线
              * @param fontPath 字体路径
              * @return 返回pdf实线分割线组件
              */
             public static XEasyPdfSolidSplitLine build(String fontPath) {
-                return new XEasyPdfSolidSplitLine(fontPath);
+                return new XEasyPdfDefaultSolidSplitLine(fontPath);
             }
         }
 
@@ -354,12 +230,12 @@ public class XEasyPdfHandler {
          */
         public static class DottedLine {
             /**
-             * 创建虚线分割线
+             * 构建虚线分割线
              * @param fontPath 字体路径
              * @return 返回pdf虚线分割线组件
              */
             public static XEasyPdfDottedSplitLine build(String fontPath) {
-                return new XEasyPdfDottedSplitLine(fontPath);
+                return new XEasyPdfDefaultDottedSplitLine(fontPath);
             }
         }
     }
@@ -369,37 +245,37 @@ public class XEasyPdfHandler {
      */
     public static class Image {
         /**
-         * 创建图片
+         * 构建图片
          * @param image 待添加图片
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(File image) {
-            return new XEasyPdfImage(image);
+            return new XEasyPdfDefaultImage(image);
         }
 
         /**
-         * 创建图片
+         * 构建图片
          * @param imageInputStream 待添加图片数据流
          * @param imageType 待添加图片类型（扩展名）
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, String imageType) {
-            return new XEasyPdfImage(imageInputStream, imageType);
+            return new XEasyPdfDefaultImage(imageInputStream, imageType);
         }
 
         /**
-         * 创建图片
+         * 构建图片
          * @param image 待添加图片
          * @param width 图片宽度
          * @param height 图片高度
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(File image, int width, int height) {
-            return new XEasyPdfImage(image, width, height);
+            return new XEasyPdfDefaultImage(image, width, height);
         }
 
         /**
-         * 创建图片
+         * 构建图片
          * @param imageInputStream 待添加图片数据流
          * @param imageType 待添加图片类型（扩展名）
          * @param width 图片宽度
@@ -407,11 +283,11 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, String imageType, int width, int height) {
-            return new XEasyPdfImage(imageInputStream, imageType, width, height);
+            return new XEasyPdfDefaultImage(imageInputStream, imageType, width, height);
         }
 
         /**
-         * 创建图片
+         * 构建图片
          * @param image 待添加图片
          * @param width 图片宽度
          * @param height 图片高度
@@ -420,11 +296,11 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(File image, int width, int height, float beginX, float beginY) {
-            return new XEasyPdfImage(image, width, height, beginX, beginY);
+            return new XEasyPdfDefaultImage(image, width, height, beginX, beginY);
         }
 
         /**
-         * 创建图片
+         * 构建图片
          * @param imageInputStream 待添加图片数据流
          * @param imageType 待添加图片类型（扩展名）
          * @param width 图片宽度
@@ -434,7 +310,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, String imageType, int width, int height, float beginX, float beginY) {
-            return new XEasyPdfImage(imageInputStream, imageType, width, height, beginX, beginY);
+            return new XEasyPdfDefaultImage(imageInputStream, imageType, width, height, beginX, beginY);
         }
     }
 }

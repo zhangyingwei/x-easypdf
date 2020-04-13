@@ -4,14 +4,12 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.FontUtil;
 import wiki.xsx.core.pdf.util.TextUtil;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -117,10 +115,7 @@ public class XEasyPdfTextParam {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = PDType0Font.load(
-                    document.getDocument(),
-                    Files.newInputStream(Paths.get(this.fontPath))
-            );
+            this.font = FontUtil.loadFont(document, page, this.fontPath);
         }
         // 如果页面X轴起始坐标未初始化，则进行初始化
         if (this.beginX==null) {
@@ -130,11 +125,11 @@ public class XEasyPdfTextParam {
         // 如果页面Y轴起始坐标未初始化，则进行初始化
         if (this.beginY==null) {
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
-            this.beginY = page.getPageY() == null?
+            this.beginY = page.getParam().getPageY() == null?
                     // 最大高度 - 上边距 - 字体大小 - 行距
                     this.maxHeight - this.marginTop - this.fontSize - this.leading :
                     // 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
-                    page.getPageY() - this.marginTop - this.fontSize - this.leading;
+                    page.getParam().getPageY() - this.marginTop - this.fontSize - this.leading;
         }
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {

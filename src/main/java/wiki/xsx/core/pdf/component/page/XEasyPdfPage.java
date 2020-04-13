@@ -1,14 +1,16 @@
-package wiki.xsx.core.pdf.doc;
+package wiki.xsx.core.pdf.component.page;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.XEasyPdfComponentBuilder;
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,33 +36,9 @@ import java.util.List;
 public class XEasyPdfPage {
 
     /**
-     * pdfBox最新页面当前X轴坐标
+     * pdf页面参数
      */
-    private Float pageX;
-    /**
-     * pdfBox最新页面当前Y轴坐标
-     */
-    private Float pageY;
-    /**
-     * pdfBox页面尺寸
-     */
-    private PDRectangle pageSize = PDRectangle.A4;
-    /**
-     * 包含的pdfBox页面列表
-     */
-    private List<PDPage> pageList = new ArrayList<>(10);
-    /**
-     * pdf组件列表
-     */
-    private List<XEasyPdfComponent> componentList = new ArrayList<>(10);
-    /**
-     * 页面水印
-     */
-    private XEasyPdfWatermark watermark;
-    /**
-     * 是否允许添加水印
-     */
-    private boolean allowWatermark = true;
+    private XEasyPdfPageParam param = new XEasyPdfPageParam();
 
     /**
      * 无参构造
@@ -73,7 +51,7 @@ public class XEasyPdfPage {
      * @param page pdfBox页面
      */
     public XEasyPdfPage(PDPage page) {
-        this.pageList.add(page);
+        this.param.getPageList().add(page);
     }
 
     /**
@@ -81,17 +59,34 @@ public class XEasyPdfPage {
      * @param pageSize pdfBox页面尺寸
      */
     public XEasyPdfPage(PDRectangle pageSize) {
-        this.pageSize = pageSize;
+        if (pageSize!=null) {
+            this.param.setPageSize(pageSize);
+        }
     }
 
-    /**
-     * 设置是否允许添加水印
-     * @param allowWatermark 是否允许添加水印
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage setAllowWatermark(boolean allowWatermark) {
-        this.allowWatermark = allowWatermark;
+    public XEasyPdfPage setFontPath(String fontPath) {
+        if (fontPath!=null&&fontPath.trim().length()>0) {
+            this.param.setFontPath(fontPath);
+        }
         return this;
+    }
+
+    public XEasyPdfPage setFont(PDFont font) {
+        this.param.setFont(font);
+        return this;
+    }
+
+    public PDFont getFont() {
+        return this.param.getFont();
+    }
+
+    public XEasyPdfPage setWatermark(XEasyPdfWatermark watermark) {
+        this.param.setWatermark(watermark);
+        return this;
+    }
+
+    public XEasyPdfWatermark getWatermark() {
+        return this.param.getWatermark();
     }
 
     /**
@@ -103,7 +98,7 @@ public class XEasyPdfPage {
         // 如果组件不为空，则添加组件
         if (components!=null) {
             // 添加组件
-            this.componentList.addAll(Arrays.asList(components));
+            this.param.getComponentList().addAll(Arrays.asList(components));
         }
         return this;
     }
@@ -126,12 +121,18 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
+        // 初始化字体
+        this.param.initFont(document);
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
-        this.pageList.add(pageSize==null?new PDPage(this.pageSize):new PDPage(pageSize));
+        this.param.getPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
+        // 获取pdf组件列表
+        List<XEasyPdfComponent> componentList = this.param.getComponentList();
         // 遍历组件列表
-        for (XEasyPdfComponent component : this.componentList) {
-            // 组件绘制
-            component.draw(document, this);
+        for (XEasyPdfComponent component : componentList) {
+            if (component instanceof XEasyPdfComponentBuilder) {
+                // 组件绘制
+                ((XEasyPdfComponentBuilder) component).draw(document, this);
+            }
         }
         return this;
     }
@@ -141,6 +142,7 @@ public class XEasyPdfPage {
      * @return 返回pdfBox最新页面
      */
     public PDPage getLastPage() {
-        return this.pageList.isEmpty()?null:this.pageList.get(this.pageList.size()-1);
+        List<PDPage> pageList = this.param.getPageList();
+        return pageList.isEmpty()?null:pageList.get(pageList.size()-1);
     }
 }

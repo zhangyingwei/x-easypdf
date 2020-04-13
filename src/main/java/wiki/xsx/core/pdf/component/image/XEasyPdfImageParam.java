@@ -6,8 +6,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -166,13 +166,13 @@ public class XEasyPdfImageParam {
         // 如果页面Y轴起始坐标为空，则初始化
         if (this.beginY==null) {
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
-            if (page.getPageY()!=null) {
+            if (page.getParam().getPageY()!=null) {
                 // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
-                this.beginY = page.getPageY() - this.marginTop - this.height;
+                this.beginY = page.getParam().getPageY() - this.marginTop - this.height;
                 // 如果页面Y轴起始坐标小于等于下边距，则分页
                 if (this.beginY <= this.marginBottom) {
                     // 添加新页面
-                    page.getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
+                    page.getParam().getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
                     // 重置页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
                     this.beginY = pageHeight - this.marginTop - this.height;
                 }

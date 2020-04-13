@@ -1,9 +1,14 @@
 package wiki.xsx.core.pdf.component;
 
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+
+import java.io.IOException;
+
 /**
- * pdf组件标记
+ * pdf组件建造器
  * @author xsx
- * @date 2020/3/3
+ * @date 2020/4/7
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
@@ -17,6 +22,12 @@ package wiki.xsx.core.pdf.component;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public interface XEasyPdfComponent {
-
+public interface XEasyPdfComponentBuilder {
+    /**
+     * 画图
+     * @param document pdf文档
+     * @param page pdf页面
+     * @throws IOException IO异常
+     */
+    void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
 }

@@ -3,15 +3,12 @@ package wiki.xsx.core.pdf.component.mark;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.FontUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * pdf页面水印参数
@@ -72,11 +69,8 @@ public class XEasyPdfWatermarkParam {
     public PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
-            // 读取字体数据流
-            try (InputStream inputStream =Files.newInputStream(Paths.get(this.fontPath))) {
-                // 初始化字体
-                this.font = PDType0Font.load(document.getDocument(), inputStream);
-            }
+            // 初始化字体
+            this.font = FontUtil.loadFont(document, page, this.fontPath);
         }
         // 如果水印文本未初始化，则进行初始化
         if (this.text==null) {

@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.doc;
+package wiki.xsx.core.pdf.component.doc;
 
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.encryption.PublicKeyProtectionPolicy;
 import org.apache.pdfbox.pdmodel.encryption.PublicKeyRecipient;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -33,7 +32,7 @@ public class XEasyPdfPermission {
     /**
      * pdf文档
      */
-    private XEasyPdfDocument xEasyPdfDocument;
+    private XEasyPdfDocument document;
     /**
      * pdf访问权限
      */
@@ -45,10 +44,10 @@ public class XEasyPdfPermission {
 
     /**
      * 有参构造
-     * @param xEasyPdfDocument pdf文档
+     * @param document pdf文档
      */
-    public XEasyPdfPermission(XEasyPdfDocument xEasyPdfDocument) {
-        this.xEasyPdfDocument = xEasyPdfDocument;
+    public XEasyPdfPermission(XEasyPdfDocument document) {
+        this.document = document;
     }
 
     /**
@@ -145,7 +144,7 @@ public class XEasyPdfPermission {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
-        return this.finishWithStandardPolicy(false, PWLength.LENGTH_40, "", "");
+        return this.finishWithStandardPolicy(false, XEasyPdfPermission.PWLength.LENGTH_40, "", "");
     }
 
     /**
@@ -168,8 +167,8 @@ public class XEasyPdfPermission {
         // 设置密钥长度
         policy.setEncryptionKeyLength(length.length);
         // 设置pdfBox文档保护策略
-        this.xEasyPdfDocument.setProtectionPolicy(policy);
-        return this.xEasyPdfDocument;
+        this.document.setProtectionPolicy(policy);
+        return this.document;
     }
 
     /**
@@ -177,7 +176,7 @@ public class XEasyPdfPermission {
      * @param certificateInputStream 公钥证书数据流
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument finishWithPublicKeyPolicy(InputStream certificateInputStream) throws CertificateException, IOException {
+    public XEasyPdfDocument finishWithPublicKeyPolicy(InputStream certificateInputStream) throws CertificateException {
         // 初始化公钥接收者
         PublicKeyRecipient recipient = new PublicKeyRecipient();
         // 设置访问权限
@@ -192,10 +191,10 @@ public class XEasyPdfPermission {
         // 设置接收者
         policy.addRecipient(recipient);
         // 设置pdfBox文档保护策略
-        this.xEasyPdfDocument.setProtectionPolicy(policy);
+        this.document.setProtectionPolicy(policy);
         // 关闭数据流
         IOUtils.closeQuietly(certificateInputStream);
-        return this.xEasyPdfDocument;
+        return this.document;
     }
 
     /**

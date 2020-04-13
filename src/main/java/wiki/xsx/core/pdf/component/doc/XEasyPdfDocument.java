@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.doc;
+package wiki.xsx.core.pdf.component.doc;
 
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -6,17 +6,23 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermarkBuilder;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.FontUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * pdf文档
@@ -36,32 +42,18 @@ import java.util.*;
  * </p>
  */
 public class XEasyPdfDocument {
-    /**
-     * pdfBox文档
-     */
-    private PDDocument document;
-    /**
-     * pdf页面列表
-     */
-    private List<XEasyPdfPage> pageList = new ArrayList<>(10);
-    /**
-     * 全局页面水印
-     */
-    private XEasyPdfWatermark globalWatermark;
-    /**
-     * pdfBox保护策略
-     */
-    private ProtectionPolicy policy;
+
+    private XEasyPdfDocumentParam param = new XEasyPdfDocumentParam();
 
     /**
-     * 无参构造方法
+     * 无参构造
      */
     public XEasyPdfDocument() {
-        this.document = new PDDocument();
+        this.param.setDocument(new PDDocument());
     }
 
     /**
-     * 有参构造方法
+     * 有参构造
      * @param filePath pdf文件路径
      * @throws IOException IO异常
      */
@@ -69,36 +61,36 @@ public class XEasyPdfDocument {
         // 读取文件流
         try (InputStream inputStream = Files.newInputStream(Paths.get(filePath))) {
             // 读取pdfBox文档
-            this.document = PDDocument.load(inputStream);
+            this.param.setDocument(PDDocument.load(inputStream));
             // 获取pdfBox页面树
-            PDPageTree pages = this.document.getPages();
+            PDPageTree pages = this.param.getDocument().getPages();
             // 遍历pdfBox页面树
             for (PDPage page : pages) {
                 // 添加pdfBox页面
-                this.pageList.add(new XEasyPdfPage(page));
+                this.param.getPageList().add(new XEasyPdfPage(page));
             }
         }
     }
 
     /**
-     * 有参构造方法
+     * 有参构造
      * @param inputStream 数据流
      * @throws IOException IO异常
      */
     public XEasyPdfDocument(InputStream inputStream) throws IOException {
         // 读取pdfBox文档
-        this.document = PDDocument.load(inputStream);
+        this.param.setDocument(PDDocument.load(inputStream));
         // 获取pdfBox页面树
-        PDPageTree pages = this.document.getPages();
+        PDPageTree pages = this.param.getDocument().getPages();
         // 遍历pdfBox页面树
         for (PDPage page : pages) {
             // 添加pdfBox页面
-            this.pageList.add(new XEasyPdfPage(page));
+            this.param.getPageList().add(new XEasyPdfPage(page));
         }
     }
 
     /**
-     * 开启访问权限
+     * 开启权限
      * @return 返回pdf文档
      */
     public XEasyPdfPermission enablePermission() {
@@ -111,8 +103,22 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
-        this.globalWatermark = globalWatermark;
+        this.param.setGlobalWatermark(globalWatermark);
         return this;
+    }
+
+    public XEasyPdfDocument setFontPath(String fontPath) {
+        this.param.setFontPath(fontPath);
+        return this;
+    }
+
+    public XEasyPdfDocument setFont(PDFont font) {
+        this.param.setFont(font);
+        return this;
+    }
+
+    public PDFont getFont() {
+        return this.param.getFont();
     }
 
     /**
@@ -122,7 +128,7 @@ public class XEasyPdfDocument {
      */
     public XEasyPdfDocument addPage(XEasyPdfPage...pages) {
         // 添加页面
-        Collections.addAll(this.pageList, pages);
+        Collections.addAll(this.param.getPageList(), pages);
         return this;
     }
 
@@ -133,12 +139,13 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument insertPage(int index, XEasyPdfPage...pages) {
+        List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果pdf页面列表数量大于索引，则插入页面，否则添加页面
-        if (this.pageList.size()>=index) {
+        if (pageList.size()>=index) {
             // 遍历pdf页面
             for (XEasyPdfPage page : pages) {
                 // 插入页面
-                this.pageList.add(Math.max(index, 0), page);
+                pageList.add(Math.max(index, 0), page);
             }
         }else {
             // 添加页面
@@ -149,12 +156,33 @@ public class XEasyPdfDocument {
 
     /**
      * 填充表单
+     * @param formMap 表单字典
+     * @return 返回pdf文档
+     * @throws IOException
+     */
+    public XEasyPdfDocument fillAcroForm(Map<String, String> formMap) throws IOException {
+        return this.fillAcroForm(FontUtil.loadFont(this, (XEasyPdfPage) null, (InputStream) null), formMap);
+    }
+
+    /**
+     * 填充表单
      * @param fontPath 字体路径
+     * @param formMap 表单字典
+     * @return 返回pdf文档
+     * @throws IOException
+     */
+    public XEasyPdfDocument fillAcroForm(String fontPath, Map<String, String> formMap) throws IOException {
+        return this.fillAcroForm(FontUtil.loadFont(this, fontPath), formMap);
+    }
+
+    /**
+     * 填充表单
+     * @param font pdfBox字体
      * @param formMap 表单字典
      * @return 返回pdf文档
      * @throws IOException IO异常
      */
-    public XEasyPdfDocument fillAcroForm(String fontPath, Map<String, String> formMap) throws IOException {
+    public XEasyPdfDocument fillAcroForm(PDFont font, Map<String, String> formMap) throws IOException {
         // 如果填充表单字典为空，则直接返回
         if (formMap==null||formMap.size()==0) {
             return this;
@@ -162,19 +190,16 @@ public class XEasyPdfDocument {
         // 定义pdfBox表单字段
         PDField field;
         // 获取pdfBox表单
-        PDAcroForm acroForm = this.document.getDocumentCatalog().getAcroForm();
+        PDAcroForm acroForm = this.param.getDocument().getDocumentCatalog().getAcroForm();
         // 如果pdfBox表单不为空，则进行填充
         if (acroForm!=null) {
             // 定义pdfBox数据源
             PDResources resources = new PDResources();
-            // 读取字体数据流
-            try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
-                // 设置字体
-                resources.put(
-                        COSName.getPDFName("AdobeSongStd-Light"),
-                        PDType0Font.load(this.document, inputStream)
-                );
-            }
+            // 设置字体
+            resources.put(
+                    COSName.getPDFName("AdobeSongStd-Light"),
+                    font
+            );
             // 设置pdfBox表单默认的数据源
             acroForm.setDefaultResources(resources);
             // 获取表单字典键值集合
@@ -210,45 +235,48 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public void save(OutputStream outputStream) throws IOException {
+        this.param.initFont(this);
         // 定义任务文档
         PDDocument target = new PDDocument();
+        // 获取pdf页面列表
+        List<XEasyPdfPage> pageList = this.param.getPageList();
         // 定义pdfBox页面列表
-        List<PDPage> pageList;
+        List<PDPage> pdfboxPageList;
         // 遍历pdf页面列表
-        for (XEasyPdfPage pdfPage : this.pageList) {
+        for (XEasyPdfPage pdfPage : pageList) {
             // 如果pdf页面组件数量大于0，则进行页面构建
-            if (pdfPage.getComponentList().size()>0) {
+            if (pdfPage.getParam().getComponentList().size()>0) {
                 // pdf页面构建
                 pdfPage.build(this);
             }
             // 初始化pdfBox页面列表
-            pageList = pdfPage.getPageList();
+            pdfboxPageList = pdfPage.getParam().getPageList();
             // 遍历pdfBox页面列表
-            for (PDPage page : pageList) {
+            for (PDPage page : pdfboxPageList) {
                 // 任务文档添加页面
                 target.addPage(page);
             }
             // 如果页面水印不为空，则进行页面水印绘制
-            if (pdfPage.getWatermark()!=null) {
+            if (pdfPage.getParam().getWatermark()!=null&&pdfPage.getParam().getWatermark() instanceof XEasyPdfWatermarkBuilder) {
                 // 绘制页面水印
-                pdfPage.getWatermark().draw(this, pdfPage);
+                ((XEasyPdfWatermarkBuilder)pdfPage.getParam().getWatermark()).draw(this, pdfPage);
             // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
-            }else if (this.globalWatermark !=null&&pdfPage.isAllowWatermark()) {
+            }else if (this.param.getGlobalWatermark()!=null&&pdfPage.getParam().isAllowWatermark()&&pdfPage.getParam().getWatermark() instanceof XEasyPdfWatermarkBuilder) {
                 // 绘制页面水印
-                this.globalWatermark.draw(this, pdfPage);
+                ((XEasyPdfWatermarkBuilder)this.param.getGlobalWatermark()).draw(this, pdfPage);
             }
         }
         // 如果pdfBox保护策略不为空，则进行设置
-        if (this.policy!=null) {
+        if (this.param.getPolicy()!=null) {
             // 设置pdf保护策略
-            target.protect(this.policy);
+            target.protect(this.param.getPolicy());
         }
         // 保存任务文档
         target.save(outputStream);
         // 关闭任务文档
         target.close();
         // 关闭pdfBox文档
-        this.document.close();
+        this.param.getDocument().close();
     }
 
     /**
@@ -256,7 +284,7 @@ public class XEasyPdfDocument {
      * @return 返回pdfBox文档
      */
     public PDDocument getDocument() {
-        return this.document;
+        return this.param.getDocument();
     }
 
     /**
@@ -264,7 +292,7 @@ public class XEasyPdfDocument {
      * @return 返回pdf页面列表
      */
     public List<XEasyPdfPage> getPageList() {
-        return this.pageList;
+        return this.param.getPageList();
     }
 
     /**
@@ -272,6 +300,6 @@ public class XEasyPdfDocument {
      * @param policy pdfBox保护策略
      */
     protected void setProtectionPolicy(ProtectionPolicy policy) {
-        this.policy = policy;
+        this.param.setPolicy(policy);
     }
 }

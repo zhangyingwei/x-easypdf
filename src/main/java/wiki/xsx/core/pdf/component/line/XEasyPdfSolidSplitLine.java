@@ -1,21 +1,10 @@
 package wiki.xsx.core.pdf.component.line;
 
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
- * 实线分割线组件
  * @author xsx
- * @date 2020/3/4
+ * @date 2020/4/3
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
@@ -29,149 +18,53 @@ import java.nio.file.Paths;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XEasyPdfSolidSplitLine implements XEasyPdfComponent {
-
-    /**
-     * 分割线参数
-     */
-    private XEasyPdfLineParam param = new XEasyPdfLineParam();
-
-    /**
-     * 有参构造
-     * @param fontPath 字体路径
-     */
-    public XEasyPdfSolidSplitLine(String fontPath) {
-        this.param.setFontPath(fontPath);
-    }
-
+public interface XEasyPdfSolidSplitLine extends XEasyPdfComponent {
     /**
      * 设置边距（上下左右）
      * @param margin 边距
      * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine setMargin(float margin) {
-        this.param.setMarginLeft(margin).setMarginRight(margin).setMarginTop(margin).setMarginBottom(margin);
-        return this;
-    }
+    XEasyPdfSolidSplitLine setMargin(float margin);
 
     /**
      * 设置左边距
      * @param margin 边距
      * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine setMarginLeft(float margin) {
-        this.param.setMarginLeft(margin);
-        return this;
-    }
+    XEasyPdfSolidSplitLine setMarginLeft(float margin);
 
     /**
      * 设置右边距
      * @param margin 边距
      * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine setMarginRight(float margin) {
-        this.param.setMarginRight(margin);
-        return this;
-    }
+    XEasyPdfSolidSplitLine setMarginRight(float margin);
 
     /**
      * 设置上边距
      * @param margin 边距
      * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine setMarginTop(float margin) {
-        this.param.setMarginTop(margin);
-        return this;
-    }
+    XEasyPdfSolidSplitLine setMarginTop(float margin);
 
     /**
      * 设置下边距
      * @param margin 边距
      * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine setMarginBottom(float margin) {
-        this.param.setMarginBottom(margin);
-        return this;
-    }
+    XEasyPdfSolidSplitLine setMarginBottom(float margin);
 
     /**
      * 设置分割线宽度
      * @param lineWidth 分割线宽度
      * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine setLineWidth(float lineWidth) {
-        this.param.setLineWidth(lineWidth);
-        return this;
-    }
+    XEasyPdfSolidSplitLine setLineWidth(float lineWidth);
 
     /**
      * 设置分割线线型
-     * @param XEasyPdfLineCapStyle 分割线线型
+     * @param lineCapStyle 分割线线型
      * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine setLineCapStyle(XEasyPdfLineCapStyle XEasyPdfLineCapStyle) {
-        this.param.setStyle(XEasyPdfLineCapStyle);
-        return this;
-    }
-
-    /**
-     * 画图
-     *
-     * @param document pdf文档
-     * @param page     pdf页面
-     * @throws IOException IO异常
-     */
-    @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
-        // 初始化分割线参数
-        this.init(document, page);
-        // 执行画图
-        new XEasyPdfLine(this.param).draw(document, page);
-        // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
-        page.setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
-    }
-
-    /**
-     * 初始化参数
-     * @param page pdf页面
-     */
-    private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
-        // 定义线宽
-        float lineWidth = this.param.getLineWidth() / 2;
-        // 获取pdfBox最新页面尺寸
-        PDRectangle rectangle = page.getLastPage().getMediaBox();
-        // 如果当前页面Y轴坐标不为空，则进行分页判断
-        if (page.getPageY()!=null) {
-            // 分页判断，如果（当前Y轴坐标-上边距-线宽）小于下边距，则进行分页
-            if (page.getPageY() - this.param.getMarginTop() - lineWidth <= this.param.getMarginBottom()) {
-                // 添加新的pdfBox页面
-                page.getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
-                // 设置当前Y轴坐标为空，表示新页面
-                page.setPageY(null);
-            }
-        }
-        // 设置X轴Y轴起始结束坐标
-        this.param.setBeginX(
-                // 左边距
-                this.param.getMarginLeft()
-        ).setBeginY(
-                // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getPageY() == null?
-                // pdfBox最新页面高度 - 上边距 - 线宽
-                rectangle.getHeight() - this.param.getMarginTop() - lineWidth:
-                // 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getPageY() - this.param.getMarginTop() - lineWidth
-        ).setEndX(
-                // 页面宽度 - 右边距
-                rectangle.getWidth() - this.param.getMarginRight()
-        ).setEndY(
-                // Y轴起始坐标
-                this.param.getBeginY()
-        );
-        // 读取字体数据流
-        try (InputStream inputStream = Files.newInputStream(Paths.get(this.param.getFontPath()))) {
-            // 设置字体
-            this.param.setFont(PDType0Font.load(document.getDocument(),inputStream));
-        }
-    }
+    XEasyPdfSolidSplitLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle);
 }
