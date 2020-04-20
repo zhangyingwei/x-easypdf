@@ -105,11 +105,13 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 获取水印
-     * @return 返回pdf水印
+     * 设置是否允许添加水印
+     * @param allowWatermark 是否允许添加水印
+     * @return 返回pdf页面
      */
-    public XEasyPdfWatermark getWatermark() {
-        return this.param.getWatermark();
+    public XEasyPdfPage setAllowWatermark(boolean allowWatermark) {
+        this.param.setAllowWatermark(allowWatermark);
+        return this;
     }
 
     /**
