@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 图片组件
+ * pdf图片组件
  * @author xsx
  * @date 2020/3/30
  * @since 1.8
@@ -32,7 +32,7 @@ import java.io.InputStream;
 public class XEasyPdfDefaultImage implements XEasyPdfImage, XEasyPdfComponentBuilder {
 
     /**
-     * 图片参数
+     * pdf图片参数
      */
     private XEasyPdfImageParam param = new XEasyPdfImageParam();
 

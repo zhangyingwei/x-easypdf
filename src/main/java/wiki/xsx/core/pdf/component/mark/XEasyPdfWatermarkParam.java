@@ -8,8 +8,6 @@ import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.FontUtil;
 
-import java.io.IOException;
-
 /**
  * pdf页面水印参数
  * @author xsx
@@ -43,7 +41,7 @@ public class XEasyPdfWatermarkParam {
      */
     private Float fontSize = 50F;
     /**
-     * 透明度（值越小越透明，0-1）
+     * 透明度（值越小越透明，0.0-1.0）
      */
     private Float alpha = 0.1F;
     /**
@@ -64,9 +62,8 @@ public class XEasyPdfWatermarkParam {
      * @param document pdf文档
      * @param page pdf页面
      * @return 返回pdfBox扩展图形对象
-     * @throws IOException IO异常
      */
-    public PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体

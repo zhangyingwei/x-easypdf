@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.line;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 
 /**
+ * pdf线条组件接口
  * @author xsx
  * @date 2020/4/3
  * @since 1.8
@@ -39,8 +40,8 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置线条线型
-     * @param XEasyPdfLineCapStyle 线条线型
+     * @param lineCapStyle 线条线型
      * @return 返回线条组件
      */
-    XEasyPdfLine setLineCapStyle(XEasyPdfLineCapStyle XEasyPdfLineCapStyle);
+    XEasyPdfLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle);
 }

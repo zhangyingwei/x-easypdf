@@ -64,6 +64,11 @@ public class XEasyPdfPage {
         }
     }
 
+    /**
+     * 设置字体路径
+     * @param fontPath 字体路径
+     * @return 返回pdf页面
+     */
     public XEasyPdfPage setFontPath(String fontPath) {
         if (fontPath!=null&&fontPath.trim().length()>0) {
             this.param.setFontPath(fontPath);
@@ -71,20 +76,38 @@ public class XEasyPdfPage {
         return this;
     }
 
+    /**
+     * 设置字体
+     * @param font 字体
+     * @return 返回pdf页面
+     */
     public XEasyPdfPage setFont(PDFont font) {
         this.param.setFont(font);
         return this;
     }
 
+    /**
+     * 获取字体
+     * @return 返回pdfBox字体
+     */
     public PDFont getFont() {
         return this.param.getFont();
     }
 
+    /**
+     * 设置水印
+     * @param watermark pdf水印
+     * @return 返回pdf页面
+     */
     public XEasyPdfPage setWatermark(XEasyPdfWatermark watermark) {
         this.param.setWatermark(watermark);
         return this;
     }
 
+    /**
+     * 获取水印
+     * @return 返回pdf水印
+     */
     public XEasyPdfWatermark getWatermark() {
         return this.param.getWatermark();
     }
@@ -129,6 +152,7 @@ public class XEasyPdfPage {
         List<XEasyPdfComponent> componentList = this.param.getComponentList();
         // 遍历组件列表
         for (XEasyPdfComponent component : componentList) {
+            // 如果组件属于pdf组件建造器接口，则进行组件绘制
             if (component instanceof XEasyPdfComponentBuilder) {
                 // 组件绘制
                 ((XEasyPdfComponentBuilder) component).draw(document, this);

@@ -111,7 +111,7 @@ public class XEasyPdfHandler {
     }
 
     /**
-     * 页面水印组件
+     * pdf水印组件
      */
     public static class Watermark {
         /**
@@ -137,7 +137,7 @@ public class XEasyPdfHandler {
     }
 
     /**
-     * 文本组件
+     * pdf文本组件
      */
     public static class Text {
         /**
@@ -190,7 +190,7 @@ public class XEasyPdfHandler {
     }
 
     /**
-     * 线条组件
+     * pdf线条组件
      */
     public static class Line {
         /**
@@ -208,7 +208,7 @@ public class XEasyPdfHandler {
     }
 
     /**
-     * 分割线组件
+     * pdf分割线组件
      */
     public static class SplitLine {
         /**
@@ -241,7 +241,7 @@ public class XEasyPdfHandler {
     }
 
     /**
-     * 图片组件
+     * pdf图片组件
      */
     public static class Image {
         /**

@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.text;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 
 /**
+ * pdf文本组件接口
  * @author xsx
  * @date 2020/4/3
  * @since 1.8

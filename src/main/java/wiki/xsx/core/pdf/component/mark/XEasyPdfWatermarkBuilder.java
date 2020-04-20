@@ -6,6 +6,7 @@ import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import java.io.IOException;
 
 /**
+ * pdf水印构建接口
  * @author xsx
  * @date 2020/4/3
  * @since 1.8

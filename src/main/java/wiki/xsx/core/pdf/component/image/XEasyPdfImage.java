@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.InputStream;
 
 /**
+ * pdf图片组件接口
  * @author xsx
  * @date 2020/4/3
  * @since 1.8

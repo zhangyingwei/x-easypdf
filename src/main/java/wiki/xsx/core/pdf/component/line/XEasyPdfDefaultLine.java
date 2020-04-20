@@ -10,7 +10,7 @@ import wiki.xsx.core.pdf.util.FontUtil;
 import java.io.IOException;
 
 /**
- * 线条组件
+ * pdf线条组件
  * @author xsx
  * @date 2020/3/4
  * @since 1.8

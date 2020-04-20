@@ -198,7 +198,7 @@ public class XEasyPdfDefaultDottedSplitLine implements XEasyPdfDottedSplitLine, 
      * @param document pdf文档
      * @param page pdf页面
      */
-    private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    private void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 定义线宽
         float lineWidth = this.param.getLineWidth() / 2;
         // 如果当前页面Y轴坐标不为空，则进行分页判断

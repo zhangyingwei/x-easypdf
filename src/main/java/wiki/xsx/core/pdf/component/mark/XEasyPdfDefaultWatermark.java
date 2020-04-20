@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 页面水印组件
+ * pdf水印组件
  * @author xsx
  * @date 2020/3/25
  * @since 1.8
@@ -31,7 +31,7 @@ import java.util.List;
 public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark, XEasyPdfWatermarkBuilder {
 
     /**
-     * 页面水印参数
+     * pdf水印参数
      */
     private XEasyPdfWatermarkParam param = new XEasyPdfWatermarkParam();
 

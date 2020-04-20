@@ -145,7 +145,7 @@ public class XEasyPdfDefaultSolidSplitLine implements XEasyPdfSolidSplitLine, XE
      * @param document pdf文档
      * @param page pdf页面
      */
-    private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    private void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 定义线宽
         float lineWidth = this.param.getLineWidth() / 2;
         // 获取pdfBox最新页面尺寸

@@ -1,6 +1,5 @@
 package wiki.xsx.core.pdf.component.doc;
 
-import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.PublicKeyProtectionPolicy;
 import org.apache.pdfbox.pdmodel.encryption.PublicKeyRecipient;
@@ -192,8 +191,6 @@ public class XEasyPdfPermission {
         policy.addRecipient(recipient);
         // 设置pdfBox文档保护策略
         this.document.setProtectionPolicy(policy);
-        // 关闭数据流
-        IOUtils.closeQuietly(certificateInputStream);
         return this.document;
     }
 

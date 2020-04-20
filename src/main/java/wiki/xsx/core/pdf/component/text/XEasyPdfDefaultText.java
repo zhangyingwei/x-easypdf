@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 文本组件
+ * pdf文本组件
  * @author xsx
  * @date 2020/3/3
  * @since 1.8
@@ -500,6 +500,4 @@ public class XEasyPdfDefaultText implements XEasyPdfText, XEasyPdfComponentBuild
         this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
         return stream;
     }
-
-
 }

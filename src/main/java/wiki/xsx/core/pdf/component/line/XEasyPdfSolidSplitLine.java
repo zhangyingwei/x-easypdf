@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.line;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 
 /**
+ * 实线分割线组件接口
  * @author xsx
  * @date 2020/4/3
  * @since 1.8

@@ -43,6 +43,9 @@ import java.util.Set;
  */
 public class XEasyPdfDocument {
 
+    /**
+     * pdf文档参数
+     */
     private XEasyPdfDocumentParam param = new XEasyPdfDocumentParam();
 
     /**
@@ -158,10 +161,10 @@ public class XEasyPdfDocument {
      * 填充表单
      * @param formMap 表单字典
      * @return 返回pdf文档
-     * @throws IOException
+     * @throws IOException IO异常
      */
     public XEasyPdfDocument fillAcroForm(Map<String, String> formMap) throws IOException {
-        return this.fillAcroForm(FontUtil.loadFont(this, (XEasyPdfPage) null, (InputStream) null), formMap);
+        return this.fillAcroForm(FontUtil.loadFont(this, null, (InputStream) null), formMap);
     }
 
     /**
@@ -169,7 +172,7 @@ public class XEasyPdfDocument {
      * @param fontPath 字体路径
      * @param formMap 表单字典
      * @return 返回pdf文档
-     * @throws IOException
+     * @throws IOException IO异常
      */
     public XEasyPdfDocument fillAcroForm(String fontPath, Map<String, String> formMap) throws IOException {
         return this.fillAcroForm(FontUtil.loadFont(this, fontPath), formMap);
@@ -196,10 +199,7 @@ public class XEasyPdfDocument {
             // 定义pdfBox数据源
             PDResources resources = new PDResources();
             // 设置字体
-            resources.put(
-                    COSName.getPDFName("AdobeSongStd-Light"),
-                    font
-            );
+            resources.put(COSName.getPDFName("AdobeSongStd-Light"), font);
             // 设置pdfBox表单默认的数据源
             acroForm.setDefaultResources(resources);
             // 获取表单字典键值集合
