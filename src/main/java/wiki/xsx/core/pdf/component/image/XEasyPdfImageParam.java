@@ -86,6 +86,10 @@ public class XEasyPdfImageParam {
      * 页面Y轴起始坐标
      */
     private Float beginY;
+    /**
+     * 是否完成绘制
+     */
+    private boolean isDraw = false;
 
     /**
      * 初始化

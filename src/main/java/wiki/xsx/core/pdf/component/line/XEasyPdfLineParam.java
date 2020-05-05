@@ -76,4 +76,8 @@ public class XEasyPdfLineParam {
      * 线型
      */
     private XEasyPdfLineCapStyle style = XEasyPdfLineCapStyle.NORMAL;
+    /**
+     * 是否完成绘制
+     */
+    private boolean isDraw = false;
 }

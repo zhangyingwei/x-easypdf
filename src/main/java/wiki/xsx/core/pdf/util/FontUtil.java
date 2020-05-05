@@ -77,7 +77,7 @@ public class FontUtil {
             }catch (IOException ex) {
                 throw new RuntimeException("the font can not be loaded");
             }
-        }else if (page!=null&&page.getFont()!=null) {
+        }else if (page!=null) {
             font = page.getFont();
         }else if (document!=null) {
             font = document.getFont();

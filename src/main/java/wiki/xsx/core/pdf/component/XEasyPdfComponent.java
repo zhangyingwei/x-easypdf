@@ -1,5 +1,10 @@
 package wiki.xsx.core.pdf.component;
 
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+
+import java.io.IOException;
+
 /**
  * pdf组件标记
  * @author xsx
@@ -19,4 +24,38 @@ package wiki.xsx.core.pdf.component;
  */
 public interface XEasyPdfComponent {
 
+    /**
+     * 设置坐标
+     * @param beginX X轴起始坐标
+     * @param beginY Y轴起始坐标
+     * @return 返回pdf组件建造器
+     */
+    XEasyPdfComponent setPosition(float beginX, float beginY);
+
+    /**
+     * 设置宽度
+     * @param width 宽度
+     * @return 返回pdf组件建造器
+     */
+    XEasyPdfComponent setWidth(float width);
+
+    /**
+     * 设置高度
+     * @param height 高度
+     * @return 返回pdf组件建造器
+     */
+    XEasyPdfComponent setHeight(float height);
+
+    /**
+     * 绘制
+     * @param document pdf文档
+     * @param page pdf页面
+     */
+    void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
+
+    /**
+     * 是否已经绘制
+     * @return 返回布尔值，完成为true，未完成为false
+     */
+    boolean isDraw();
 }

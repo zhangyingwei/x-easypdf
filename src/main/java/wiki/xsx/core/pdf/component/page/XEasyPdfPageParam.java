@@ -69,6 +69,10 @@ public class XEasyPdfPageParam {
      * 是否允许添加水印
      */
     private boolean allowWatermark = true;
+    /**
+     * 是否允许重置定位
+     */
+    private boolean allowResetPosition = true;
 
     /**
      * 初始化字体

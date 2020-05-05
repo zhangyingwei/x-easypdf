@@ -3,15 +3,12 @@ package wiki.xsx.core.pdf.handler;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.image.XEasyPdfDefaultImage;
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.*;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.component.text.XEasyPdfDefaultText;
-import wiki.xsx.core.pdf.component.text.XEasyPdfText;
-import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 
 import java.io.File;
 import java.io.InputStream;
@@ -121,7 +118,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf页面水印组件
          */
         public static XEasyPdfWatermark build(String fontPath, String text) {
-            return new XEasyPdfDefaultWatermark(fontPath, text);
+            return new XEasyPdfWatermark(fontPath, text);
         }
 
         /**
@@ -132,7 +129,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf页面水印组件
          */
         public static XEasyPdfWatermark build(String fontPath, float fontSize, String text) {
-            return new XEasyPdfDefaultWatermark(fontPath, fontSize, text);
+            return new XEasyPdfWatermark(fontPath, fontSize, text);
         }
     }
 
@@ -147,7 +144,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, String text) {
-            return new XEasyPdfDefaultText(fontPath, text);
+            return new XEasyPdfText(fontPath, text);
         }
 
         /**
@@ -158,7 +155,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, float fontSize, String text) {
-            return new XEasyPdfDefaultText(fontPath, fontSize, text);
+            return new XEasyPdfText(fontPath, fontSize, text);
         }
 
         /**
@@ -171,7 +168,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, float fontSize, float beginX, float beginY, String text) {
-            return new XEasyPdfDefaultText(fontPath, fontSize, beginX, beginY, text);
+            return new XEasyPdfText(fontPath, fontSize, beginX, beginY, text);
         }
 
         /**
@@ -185,7 +182,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
-            return new XEasyPdfDefaultText(fontPath, fontSize, leading, beginX, beginY, text);
+            return new XEasyPdfText(fontPath, fontSize, leading, beginX, beginY, text);
         }
     }
 
@@ -203,7 +200,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf线条组件
          */
         public static XEasyPdfLine build(String fontPath, float beginX, float beginY, float endX, float endY) {
-            return new XEasyPdfDefaultLine(fontPath, beginX, beginY, endX, endY);
+            return new XEasyPdfLine(fontPath, beginX, beginY, endX, endY);
         }
     }
 
@@ -221,7 +218,7 @@ public class XEasyPdfHandler {
              * @return 返回pdf实线分割线组件
              */
             public static XEasyPdfSolidSplitLine build(String fontPath) {
-                return new XEasyPdfDefaultSolidSplitLine(fontPath);
+                return new XEasyPdfSolidSplitLine(fontPath);
             }
         }
 
@@ -235,7 +232,7 @@ public class XEasyPdfHandler {
              * @return 返回pdf虚线分割线组件
              */
             public static XEasyPdfDottedSplitLine build(String fontPath) {
-                return new XEasyPdfDefaultDottedSplitLine(fontPath);
+                return new XEasyPdfDottedSplitLine(fontPath);
             }
         }
     }
@@ -250,7 +247,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(File image) {
-            return new XEasyPdfDefaultImage(image);
+            return new XEasyPdfImage(image);
         }
 
         /**
@@ -260,7 +257,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, String imageType) {
-            return new XEasyPdfDefaultImage(imageInputStream, imageType);
+            return new XEasyPdfImage(imageInputStream, imageType);
         }
 
         /**
@@ -271,7 +268,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(File image, int width, int height) {
-            return new XEasyPdfDefaultImage(image, width, height);
+            return new XEasyPdfImage(image, width, height);
         }
 
         /**
@@ -283,7 +280,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, String imageType, int width, int height) {
-            return new XEasyPdfDefaultImage(imageInputStream, imageType, width, height);
+            return new XEasyPdfImage(imageInputStream, imageType, width, height);
         }
 
         /**
@@ -296,7 +293,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(File image, int width, int height, float beginX, float beginY) {
-            return new XEasyPdfDefaultImage(image, width, height, beginX, beginY);
+            return new XEasyPdfImage(image, width, height, beginX, beginY);
         }
 
         /**
@@ -310,7 +307,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, String imageType, int width, int height, float beginX, float beginY) {
-            return new XEasyPdfDefaultImage(imageInputStream, imageType, width, height, beginX, beginY);
+            return new XEasyPdfImage(imageInputStream, imageType, width, height, beginX, beginY);
         }
     }
 }

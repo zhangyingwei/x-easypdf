@@ -10,7 +10,6 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermarkBuilder;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.FontUtil;
 
@@ -46,7 +45,7 @@ public class XEasyPdfDocument {
     /**
      * pdf文档参数
      */
-    private XEasyPdfDocumentParam param = new XEasyPdfDocumentParam();
+    private final XEasyPdfDocumentParam param = new XEasyPdfDocumentParam();
 
     /**
      * 无参构造
@@ -257,13 +256,13 @@ public class XEasyPdfDocument {
                 target.addPage(page);
             }
             // 如果页面水印不为空，则进行页面水印绘制
-            if (pdfPage.getParam().getWatermark()!=null&&pdfPage.getParam().getWatermark() instanceof XEasyPdfWatermarkBuilder) {
+            if (pdfPage.getParam().getWatermark()!=null) {
                 // 绘制页面水印
-                ((XEasyPdfWatermarkBuilder)pdfPage.getParam().getWatermark()).draw(this, pdfPage);
+                pdfPage.getParam().getWatermark().draw(this, pdfPage);
             // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
-            }else if (this.param.getGlobalWatermark()!=null&&pdfPage.getParam().isAllowWatermark()&&pdfPage.getParam().getWatermark() instanceof XEasyPdfWatermarkBuilder) {
+            }else if (this.param.getGlobalWatermark()!=null&&pdfPage.getParam().isAllowWatermark()) {
                 // 绘制页面水印
-                ((XEasyPdfWatermarkBuilder)this.param.getGlobalWatermark()).draw(this, pdfPage);
+                this.param.getGlobalWatermark().draw(this, pdfPage);
             }
         }
         // 如果pdfBox保护策略不为空，则进行设置

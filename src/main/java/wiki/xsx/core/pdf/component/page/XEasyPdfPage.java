@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.XEasyPdfComponentBuilder;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 
@@ -154,10 +153,10 @@ public class XEasyPdfPage {
         List<XEasyPdfComponent> componentList = this.param.getComponentList();
         // 遍历组件列表
         for (XEasyPdfComponent component : componentList) {
-            // 如果组件属于pdf组件建造器接口，则进行组件绘制
-            if (component instanceof XEasyPdfComponentBuilder) {
+            // 如果组件未绘制，则进行绘制
+            if (!component.isDraw()) {
                 // 组件绘制
-                ((XEasyPdfComponentBuilder) component).draw(document, this);
+                component.draw(document, this);
             }
         }
         return this;
