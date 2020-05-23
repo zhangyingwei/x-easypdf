@@ -9,6 +9,7 @@ import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.FontUtil;
 import wiki.xsx.core.pdf.util.TextUtil;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -92,6 +93,10 @@ public class XEasyPdfTextParam {
      * 页面Y轴起始坐标
      */
     private Float beginY;
+    /**
+     * 字体颜色
+     */
+    private Color fontColor = Color.BLACK;
     /**
      * 是否完成绘制
      */

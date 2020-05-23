@@ -71,6 +71,7 @@ public class XEasyPdfDocument {
                 // 添加pdfBox页面
                 this.param.getPageList().add(new XEasyPdfPage(page));
             }
+            this.param.initInfo();
         }
     }
 
@@ -89,6 +90,7 @@ public class XEasyPdfDocument {
             // 添加pdfBox页面
             this.param.getPageList().add(new XEasyPdfPage(page));
         }
+        this.param.initInfo();
     }
 
     /**
@@ -109,18 +111,42 @@ public class XEasyPdfDocument {
         return this;
     }
 
+    /**
+     * 设置字体路径
+     * @param fontPath 字体路径
+     * @return 返回pdf文档
+     */
     public XEasyPdfDocument setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
         return this;
     }
 
+    /**
+     * 设置字体
+     * @param font pdfBox字体
+     * @return 返回pdf文档
+     */
     public XEasyPdfDocument setFont(PDFont font) {
         this.param.setFont(font);
         return this;
     }
 
+    /**
+     * 获取文档字体
+     * @return 返回pdf文档
+     */
     public PDFont getFont() {
         return this.param.getFont();
+    }
+
+    /**
+     * 设置文档信息
+     * @param info pdf文档信息
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setInfo(XEasyPdfDocumentInfo info) {
+        this.param.setInfo(info);
+        return this;
     }
 
     /**
@@ -218,6 +244,33 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 合并文档
+     * @param documents pdf文档
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument merge(XEasyPdfDocument ...documents) {
+        // 定义pdfBox页面树
+        PDPageTree pageTree;
+        // 定义页面
+        XEasyPdfPage page;
+        // 遍历待合并文档
+        for (XEasyPdfDocument document : documents) {
+            // 获取pdfBox页面树
+            pageTree = document.getDocument().getPages();
+            // 新建页面
+            page = new XEasyPdfPage();
+            // 遍历pdfBox页面树
+            for (PDPage pdPage : pageTree) {
+                // 添加pdfBox页面
+                page.addPage(pdPage);
+            }
+            // 添加页面
+            this.param.getPageList().add(page);
+        }
+        return this;
+    }
+
+    /**
      * 保存（页面构建）
      * @param outputPath 文件输出路径
      * @throws IOException IO异常
@@ -234,9 +287,15 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public void save(OutputStream outputStream) throws IOException {
+        // 初始化字体
         this.param.initFont(this);
         // 定义任务文档
         PDDocument target = new PDDocument();
+        // 如果文档信息不为空，则进行设置
+        if (this.param.getInfo()!=null) {
+            // 设置文档信息
+            target.setDocumentInformation(this.param.getInfo().getInfo());
+        }
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 定义pdfBox页面列表
@@ -275,7 +334,17 @@ public class XEasyPdfDocument {
         // 关闭任务文档
         target.close();
         // 关闭pdfBox文档
-        this.param.getDocument().close();
+        this.close();
+    }
+
+    /**
+     * 关闭文档
+     * @throws IOException IO异常
+     */
+    public void close() throws IOException {
+        if (this.getDocument()!=null) {
+            this.getDocument().close();
+        }
     }
 
     /**
@@ -298,7 +367,7 @@ public class XEasyPdfDocument {
      * 设置pdfBox保护策略
      * @param policy pdfBox保护策略
      */
-    protected void setProtectionPolicy(ProtectionPolicy policy) {
+    void setProtectionPolicy(ProtectionPolicy policy) {
         this.param.setPolicy(policy);
     }
 }

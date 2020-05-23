@@ -6,6 +6,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -194,6 +195,16 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 设置字体颜色
+     * @param fontColor 字体颜色
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setFontColor(Color fontColor) {
+        this.param.setFontColor(fontColor);
+        return this;
+    }
+
+    /**
      * 设置文本样式（居左、居中、居右）
      * @param style 样式
      * @return 返回文本组件
@@ -275,6 +286,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
         );
         // 设置字体
         contentStream.setFont(this.param.getFont(), this.param.getFontSize());
+        // 设置字体颜色
+        contentStream.setNonStrokingColor(this.param.getFontColor());
         // 设置行间距
         contentStream.setLeading(this.param.getLeading() + this.param.getFontSize());
         return contentStream;
@@ -369,8 +382,11 @@ public class XEasyPdfText implements XEasyPdfComponent {
         }
         // 如果内容流不为空，则关闭内容流，并重置文档页面Y轴坐标
         if (stream!=null) {
+            // 内容流重置颜色为黑色
+            stream.setNonStrokingColor(Color.BLACK);
             // 关闭内容流
             stream.close();
+            // 如果允许页面重置定位，则进行重置
             if (page.getParam().isAllowResetPosition()) {
                 // 设置文档页面Y轴坐标
                 page.getParam().setPageY(this.param.getBeginY() - this.param.getFontSize() / 3);

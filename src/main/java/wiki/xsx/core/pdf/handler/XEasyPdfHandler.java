@@ -5,9 +5,12 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
-import wiki.xsx.core.pdf.component.line.*;
+import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
+import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
+import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 
 import java.io.File;
@@ -308,6 +311,33 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfImage build(InputStream imageInputStream, String imageType, int width, int height, float beginX, float beginY) {
             return new XEasyPdfImage(imageInputStream, imageType, width, height, beginX, beginY);
+        }
+    }
+
+    /**
+     * pdf矩形组件
+     */
+    public static class Rect {
+        /**
+         * 构建矩形
+         * @param width 宽度
+         * @param height 高度
+         * @return 返回pdf矩形组件
+         */
+        public static XEasyPdfRect build(float width, float height) {
+            return new XEasyPdfRect(width, height);
+        }
+
+        /**
+         * 构建矩形
+         * @param width 宽度
+         * @param height 高度
+         * @param beginX X轴起始坐标
+         * @param beginY Y轴起始坐标
+         * @return 返回pdf矩形组件
+         */
+        public static XEasyPdfRect build(float width, float height, float beginX, float beginY) {
+            return new XEasyPdfRect(width, height, beginX, beginY);
         }
     }
 }

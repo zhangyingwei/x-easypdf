@@ -281,6 +281,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY());
         // 关闭内容流
         contentStream.close();
+        // 如果允许页面重置定位，则进行重置
         if (page.getParam().isAllowResetPosition()) {
             // 设置文档页面X轴坐标Y轴坐标
             page.getParam().setPageX(this.param.getBeginX()).setPageY(this.param.getBeginY());

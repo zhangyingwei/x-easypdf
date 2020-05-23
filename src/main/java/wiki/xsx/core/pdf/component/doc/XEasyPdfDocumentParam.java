@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.doc;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
@@ -56,6 +57,10 @@ public class XEasyPdfDocumentParam {
      * pdfBox保护策略
      */
     private ProtectionPolicy policy;
+    /**
+     * pdfBox文档属性
+     */
+    private XEasyPdfDocumentInfo info;
 
     /**
      * 初始化字体
@@ -64,6 +69,23 @@ public class XEasyPdfDocumentParam {
     protected void initFont(XEasyPdfDocument document) {
         if (this.fontPath!=null&&this.font==null) {
             this.font = FontUtil.loadFont(document, this.fontPath);
+        }
+    }
+
+    /**
+     * 初始化文档信息
+     */
+    protected void initInfo() {
+        if (this.document!=null) {
+            PDDocumentInformation documentInformation = this.document.getDocumentInformation();
+            this.info = XEasyPdfDocumentInfo.builder()
+                    .title(documentInformation.getTitle())
+                    .author(documentInformation.getAuthor())
+                    .subject(documentInformation.getSubject())
+                    .keywords(documentInformation.getKeywords())
+                    .creator(documentInformation.getCreator())
+                    .creationDate(documentInformation.getCreationDate())
+                    .modificationDate(documentInformation.getModificationDate()).build();
         }
     }
 }

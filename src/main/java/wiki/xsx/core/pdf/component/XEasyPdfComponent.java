@@ -28,21 +28,21 @@ public interface XEasyPdfComponent {
      * 设置坐标
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
-     * @return 返回pdf组件建造器
+     * @return 返回pdf组件
      */
     XEasyPdfComponent setPosition(float beginX, float beginY);
 
     /**
      * 设置宽度
      * @param width 宽度
-     * @return 返回pdf组件建造器
+     * @return 返回pdf组件
      */
     XEasyPdfComponent setWidth(float width);
 
     /**
      * 设置高度
      * @param height 高度
-     * @return 返回pdf组件建造器
+     * @return 返回pdf组件
      */
     XEasyPdfComponent setHeight(float height);
 

@@ -151,22 +151,6 @@ public class XEasyPdfImageParam {
                     )
             );
         }
-        // 如果页面X轴起始坐标为空，则初始化
-        if (this.beginX==null) {
-            // 如果图片样式为空，或图片样式为居中，则初始化页面X轴起始坐标为居中
-            if (this.style==null || this.style== XEasyPdfImageStyle.CENTER) {
-                // 页面X轴起始坐标 = （页面宽度 - 自定义宽度）/ 2
-                this.beginX = (pageWidth - this.width) / 2;
-            // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
-            }else if (this.style== XEasyPdfImageStyle.LEFT) {
-                // 页面X轴起始坐标 = 左边距
-                this.beginX = this.marginLeft;
-            // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
-            }else {
-                // 页面X轴起始坐标 = 页面宽度 - 自定义宽度 - 右边距
-                this.beginX = pageWidth - this.width - this.marginRight;
-            }
-        }
         // 如果页面Y轴起始坐标为空，则初始化
         if (this.beginY==null) {
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
@@ -176,14 +160,30 @@ public class XEasyPdfImageParam {
                 // 如果页面Y轴起始坐标小于等于下边距，则分页
                 if (this.beginY <= this.marginBottom) {
                     // 添加新页面
-                    page.getParam().getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
+                    page.addPage(new PDPage(rectangle)).getParam().setPageX(null).setPageY(null);
                     // 重置页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
                     this.beginY = pageHeight - this.marginTop - this.height;
                 }
-            // 如果pdfBox最新页面当前Y轴坐标为空，则为新页面
+                // 如果pdfBox最新页面当前Y轴坐标为空，则为新页面
             }else {
                 // 页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
                 this.beginY = pageHeight - this.marginTop - this.height;
+            }
+        }
+        // 如果页面X轴起始坐标为空，则初始化
+        if (this.beginX==null) {
+            // 如果图片样式为空，或图片样式为居中，则初始化页面X轴起始坐标为居中
+            if (this.style==null || this.style == XEasyPdfImageStyle.CENTER) {
+                // 页面X轴起始坐标 = （页面宽度 - 自定义宽度）/ 2
+                this.beginX = (pageWidth - this.width) / 2;
+            // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
+            }else if (this.style == XEasyPdfImageStyle.LEFT) {
+                // 页面X轴起始坐标 = 左边距
+                this.beginX = this.marginLeft;
+            // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
+            }else {
+                // 页面X轴起始坐标 = 页面宽度 - 自定义宽度 - 右边距
+                this.beginX = pageWidth - this.width - this.marginRight;
             }
         }
         return pdImage;

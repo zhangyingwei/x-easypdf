@@ -1,7 +1,7 @@
 package wiki.xsx.core.pdf.util;
 
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 
 import java.io.IOException;
@@ -405,4 +405,110 @@ public class PdfUtil {
     }
 
     /*------------------- fill end -------------------*/
+
+
+
+    /*------------------- merge -------------------*/
+
+    /**
+     * 合并pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(String sourcePath, String outputPath, XEasyPdfDocument...documents) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            merge(sourcePath, outputStream, documents);
+        }
+    }
+
+    /**
+     * 合并pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(String sourcePath, OutputStream outputStream, XEasyPdfDocument...documents) throws IOException {
+        new XEasyPdfDocument(sourcePath).merge(documents).save(outputStream);
+    }
+
+    /**
+     * 合并pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(InputStream sourceInputStream, String outputPath, XEasyPdfDocument...documents) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            merge(sourceInputStream, outputStream, documents);
+        }
+    }
+
+    /**
+     * 合并pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputStream 文件输出流
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(InputStream sourceInputStream, OutputStream outputStream, XEasyPdfDocument...documents) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).merge(documents).save(outputStream);
+    }
+
+    /**
+     * 合并pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(String sourcePath, String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            merge(sourcePath, outputStream, globalWatermark, documents);
+        }
+    }
+
+    /**
+     * 合并pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(String sourcePath, OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).merge(documents).save(outputStream);
+    }
+
+    /**
+     * 合并pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(InputStream sourceInputStream, String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            merge(sourceInputStream, outputStream, globalWatermark, documents);
+        }
+    }
+
+    /**
+     * 合并pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param documents pdf文档
+     * @throws IOException IO异常
+     */
+    public static void merge(InputStream sourceInputStream, OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).merge(documents).save(outputStream);
+    }
+
+    /*------------------- merge end -------------------*/
 }

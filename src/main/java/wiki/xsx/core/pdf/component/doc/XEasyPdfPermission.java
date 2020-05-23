@@ -31,11 +31,11 @@ public class XEasyPdfPermission {
     /**
      * pdf文档
      */
-    private XEasyPdfDocument document;
+    private final XEasyPdfDocument document;
     /**
      * pdf访问权限
      */
-    private AccessPermission accessPermission = new AccessPermission();
+    private final AccessPermission accessPermission = new AccessPermission();
     /**
      * 公钥类型
      */
@@ -139,7 +139,7 @@ public class XEasyPdfPermission {
     }
 
     /**
-     * 完成权限设置（标准策略，无密码）
+     * 完成权限设置（标准策略，空密码）
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
@@ -213,7 +213,7 @@ public class XEasyPdfPermission {
         /**
          * 长度
          */
-        private int length;
+        private final int length;
 
         /**
          * 构造方法

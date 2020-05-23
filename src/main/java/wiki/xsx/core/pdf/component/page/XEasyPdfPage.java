@@ -63,6 +63,11 @@ public class XEasyPdfPage {
         }
     }
 
+    public XEasyPdfPage addPage(PDPage page) {
+        this.param.getPageList().add(page);
+        return this;
+    }
+
     /**
      * 设置字体路径
      * @param fontPath 字体路径
