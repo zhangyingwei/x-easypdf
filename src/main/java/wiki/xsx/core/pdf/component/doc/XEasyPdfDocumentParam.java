@@ -61,6 +61,14 @@ public class XEasyPdfDocumentParam {
      * pdfBox文档属性
      */
     private XEasyPdfDocumentInfo info;
+    /**
+     * pdfBox文档（目标文档）
+     */
+    private PDDocument target;
+    /**
+     * 是否重置
+     */
+    private boolean isReset;
 
     /**
      * 初始化字体

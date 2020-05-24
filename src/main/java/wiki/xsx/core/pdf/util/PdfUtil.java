@@ -511,4 +511,108 @@ public class PdfUtil {
     }
 
     /*------------------- merge end -------------------*/
+
+
+
+    /*------------------- image -------------------*/
+
+    /**
+     * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param imageType 图片类型
+     * @throws IOException IO异常
+     */
+    public static void image(String sourcePath, String outputPath, String imageType) throws IOException {
+        new XEasyPdfDocument(sourcePath).toImage(outputPath, imageType).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param imageType 图片类型
+     * @throws IOException IO异常
+     */
+    public static void image(InputStream sourceInputStream, String outputPath, String imageType) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).toImage(outputPath, imageType).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param imageType 图片类型
+     * @param prefix 图片名称前缀
+     * @throws IOException IO异常
+     */
+    public static void image(String sourcePath, String outputPath, String imageType, String prefix) throws IOException {
+        new XEasyPdfDocument(sourcePath).toImage(outputPath, imageType, prefix).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param imageType 图片类型
+     * @param prefix 图片名称前缀
+     * @throws IOException IO异常
+     */
+    public static void image(InputStream sourceInputStream, String outputPath, String imageType, String prefix) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).toImage(outputPath, imageType, prefix).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(String sourcePath, String outputPath, String imageType, int pageIndex) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            image(sourcePath, outputStream, imageType, pageIndex);
+        }
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(InputStream sourceInputStream, String outputPath, String imageType, int pageIndex) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            image(sourceInputStream, outputStream, imageType, pageIndex);
+        }
+    }
+
+    /**
+     * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(String sourcePath, OutputStream outputStream, String imageType, int pageIndex) throws IOException {
+        new XEasyPdfDocument(sourcePath).toImage(outputStream, imageType, pageIndex).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputStream 文件输出流
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(InputStream sourceInputStream, OutputStream outputStream, String imageType, int pageIndex) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).toImage(outputStream, imageType, pageIndex).close();
+    }
+
+    /*------------------- image end -------------------*/
 }

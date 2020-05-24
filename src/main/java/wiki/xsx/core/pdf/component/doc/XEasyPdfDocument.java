@@ -9,19 +9,20 @@ import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.FontUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * pdf文档
@@ -98,6 +99,8 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfPermission enablePermission() {
+        // 设置重置
+        this.param.setReset(true);
         return new XEasyPdfPermission(this);
     }
 
@@ -107,6 +110,8 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
+        // 设置重置
+        this.param.setReset(true);
         this.param.setGlobalWatermark(globalWatermark);
         return this;
     }
@@ -117,6 +122,8 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setFontPath(String fontPath) {
+        // 设置重置
+        this.param.setReset(true);
         this.param.setFontPath(fontPath);
         return this;
     }
@@ -127,6 +134,8 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setFont(PDFont font) {
+        // 设置重置
+        this.param.setReset(true);
         this.param.setFont(font);
         return this;
     }
@@ -145,6 +154,8 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setInfo(XEasyPdfDocumentInfo info) {
+        // 设置重置
+        this.param.setReset(true);
         this.param.setInfo(info);
         return this;
     }
@@ -155,6 +166,8 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument addPage(XEasyPdfPage...pages) {
+        // 设置重置
+        this.param.setReset(true);
         // 添加页面
         Collections.addAll(this.param.getPageList(), pages);
         return this;
@@ -167,6 +180,9 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument insertPage(int index, XEasyPdfPage...pages) {
+        // 设置重置
+        this.param.setReset(true);
+        // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果pdf页面列表数量大于索引，则插入页面，否则添加页面
         if (pageList.size()>=index) {
@@ -211,6 +227,8 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument fillAcroForm(PDFont font, Map<String, String> formMap) throws IOException {
+        // 设置重置
+        this.param.setReset(true);
         // 如果填充表单字典为空，则直接返回
         if (formMap==null||formMap.size()==0) {
             return this;
@@ -249,6 +267,8 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument merge(XEasyPdfDocument ...documents) {
+        // 设置重置
+        this.param.setReset(true);
         // 定义pdfBox页面树
         PDPageTree pageTree;
         // 定义页面
@@ -267,6 +287,81 @@ public class XEasyPdfDocument {
             // 添加页面
             this.param.getPageList().add(page);
         }
+        return this;
+    }
+
+    /**
+     * 转为图片（整个文档）
+     * @param outputPath 输出路径（目录）
+     * @param imageType 图片类型
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocument toImage(String outputPath, String imageType) throws IOException {
+        return this.toImage(outputPath, imageType, null);
+    }
+
+    /**
+     * 转为图片（整个文档）
+     * @param outputPath 输出路径（目录）
+     * @param imageType 图片类型
+     * @param prefix 图片名称前缀
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocument toImage(String outputPath, String imageType, String prefix) throws IOException {
+        // 获取任务文档
+        PDDocument target = this.createTarget();
+        // 文件名称构造器
+        StringBuilder fileNameBuilder;
+        // 任务文档页面总数
+        int pageCount = target.getNumberOfPages();
+        // 遍历文档页面
+        for (int i = 0; i < pageCount; i++) {
+            // 新建文件名称构造器
+            fileNameBuilder = new StringBuilder();
+            // 构建文件名称
+            fileNameBuilder.append(outputPath).append(File.separator).append(prefix==null?UUID.randomUUID():prefix+i).append('.').append(imageType);
+            // 获取输出流
+            try (OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
+                // 初始化pdfBox文档渲染器
+                PDFRenderer renderer = new PDFRenderer(target);
+                // 渲染图片
+                BufferedImage bufferedImage = renderer.renderImage(i);
+                // 写出图片
+                ImageIO.write(bufferedImage, imageType, outputStream);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 转为图片（根据页面索引）
+     * @param outputStream 输出流
+     * @param imageType 图片类型
+     * @param pageIndex 页面索引
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocument toImage(OutputStream outputStream, String imageType, int pageIndex) throws IOException {
+        // 获取任务文档
+        PDDocument target = this.createTarget();
+        // 获取文档总页面索引
+        int totalPageIndex = target.getNumberOfPages()-1;
+        // 如果文档总页面索引为-1，则跑异常
+        if (totalPageIndex==-1) {
+            throw new RuntimeException("the document has not any content");
+        }
+        // 如果页面索引大于文档总页面索引或小于0，则抛异常
+        if (pageIndex>totalPageIndex||pageIndex<0) {
+            throw new RuntimeException("the pageIndex is only between " + 0 + " and " + totalPageIndex);
+        }
+        // 初始化pdfBox文档渲染器
+        PDFRenderer renderer = new PDFRenderer(target);
+        // 渲染图片
+        BufferedImage bufferedImage = renderer.renderImage(pageIndex);
+        // 写出图片
+        ImageIO.write(bufferedImage, imageType, outputStream);
         return this;
     }
 
@@ -290,51 +385,23 @@ public class XEasyPdfDocument {
         // 初始化字体
         this.param.initFont(this);
         // 定义任务文档
-        PDDocument target = new PDDocument();
-        // 如果文档信息不为空，则进行设置
-        if (this.param.getInfo()!=null) {
-            // 设置文档信息
-            target.setDocumentInformation(this.param.getInfo().getInfo());
-        }
-        // 获取pdf页面列表
-        List<XEasyPdfPage> pageList = this.param.getPageList();
-        // 定义pdfBox页面列表
-        List<PDPage> pdfboxPageList;
-        // 遍历pdf页面列表
-        for (XEasyPdfPage pdfPage : pageList) {
-            // 如果pdf页面组件数量大于0，则进行页面构建
-            if (pdfPage.getParam().getComponentList().size()>0) {
-                // pdf页面构建
-                pdfPage.build(this);
+        try (PDDocument target = this.createTarget()) {
+            // 如果文档信息不为空，则进行设置
+            if (this.param.getInfo() != null) {
+                // 设置文档信息
+                target.setDocumentInformation(this.param.getInfo().getInfo());
             }
-            // 初始化pdfBox页面列表
-            pdfboxPageList = pdfPage.getParam().getPageList();
-            // 遍历pdfBox页面列表
-            for (PDPage page : pdfboxPageList) {
-                // 任务文档添加页面
-                target.addPage(page);
+            // 如果pdfBox保护策略不为空，则进行设置
+            if (this.param.getPolicy() != null) {
+                // 设置pdf保护策略
+                target.protect(this.param.getPolicy());
             }
-            // 如果页面水印不为空，则进行页面水印绘制
-            if (pdfPage.getParam().getWatermark()!=null) {
-                // 绘制页面水印
-                pdfPage.getParam().getWatermark().draw(this, pdfPage);
-            // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
-            }else if (this.param.getGlobalWatermark()!=null&&pdfPage.getParam().isAllowWatermark()) {
-                // 绘制页面水印
-                this.param.getGlobalWatermark().draw(this, pdfPage);
-            }
+            // 保存任务文档
+            target.save(outputStream);
+        } finally {
+            // 关闭pdfBox文档
+            this.close();
         }
-        // 如果pdfBox保护策略不为空，则进行设置
-        if (this.param.getPolicy()!=null) {
-            // 设置pdf保护策略
-            target.protect(this.param.getPolicy());
-        }
-        // 保存任务文档
-        target.save(outputStream);
-        // 关闭任务文档
-        target.close();
-        // 关闭pdfBox文档
-        this.close();
     }
 
     /**
@@ -343,6 +410,9 @@ public class XEasyPdfDocument {
      */
     public void close() throws IOException {
         if (this.getDocument()!=null) {
+            if (this.param.getTarget()!=null) {
+                this.param.getTarget().close();
+            }
             this.getDocument().close();
         }
     }
@@ -369,5 +439,54 @@ public class XEasyPdfDocument {
      */
     void setProtectionPolicy(ProtectionPolicy policy) {
         this.param.setPolicy(policy);
+    }
+
+    /**
+     * 创建任务
+     * @return 返回pdfBox文档
+     * @throws IOException IO异常
+     */
+    private PDDocument createTarget() throws IOException {
+        // 如果任务文档未初始化或文档被重置，则进行新任务创建
+        if (this.param.getTarget()==null||this.param.isReset()) {
+            // 新建任务文档
+            PDDocument target = new PDDocument();
+            // 获取pdf页面列表
+            List<XEasyPdfPage> pageList = this.param.getPageList();
+            // 定义pdfBox页面列表
+            List<PDPage> pdfboxPageList;
+            // 遍历pdf页面列表
+            for (XEasyPdfPage pdfPage : pageList) {
+                // 如果pdf页面组件数量大于0，则进行页面构建
+                if (pdfPage.getParam().getComponentList().size() > 0) {
+                    // pdf页面构建
+                    pdfPage.build(this);
+                }
+                // 初始化pdfBox页面列表
+                pdfboxPageList = pdfPage.getParam().getPageList();
+                // 遍历pdfBox页面列表
+                for (PDPage page : pdfboxPageList) {
+                    // 任务文档添加页面
+                    target.addPage(page);
+                }
+                // 如果页面水印不为空，则进行页面水印绘制
+                if (pdfPage.getParam().getWatermark() != null) {
+                    // 绘制页面水印
+                    pdfPage.getParam().getWatermark().draw(this, pdfPage);
+                    // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
+                } else if (this.param.getGlobalWatermark() != null && pdfPage.getParam().isAllowWatermark()) {
+                    // 绘制页面水印
+                    this.param.getGlobalWatermark().draw(this, pdfPage);
+                }
+            }
+            // 如果任务文档不为空，则关闭
+            if (this.param.getTarget()!=null) {
+                // 关闭旧任务文档
+                this.param.getTarget().close();
+            }
+            // 设置新任务文档
+            this.param.setTarget(target);
+        }
+        return this.param.getTarget();
     }
 }
