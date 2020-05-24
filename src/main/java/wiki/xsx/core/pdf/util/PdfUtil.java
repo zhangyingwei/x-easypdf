@@ -1,6 +1,7 @@
 package wiki.xsx.core.pdf.util;
 
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.doc.XEasyPdfDocumentSplitter;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 
@@ -38,7 +39,10 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(String outputPath, XEasyPdfPage...pages) throws IOException {
+    public static void create(
+            String outputPath,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             create(outputStream, pages);
         }
@@ -50,7 +54,10 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(OutputStream outputStream, XEasyPdfPage...pages) throws IOException {
+    public static void create(
+            OutputStream outputStream,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument().addPage(pages).save(outputStream);
     }
 
@@ -61,7 +68,11 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+    public static void create(
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             create(outputStream, globalWatermark, pages);
         }
@@ -74,7 +85,11 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void create(OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+    public static void create(
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
     }
 
@@ -91,7 +106,11 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, String outputPath, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             append(sourcePath, outputStream, pages);
         }
@@ -104,7 +123,11 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, OutputStream outputStream, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            String sourcePath,
+            OutputStream outputStream,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourcePath).addPage(pages).save(outputStream);
     }
 
@@ -115,7 +138,11 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(InputStream sourceInputStream, String outputPath, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             append(sourceInputStream, outputStream, pages);
         }
@@ -128,7 +155,11 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(InputStream sourceInputStream, OutputStream outputStream, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).addPage(pages).save(outputStream);
     }
 
@@ -140,7 +171,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             append(sourcePath, outputStream, globalWatermark, pages);
         }
@@ -154,7 +190,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(String sourcePath, OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            String sourcePath,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
     }
 
@@ -166,7 +207,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(InputStream sourceInputStream, String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             append(sourceInputStream, outputStream, globalWatermark, pages);
         }
@@ -180,7 +226,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void append(InputStream sourceInputStream, OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfPage...pages) throws IOException {
+    public static void append(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
     }
 
@@ -198,7 +249,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, String outputPath, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            String sourcePath,
+            String outputPath,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             insert(sourcePath, outputStream, index, pages);
         }
@@ -212,7 +268,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, OutputStream outputStream, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            String sourcePath,
+            OutputStream outputStream,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourcePath).insertPage(index, pages).save(outputStream);
     }
 
@@ -224,7 +285,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(InputStream sourceInputStream, String outputPath, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            InputStream sourceInputStream,
+            String outputPath,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             insert(sourceInputStream, outputStream, index, pages);
         }
@@ -238,7 +304,12 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(InputStream sourceInputStream, OutputStream outputStream, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).insertPage(index, pages).save(outputStream);
     }
 
@@ -251,7 +322,13 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, String outputPath, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             insert(sourcePath, outputStream, globalWatermark, index, pages);
         }
@@ -266,7 +343,13 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(String sourcePath, OutputStream outputStream, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            String sourcePath,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(outputStream);
     }
 
@@ -279,7 +362,13 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(InputStream sourceInputStream, String outputPath, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             insert(sourceInputStream, outputStream, globalWatermark, index, pages);
         }
@@ -294,7 +383,13 @@ public class PdfUtil {
      * @param pages pdf页面
      * @throws IOException IO异常
      */
-    public static void insert(InputStream sourceInputStream, OutputStream outputStream, XEasyPdfWatermark globalWatermark, int index, XEasyPdfPage...pages) throws IOException {
+    public static void insert(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            int index,
+            XEasyPdfPage...pages
+    ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).insertPage(index, pages).save(outputStream);
     }
 
@@ -311,7 +406,12 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(String templateSourcePath, String outputPath, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            String templateSourcePath,
+            String outputPath,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             fill(templateSourcePath, outputStream, fontPath, formMap);
         }
@@ -324,7 +424,12 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(String templateSourcePath, OutputStream outputStream, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            String templateSourcePath,
+            OutputStream outputStream,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         new XEasyPdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(outputStream);
     }
 
@@ -336,7 +441,13 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(String templateSourcePath, String outputPath, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            String templateSourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             fill(templateSourcePath, outputStream, globalWatermark, fontPath, formMap);
         }
@@ -350,7 +461,13 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(String templateSourcePath, OutputStream outputStream, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            String templateSourcePath,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         new XEasyPdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(outputStream);
     }
 
@@ -361,7 +478,12 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(InputStream templateInputStream, String outputPath, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            InputStream templateInputStream,
+            String outputPath,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             fill(templateInputStream, outputStream, fontPath, formMap);
         }
@@ -374,7 +496,12 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(InputStream templateInputStream, OutputStream outputStream, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            InputStream templateInputStream,
+            OutputStream outputStream,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         new XEasyPdfDocument(templateInputStream).fillAcroForm(fontPath, formMap).save(outputStream);
     }
 
@@ -386,7 +513,13 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(InputStream templateInputStream, String outputPath, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            InputStream templateInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             fill(templateInputStream, outputStream, globalWatermark, fontPath, formMap);
         }
@@ -400,7 +533,13 @@ public class PdfUtil {
      * @param formMap 表单字典
      * @throws IOException IO异常
      */
-    public static void fill(InputStream templateInputStream, OutputStream outputStream, XEasyPdfWatermark globalWatermark, String fontPath, Map<String, String> formMap) throws IOException {
+    public static void fill(
+            InputStream templateInputStream,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            String fontPath,
+            Map<String, String> formMap
+    ) throws IOException {
         new XEasyPdfDocument(templateInputStream).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(outputStream);
     }
 
@@ -417,7 +556,11 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(String sourcePath, String outputPath, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             merge(sourcePath, outputStream, documents);
         }
@@ -430,7 +573,11 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(String sourcePath, OutputStream outputStream, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            String sourcePath,
+            OutputStream outputStream,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         new XEasyPdfDocument(sourcePath).merge(documents).save(outputStream);
     }
 
@@ -441,7 +588,11 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(InputStream sourceInputStream, String outputPath, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             merge(sourceInputStream, outputStream, documents);
         }
@@ -454,7 +605,11 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(InputStream sourceInputStream, OutputStream outputStream, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).merge(documents).save(outputStream);
     }
 
@@ -466,7 +621,12 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(String sourcePath, String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             merge(sourcePath, outputStream, globalWatermark, documents);
         }
@@ -480,7 +640,12 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(String sourcePath, OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            String sourcePath,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).merge(documents).save(outputStream);
     }
 
@@ -492,7 +657,12 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(InputStream sourceInputStream, String outputPath, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             merge(sourceInputStream, outputStream, globalWatermark, documents);
         }
@@ -506,11 +676,414 @@ public class PdfUtil {
      * @param documents pdf文档
      * @throws IOException IO异常
      */
-    public static void merge(InputStream sourceInputStream, OutputStream outputStream, XEasyPdfWatermark globalWatermark, XEasyPdfDocument...documents) throws IOException {
+    public static void merge(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocument...documents
+    ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).merge(documents).save(outputStream);
     }
 
     /*------------------- merge end -------------------*/
+
+
+
+    /*------------------- split -------------------*/
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath
+    ) throws IOException {
+        split(sourcePath, outputPath, (XEasyPdfDocumentSplitter) null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param splitter pdf文档拆分器
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfDocumentSplitter splitter
+    ) throws IOException {
+        split(sourcePath, outputPath, splitter, null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark
+    ) throws IOException {
+        split(sourcePath, outputPath, globalWatermark, (XEasyPdfDocumentSplitter) null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param splitter pdf文档拆分器
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocumentSplitter splitter
+    ) throws IOException {
+        split(sourcePath, outputPath, globalWatermark, splitter, null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath
+    ) throws IOException {
+        split(sourceInputStream, outputPath, (XEasyPdfDocumentSplitter) null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param splitter pdf文档拆分器
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfDocumentSplitter splitter
+    ) throws IOException {
+        split(sourceInputStream, outputPath, splitter, null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark
+    ) throws IOException {
+        split(sourceInputStream, outputPath, globalWatermark, (XEasyPdfDocumentSplitter) null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param splitter pdf文档拆分器
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocumentSplitter splitter
+    ) throws IOException {
+        split(sourceInputStream, outputPath, globalWatermark, splitter, null);
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).split(outputPath, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param splitter pdf文档拆分器
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfDocumentSplitter splitter,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).split(outputPath, splitter, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputPath, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param splitter pdf文档拆分器
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocumentSplitter splitter,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputPath, splitter, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).split(outputPath, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param splitter pdf文档拆分器
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfDocumentSplitter splitter,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).split(outputPath, splitter, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputPath, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param splitter pdf文档拆分器
+     * @param prefix 文档名称前缀
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDocumentSplitter splitter,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputPath, splitter, prefix).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            int ...pageIndex
+    ) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            split(sourcePath, outputStream, pageIndex);
+        }
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            OutputStream outputStream,
+            int ...pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).split(outputStream, pageIndex).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            int ...pageIndex
+    ) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            split(sourcePath, outputStream, globalWatermark, pageIndex);
+        }
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            String sourcePath,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            int ...pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputStream, pageIndex).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            int ...pageIndex
+    ) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            split(sourceInputStream, outputStream, pageIndex);
+        }
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputStream 文件输出流
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            int ...pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).split(outputStream, pageIndex).close();
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            int ...pageIndex
+    ) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            split(sourceInputStream, outputStream, globalWatermark,pageIndex);
+        }
+    }
+
+    /**
+     * 拆分pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public static void split(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            int ...pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputStream, pageIndex).close();
+    }
+
+    /*------------------- split end -------------------*/
 
 
 
@@ -523,8 +1096,29 @@ public class PdfUtil {
      * @param imageType 图片类型
      * @throws IOException IO异常
      */
-    public static void image(String sourcePath, String outputPath, String imageType) throws IOException {
-        new XEasyPdfDocument(sourcePath).toImage(outputPath, imageType).close();
+    public static void image(
+            String sourcePath,
+            String outputPath,
+            String imageType
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).image(outputPath, imageType).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @throws IOException IO异常
+     */
+    public static void image(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String imageType
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).image(outputPath, imageType).close();
     }
 
     /**
@@ -534,8 +1128,29 @@ public class PdfUtil {
      * @param imageType 图片类型
      * @throws IOException IO异常
      */
-    public static void image(InputStream sourceInputStream, String outputPath, String imageType) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).toImage(outputPath, imageType).close();
+    public static void image(
+            InputStream sourceInputStream,
+            String outputPath,
+            String imageType
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).image(outputPath, imageType).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @throws IOException IO异常
+     */
+    public static void image(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String imageType
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).image(outputPath, imageType).close();
     }
 
     /**
@@ -546,8 +1161,32 @@ public class PdfUtil {
      * @param prefix 图片名称前缀
      * @throws IOException IO异常
      */
-    public static void image(String sourcePath, String outputPath, String imageType, String prefix) throws IOException {
-        new XEasyPdfDocument(sourcePath).toImage(outputPath, imageType, prefix).close();
+    public static void image(
+            String sourcePath,
+            String outputPath,
+            String imageType,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).image(outputPath, imageType, prefix).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @param prefix 图片名称前缀
+     * @throws IOException IO异常
+     */
+    public static void image(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String imageType,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).image(outputPath, imageType, prefix).close();
     }
 
     /**
@@ -558,8 +1197,32 @@ public class PdfUtil {
      * @param prefix 图片名称前缀
      * @throws IOException IO异常
      */
-    public static void image(InputStream sourceInputStream, String outputPath, String imageType, String prefix) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).toImage(outputPath, imageType, prefix).close();
+    public static void image(
+            InputStream sourceInputStream,
+            String outputPath,
+            String imageType,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).image(outputPath, imageType, prefix).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径（目录）
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @param prefix 图片名称前缀
+     * @throws IOException IO异常
+     */
+    public static void image(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String imageType,
+            String prefix
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).image(outputPath, imageType, prefix).close();
     }
 
     /**
@@ -570,7 +1233,12 @@ public class PdfUtil {
      * @param pageIndex 文档页面索引
      * @throws IOException IO异常
      */
-    public static void image(String sourcePath, String outputPath, String imageType, int pageIndex) throws IOException {
+    public static void image(
+            String sourcePath,
+            String outputPath,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             image(sourcePath, outputStream, imageType, pageIndex);
         }
@@ -578,15 +1246,62 @@ public class PdfUtil {
 
     /**
      * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(
+            String sourcePath,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            image(sourcePath, outputStream, globalWatermark, imageType, pageIndex);
+        }
+    }
+
+    /**
+     * 图片pdf
      * @param sourceInputStream 源文件数据流
      * @param outputPath 文件输出路径
      * @param imageType 图片类型
      * @param pageIndex 文档页面索引
      * @throws IOException IO异常
      */
-    public static void image(InputStream sourceInputStream, String outputPath, String imageType, int pageIndex) throws IOException {
+    public static void image(
+            InputStream sourceInputStream,
+            String outputPath,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
             image(sourceInputStream, outputStream, imageType, pageIndex);
+        }
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputPath 文件输出路径
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(
+            InputStream sourceInputStream,
+            String outputPath,
+            XEasyPdfWatermark globalWatermark,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+            image(sourceInputStream, outputStream, globalWatermark, imageType, pageIndex);
         }
     }
 
@@ -598,8 +1313,32 @@ public class PdfUtil {
      * @param pageIndex 文档页面索引
      * @throws IOException IO异常
      */
-    public static void image(String sourcePath, OutputStream outputStream, String imageType, int pageIndex) throws IOException {
-        new XEasyPdfDocument(sourcePath).toImage(outputStream, imageType, pageIndex).close();
+    public static void image(
+            String sourcePath,
+            OutputStream outputStream,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).image(outputStream, imageType, pageIndex).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourcePath 源文件路径
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(
+            String sourcePath,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).image(outputStream, imageType, pageIndex).close();
     }
 
     /**
@@ -610,8 +1349,32 @@ public class PdfUtil {
      * @param pageIndex 文档页面索引
      * @throws IOException IO异常
      */
-    public static void image(InputStream sourceInputStream, OutputStream outputStream, String imageType, int pageIndex) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).toImage(outputStream, imageType, pageIndex).close();
+    public static void image(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).image(outputStream, imageType, pageIndex).close();
+    }
+
+    /**
+     * 图片pdf
+     * @param sourceInputStream 源文件数据流
+     * @param outputStream 文件输出流
+     * @param globalWatermark 全局水印
+     * @param imageType 图片类型
+     * @param pageIndex 文档页面索引
+     * @throws IOException IO异常
+     */
+    public static void image(
+            InputStream sourceInputStream,
+            OutputStream outputStream,
+            XEasyPdfWatermark globalWatermark,
+            String imageType,
+            int pageIndex
+    ) throws IOException {
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).image(outputStream, imageType, pageIndex).close();
     }
 
     /*------------------- image end -------------------*/
