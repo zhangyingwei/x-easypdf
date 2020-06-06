@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfTableParam {
+class XEasyPdfTableParam {
 
     /**
      * 行列表

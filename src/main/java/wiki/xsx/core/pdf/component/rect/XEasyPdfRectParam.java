@@ -28,7 +28,7 @@ import java.awt.*;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfRectParam {
+class XEasyPdfRectParam {
     /**
      * 左边距
      */
@@ -91,7 +91,7 @@ public class XEasyPdfRectParam {
      * @param document pdf文档
      * @param page pdf页面
      */
-    public void init(XEasyPdfDocument document, XEasyPdfPage page) {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果宽度未设置，则抛异常
         if (this.width==null) {
             throw new RuntimeException("the width can not null");

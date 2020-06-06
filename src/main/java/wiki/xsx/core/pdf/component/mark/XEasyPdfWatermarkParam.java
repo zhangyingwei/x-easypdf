@@ -27,7 +27,7 @@ import wiki.xsx.core.pdf.util.FontUtil;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfWatermarkParam {
+class XEasyPdfWatermarkParam {
     /**
      * 字体路径
      */
@@ -63,7 +63,7 @@ public class XEasyPdfWatermarkParam {
      * @param page pdf页面
      * @return 返回pdfBox扩展图形对象
      */
-    public PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) {
+    PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体

@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfRowParam {
+class XEasyPdfRowParam {
     /**
      * 单元格列表
      */

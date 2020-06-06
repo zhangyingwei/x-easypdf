@@ -78,9 +78,9 @@ public class XEasyPdfPageParam {
      * 初始化字体
      * @param document pdf文档
      */
-    protected void initFont(XEasyPdfDocument document) {
-        if (this.fontPath!=null&&this.font==null) {
-            this.font = FontUtil.loadFont(document, this.fontPath);
+    void initFont(XEasyPdfDocument document, XEasyPdfPage page) {
+        if (this.font==null) {
+            this.font = FontUtil.loadFont(document, page, this.fontPath);
         }
     }
 }

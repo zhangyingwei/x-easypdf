@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfCellParam {
+class XEasyPdfCellParam {
     /**
      * 是否带有边框
      */

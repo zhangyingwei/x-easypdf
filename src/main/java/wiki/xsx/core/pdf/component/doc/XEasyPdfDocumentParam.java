@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfDocumentParam {
+class XEasyPdfDocumentParam {
     /**
      * 字体路径
      */

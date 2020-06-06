@@ -23,7 +23,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfLineParam {
+class XEasyPdfLineParam {
     /**
      * 字体路径
      */

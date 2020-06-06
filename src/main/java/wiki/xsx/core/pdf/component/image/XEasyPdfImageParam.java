@@ -33,7 +33,7 @@ import java.io.IOException;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfImageParam {
+class XEasyPdfImageParam {
     /**
      * 待添加图片
      */
@@ -98,7 +98,7 @@ public class XEasyPdfImageParam {
      * @return 返回pdfBox图片对象
      * @throws IOException IO异常
      */
-    public PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 如果图片为空，则抛出异常信息
         if (this.image==null) {
             throw new FileNotFoundException("the image can not be found");

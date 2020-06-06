@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfTextParam {
+class XEasyPdfTextParam {
     /**
      * 字体路径
      */
@@ -108,7 +108,7 @@ public class XEasyPdfTextParam {
      * @param page pdf页面
      * @throws IOException IO异常
      */
-    public void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果最大宽度未初始化，则进行初始化

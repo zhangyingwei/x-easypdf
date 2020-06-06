@@ -66,22 +66,6 @@ public class XEasyPdfDocumentInfo {
     }
 
     /**
-     * 获取pdfBox文档信息
-     * @return 返回pdfBox文档信息
-     */
-    public PDDocumentInformation getInfo() {
-        PDDocumentInformation pdInfo = new PDDocumentInformation();
-        pdInfo.setTitle(this.title);
-        pdInfo.setAuthor(this.author);
-        pdInfo.setSubject(this.subject);
-        pdInfo.setKeywords(this.keywords);
-        pdInfo.setCreator(this.creator);
-        pdInfo.setCreationDate(this.creationDate);
-        pdInfo.setModificationDate(this.modificationDate);
-        return pdInfo;
-    }
-
-    /**
      * 设置标题
      * @param title 标题
      * @return 返回pdf文档信息
@@ -152,11 +136,27 @@ public class XEasyPdfDocumentInfo {
     }
 
     /**
-     * 完成
+     * 完成信息设置
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
         this.document.setInfo(this);
         return this.document;
+    }
+
+    /**
+     * 获取pdfBox文档信息
+     * @return 返回pdfBox文档信息
+     */
+    PDDocumentInformation getInfo() {
+        PDDocumentInformation pdInfo = new PDDocumentInformation();
+        pdInfo.setTitle(this.title);
+        pdInfo.setAuthor(this.author);
+        pdInfo.setSubject(this.subject);
+        pdInfo.setKeywords(this.keywords);
+        pdInfo.setCreator(this.creator);
+        pdInfo.setCreationDate(this.creationDate);
+        pdInfo.setModificationDate(this.modificationDate);
+        return pdInfo;
     }
 }

@@ -177,7 +177,7 @@ public class XEasyPdfPage {
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
         // 初始化字体
-        this.param.initFont(document);
+        this.param.initFont(document, this);
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
         this.param.getPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
         // 获取pdf组件列表
