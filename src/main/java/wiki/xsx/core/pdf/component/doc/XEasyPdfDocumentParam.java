@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
-import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
@@ -54,13 +53,13 @@ public class XEasyPdfDocumentParam {
      */
     private XEasyPdfWatermark globalWatermark;
     /**
-     * pdfBox保护策略
+     * pdf文档权限
      */
-    private ProtectionPolicy policy;
+    private XEasyPdfDocumentPermission permission;
     /**
-     * pdfBox文档属性
+     * pdf文档信息
      */
-    private XEasyPdfDocumentInfo info;
+    private XEasyPdfDocumentInfo documentInfo;
     /**
      * pdfBox文档（目标文档）
      */
@@ -74,7 +73,7 @@ public class XEasyPdfDocumentParam {
      * 初始化字体
      * @param document pdf文档
      */
-    protected void initFont(XEasyPdfDocument document) {
+    void initFont(XEasyPdfDocument document) {
         if (this.fontPath!=null&&this.font==null) {
             this.font = FontUtil.loadFont(document, this.fontPath);
         }
@@ -83,17 +82,17 @@ public class XEasyPdfDocumentParam {
     /**
      * 初始化文档信息
      */
-    protected void initInfo() {
+    void initInfo(XEasyPdfDocument document) {
         if (this.document!=null) {
             PDDocumentInformation documentInformation = this.document.getDocumentInformation();
-            this.info = XEasyPdfDocumentInfo.builder()
-                    .title(documentInformation.getTitle())
-                    .author(documentInformation.getAuthor())
-                    .subject(documentInformation.getSubject())
-                    .keywords(documentInformation.getKeywords())
-                    .creator(documentInformation.getCreator())
-                    .creationDate(documentInformation.getCreationDate())
-                    .modificationDate(documentInformation.getModificationDate()).build();
+            this.documentInfo = new XEasyPdfDocumentInfo(document)
+                    .setTitle(documentInformation.getTitle())
+                    .setAuthor(documentInformation.getAuthor())
+                    .setSubject(documentInformation.getSubject())
+                    .setKeywords(documentInformation.getKeywords())
+                    .setCreator(documentInformation.getCreator())
+                    .setCreateTime(documentInformation.getCreationDate())
+                    .setUpdateTime(documentInformation.getModificationDate());
         }
     }
 }

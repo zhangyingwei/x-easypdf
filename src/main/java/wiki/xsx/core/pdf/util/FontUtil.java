@@ -29,6 +29,20 @@ import java.nio.file.Paths;
 public class FontUtil {
 
     /**
+     * 获取字体
+     * @param document pdf文档
+     * @param fontPath 字体路径
+     * @param defaultFont 默认字体
+     * @return 返回pdfBox字体
+     */
+    public static PDFont getFont(XEasyPdfDocument document, String fontPath, PDFont defaultFont) {
+        if (fontPath!=null) {
+            return loadFont(document, fontPath);
+        }
+        return defaultFont;
+    }
+
+    /**
      * 加载字体
      * @param document pdf文档
      * @param fontPath 字体路径
@@ -72,14 +86,15 @@ public class FontUtil {
         PDFont font = null;
         if (inputStream!=null) {
             try  {
-                // 初始化字体
                 font = PDType0Font.load(document.getDocument(), inputStream);
             }catch (IOException ex) {
                 throw new RuntimeException("the font can not be loaded");
             }
-        }else if (page!=null) {
+        }
+        if (font==null&&page!=null) {
             font = page.getFont();
-        }else if (document!=null) {
+        }
+        if (font==null&&document!=null) {
             font = document.getFont();
         }
         if (font==null) {

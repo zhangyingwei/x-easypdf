@@ -109,12 +109,38 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 设置是否允许添加水印
-     * @param allowWatermark 是否允许添加水印
+     * 开启水印
      * @return 返回pdf页面
      */
-    public XEasyPdfPage setAllowWatermark(boolean allowWatermark) {
-        this.param.setAllowWatermark(allowWatermark);
+    public XEasyPdfPage enableWatermark() {
+        this.param.setAllowWatermark(true);
+        return this;
+    }
+
+    /**
+     * 关闭水印
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage disableWatermark() {
+        this.param.setAllowWatermark(false);
+        return this;
+    }
+
+    /**
+     * 开启页面自动重置定位
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage enablePosition() {
+        this.param.setAllowResetPosition(true);
+        return this;
+    }
+
+    /**
+     * 关闭页面自动重置定位
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage disablePosition() {
+        this.param.setAllowResetPosition(false);
         return this;
     }
 

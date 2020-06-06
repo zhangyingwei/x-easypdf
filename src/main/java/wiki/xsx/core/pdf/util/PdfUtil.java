@@ -1090,7 +1090,7 @@ public class PdfUtil {
     /*------------------- image -------------------*/
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputPath 文件输出路径（目录）
      * @param imageType 图片类型
@@ -1105,7 +1105,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputPath 文件输出路径（目录）
      * @param globalWatermark 全局水印
@@ -1122,7 +1122,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputPath 文件输出路径（目录）
      * @param imageType 图片类型
@@ -1137,7 +1137,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputPath 文件输出路径（目录）
      * @param globalWatermark 全局水印
@@ -1154,7 +1154,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputPath 文件输出路径（目录）
      * @param imageType 图片类型
@@ -1171,7 +1171,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputPath 文件输出路径（目录）
      * @param globalWatermark 全局水印
@@ -1190,7 +1190,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputPath 文件输出路径（目录）
      * @param imageType 图片类型
@@ -1207,7 +1207,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputPath 文件输出路径（目录）
      * @param globalWatermark 全局水印
@@ -1226,7 +1226,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputPath 文件输出路径
      * @param imageType 图片类型
@@ -1245,7 +1245,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputPath 文件输出路径
      * @param globalWatermark 全局水印
@@ -1266,7 +1266,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputPath 文件输出路径
      * @param imageType 图片类型
@@ -1285,7 +1285,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputPath 文件输出路径
      * @param globalWatermark 全局水印
@@ -1306,7 +1306,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputStream 文件输出流
      * @param imageType 图片类型
@@ -1323,7 +1323,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourcePath 源文件路径
      * @param outputStream 文件输出流
      * @param globalWatermark 全局水印
@@ -1342,7 +1342,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputStream 文件输出流
      * @param imageType 图片类型
@@ -1359,7 +1359,7 @@ public class PdfUtil {
     }
 
     /**
-     * 图片pdf
+     * 图片化pdf
      * @param sourceInputStream 源文件数据流
      * @param outputStream 文件输出流
      * @param globalWatermark 全局水印

@@ -1,11 +1,10 @@
 package wiki.xsx.core.pdf.component.doc;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 
 import java.util.Calendar;
+
+
 
 /**
  * pdf文档信息
@@ -24,10 +23,11 @@ import java.util.Calendar;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-@Data
-@Accessors(chain = true)
-@Builder
 public class XEasyPdfDocumentInfo {
+    /**
+     * pdf文档
+     */
+    private final XEasyPdfDocument document;
     /**
      * 标题
      */
@@ -58,6 +58,14 @@ public class XEasyPdfDocumentInfo {
     private Calendar modificationDate;
 
     /**
+     * 有参构造
+     * @param document pdf文档
+     */
+    XEasyPdfDocumentInfo(XEasyPdfDocument document) {
+        this.document = document;
+    }
+
+    /**
      * 获取pdfBox文档信息
      * @return 返回pdfBox文档信息
      */
@@ -71,5 +79,84 @@ public class XEasyPdfDocumentInfo {
         pdInfo.setCreationDate(this.creationDate);
         pdInfo.setModificationDate(this.modificationDate);
         return pdInfo;
+    }
+
+    /**
+     * 设置标题
+     * @param title 标题
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    /**
+     * 设置作者
+     * @param author 作者
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo setAuthor(String author) {
+        this.author = author;
+        return this;
+    }
+
+    /**
+     * 设置主题
+     * @param subject 主题
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo setSubject(String subject) {
+        this.subject = subject;
+        return this;
+    }
+
+    /**
+     * 设置关键词
+     * @param keywords 关键词
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo setKeywords(String keywords) {
+        this.keywords = keywords;
+        return this;
+    }
+
+    /**
+     * 设置创建者
+     * @param creator 创建者
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo setCreator(String creator) {
+        this.creator = creator;
+        return this;
+    }
+
+    /**
+     * 设置创建时间
+     * @param createTime 创建时间
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo setCreateTime(Calendar createTime) {
+        this.creationDate = createTime;
+        return this;
+    }
+
+    /**
+     * 设置修改时间
+     * @param updateTime 修改时间
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo setUpdateTime(Calendar updateTime) {
+        this.modificationDate = updateTime;
+        return this;
+    }
+
+    /**
+     * 完成
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument finish() {
+        this.document.setInfo(this);
+        return this.document;
     }
 }

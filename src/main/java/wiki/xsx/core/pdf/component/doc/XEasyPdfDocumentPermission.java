@@ -1,9 +1,6 @@
 package wiki.xsx.core.pdf.component.doc;
 
-import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
-import org.apache.pdfbox.pdmodel.encryption.PublicKeyProtectionPolicy;
-import org.apache.pdfbox.pdmodel.encryption.PublicKeyRecipient;
-import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
+import org.apache.pdfbox.pdmodel.encryption.*;
 
 import java.io.InputStream;
 import java.security.cert.CertificateException;
@@ -11,7 +8,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 /**
- * pdf权限
+ * pdf文档权限
  * @author xsx
  * @date 2020/4/1
  * @since 1.8
@@ -27,11 +24,15 @@ import java.security.cert.X509Certificate;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XEasyPdfPermission {
+public class XEasyPdfDocumentPermission {
     /**
      * pdf文档
      */
     private final XEasyPdfDocument document;
+    /**
+     * pdfBox保护策略
+     */
+    private ProtectionPolicy policy;
     /**
      * pdf访问权限
      */
@@ -45,7 +46,7 @@ public class XEasyPdfPermission {
      * 有参构造
      * @param document pdf文档
      */
-    public XEasyPdfPermission(XEasyPdfDocument document) {
+    XEasyPdfDocumentPermission(XEasyPdfDocument document) {
         this.document = document;
     }
 
@@ -54,7 +55,7 @@ public class XEasyPdfPermission {
      * @param allowPrinting 能否打印
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanPrint(boolean allowPrinting) {
+    public XEasyPdfDocumentPermission setCanPrint(boolean allowPrinting) {
         this.accessPermission.setCanPrint(allowPrinting);
         return this;
     }
@@ -64,7 +65,7 @@ public class XEasyPdfPermission {
      * @param allowModifications 能否编辑
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanModify(boolean allowModifications) {
+    public XEasyPdfDocumentPermission setCanModify(boolean allowModifications) {
         this.accessPermission.setCanModify(allowModifications);
         return this;
     }
@@ -74,7 +75,7 @@ public class XEasyPdfPermission {
      * @param allowAnnotationModification 能否修改批注
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanModifyAnnotations(boolean allowAnnotationModification) {
+    public XEasyPdfDocumentPermission setCanModifyAnnotations(boolean allowAnnotationModification) {
         this.accessPermission.setCanModifyAnnotations(allowAnnotationModification);
         return this;
     }
@@ -84,7 +85,7 @@ public class XEasyPdfPermission {
      * @param allowFillingInForm 能否填充表单
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanFillInForm(boolean allowFillingInForm) {
+    public XEasyPdfDocumentPermission setCanFillInForm(boolean allowFillingInForm) {
         this.accessPermission.setCanFillInForm(allowFillingInForm);
         return this;
     }
@@ -94,7 +95,7 @@ public class XEasyPdfPermission {
      * @param allowExtraction 能否提取内容
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanExtractContent(boolean allowExtraction) {
+    public XEasyPdfDocumentPermission setCanExtractContent(boolean allowExtraction) {
         this.accessPermission.setCanExtractContent(allowExtraction);
         return this;
     }
@@ -104,7 +105,7 @@ public class XEasyPdfPermission {
      * @param allowExtraction 能否提取内容
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanExtractForAccessibility(boolean allowExtraction) {
+    public XEasyPdfDocumentPermission setCanExtractForAccessibility(boolean allowExtraction) {
         this.accessPermission.setCanExtractForAccessibility(allowExtraction);
         return this;
     }
@@ -114,7 +115,7 @@ public class XEasyPdfPermission {
      * @param allowAssembly 能否组装文档
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanAssembleDocument(boolean allowAssembly) {
+    public XEasyPdfDocumentPermission setCanAssembleDocument(boolean allowAssembly) {
         this.accessPermission.setCanAssembleDocument(allowAssembly);
         return this;
     }
@@ -124,7 +125,7 @@ public class XEasyPdfPermission {
      * @param canPrintDegraded 能否打印降级
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setCanPrintDegraded(boolean canPrintDegraded) {
+    public XEasyPdfDocumentPermission setCanPrintDegraded(boolean canPrintDegraded) {
         this.accessPermission.setCanPrintDegraded(canPrintDegraded);
         return this;
     }
@@ -133,7 +134,7 @@ public class XEasyPdfPermission {
      * 设置为只读（只读时，其他设置将失效）
      * @return 返回pdf权限
      */
-    public XEasyPdfPermission setReadOnly() {
+    public XEasyPdfDocumentPermission setReadOnly() {
         this.accessPermission.setReadOnly();
         return this;
     }
@@ -143,7 +144,7 @@ public class XEasyPdfPermission {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
-        return this.finishWithStandardPolicy(false, XEasyPdfPermission.PWLength.LENGTH_40, "", "");
+        return this.finishWithStandardPolicy(false, XEasyPdfDocumentPermission.PWLength.LENGTH_40, "", "");
     }
 
     /**
@@ -166,7 +167,7 @@ public class XEasyPdfPermission {
         // 设置密钥长度
         policy.setEncryptionKeyLength(length.length);
         // 设置pdfBox文档保护策略
-        this.document.setProtectionPolicy(policy);
+        this.policy = policy;
         return this.document;
     }
 
@@ -190,8 +191,16 @@ public class XEasyPdfPermission {
         // 设置接收者
         policy.addRecipient(recipient);
         // 设置pdfBox文档保护策略
-        this.document.setProtectionPolicy(policy);
+        this.policy = policy;
         return this.document;
+    }
+
+    /**
+     * 获取pdfBox保护策略
+     * @return 返回pdfBox保护策略
+     */
+    ProtectionPolicy getPolicy() {
+        return this.policy;
     }
 
     /**

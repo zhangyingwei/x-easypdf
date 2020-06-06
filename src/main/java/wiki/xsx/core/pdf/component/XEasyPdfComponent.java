@@ -54,7 +54,7 @@ public interface XEasyPdfComponent {
     void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
 
     /**
-     * 是否已经绘制
+     * 是否完成绘制
      * @return 返回布尔值，完成为true，未完成为false
      */
     boolean isDraw();

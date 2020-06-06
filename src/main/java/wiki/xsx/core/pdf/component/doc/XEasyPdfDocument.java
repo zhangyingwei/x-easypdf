@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.PDResources;
-import org.apache.pdfbox.pdmodel.encryption.ProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -74,7 +73,7 @@ public class XEasyPdfDocument {
                 // 添加pdfBox页面
                 this.param.getPageList().add(new XEasyPdfPage(page));
             }
-            this.param.initInfo();
+            this.param.initInfo(this);
         }
     }
 
@@ -93,17 +92,27 @@ public class XEasyPdfDocument {
             // 添加pdfBox页面
             this.param.getPageList().add(new XEasyPdfPage(page));
         }
-        this.param.initInfo();
+        this.param.initInfo(this);
     }
 
     /**
-     * 开启权限
+     * 设置文档信息
      * @return 返回pdf文档
      */
-    public XEasyPdfPermission enablePermission() {
+    public XEasyPdfDocumentInfo setInfo() {
         // 设置重置
         this.param.setReset(true);
-        return new XEasyPdfPermission(this);
+        return this.param.getDocumentInfo() != null ? this.param.getDocumentInfo() : new XEasyPdfDocumentInfo(this);
+    }
+
+    /**
+     * 设置文档权限
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocumentPermission setPermission() {
+        // 设置重置
+        this.param.setReset(true);
+        return this.param.getPermission() != null ? this.param.getPermission() : new XEasyPdfDocumentPermission(this);
     }
 
     /**
@@ -127,6 +136,7 @@ public class XEasyPdfDocument {
         // 设置重置
         this.param.setReset(true);
         this.param.setFontPath(fontPath);
+        this.param.setFont(FontUtil.loadFont(this, fontPath));
         return this;
     }
 
@@ -148,18 +158,6 @@ public class XEasyPdfDocument {
      */
     public PDFont getFont() {
         return this.param.getFont();
-    }
-
-    /**
-     * 设置文档信息
-     * @param info pdf文档信息
-     * @return 返回pdf文档
-     */
-    public XEasyPdfDocument setInfo(XEasyPdfDocumentInfo info) {
-        // 设置重置
-        this.param.setReset(true);
-        this.param.setInfo(info);
-        return this;
     }
 
     /**
@@ -443,6 +441,8 @@ public class XEasyPdfDocument {
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix==null?UUID.randomUUID():prefix+index).append(".pdf");
                 // 获取输出流
                 try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
+                    // 设置文档信息及保护策略
+                    this.setInfoAndPolicy(target);
                     // 保存文档
                     target.save(outputStream);
                     // 关闭文档
@@ -543,11 +543,11 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 设置pdfBox保护策略
-     * @param policy pdfBox保护策略
+     * 设置文档信息
+     * @param info pdf文档信息
      */
-    void setProtectionPolicy(ProtectionPolicy policy) {
-        this.param.setPolicy(policy);
+    void setInfo(XEasyPdfDocumentInfo info) {
+        this.param.setDocumentInfo(info);
     }
 
     /**
@@ -617,14 +617,14 @@ public class XEasyPdfDocument {
      */
     private void setInfoAndPolicy(PDDocument target) throws IOException {
         // 如果文档信息不为空，则进行设置
-        if (this.param.getInfo() != null) {
+        if (this.param.getDocumentInfo() != null) {
             // 设置文档信息
-            target.setDocumentInformation(this.param.getInfo().getInfo());
+            target.setDocumentInformation(this.param.getDocumentInfo().getInfo());
         }
         // 如果pdfBox保护策略不为空，则进行设置
-        if (this.param.getPolicy() != null) {
+        if (this.param.getPermission() != null) {
             // 设置pdfBox保护策略
-            target.protect(this.param.getPolicy());
+            target.protect(this.param.getPermission().getPolicy());
         }
     }
 }

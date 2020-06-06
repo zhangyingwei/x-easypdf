@@ -132,8 +132,7 @@ public class XEasyPdfWatermark {
     }
 
     /**
-     * 画图
-     *
+     * 绘制
      * @param document pdf文档
      * @param page     pdf页面
      * @throws IOException IO异常
@@ -151,7 +150,7 @@ public class XEasyPdfWatermark {
     }
 
     /**
-     * 执行画水印
+     * 执行绘制
      * @param document pdf文档
      * @param pdPage pdf页面
      * @param state pdfBox扩展图形对象

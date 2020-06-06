@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.component.text;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
@@ -32,12 +33,18 @@ public class XEasyPdfText implements XEasyPdfComponent {
     /**
      * 文本参数
      */
-    private XEasyPdfTextParam param = new XEasyPdfTextParam();
+    private final XEasyPdfTextParam param = new XEasyPdfTextParam();
 
     /**
      * 当前页面文本最后一行索引
      */
     private int lastLineIndex = 0;
+
+    /**
+     * 无参构造
+     */
+    public XEasyPdfText() {
+    }
 
     /**
      * 有参构造
@@ -73,42 +80,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfText(String fontPath, float fontSize, String text) {
         this.param.setFontPath(fontPath).setFontSize(fontSize).setText(text);
-    }
-
-    /**
-     * 有参构造
-     * @param fontPath 字体路径
-     * @param fontSize 字体大小
-     * @param beginX 当前页面X轴起始坐标
-     * @param beginY 当前页面Y轴起始坐标
-     * @param text 待输入文本
-     */
-    public XEasyPdfText(String fontPath, float fontSize, float beginX, float beginY, String text) {
-        this.param.setFontPath(fontPath).setFontSize(fontSize).setBeginX(beginX).setBeginY(beginY).setText(text);
-    }
-
-    /**
-     * 有参构造
-     * @param fontPath 字体路径
-     * @param fontSize 字体大小
-     * @param leading 行间距
-     * @param beginX 当前页面X轴起始坐标
-     * @param beginY 当前页面Y轴起始坐标
-     * @param text 待输入文本
-     */
-    public XEasyPdfText(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
-        this.param.setFontPath(fontPath).setFontSize(fontSize).setLeading(leading).setBeginX(beginX).setBeginY(beginY).setText(text);
-    }
-
-    /**
-     * 有参构造
-     * @param param 文本参数
-     */
-    public XEasyPdfText(XEasyPdfTextParam param) {
-        if (param==null) {
-            throw new IllegalArgumentException("the param is not invalid");
-        }
-        this.param = param;
     }
 
     /**
@@ -175,12 +146,22 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 设置字体
+     * 设置字体路径
      * @param fontPath 字体路径
      * @return 返回文本组件
      */
-    public XEasyPdfText setFont(String fontPath) {
+    public XEasyPdfText setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
+        return this;
+    }
+
+    /**
+     * 设置字体
+     * @param font 字体
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setFont(PDFont font) {
+        this.param.setFont(font);
         return this;
     }
 
@@ -211,6 +192,16 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfText setStyle(XEasyPdfTextStyle style) {
         this.param.setStyle(style);
+        return this;
+    }
+
+    /**
+     * 设置拆分后的待添加文本列表
+     * @param splitTextList 拆分后的待添加文本列表
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setSplitTextList(List<String> splitTextList) {
+        this.param.setSplitTextList(splitTextList);
         return this;
     }
 
@@ -547,7 +538,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 设置文本定位
         stream.newLineAtOffset(
                 // X轴坐标 = 页面宽度 - 文本真实宽度 - 右边距
-                (this.param.getMaxWidth() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000) - this.param.getMarginRight()),
+                (this.param.getBeginX() + this.param.getMaxWidth() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000) - this.param.getMarginRight()),
                 // Y轴坐标 = Y轴起始坐标
                 this.param.getBeginY()
         );

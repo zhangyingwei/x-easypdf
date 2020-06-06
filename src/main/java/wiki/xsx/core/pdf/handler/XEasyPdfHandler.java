@@ -11,6 +11,9 @@ import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
+import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
+import wiki.xsx.core.pdf.component.table.XEasyPdfRow;
+import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 
 import java.io.File;
@@ -142,8 +145,25 @@ public class XEasyPdfHandler {
     public static class Text {
         /**
          * 构建文本
+         * @param text 待写入文本
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(String text) {
+            return new XEasyPdfText(text);
+        }
+        /**
+         * 构建文本
+         * @param fontSize 字体大小
+         * @param text 待写入文本
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(float fontSize, String text) {
+            return new XEasyPdfText(fontSize, text);
+        }
+        /**
+         * 构建文本
          * @param fontPath 字体路径
-         * @param text 待输入文本
+         * @param text 待写入文本
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, String text) {
@@ -154,38 +174,11 @@ public class XEasyPdfHandler {
          * 构建文本
          * @param fontPath 字体路径
          * @param fontSize 字体大小
-         * @param text 待输入文本
+         * @param text 待写入文本
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String fontPath, float fontSize, String text) {
             return new XEasyPdfText(fontPath, fontSize, text);
-        }
-
-        /**
-         * 构建文本
-         * @param fontPath 字体路径
-         * @param fontSize 字体大小
-         * @param beginX 当前页面X轴起始坐标
-         * @param beginY 当前页面Y轴起始坐标
-         * @param text 待输入文本
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(String fontPath, float fontSize, float beginX, float beginY, String text) {
-            return new XEasyPdfText(fontPath, fontSize, beginX, beginY, text);
-        }
-
-        /**
-         * 构建文本
-         * @param fontPath 字体路径
-         * @param fontSize 字体大小
-         * @param leading 行间距
-         * @param beginX 当前页面X轴起始坐标
-         * @param beginY 当前页面Y轴起始坐标
-         * @param text 待输入文本
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(String fontPath, float fontSize, float leading, float beginX, float beginY, String text) {
-            return new XEasyPdfText(fontPath, fontSize, leading, beginX, beginY, text);
         }
     }
 
@@ -338,6 +331,89 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfRect build(float width, float height, float beginX, float beginY) {
             return new XEasyPdfRect(width, height, beginX, beginY);
+        }
+    }
+
+    /**
+     * pdf表格组件
+     */
+    public static class Table {
+        /**
+         * pdf表格行
+         */
+        public static class Row {
+            /**
+             * pdf单元格
+             */
+            public static class Cell {
+                /**
+                 * 构建单元格
+                 * @param width 宽度
+                 * @param height 高度
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfCell build(float width, float height) {
+                    return new XEasyPdfCell(width, height);
+                }
+
+                /**
+                 * 构建单元格
+                 * @param text 待写入文本
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfCell build(String text) {
+                    return new XEasyPdfCell(text);
+                }
+
+                /**
+                 * 构建单元格
+                 * @param fontPath 字体路径
+                 * @param text 待写入文本
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfCell build(String fontPath, String text) {
+                    return new XEasyPdfCell(fontPath, text);
+                }
+
+                /**
+                 * 构建单元格
+                 * @param text 待写入文本
+                 * @param hasBorder 是否有边框
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfCell build(String text, boolean hasBorder) {
+                    return new XEasyPdfCell(text, hasBorder);
+                }
+
+                /**
+                 * 构建单元格
+                 * @param fontPath 字体路径
+                 * @param text 待写入文本
+                 * @param hasBorder 是否有边框
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfCell build(String fontPath, String text, boolean hasBorder) {
+                    return new XEasyPdfCell(fontPath, text, hasBorder);
+                }
+            }
+
+            /**
+             * 构建表格行
+             * @param cells 单元格
+             * @return 返回pdf表格行组件
+             */
+            public static XEasyPdfRow build(XEasyPdfCell...cells) {
+                return new XEasyPdfRow(cells);
+            }
+        }
+
+        /**
+         * 构建表格
+         * @param rows 表格行
+         * @return 返回pdf表格组件
+         */
+        public static XEasyPdfTable build(XEasyPdfRow ...rows) {
+            return new XEasyPdfTable(rows);
         }
     }
 }
