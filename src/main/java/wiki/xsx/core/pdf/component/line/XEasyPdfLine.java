@@ -53,27 +53,23 @@ public class XEasyPdfLine implements XEasyPdfComponent {
     }
 
     /**
-     * 有参构造
+     * 设置字体路径
      * @param fontPath 字体路径
-     * @param beginX 页面X轴起始坐标
-     * @param beginY 页面Y轴起始坐标
-     * @param endX 页面X轴结束坐标
-     * @param endY 页面Y轴结束坐标
+     * @return 返回线条组件
      */
-    public XEasyPdfLine(String fontPath, float beginX, float beginY, float endX, float endY) {
-        this.param.setFontPath(fontPath).setBeginX(beginX).setBeginY(beginY).setEndX(endX).setEndY(endY);
+    public XEasyPdfLine setFontPath(String fontPath) {
+        this.param.setFontPath(fontPath);
+        return this;
     }
 
     /**
-     * 有参构造
-     * @param font 字体
-     * @param beginX 页面X轴起始坐标
-     * @param beginY 页面Y轴起始坐标
-     * @param endX 页面X轴结束坐标
-     * @param endY 页面Y轴结束坐标
+     * 设置字体
+     * @param font pdfBox字体
+     * @return 返回线条组件
      */
-    public XEasyPdfLine(PDFont font, float beginX, float beginY, float endX, float endY) {
-        this.param.setFont(font).setBeginX(beginX).setBeginY(beginY).setEndX(endX).setEndY(endY);
+    public XEasyPdfLine setFont(PDFont font) {
+        this.param.setFont(font);
+        return this;
     }
 
     /**
@@ -115,9 +111,9 @@ public class XEasyPdfLine implements XEasyPdfComponent {
      * @param beginY Y轴起始坐标
      * @return 返回线条组件
      */
+    @Deprecated
     @Override
     public XEasyPdfLine setPosition(float beginX, float beginY) {
-        this.param.setBeginX(beginX).setBeginY(beginY);
         return this;
     }
 

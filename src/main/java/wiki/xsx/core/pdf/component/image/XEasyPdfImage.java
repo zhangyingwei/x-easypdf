@@ -86,43 +86,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 有参构造
-     * @param imageFile 待添加图片
-     * @param width 图片宽度
-     * @param height 图片高度
-     * @param beginX X轴起始坐标
-     * @param beginY Y轴起始坐标
-     */
-    @SneakyThrows
-    public XEasyPdfImage(File imageFile, int width, int height, float beginX, float beginY) {
-        this.param.setImageType(ImageUtil.parseType(imageFile))
-                .setImage(ImageUtil.read(imageFile))
-                .setWidth(width)
-                .setHeight(height)
-                .setBeginX(beginX)
-                .setBeginY(beginY);
-    }
-
-    /**
-     * 有参构造
-     * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型（扩展名）
-     * @param width 图片宽度
-     * @param height 图片高度
-     * @param beginX X轴起始坐标
-     * @param beginY Y轴起始坐标
-     */
-    @SneakyThrows
-    public XEasyPdfImage(InputStream imageStream, String imageType, int width, int height, float beginX, float beginY) {
-        this.param.setImageType(imageType)
-                .setImage(ImageUtil.read(imageStream))
-                .setWidth(width)
-                .setHeight(height)
-                .setBeginX(beginX)
-                .setBeginY(beginY);
-    }
-
-    /**
      * 设置图片
      * @param imageFile 待添加图片
      * @return 返回图片组件

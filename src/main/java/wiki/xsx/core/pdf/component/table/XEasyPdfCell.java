@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.component.table;
 
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
@@ -35,28 +36,10 @@ public class XEasyPdfCell {
 
     /**
      * 有参构造
-     * @param width 宽度
-     * @param height 高度
-     */
-    public XEasyPdfCell(float width, float height) {
-        this.param.setWidth(width).setHeight(height);
-    }
-
-    /**
-     * 有参构造
      * @param text 待写入文本
      */
     public XEasyPdfCell(String text) {
         this.param.setText(text);
-    }
-
-    /**
-     * 有参构造
-     * @param fontPath 字体路径
-     * @param text 待写入文本
-     */
-    public XEasyPdfCell(String fontPath, String text) {
-        this.param.setFontPath(fontPath).setText(text);
     }
 
     /**
@@ -70,12 +53,11 @@ public class XEasyPdfCell {
 
     /**
      * 有参构造
-     * @param fontPath 字体路径
-     * @param text 待写入文本
-     * @param hasBorder 是否有边框
+     * @param width 宽度
+     * @param height 高度
      */
-    public XEasyPdfCell(String fontPath, String text, boolean hasBorder) {
-        this.param.setFontPath(fontPath).setText(text).setHasBorder(hasBorder);
+    public XEasyPdfCell(float width, float height) {
+        this.param.setWidth(width).setHeight(height);
     }
 
     /**
@@ -199,12 +181,22 @@ public class XEasyPdfCell {
     }
 
     /**
-     * 设置字体
+     * 设置字体路径
      * @param fontPath 字体路径
      * @return 返回单元格组件
      */
-    public XEasyPdfCell setFont(String fontPath) {
+    public XEasyPdfCell setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
+        return this;
+    }
+
+    /**
+     * 设置字体
+     * @param font pdfBox字体
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setFont(PDFont font) {
+        this.param.setFont(font);
         return this;
     }
 
@@ -318,7 +310,7 @@ public class XEasyPdfCell {
      * @throws IOException IO异常
      */
     private void writeText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) throws IOException {
-        new XEasyPdfText()
+        new XEasyPdfText(null)
                 .setFont(this.param.getFont())
                 .setFontSize(this.param.getFontSize())
                 .setFontColor(this.param.getFontColor())

@@ -51,7 +51,7 @@ public class TextUtil {
         count = Math.min(count, text.length());
         // 定义开始索引
         int beginIndex = 0;
-        // 循环文本
+        // 遍历文本
         for (int i = count, len = text.length(); i <= len; i++) {
             // 截取临时文本
             tempText = text.substring(beginIndex, i);

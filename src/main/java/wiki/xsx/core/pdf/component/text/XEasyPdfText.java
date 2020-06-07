@@ -41,12 +41,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
     private int lastLineIndex = 0;
 
     /**
-     * 无参构造
-     */
-    public XEasyPdfText() {
-    }
-
-    /**
      * 有参构造
      * @param text 待输入文本
      */
@@ -61,25 +55,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfText(float fontSize, String text) {
         this.param.setText(text);
-    }
-
-    /**
-     * 有参构造
-     * @param fontPath 字体路径
-     * @param text 待输入文本
-     */
-    public XEasyPdfText(String fontPath, String text) {
-        this.param.setFontPath(fontPath).setText(text);
-    }
-
-    /**
-     * 有参构造
-     * @param fontPath 字体路径
-     * @param fontSize 字体大小
-     * @param text 待输入文本
-     */
-    public XEasyPdfText(String fontPath, float fontSize, String text) {
-        this.param.setFontPath(fontPath).setFontSize(fontSize).setText(text);
     }
 
     /**

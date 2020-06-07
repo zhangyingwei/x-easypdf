@@ -45,15 +45,6 @@ public class XEasyPdfWatermark {
 
     /**
      * 有参构造
-     * @param fontPath 字体路径
-     * @param text 水印文本
-     */
-    public XEasyPdfWatermark(String fontPath, String text) {
-        this.param.setFontPath(fontPath).setText(text);
-    }
-
-    /**
-     * 有参构造
      * @param fontSize 字体大小
      * @param text 水印文本
      */
@@ -62,13 +53,13 @@ public class XEasyPdfWatermark {
     }
 
     /**
-     * 有参构造
+     * 设置字体路径
      * @param fontPath 字体路径
-     * @param fontSize 字体大小
-     * @param text 水印文本
+     * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark(String fontPath, float fontSize, String text) {
-        this.param.setFontPath(fontPath).setFontSize(fontSize).setText(text);
+    public XEasyPdfWatermark setFontPath(String fontPath) {
+        this.param.setFontPath(fontPath);
+        return this;
     }
 
     /**

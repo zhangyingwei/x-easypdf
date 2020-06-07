@@ -74,9 +74,7 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage setFontPath(String fontPath) {
-        if (fontPath!=null&&fontPath.trim().length()>0) {
-            this.param.setFontPath(fontPath);
-        }
+        this.param.setFontPath(fontPath);
         return this;
     }
 

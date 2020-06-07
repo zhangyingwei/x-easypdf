@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.component.line;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
@@ -39,11 +40,23 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfComponent {
     public XEasyPdfSolidSplitLine() {}
 
     /**
-     * 有参构造
+     * 设置字体路径
      * @param fontPath 字体路径
+     * @return 返回实线分割线组件
      */
-    public XEasyPdfSolidSplitLine(String fontPath) {
+    public XEasyPdfSolidSplitLine setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
+        return this;
+    }
+
+    /**
+     * 设置字体
+     * @param font pdfBox字体
+     * @return 返回实线分割线组件
+     */
+    public XEasyPdfSolidSplitLine setFont(PDFont font) {
+        this.param.setFont(font);
+        return this;
     }
 
     /**
