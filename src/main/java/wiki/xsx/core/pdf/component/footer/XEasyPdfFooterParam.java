@@ -1,15 +1,18 @@
-package wiki.xsx.core.pdf.component.header;
+package wiki.xsx.core.pdf.component.footer;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 /**
- * pdf页眉组件参数
+ * pdf页脚组件参数
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -27,7 +30,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfHeaderParam {
+class XEasyPdfFooterParam {
     /**
      * 文本
      */
@@ -70,11 +73,42 @@ class XEasyPdfHeaderParam {
      */
     private Float marginRight = 0F;
     /**
-     * 上边距
+     * 下边距
      */
-    private Float marginTop = 5F;
+    private Float marginBottom = 5F;
     /**
-     * 是否有分割线
+     * 页面X轴起始坐标
      */
-    private boolean hasSplitLine = true;
+    private Float beginX;
+    /**
+     * 页面Y轴起始坐标
+     */
+    private Float beginY;
+    /**
+     * 高度
+     */
+    private Float height;
+
+    void init(XEasyPdfPage page) throws IOException {
+        // 如果拆分后的待添加文本列表未初始化，则进行初始化
+        if (this.splitTextList==null) {
+            // 初始化待添加文本列表
+            this.splitTextList =  XEasyPdfTextUtil.splitLines(
+                    // 待输入文本
+                    this.text,
+                    // 行宽度 = 页面宽度 - 左边距 - 右边距
+                    page.getLastPage().getMediaBox().getWidth() - this.marginLeft - this.marginRight,
+                    // 字体
+                    this.font,
+                    // 字体大小
+                    this.fontSize
+            );
+        }
+        // 初始化X轴起始坐标
+        this.beginX = this.marginLeft;
+        // 初始化Y轴起始坐标
+        this.beginY = this.marginBottom + this.fontSize * (this.splitTextList.size() - 1);
+        // 初始化高度
+        this.height = this.beginY;
+    }
 }

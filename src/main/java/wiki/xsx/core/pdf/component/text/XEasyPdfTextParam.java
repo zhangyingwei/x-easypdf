@@ -102,6 +102,10 @@ class XEasyPdfTextParam {
      */
     private boolean isNewLine = true;
     /**
+     * 是否分页检查
+     */
+    private boolean checkPage = true;
+    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;

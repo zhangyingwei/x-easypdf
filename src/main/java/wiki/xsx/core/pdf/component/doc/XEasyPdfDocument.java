@@ -143,6 +143,18 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 设置文档页脚（每个页面都将添加页脚）
+     * @param globalFooter 页脚
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setGlobalFooter(XEasyPdfFooter globalFooter) {
+        // 设置重置
+        this.param.setReset(true);
+        this.param.setGlobalFooter(globalFooter);
+        return this;
+    }
+
+    /**
      * 设置字体路径
      * @param fontPath 字体路径
      * @return 返回pdf文档

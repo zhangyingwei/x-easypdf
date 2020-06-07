@@ -107,7 +107,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
         return this;
     }
 
-
     /**
      * 设置行间距
      * @param leading 行间距
@@ -187,6 +186,16 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfText setNewLine(boolean isNewLine) {
         this.param.setNewLine(isNewLine);
+        return this;
+    }
+
+    /**
+     * 设置是否分页检查
+     * @param isCheckPage 是否分页检查
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setCheckPage(boolean isCheckPage) {
+        this.param.setCheckPage(isCheckPage);
         return this;
     }
 
@@ -361,35 +370,37 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @throws IOException IO异常
      */
     private PDPageContentStream checkPage(XEasyPdfDocument document, XEasyPdfPage page, PDPageContentStream stream) throws IOException {
-        // 定义页脚高度
-        float footerHeight = 0F;
-        // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-        if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
-            // 初始化页脚高度
-            footerHeight = page.getParam().getFooter().getHeight();
-        }
-        // 分页检查
-        if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()) - footerHeight <= this.param.getMarginBottom()) {
-            // 如果内容流不为空，则关闭并设置为空
-            if (stream!=null) {
-                // 关闭内容流
-                stream.close();
-                // 设置内容流为空
-                stream = null;
+        if (this.param.isCheckPage()) {
+            // 定义页脚高度
+            float footerHeight = 0F;
+            // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+                // 初始化页脚高度
+                footerHeight = page.getParam().getFooter().getHeight();
             }
-            PDRectangle rectangle = page.getLastPage().getMediaBox();
-            // 添加新页面
-            page.addNewPage(rectangle, document);
-            // 重置页面X轴Y轴起始坐标
-            this.param.setBeginX(
-                    // X轴起始坐标 = 左边距
-                    this.param.getMarginLeft()
-            ).setBeginY(
-                    // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行间距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行间距
-                    page.getParam().getPageY()==null?
-                    rectangle.getHeight() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading():
-                    page.getParam().getPageY() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading()
-            );
+            // 分页检查
+            if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()) - footerHeight <= this.param.getMarginBottom()) {
+                // 如果内容流不为空，则关闭并设置为空
+                if (stream!=null) {
+                    // 关闭内容流
+                    stream.close();
+                    // 设置内容流为空
+                    stream = null;
+                }
+                PDRectangle rectangle = page.getLastPage().getMediaBox();
+                // 添加新页面
+                page.addNewPage(rectangle, document);
+                // 重置页面X轴Y轴起始坐标
+                this.param.setBeginX(
+                        // X轴起始坐标 = 左边距
+                        this.param.getMarginLeft()
+                ).setBeginY(
+                        // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行间距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行间距
+                        page.getParam().getPageY()==null?
+                                rectangle.getHeight() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading():
+                                page.getParam().getPageY() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading()
+                );
+            }
         }
         return stream;
     }

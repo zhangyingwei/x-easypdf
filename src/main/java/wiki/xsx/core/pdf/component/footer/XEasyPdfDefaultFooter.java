@@ -1,8 +1,7 @@
-package wiki.xsx.core.pdf.component.header;
+package wiki.xsx.core.pdf.component.footer;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
@@ -12,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * pdf页眉组件
+ * pdf页脚组件
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -28,18 +27,18 @@ import java.util.List;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
+public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
 
     /**
-     * 页眉参数
+     * 页脚参数
      */
-    private final XEasyPdfHeaderParam param = new XEasyPdfHeaderParam();
+    private final XEasyPdfFooterParam param = new XEasyPdfFooterParam();
 
     /**
      * 有参构造
      * @param text 待输入文本
      */
-    public XEasyPdfDefaultHeader(String text) {
+    public XEasyPdfDefaultFooter(String text) {
         this.param.setText(text);
     }
 
@@ -48,26 +47,26 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param fontSize 字体大小
      * @param text 待输入文本
      */
-    public XEasyPdfDefaultHeader(float fontSize, String text) {
+    public XEasyPdfDefaultFooter(float fontSize, String text) {
         this.param.setText(text);
     }
 
     /**
-     * 设置边距（上左右）
+     * 设置边距（左右下）
      * @param margin 边距
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setMargin(float margin) {
-        this.param.setMarginLeft(margin).setMarginRight(margin).setMarginTop(margin);
+    public XEasyPdfDefaultFooter setMargin(float margin) {
+        this.param.setMarginLeft(margin).setMarginRight(margin).setMarginBottom(margin);
         return this;
     }
 
     /**
      * 设置左边距
      * @param margin 边距
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setMarginLeft(float margin) {
+    public XEasyPdfDefaultFooter setMarginLeft(float margin) {
         this.param.setMarginLeft(margin);
         return this;
     }
@@ -75,29 +74,29 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 设置右边距
      * @param margin 边距
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setMarginRight(float margin) {
+    public XEasyPdfDefaultFooter setMarginRight(float margin) {
         this.param.setMarginRight(margin);
         return this;
     }
 
     /**
-     * 设置上边距
+     * 设置下边距
      * @param margin 边距
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setMarginTop(float margin) {
-        this.param.setMarginTop(margin);
+    public XEasyPdfDefaultFooter setMarginBottom(float margin) {
+        this.param.setMarginBottom(margin);
         return this;
     }
 
     /**
      * 设置行间距
      * @param leading 行间距
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setLeading(float leading) {
+    public XEasyPdfDefaultFooter setLeading(float leading) {
         if (leading>0) {
             this.param.setLeading(leading);
         }
@@ -107,9 +106,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 设置字体路径
      * @param fontPath 字体路径
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setFontPath(String fontPath) {
+    public XEasyPdfDefaultFooter setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
         return this;
     }
@@ -117,9 +116,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 设置字体
      * @param font pdfBox字体
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setFont(PDFont font) {
+    public XEasyPdfDefaultFooter setFont(PDFont font) {
         this.param.setFont(font);
         return this;
     }
@@ -127,9 +126,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 设置字体大小
      * @param fontSize 字体大小
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setFontSize(float fontSize) {
+    public XEasyPdfDefaultFooter setFontSize(float fontSize) {
         this.param.setFontSize(fontSize);
         return this;
     }
@@ -137,9 +136,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 设置字体颜色
      * @param fontColor 字体颜色
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setFontColor(Color fontColor) {
+    public XEasyPdfDefaultFooter setFontColor(Color fontColor) {
         this.param.setFontColor(fontColor);
         return this;
     }
@@ -147,9 +146,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 设置文本样式（居左、居中、居右）
      * @param style 样式
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setStyle(XEasyPdfTextStyle style) {
+    public XEasyPdfDefaultFooter setStyle(XEasyPdfTextStyle style) {
         this.param.setStyle(style);
         return this;
     }
@@ -157,25 +156,16 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 设置拆分后的待添加文本列表
      * @param splitTextList 拆分后的待添加文本列表
-     * @return 返回页眉组件
+     * @return 返回页脚组件
      */
-    public XEasyPdfDefaultHeader setSplitTextList(List<String> splitTextList) {
+    public XEasyPdfDefaultFooter setSplitTextList(List<String> splitTextList) {
         this.param.setSplitTextList(splitTextList);
         return this;
     }
-
-    /**
-     * 设置是否有分割线
-     * @param hasSplitLine 是否有分割线
-     * @return 返回页眉组件
-     */
-    public XEasyPdfDefaultHeader setHasSplitLine(boolean hasSplitLine) {
-        this.param.setHasSplitLine(hasSplitLine);
-        return this;
-    }
-
+    
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        this.param.init(page);
         // 写入文本
         new XEasyPdfText(this.param.getText())
                 .setFontPath(this.param.getFontPath())
@@ -185,29 +175,18 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
                 .setFontColor(this.param.getFontColor())
                 .setMarginLeft(this.param.getMarginLeft())
                 .setMarginRight(this.param.getMarginRight())
-                .setMarginTop(this.param.getMarginTop())
+                .setMarginBottom(this.param.getMarginBottom())
                 .setSplitTextList(this.param.getSplitTextList())
                 .setStyle(this.param.getStyle())
+                .setPosition(this.param.getBeginX(), this.param.getBeginY())
+                .setCheckPage(false)
+                .setNewLine(false)
                 .draw(document, page);
-        // 如果带有分割线，则进行分割线绘制
-        if (this.param.isHasSplitLine()) {
-            // 定义分割线边距
-            float margin = 5F;
-            // 绘制分割线
-            new XEasyPdfSolidSplitLine()
-                    .setFontPath(this.param.getFontPath())
-                    .setFont(this.param.getFont())
-                    .setMarginLeft(margin)
-                    .setMarginRight(margin)
-                    .draw(document, page);
-            // 绘制分割线
-            new XEasyPdfSolidSplitLine()
-                    .setFontPath(this.param.getFontPath())
-                    .setFont(this.param.getFont())
-                    .setMarginTop(1F)
-                    .setMarginLeft(margin)
-                    .setMarginRight(margin)
-                    .draw(document, page);
-        }
+        page.enablePosition();
+    }
+
+    @Override
+    public float getHeight() {
+        return this.param.getHeight();
     }
 }

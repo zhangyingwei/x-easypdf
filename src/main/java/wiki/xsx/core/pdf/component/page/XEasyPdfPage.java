@@ -7,6 +7,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.footer.XEasyPdfDefaultFooter;
+import wiki.xsx.core.pdf.component.header.XEasyPdfDefaultHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 
 import java.io.IOException;
@@ -122,6 +124,26 @@ public class XEasyPdfPage {
      */
     public XEasyPdfPage setWatermark(XEasyPdfDefaultWatermark watermark) {
         this.param.setWatermark(watermark);
+        return this;
+    }
+
+    /**
+     * 设置页眉
+     * @param header pdf页眉
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage setHeader(XEasyPdfDefaultHeader header) {
+        this.param.setHeader(header);
+        return this;
+    }
+
+    /**
+     * 设置页脚
+     * @param footer pdf页脚
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage setFooter(XEasyPdfDefaultFooter footer) {
+        this.param.setFooter(footer);
         return this;
     }
 
