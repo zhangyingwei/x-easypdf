@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
-import wiki.xsx.core.pdf.util.FontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -94,7 +94,7 @@ class XEasyPdfRowParam {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = FontUtil.getFont(document, this.fontPath, tableParam.getFont());
+            this.font = XEasyPdfFontUtil.getFont(document, this.fontPath, tableParam.getFont());
         }
         // 如果字体大小未初始化，则进行初始化
         if (this.fontSize==null) {

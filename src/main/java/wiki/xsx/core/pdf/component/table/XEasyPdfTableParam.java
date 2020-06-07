@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
-import wiki.xsx.core.pdf.util.FontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +85,7 @@ class XEasyPdfTableParam {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = FontUtil.loadFont(document, this.fontPath);
+            this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
         }
     }
 }

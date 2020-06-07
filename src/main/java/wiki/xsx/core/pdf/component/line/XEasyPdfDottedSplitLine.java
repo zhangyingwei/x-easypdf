@@ -4,7 +4,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.FontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.io.IOException;
 
@@ -269,7 +269,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
         );
         if (this.param.getFont()==null) {
             // 设置字体
-            this.param.setFont(FontUtil.loadFont(document, page, this.param.getFontPath()));
+            this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
         }
     }
 }

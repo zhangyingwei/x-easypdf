@@ -10,7 +10,7 @@ import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.util.FontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +102,7 @@ public class XEasyPdfPageParam {
      */
     void initFont(XEasyPdfDocument document, XEasyPdfPage page) {
         if (this.font==null) {
-            this.font = FontUtil.loadFont(document, page, this.fontPath);
+            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
     }
 }

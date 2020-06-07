@@ -27,7 +27,7 @@ import java.nio.file.Paths;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class FontUtil {
+public class XEasyPdfFontUtil {
 
     /**
      * 获取字体

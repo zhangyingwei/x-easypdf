@@ -6,8 +6,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.FontUtil;
-import wiki.xsx.core.pdf.util.TextUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
 import java.io.IOException;
@@ -128,7 +128,7 @@ class XEasyPdfTextParam {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = FontUtil.loadFont(document, page, this.fontPath);
+            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
         // 如果页面X轴起始坐标未初始化，则进行初始化
         if (this.beginX==null) {
@@ -147,7 +147,7 @@ class XEasyPdfTextParam {
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {
             // 初始化待添加文本列表
-            this.splitTextList =  TextUtil.splitLines(
+            this.splitTextList =  XEasyPdfTextUtil.splitLines(
                     // 待输入文本
                     this.text,
                     // 行宽度 = 页面宽度 - 左边距 - 右边距

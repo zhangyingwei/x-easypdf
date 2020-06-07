@@ -23,7 +23,7 @@ import java.util.List;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class TextUtil {
+public class XEasyPdfTextUtil {
     /**
      * 拆分文本段落（换行）
      * @param text 待输入文本

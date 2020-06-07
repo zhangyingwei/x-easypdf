@@ -1,6 +1,6 @@
 package wiki.xsx.core.pdf.component.doc;
 
-import wiki.xsx.core.pdf.util.ConvertUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class XEasyPdfDocumentSplitter {
      * @return 返回pdf文档拆分器
      */
     public XEasyPdfDocumentSplitter addDocument(int ...pageIndex) {
-        this.documentList.add(ConvertUtil.toInteger(pageIndex));
+        this.documentList.add(XEasyPdfConvertUtil.toInteger(pageIndex));
         return this;
     }
 

@@ -29,7 +29,7 @@ import java.util.Map;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class PdfUtil {
+public class XEasyPdfUtil {
 
     /*------------------- create -------------------*/
 

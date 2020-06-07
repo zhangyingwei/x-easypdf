@@ -15,8 +15,8 @@ import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPageParam;
-import wiki.xsx.core.pdf.util.ConvertUtil;
-import wiki.xsx.core.pdf.util.FontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -151,7 +151,7 @@ public class XEasyPdfDocument {
         // 设置重置
         this.param.setReset(true);
         this.param.setFontPath(fontPath);
-        this.param.setFont(FontUtil.loadFont(this, fontPath));
+        this.param.setFont(XEasyPdfFontUtil.loadFont(this, fontPath));
         return this;
     }
 
@@ -265,7 +265,7 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument fillAcroForm(Map<String, String> formMap) throws IOException {
-        return this.fillAcroForm(FontUtil.loadFont(this, null, (InputStream) null), formMap);
+        return this.fillAcroForm(XEasyPdfFontUtil.loadFont(this, null, (InputStream) null), formMap);
     }
 
     /**
@@ -276,7 +276,7 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument fillAcroForm(String fontPath, Map<String, String> formMap) throws IOException {
-        return this.fillAcroForm(FontUtil.loadFont(this, fontPath), formMap);
+        return this.fillAcroForm(XEasyPdfFontUtil.loadFont(this, fontPath), formMap);
     }
 
     /**
@@ -482,7 +482,7 @@ public class XEasyPdfDocument {
                 // 获取输出流
                 try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
                     // 拆分文档
-                    this.split(outputStream, ConvertUtil.toInt(pageList.get(i)));
+                    this.split(outputStream, XEasyPdfConvertUtil.toInt(pageList.get(i)));
                 }
             }
         //  按单页面拆分

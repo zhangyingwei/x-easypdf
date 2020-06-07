@@ -25,7 +25,7 @@ import java.io.InputStream;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class ImageUtil {
+public class XEasyPdfImageUtil {
 
     /**
      * 读取文件

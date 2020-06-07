@@ -6,7 +6,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.FontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 /**
  * pdf页面水印参数
@@ -67,7 +67,7 @@ class XEasyPdfWatermarkParam {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = FontUtil.loadFont(document, page, this.fontPath);
+            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
         // 如果水印文本未初始化，则进行初始化
         if (this.text==null) {

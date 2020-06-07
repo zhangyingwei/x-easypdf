@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.ImageUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -111,7 +111,7 @@ class XEasyPdfImageParam {
         // 创建pdfBox图片
         PDImageXObject pdImage = PDImageXObject.createFromByteArray(
                 document.getDocument(),
-                ImageUtil.toBytes(this.image, this.imageType),
+                XEasyPdfImageUtil.toBytes(this.image, this.imageType),
                 this.imageType
         );
         // 获取图片宽度
@@ -142,7 +142,7 @@ class XEasyPdfImageParam {
                     // pdfBox文档
                     document.getDocument(),
                     // 图片缩放
-                    ImageUtil.scale(
+                    XEasyPdfImageUtil.scale(
                             this.image,
                             this.width,
                             this.height,

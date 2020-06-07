@@ -6,7 +6,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.ImageUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.*;
 import java.io.File;
@@ -43,7 +43,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage(File imageFile) {
-        this.param.setImageType(ImageUtil.parseType(imageFile)).setImage(ImageUtil.read(imageFile));
+        this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile)).setImage(XEasyPdfImageUtil.read(imageFile));
     }
 
     /**
@@ -53,7 +53,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage(InputStream imageStream, String imageType) {
-        this.param.setImageType(imageType).setImage(ImageUtil.read(imageStream));
+        this.param.setImageType(imageType).setImage(XEasyPdfImageUtil.read(imageStream));
     }
 
     /**
@@ -64,8 +64,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage(File imageFile, int width, int height) {
-        this.param.setImageType(ImageUtil.parseType(imageFile))
-                .setImage(ImageUtil.read(imageFile))
+        this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile))
+                .setImage(XEasyPdfImageUtil.read(imageFile))
                 .setWidth(width)
                 .setHeight(height);
     }
@@ -80,7 +80,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @SneakyThrows
     public XEasyPdfImage(InputStream imageStream, String imageType, int width, int height) {
         this.param.setImageType(imageType)
-                .setImage(ImageUtil.read(imageStream))
+                .setImage(XEasyPdfImageUtil.read(imageStream))
                 .setWidth(width)
                 .setHeight(height);
     }
@@ -92,7 +92,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage setImage(File imageFile) {
-        this.param.setImageType(ImageUtil.parseType(imageFile)).setImage(ImageUtil.read(imageFile));
+        this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile)).setImage(XEasyPdfImageUtil.read(imageFile));
         return this;
     }
 
@@ -104,7 +104,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage setImage(InputStream imageStream, String imageType) {
-        this.param.setImageType(imageType).setImage(ImageUtil.read(imageStream));
+        this.param.setImageType(imageType).setImage(XEasyPdfImageUtil.read(imageStream));
         return this;
     }
 

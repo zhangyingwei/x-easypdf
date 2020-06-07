@@ -5,8 +5,8 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
-import wiki.xsx.core.pdf.util.FontUtil;
-import wiki.xsx.core.pdf.util.TextUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
 import java.io.IOException;
@@ -123,7 +123,7 @@ class XEasyPdfCellParam {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = FontUtil.getFont(document, this.fontPath, rowParam.getFont());
+            this.font = XEasyPdfFontUtil.getFont(document, this.fontPath, rowParam.getFont());
         }
         // 如果字体大小未初始化，则进行初始化
         if (this.fontSize==null) {
@@ -161,7 +161,7 @@ class XEasyPdfCellParam {
                 splitTextList.add(this.text);
             }else{
                 // 初始化待添加文本列表
-                this.splitTextList = TextUtil.splitLines(this.text, (this.width - this.textMarginLeft - this.textMarginRight), this.font, this.fontSize);
+                this.splitTextList = XEasyPdfTextUtil.splitLines(this.text, (this.width - this.textMarginLeft - this.textMarginRight), this.font, this.fontSize);
             }
         }else {
             // 如果宽度为空，则初始化宽度与高度为0F

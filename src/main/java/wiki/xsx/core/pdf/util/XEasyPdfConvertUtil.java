@@ -20,7 +20,7 @@ import java.util.List;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class ConvertUtil {
+public class XEasyPdfConvertUtil {
 
     /**
      * 转为基本类型数组
