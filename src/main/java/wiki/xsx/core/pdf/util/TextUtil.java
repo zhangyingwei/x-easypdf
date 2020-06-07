@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 文本工具类
+ * 文本工具
  * @author xsx
  * @date 2020/3/24
  * @since 1.8

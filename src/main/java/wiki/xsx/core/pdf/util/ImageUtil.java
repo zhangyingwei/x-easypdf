@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 图片工具类
+ * 图片工具
  * @author xsx
  * @date 2020/3/30
  * @since 1.8

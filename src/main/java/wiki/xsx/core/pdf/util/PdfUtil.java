@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 /**
- * pdf工具类
+ * pdf工具
  * @author xsx
  * @date 2019/12/19
  * @since 1.8
