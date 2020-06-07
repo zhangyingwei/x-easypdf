@@ -2,12 +2,12 @@ package wiki.xsx.core.pdf.component.rect;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * pdf矩形参数
@@ -91,7 +91,7 @@ class XEasyPdfRectParam {
      * @param document pdf文档
      * @param page pdf页面
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page) {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 如果宽度未设置，则抛异常
         if (this.width==null) {
             throw new RuntimeException("the width can not null");
@@ -102,8 +102,15 @@ class XEasyPdfRectParam {
         }
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 定义页脚高度
+        float footerHeight = 0F;
         // 如果页面Y轴起始坐标未初始化，则进行初始化
         if (this.beginY==null) {
+            // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+                // 初始化页脚高度
+                footerHeight = page.getParam().getFooter().getHeight();
+            }
             // 获取当前页面Y轴起始坐标
             Float pageY = page.getParam().getPageY();
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 矩形高度，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 矩形高度
@@ -111,12 +118,16 @@ class XEasyPdfRectParam {
                     rectangle.getHeight() - this.marginTop - this.height :
                     pageY - this.marginTop - this.height;
         }
-        // 如果检查页面为真，并且Y轴起始坐标小于等于下边距，则进行分页
-        if (checkPage && this.beginY <= this.marginBottom) {
+        // 如果检查页面为真，并且Y轴起始坐标-页脚高度小于等于下边距，则进行分页
+        if (checkPage && this.beginY - footerHeight <= this.marginBottom) {
             // 添加新页面
-            page.addPage(new PDPage(rectangle)).getParam().setPageX(null).setPageY(null);
-            // 初始化页面Y轴起始坐标 = 最大高度 - 上边距 - 矩形高度
-            this.beginY = rectangle.getHeight() - this.marginTop - this.height;
+            page.addNewPage(rectangle, document);
+            // 获取当前页面Y轴起始坐标
+            Float pageY = page.getParam().getPageY();
+            // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 矩形高度，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 矩形高度
+            this.beginY = pageY == null?
+                    rectangle.getHeight() - this.marginTop - this.height:
+                    pageY - this.marginTop - this.height;
         }
         // 如果页面Y轴起始坐标未初始化，则进行初始化
         if (this.beginX==null) {

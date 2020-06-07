@@ -5,6 +5,8 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.FontUtil;
@@ -52,6 +54,14 @@ class XEasyPdfDocumentParam {
      * 全局页面水印
      */
     private XEasyPdfWatermark globalWatermark;
+    /**
+     * 全局页眉
+     */
+    private XEasyPdfHeader globalHeader;
+    /**
+     * 全局页脚
+     */
+    private XEasyPdfFooter globalFooter;
     /**
      * pdf文档权限
      */

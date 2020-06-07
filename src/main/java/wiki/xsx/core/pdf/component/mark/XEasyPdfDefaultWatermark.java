@@ -28,7 +28,7 @@ import java.util.List;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class XEasyPdfWatermark {
+public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * pdf水印参数
@@ -39,7 +39,7 @@ public class XEasyPdfWatermark {
      * 有参构造
      * @param text 水印文本
      */
-    public XEasyPdfWatermark(String text) {
+    public XEasyPdfDefaultWatermark(String text) {
         this.param.setText(text);
     }
 
@@ -48,7 +48,7 @@ public class XEasyPdfWatermark {
      * @param fontSize 字体大小
      * @param text 水印文本
      */
-    public XEasyPdfWatermark(float fontSize, String text) {
+    public XEasyPdfDefaultWatermark(float fontSize, String text) {
         this.param.setFontSize(fontSize).setText(text);
     }
 
@@ -57,7 +57,7 @@ public class XEasyPdfWatermark {
      * @param fontPath 字体路径
      * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark setFontPath(String fontPath) {
+    public XEasyPdfDefaultWatermark setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
         return this;
     }
@@ -67,7 +67,7 @@ public class XEasyPdfWatermark {
      * @param font pdfBox字体
      * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark setFont(PDFont font) {
+    public XEasyPdfDefaultWatermark setFont(PDFont font) {
         this.param.setFont(font);
         return this;
     }
@@ -77,7 +77,7 @@ public class XEasyPdfWatermark {
      * @param fontSize 字体大小
      * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark setFontSize(float fontSize) {
+    public XEasyPdfDefaultWatermark setFontSize(float fontSize) {
         this.param.setFontSize(fontSize);
         return this;
     }
@@ -87,7 +87,7 @@ public class XEasyPdfWatermark {
      * @param alpha 文本透明度
      * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark setAlpha(float alpha) {
+    public XEasyPdfDefaultWatermark setAlpha(float alpha) {
         this.param.setAlpha(alpha);
         return this;
     }
@@ -97,7 +97,7 @@ public class XEasyPdfWatermark {
      * @param radians 文本弧度
      * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark setRadians(double radians) {
+    public XEasyPdfDefaultWatermark setRadians(double radians) {
         this.param.setRadians(radians);
         return this;
     }
@@ -107,7 +107,7 @@ public class XEasyPdfWatermark {
      * @param text 水印文本
      * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark setText(String text) {
+    public XEasyPdfDefaultWatermark setText(String text) {
         this.param.setText(text);
         return this;
     }
@@ -117,7 +117,7 @@ public class XEasyPdfWatermark {
      * @param wordSpace 水印文本间距
      * @return 返回页面水印组件
      */
-    public XEasyPdfWatermark setWordSpace(float wordSpace) {
+    public XEasyPdfDefaultWatermark setWordSpace(float wordSpace) {
         this.param.setWordSpace(wordSpace);
         return this;
     }
@@ -128,6 +128,7 @@ public class XEasyPdfWatermark {
      * @param page     pdf页面
      * @throws IOException IO异常
      */
+    @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 初始化水印参数，获取pdfBox扩展图形对象
         PDExtendedGraphicsState state = this.param.init(document, page);

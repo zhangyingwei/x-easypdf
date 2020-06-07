@@ -1,6 +1,5 @@
 package wiki.xsx.core.pdf.component.line;
 
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
@@ -245,19 +244,11 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param document pdf文档
      * @param page pdf页面
      */
-    private void init(XEasyPdfDocument document, XEasyPdfPage page) {
+    private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 分页检查
+        this.param.checkPage(document, page);
         // 定义线宽
         float lineWidth = this.param.getLineWidth() / 2;
-        // 如果当前页面Y轴坐标不为空，则进行分页判断
-        if (page.getParam().getPageY()!=null) {
-            // 分页判断，如果（当前Y轴坐标-上边距-线宽）小于下边距，则进行分页
-            if (page.getParam().getPageY() - this.param.getMarginTop() - lineWidth <= this.param.getMarginBottom()) {
-                // 添加新的pdfBox页面
-                page.getParam().getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
-                // 设置当前Y轴坐标为空，表示新页面
-                page.getParam().setPageY(null);
-            }
-        }
         // 设置X轴Y轴起始结束坐标
         this.param.setBeginX(
             // 左边距

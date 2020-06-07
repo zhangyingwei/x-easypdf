@@ -46,6 +46,20 @@ public class FontUtil {
     /**
      * 加载字体
      * @param document pdf文档
+     * @param inputStream 字体数据流
+     * @return 返回pdfBox字体
+     */
+    public static PDFont loadFont(XEasyPdfDocument document, InputStream inputStream) {
+        try {
+            return PDType0Font.load(document.getDocument(), inputStream);
+        }catch (Exception e) {
+            throw new RuntimeException("the font can not be loaded");
+        }
+    }
+
+    /**
+     * 加载字体
+     * @param document pdf文档
      * @param fontPath 字体路径
      * @return 返回pdfBox字体
      */

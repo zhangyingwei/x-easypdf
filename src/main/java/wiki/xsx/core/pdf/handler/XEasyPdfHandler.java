@@ -8,7 +8,7 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
 import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
@@ -87,7 +87,7 @@ public class XEasyPdfHandler {
          * @param watermark 页面水印组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(XEasyPdfWatermark watermark, XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
             return new XEasyPdfPage().setWatermark(watermark).addComponent(components);
         }
 
@@ -108,7 +108,7 @@ public class XEasyPdfHandler {
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfWatermark watermark, XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
             return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
         }
     }
@@ -122,8 +122,8 @@ public class XEasyPdfHandler {
          * @param text 水印文本
          * @return 返回pdf页面水印组件
          */
-        public static XEasyPdfWatermark build(String text) {
-            return new XEasyPdfWatermark(text);
+        public static XEasyPdfDefaultWatermark build(String text) {
+            return new XEasyPdfDefaultWatermark(text);
         }
 
         /**
@@ -132,8 +132,8 @@ public class XEasyPdfHandler {
          * @param text 水印文本
          * @return 返回pdf页面水印组件
          */
-        public static XEasyPdfWatermark build(float fontSize, String text) {
-            return new XEasyPdfWatermark(fontSize, text);
+        public static XEasyPdfDefaultWatermark build(float fontSize, String text) {
+            return new XEasyPdfDefaultWatermark(fontSize, text);
         }
     }
 

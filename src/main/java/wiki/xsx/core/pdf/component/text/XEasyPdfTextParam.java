@@ -98,6 +98,10 @@ class XEasyPdfTextParam {
      */
     private Color fontColor = Color.BLACK;
     /**
+     * 是否换行
+     */
+    private boolean isNewLine = true;
+    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;

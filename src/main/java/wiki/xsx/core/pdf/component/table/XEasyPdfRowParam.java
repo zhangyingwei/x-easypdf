@@ -2,7 +2,6 @@ package wiki.xsx.core.pdf.component.table;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
@@ -119,14 +118,23 @@ class XEasyPdfRowParam {
             // 初始化Y轴起始坐标 = 页面高度 - 表格上边距 - 行高 - 上边距
             this.beginY = rectangle.getHeight() - tableParam.getMarginTop() - this.height - this.marginTop;
         }else {
+            // 定义页脚高度
+            float footerHeight = 0F;
+            // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+                // 初始化页脚高度
+                footerHeight = page.getParam().getFooter().getHeight();
+            }
             // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距 + 1，自动补偿1
             float currentY = pageY - this.height - this.marginTop + 1;
-            // 如果当前Y轴起始坐标小于等于表格下边距，则进行分页
-            if (currentY <= tableParam.getMarginBottom()) {
+            // 如果当前Y轴起始坐标-页脚高度小于等于表格下边距，则进行分页
+            if (currentY - footerHeight <= tableParam.getMarginBottom()) {
                 // 添加新页面
-                page.addPage(new PDPage(rectangle)).getParam().setPageX(null).setPageY(null);
+                page.addNewPage(rectangle, document);
                 // 初始化Y轴起始坐标 = 页面高度 - 表格上边距 - 行高 - 上边距
-                this.beginY = rectangle.getHeight() - tableParam.getMarginTop() - this.height - this.marginTop;
+                this.beginY = page.getParam().getPageY()==null?
+                        rectangle.getHeight() - tableParam.getMarginTop() - this.height - this.marginTop:
+                        page.getParam().getPageY() - tableParam.getMarginTop() - this.height - this.marginTop;
                 // 初始化X轴起始坐标 = null
                 this.beginX = null;
             }else {

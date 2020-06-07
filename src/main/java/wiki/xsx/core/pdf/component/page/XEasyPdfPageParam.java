@@ -7,6 +7,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.util.FontUtil;
 
@@ -58,6 +60,10 @@ public class XEasyPdfPageParam {
      */
     private List<PDPage> pageList = new ArrayList<>(10);
     /**
+     * 新增的pdfBox页面列表
+     */
+    private List<PDPage> newPageList = new ArrayList<>(10);
+    /**
      * pdf组件列表
      */
     private List<XEasyPdfComponent> componentList = new ArrayList<>(10);
@@ -66,9 +72,25 @@ public class XEasyPdfPageParam {
      */
     private XEasyPdfWatermark watermark;
     /**
+     * 页眉
+     */
+    private XEasyPdfHeader header;
+    /**
+     * 页脚
+     */
+    private XEasyPdfFooter footer;
+    /**
      * 是否允许添加水印
      */
     private boolean allowWatermark = true;
+    /**
+     * 是否允许添加页眉
+     */
+    private boolean allowHeader = true;
+    /**
+     * 是否允许添加页脚
+     */
+    private boolean allowFooter = true;
     /**
      * 是否允许重置定位
      */

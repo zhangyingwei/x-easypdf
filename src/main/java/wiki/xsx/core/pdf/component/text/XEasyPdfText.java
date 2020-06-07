@@ -1,7 +1,7 @@
 package wiki.xsx.core.pdf.component.text;
 
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
@@ -181,6 +181,16 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 设置是否换行（影响下一组件是否换行）
+     * @param isNewLine 是否换行
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setNewLine(boolean isNewLine) {
+        this.param.setNewLine(isNewLine);
+        return this;
+    }
+
+    /**
      * 设置定位
      * @param beginX 当前页面X轴坐标
      * @param beginY 当前页面Y轴坐标
@@ -266,6 +276,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @throws IOException IO异常
      */
     private void doDraw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 设置是否换行
+        page.getParam().setAllowResetPosition(this.param.isNewLine());
         // 参数初始化
         this.param.init(document, page);
         // 拆分后的待添加文本列表
@@ -277,19 +289,11 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 定义内容流
         PDPageContentStream stream = null;
         // 居左样式
-        if (this.param.getStyle()==null||this.param.getStyle()== XEasyPdfTextStyle.LEFT) {
+        if (this.param.getStyle()==null||this.param.getStyle()==XEasyPdfTextStyle.LEFT) {
             // 遍历文本输入
             for (String text : splitTextList) {
                 // 分页检查，并居左写入文本
-                stream = this.writeTextWithLeft(document, page, this.checkPage(page, stream), text);
-                // 当前文本行索引自增
-                lineIndex++;
-                // 当前页面文本最后一行索引自增
-                this.lastLineIndex++;
-                if (lineIndex>=totalLineIndex) {
-                    float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000;
-                    page.getParam().setPageX(page.getParam().getPageX()==null?textWidth:textWidth+page.getParam().getPageX());
-                }
+                stream = this.writeTextWithLeft(document, page, this.checkPage(document, page, stream), text);
             }
             //如果内容流不为空，则结束文本写入，并重置Y轴起始坐标
             if (stream!=null) {
@@ -308,43 +312,30 @@ public class XEasyPdfText implements XEasyPdfComponent {
         }else if (this.param.getStyle()== XEasyPdfTextStyle.CENTER) {
             // 遍历文本输入
             for (String text : splitTextList) {
-                // 分页检查
-                stream = this.checkPage(page, stream);
-                // 判断是否为最后一行
-                if (lineIndex>=totalLineIndex) {
-                    // 居中写入文本
-                    stream = this.writeTextWithCenter(document, page, stream, text, true);
-                    float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000;
-                    page.getParam().setPageX(page.getParam().getPageX()==null?textWidth:textWidth+page.getParam().getPageX());
-                }else {
-                    // 居中写入文本
-                    stream = this.writeTextWithCenter(document, page, stream, text, false);
-                    // 当前文本行索引自增
-                    lineIndex++;
-                    // 当前页面文本最后一行索引自增
-                    this.lastLineIndex++;
-                }
-            }
-        // 居右样式
-        }else {
-            // 遍历文本输入
-            for (String text : splitTextList) {
-                // 分页检查，并居右写入文本
-                stream = this.writeTextWithRight(document, page, this.checkPage(page, stream), text);
-                // 当前文本行索引自增
-                lineIndex++;
-                // 当前页面文本最后一行索引自增
-                this.lastLineIndex++;
-                if (lineIndex>=totalLineIndex) {
-                    float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000;
-                    page.getParam().setPageX(page.getParam().getPageX()==null?textWidth:textWidth+page.getParam().getPageX());
-                }
+                // 分页检查，并居中写入文本
+                stream = this.writeTextWithCenter(document, page, this.checkPage(document, page, stream), text);
             }
             // 如果文本总行数索引大于-1，则重置Y轴起始坐标
             if (totalLineIndex>-1) {
                 // Y轴起始坐标 = Y轴起始坐标 + 字体大小 + 行间距，由于之前多减一行，所以现在加回来
                 this.param.setBeginY(this.param.getBeginY() + this.param.getFontSize() + this.param.getLeading());
             }
+        // 居右样式
+        }else {
+            // 遍历文本输入
+            for (String text : splitTextList) {
+                // 分页检查，并居右写入文本
+                stream = this.writeTextWithRight(document, page, this.checkPage(document, page, stream), text);
+            }
+            // 如果文本总行数索引大于-1，则重置Y轴起始坐标
+            if (totalLineIndex>-1) {
+                // Y轴起始坐标 = Y轴起始坐标 + 字体大小 + 行间距，由于之前多减一行，所以现在加回来
+                this.param.setBeginY(this.param.getBeginY() + this.param.getFontSize() + this.param.getLeading());
+            }
+        }
+        if (splitTextList.size()>0) {
+            float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
+            page.getParam().setPageX(page.getParam().getPageX()==null?textWidth:textWidth+page.getParam().getPageX());
         }
         // 如果内容流不为空，则关闭内容流，并重置文档页面Y轴坐标
         if (stream!=null) {
@@ -369,30 +360,35 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回内容流
      * @throws IOException IO异常
      */
-    private PDPageContentStream checkPage(XEasyPdfPage page, PDPageContentStream stream) throws IOException {
+    private PDPageContentStream checkPage(XEasyPdfDocument document, XEasyPdfPage page, PDPageContentStream stream) throws IOException {
+        // 定义页脚高度
+        float footerHeight = 0F;
+        // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+        if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+            // 初始化页脚高度
+            footerHeight = page.getParam().getFooter().getHeight();
+        }
         // 分页检查
-        if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()) <= this.param.getMarginBottom()) {
+        if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()) - footerHeight <= this.param.getMarginBottom()) {
             // 如果内容流不为空，则关闭并设置为空
             if (stream!=null) {
-                // 如果文本样式为居右样式，则结束文本写入
-                if (this.param.getStyle()!= XEasyPdfTextStyle.RIGHT) {
-                    // 结束文本写入
-                    stream.endText();
-                }
                 // 关闭内容流
                 stream.close();
                 // 设置内容流为空
                 stream = null;
             }
+            PDRectangle rectangle = page.getLastPage().getMediaBox();
             // 添加新页面
-            page.getParam().getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
+            page.addNewPage(rectangle, document);
             // 重置页面X轴Y轴起始坐标
             this.param.setBeginX(
                     // X轴起始坐标 = 左边距
                     this.param.getMarginLeft()
             ).setBeginY(
-                    // Y轴起始坐标 = 页面高度 - 上边距 - 字体大小 - 行间距
-                    this.param.getMaxHeight() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading()
+                    // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行间距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行间距
+                    page.getParam().getPageY()==null?
+                    rectangle.getHeight() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading():
+                    page.getParam().getPageY() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading()
             );
         }
         return stream;
@@ -437,7 +433,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param page pdf页面
      * @param stream 内容流
      * @param text 待写入文本
-     * @param isLastLine 是否最后一行
      * @return 返回内容流
      * @throws IOException IO异常
      */
@@ -445,8 +440,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             XEasyPdfDocument document,
             XEasyPdfPage page,
             PDPageContentStream stream,
-            String text,
-            boolean isLastLine
+            String text
     ) throws IOException {
         // 如果内容流为空，则初始化内容流
         if (stream==null) {
@@ -454,35 +448,20 @@ public class XEasyPdfText implements XEasyPdfComponent {
             this.lastLineIndex = 0;
             // 初始化内容流
             stream = this.initPageContentStream(document, page);
-            // 开启文本输入
-            stream.beginText();
-            // 设置文本定位
-            stream.newLineAtOffset(this.param.getBeginX(), this.param.getBeginY());
         }
-        // 如果是最后一行，则重置文本定位
-        if (isLastLine) {
-            // 设置文本定位
-            stream.newLineAtOffset(
-                    // X轴坐标 = (页面宽度 - 左边距 - 右边距 - 文本真实宽度) /2
-                    (this.param.getMaxWidth()  - this.param.getMarginLeft() - this.param.getMarginRight() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000)) / 2,
-                    // Y轴坐标 = 0
-                    0
-            );
-            // 文本输入
-            stream.showText(text);
-            // 结束文本写入
-            stream.endText();
-            // 重置Y轴起始坐标
-            this.param.setBeginY(
-                    // Y轴起始坐标 = Y轴起始坐标 - 当前页面文本最后一行索引 * (字体大小 + 行间距) - 行间距
-                    this.param.getBeginY() - this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()
-            );
-        }else {
-            // 文本输入
-            stream.showText(text);
-            // 换行
-            stream.newLine();
-        }
+        // 开启文本输入
+        stream.beginText();
+        // 设置文本定位
+        stream.newLineAtOffset(
+                (this.param.getMaxWidth()  - this.param.getMarginLeft() - this.param.getMarginRight() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000)) / 2,
+                this.param.getBeginY()
+        );
+        // 文本输入
+        stream.showText(text);
+        // 结束文本写入
+        stream.endText();
+        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体大小 - 行间距
+        this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
         return stream;
     }
 

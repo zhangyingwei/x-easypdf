@@ -2,7 +2,7 @@ package wiki.xsx.core.pdf.util;
 
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocumentSplitter;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class PdfUtil {
      */
     public static void create(
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfPage...pages
     ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
@@ -87,7 +87,7 @@ public class PdfUtil {
      */
     public static void create(
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfPage...pages
     ) throws IOException {
         new XEasyPdfDocument().setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
@@ -174,7 +174,7 @@ public class PdfUtil {
     public static void append(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfPage...pages
     ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
@@ -193,7 +193,7 @@ public class PdfUtil {
     public static void append(
             String sourcePath,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfPage...pages
     ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
@@ -210,7 +210,7 @@ public class PdfUtil {
     public static void append(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfPage...pages
     ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
@@ -229,7 +229,7 @@ public class PdfUtil {
     public static void append(
             InputStream sourceInputStream,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfPage...pages
     ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).addPage(pages).save(outputStream);
@@ -325,7 +325,7 @@ public class PdfUtil {
     public static void insert(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int index,
             XEasyPdfPage...pages
     ) throws IOException {
@@ -346,7 +346,7 @@ public class PdfUtil {
     public static void insert(
             String sourcePath,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int index,
             XEasyPdfPage...pages
     ) throws IOException {
@@ -365,7 +365,7 @@ public class PdfUtil {
     public static void insert(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int index,
             XEasyPdfPage...pages
     ) throws IOException {
@@ -386,7 +386,7 @@ public class PdfUtil {
     public static void insert(
             InputStream sourceInputStream,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int index,
             XEasyPdfPage...pages
     ) throws IOException {
@@ -444,7 +444,7 @@ public class PdfUtil {
     public static void fill(
             String templateSourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
@@ -464,7 +464,7 @@ public class PdfUtil {
     public static void fill(
             String templateSourcePath,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
@@ -516,7 +516,7 @@ public class PdfUtil {
     public static void fill(
             InputStream templateInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
@@ -536,7 +536,7 @@ public class PdfUtil {
     public static void fill(
             InputStream templateInputStream,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
@@ -624,7 +624,7 @@ public class PdfUtil {
     public static void merge(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocument...documents
     ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
@@ -643,7 +643,7 @@ public class PdfUtil {
     public static void merge(
             String sourcePath,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocument...documents
     ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).merge(documents).save(outputStream);
@@ -660,7 +660,7 @@ public class PdfUtil {
     public static void merge(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocument...documents
     ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
@@ -679,7 +679,7 @@ public class PdfUtil {
     public static void merge(
             InputStream sourceInputStream,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocument...documents
     ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).merge(documents).save(outputStream);
@@ -729,7 +729,7 @@ public class PdfUtil {
     public static void split(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark
+            XEasyPdfDefaultWatermark globalWatermark
     ) throws IOException {
         split(sourcePath, outputPath, globalWatermark, (XEasyPdfDocumentSplitter) null);
     }
@@ -745,7 +745,7 @@ public class PdfUtil {
     public static void split(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocumentSplitter splitter
     ) throws IOException {
         split(sourcePath, outputPath, globalWatermark, splitter, null);
@@ -789,7 +789,7 @@ public class PdfUtil {
     public static void split(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark
+            XEasyPdfDefaultWatermark globalWatermark
     ) throws IOException {
         split(sourceInputStream, outputPath, globalWatermark, (XEasyPdfDocumentSplitter) null);
     }
@@ -805,7 +805,7 @@ public class PdfUtil {
     public static void split(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocumentSplitter splitter
     ) throws IOException {
         split(sourceInputStream, outputPath, globalWatermark, splitter, null);
@@ -854,7 +854,7 @@ public class PdfUtil {
     public static void split(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String prefix
     ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputPath, prefix).close();
@@ -872,7 +872,7 @@ public class PdfUtil {
     public static void split(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocumentSplitter splitter,
             String prefix
     ) throws IOException {
@@ -922,7 +922,7 @@ public class PdfUtil {
     public static void split(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String prefix
     ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputPath, prefix).close();
@@ -940,7 +940,7 @@ public class PdfUtil {
     public static void split(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             XEasyPdfDocumentSplitter splitter,
             String prefix
     ) throws IOException {
@@ -990,7 +990,7 @@ public class PdfUtil {
     public static void split(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int ...pageIndex
     ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
@@ -1009,7 +1009,7 @@ public class PdfUtil {
     public static void split(
             String sourcePath,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int ...pageIndex
     ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputStream, pageIndex).close();
@@ -1058,7 +1058,7 @@ public class PdfUtil {
     public static void split(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int ...pageIndex
     ) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
@@ -1077,7 +1077,7 @@ public class PdfUtil {
     public static void split(
             InputStream sourceInputStream,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             int ...pageIndex
     ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputStream, pageIndex).close();
@@ -1115,7 +1115,7 @@ public class PdfUtil {
     public static void image(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType
     ) throws IOException {
         new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).image(outputPath, imageType).close();
@@ -1147,7 +1147,7 @@ public class PdfUtil {
     public static void image(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType
     ) throws IOException {
         new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).image(outputPath, imageType).close();
@@ -1182,7 +1182,7 @@ public class PdfUtil {
     public static void image(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType,
             String prefix
     ) throws IOException {
@@ -1218,7 +1218,7 @@ public class PdfUtil {
     public static void image(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType,
             String prefix
     ) throws IOException {
@@ -1256,7 +1256,7 @@ public class PdfUtil {
     public static void image(
             String sourcePath,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType,
             int pageIndex
     ) throws IOException {
@@ -1296,7 +1296,7 @@ public class PdfUtil {
     public static void image(
             InputStream sourceInputStream,
             String outputPath,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType,
             int pageIndex
     ) throws IOException {
@@ -1334,7 +1334,7 @@ public class PdfUtil {
     public static void image(
             String sourcePath,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType,
             int pageIndex
     ) throws IOException {
@@ -1370,7 +1370,7 @@ public class PdfUtil {
     public static void image(
             InputStream sourceInputStream,
             OutputStream outputStream,
-            XEasyPdfWatermark globalWatermark,
+            XEasyPdfDefaultWatermark globalWatermark,
             String imageType,
             int pageIndex
     ) throws IOException {

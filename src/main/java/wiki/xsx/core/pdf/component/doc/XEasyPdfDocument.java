@@ -10,8 +10,11 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.component.page.XEasyPdfPageParam;
 import wiki.xsx.core.pdf.util.ConvertUtil;
 import wiki.xsx.core.pdf.util.FontUtil;
 
@@ -128,6 +131,18 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 设置文档页眉（每个页面都将添加页眉）
+     * @param globalHeader 页眉
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setGlobalHeader(XEasyPdfHeader globalHeader) {
+        // 设置重置
+        this.param.setReset(true);
+        this.param.setGlobalHeader(globalHeader);
+        return this;
+    }
+
+    /**
      * 设置字体路径
      * @param fontPath 字体路径
      * @return 返回pdf文档
@@ -154,10 +169,55 @@ public class XEasyPdfDocument {
 
     /**
      * 获取文档字体
-     * @return 返回pdf文档
+     * @return 返回pdfBox字体
      */
     public PDFont getFont() {
         return this.param.getFont();
+    }
+
+    /**
+     * 获取全局水印
+     * @return pdf水印
+     */
+    public XEasyPdfWatermark getGlobalWatermark() {
+        return this.param.getGlobalWatermark();
+    }
+
+    /**
+     * 获取全局页眉
+     * @return pdf页眉
+     */
+    public XEasyPdfHeader getGlobalHeader() {
+        return this.param.getGlobalHeader();
+    }
+
+    /**
+     * 获取全局页脚
+     * @return pdf页脚
+     */
+    public XEasyPdfFooter getGlobalFooter() {
+        return this.param.getGlobalFooter();
+    }
+
+    /**
+     * 获取文档总页数
+     * @return 返回文档总页数
+     */
+    public int getTotalPage() {
+        // 定义总页数
+        int total = 0;
+        // 定义页面参数
+        XEasyPdfPageParam pageParam;
+        // 获取pdf页面列表
+        List<XEasyPdfPage> pageList = this.getPageList();
+        // 遍历pdf页面列表
+        for (XEasyPdfPage xEasyPdfPage : pageList) {
+            // 获取页面参数
+            pageParam = xEasyPdfPage.getParam();
+            // 总页数 = 包含的pdfBox页面列表数量 + 新增的pdfBox页面列表数量
+            total += pageParam.getPageList().size() + pageParam.getNewPageList().size();
+        }
+        return total;
     }
 
     /**
@@ -585,11 +645,8 @@ public class XEasyPdfDocument {
         List<PDPage> pdfboxPageList;
         // 遍历pdf页面列表
         for (XEasyPdfPage pdfPage : pageList) {
-            // 如果pdf页面组件数量大于0，则进行页面构建
-            if (pdfPage.getParam().getComponentList().size() > 0) {
-                // pdf页面构建
-                pdfPage.build(this);
-            }
+            // pdf页面构建
+            pdfPage.build(this);
             // 初始化pdfBox页面列表
             pdfboxPageList = pdfPage.getParam().getPageList();
             // 遍历pdfBox页面列表
@@ -597,16 +654,16 @@ public class XEasyPdfDocument {
                 // 任务文档添加页面
                 target.addPage(page);
             }
-            // 如果页面水印不为空，则进行页面水印绘制
-            if (pdfPage.getParam().getWatermark() != null) {
-                // 绘制页面水印
-                pdfPage.getParam().getWatermark().draw(this, pdfPage);
-                // 如果页面水印为空，文档全局页面水印不为空且当前pdf页面允许添加页面水印，则进行页面水印绘制
-            } else if (this.param.getGlobalWatermark() != null && pdfPage.getParam().isAllowWatermark()) {
-                // 绘制页面水印
-                this.param.getGlobalWatermark().draw(this, pdfPage);
+            // 初始化pdfBox新增页面列表
+            pdfboxPageList = pdfPage.getParam().getNewPageList();
+            // 遍历pdfBox页面列表
+            for (PDPage page : pdfboxPageList) {
+                // 任务文档添加页面
+                target.addPage(page);
             }
         }
+        // 关闭文档重置
+        this.param.setReset(false);
         return target;
     }
 

@@ -7,9 +7,10 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,7 +65,25 @@ public class XEasyPdfPage {
     }
 
     public XEasyPdfPage addPage(PDPage page) {
-        this.param.getPageList().add(page);
+        this.param.getNewPageList().add(page);
+        return this;
+    }
+
+    public XEasyPdfPage addNewPage(PDRectangle pageSize, XEasyPdfDocument document) throws IOException {
+        // 添加新页面
+        this.param.getNewPageList().add(new PDPage(pageSize));
+        // 重置页面X轴Y轴起始坐标
+        this.getParam().setPageX(null).setPageY(null);
+        // 如果允许添加页眉，且页眉不为空则进行页眉绘制
+        if (this.param.isAllowHeader()&&this.param.getHeader()!=null) {
+            // 页眉绘制
+            this.param.getHeader().draw(document, this);
+        }
+        // 如果允许添加页脚，且页脚不为空，则进行页脚绘制
+        if (this.param.isAllowFooter()&&this.param.getFooter()!=null) {
+            // 页脚绘制
+            this.param.getFooter().draw(document, this);
+        }
         return this;
     }
 
@@ -101,7 +120,7 @@ public class XEasyPdfPage {
      * @param watermark pdf水印
      * @return 返回pdf页面
      */
-    public XEasyPdfPage setWatermark(XEasyPdfWatermark watermark) {
+    public XEasyPdfPage setWatermark(XEasyPdfDefaultWatermark watermark) {
         this.param.setWatermark(watermark);
         return this;
     }
@@ -121,6 +140,42 @@ public class XEasyPdfPage {
      */
     public XEasyPdfPage disableWatermark() {
         this.param.setAllowWatermark(false);
+        return this;
+    }
+
+    /**
+     * 开启页眉
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage enableHeader() {
+        this.param.setAllowHeader(true);
+        return this;
+    }
+
+    /**
+     * 关闭页眉
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage disableHeader() {
+        this.param.setAllowHeader(false);
+        return this;
+    }
+
+    /**
+     * 开启页脚
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage enableFooter() {
+        this.param.setAllowFooter(true);
+        return this;
+    }
+
+    /**
+     * 关闭页脚
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage disableFooter() {
+        this.param.setAllowFooter(false);
         return this;
     }
 
@@ -163,7 +218,7 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document) throws IOException {
-        return this.build(document, null);
+        return this.build(document, PDRectangle.A4);
     }
 
     /**
@@ -174,20 +229,26 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
+        // 设置新的页面列表
+        this.param.setNewPageList(new ArrayList<>(10));
         // 初始化字体
         this.param.initFont(document, this);
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
-        this.param.getPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
+        this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
+        // 绘制页眉与页脚
+        this.drawHeaderAndFooter(document);
         // 获取pdf组件列表
         List<XEasyPdfComponent> componentList = this.param.getComponentList();
-        // 遍历组件列表
-        for (XEasyPdfComponent component : componentList) {
-            // 如果组件未绘制，则进行绘制
-            if (!component.isDraw()) {
+        // 如果组件列表不为空，且数量大于0，则进行组件绘制
+        if (componentList!=null&&componentList.size()>0) {
+            // 遍历组件列表
+            for (XEasyPdfComponent component : componentList) {
                 // 组件绘制
                 component.draw(document, this);
             }
         }
+        // 绘制水印
+        this.drawWatermark(document);
         return this;
     }
 
@@ -196,7 +257,82 @@ public class XEasyPdfPage {
      * @return 返回pdfBox最新页面
      */
     public PDPage getLastPage() {
-        List<PDPage> pageList = this.param.getPageList();
+        List<PDPage> pageList = this.param.getNewPageList();
         return pageList.isEmpty()?null:pageList.get(pageList.size()-1);
+    }
+
+    /**
+     * 绘制页眉与页脚
+     * @param document pdf文档
+     * @throws IOException IO异常
+     */
+    private void drawHeaderAndFooter(XEasyPdfDocument document) throws IOException {
+        // 绘制页眉
+        this.drawHeader(document);
+        // 绘制页脚
+        this.drawFooter(document);
+    }
+
+    /**
+     * 绘制页眉
+     * @param document pdf文档
+     * @throws IOException IO异常
+     */
+    private void drawHeader(XEasyPdfDocument document) throws IOException {
+        // 如果当前pdf页面允许添加页眉，则进行页眉绘制
+        if (this.param.isAllowHeader()) {
+            // 如果页眉未初始化，则设置全局页眉
+            if (this.param.getHeader()==null) {
+                // 设置全局页眉
+                this.param.setHeader(document.getGlobalHeader());
+            }
+            // 如果页眉不为空，则进行绘制
+            if (this.param.getHeader()!=null) {
+                // 绘制页眉
+                this.param.getHeader().draw(document, this);
+            }
+        }
+    }
+
+    /**
+     * 绘制页脚
+     * @param document pdf文档
+     * @throws IOException IO异常
+     */
+    private void drawFooter(XEasyPdfDocument document) throws IOException {
+        // 如果当前pdf页面允许添加页脚，则进行页脚绘制
+        if (this.param.isAllowFooter()) {
+            // 如果页脚未初始化，则设置全局页脚
+            if (this.param.getFooter()==null) {
+                // 设置全局页脚
+                this.param.setFooter(document.getGlobalFooter());
+            }
+            // 如果页脚不为空，则进行绘制
+            if (this.param.getFooter()!=null) {
+                // 绘制页脚
+                this.param.getFooter().draw(document, this);
+            }
+        }
+    }
+
+    /**
+     * 绘制水印
+     * @param document pdf文档
+     * @throws IOException IO异常
+     */
+    private void drawWatermark(XEasyPdfDocument document) throws IOException {
+        // 如果当前pdf页面允许添加页面水印，则进行页面水印绘制
+        if (this.param.isAllowWatermark()) {
+            // 如果页面水印未初始化，则设置全局页面水印
+            if (this.param.getWatermark()==null) {
+                // 设置全局页面水印
+                this.param.setWatermark(document.getGlobalWatermark());
+            }
+            // 如果页面水印不为空，则进行绘制
+            if (this.param.getWatermark()!=null) {
+                // 绘制页面水印
+                this.param.getWatermark().draw(document, this);
+            }
+        }
     }
 }
