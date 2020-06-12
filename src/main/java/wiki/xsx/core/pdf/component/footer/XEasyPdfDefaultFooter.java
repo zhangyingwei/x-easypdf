@@ -36,7 +36,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
 
     /**
      * 有参构造
-     * @param text 待输入文本
+     * @param text 待写入文本
      */
     public XEasyPdfDefaultFooter(String text) {
         this.param.setText(text);
@@ -45,7 +45,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
     /**
      * 有参构造
      * @param fontSize 字体大小
-     * @param text 待输入文本
+     * @param text 待写入文本
      */
     public XEasyPdfDefaultFooter(float fontSize, String text) {
         this.param.setText(text);
@@ -165,7 +165,10 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
     
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 初始化参数
         this.param.init(page);
+        // 关闭页面自动重置定位
+        page.disablePosition();
         // 写入文本
         new XEasyPdfText(this.param.getText())
                 .setFontPath(this.param.getFontPath())
@@ -180,8 +183,8 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
                 .setStyle(this.param.getStyle())
                 .setPosition(this.param.getBeginX(), this.param.getBeginY())
                 .setCheckPage(false)
-                .setNewLine(false)
                 .draw(document, page);
+        // 开启页面自动重置定位
         page.enablePosition();
     }
 

@@ -121,7 +121,7 @@ class XEasyPdfRectParam {
         // 如果检查页面为真，并且Y轴起始坐标-页脚高度小于等于下边距，则进行分页
         if (checkPage && this.beginY - footerHeight <= this.marginBottom) {
             // 添加新页面
-            page.addNewPage(rectangle, document);
+            page.addNewPage(document, rectangle);
             // 获取当前页面Y轴起始坐标
             Float pageY = page.getParam().getPageY();
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 矩形高度，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 矩形高度

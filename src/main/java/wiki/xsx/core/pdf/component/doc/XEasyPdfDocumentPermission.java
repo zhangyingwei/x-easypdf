@@ -168,6 +168,7 @@ public class XEasyPdfDocumentPermission {
         policy.setEncryptionKeyLength(length.length);
         // 设置pdfBox文档保护策略
         this.policy = policy;
+        this.document.setPermission(this);
         return this.document;
     }
 

@@ -139,6 +139,13 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
             // 执行画水印
             this.doDraw(document, pdPage, state);
         }
+        // 获取新的pdfBox页面列表
+        pageList = page.getParam().getNewPageList();
+        // 遍历pdfBox页面列表
+        for (PDPage pdPage : pageList) {
+            // 执行画水印
+            this.doDraw(document, pdPage, state);
+        }
     }
 
     /**

@@ -285,8 +285,11 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @throws IOException IO异常
      */
     private void doDraw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
-        // 设置是否换行
-        page.getParam().setAllowResetPosition(this.param.isNewLine());
+        // 如果设置不自动换行，则关闭页面自动重置定位
+        if (!this.param.isNewLine()) {
+            // 关闭页面自动重置定位
+            page.disablePosition();
+        }
         // 参数初始化
         this.param.init(document, page);
         // 拆分后的待添加文本列表
@@ -389,7 +392,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 }
                 PDRectangle rectangle = page.getLastPage().getMediaBox();
                 // 添加新页面
-                page.addNewPage(rectangle, document);
+                page.addNewPage(document, rectangle);
                 // 重置页面X轴Y轴起始坐标
                 this.param.setBeginX(
                         // X轴起始坐标 = 左边距
@@ -435,6 +438,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
         stream.showText(text);
         // 换行
         stream.newLine();
+        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体大小 - 行间距
+        this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
         return stream;
     }
 

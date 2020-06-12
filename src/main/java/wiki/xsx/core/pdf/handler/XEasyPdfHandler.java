@@ -4,6 +4,8 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.component.footer.XEasyPdfDefaultFooter;
+import wiki.xsx.core.pdf.component.header.XEasyPdfDefaultHeader;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
@@ -341,6 +343,54 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfTable build(XEasyPdfRow ...rows) {
             return new XEasyPdfTable(rows);
+        }
+    }
+
+    /**
+     * pdf页眉组件
+     */
+    public static class Header {
+        /**
+         * 构建页眉
+         * @param text 待写入文本
+         * @return 返回pdf页眉组件
+         */
+        public static XEasyPdfDefaultHeader build(String text) {
+            return new XEasyPdfDefaultHeader(text);
+        }
+
+        /**
+         * 构建页眉
+         * @param fontSize 字体大小
+         * @param text 待写入文本
+         * @return 返回pdf页眉组件
+         */
+        public static XEasyPdfDefaultHeader build(float fontSize, String text) {
+            return new XEasyPdfDefaultHeader(fontSize, text);
+        }
+    }
+
+    /**
+     * pdf页脚组件
+     */
+    public static class Footer {
+        /**
+         * 构建页脚
+         * @param text 待写入文本
+         * @return 返回pdf页脚组件
+         */
+        public static XEasyPdfDefaultFooter build(String text) {
+            return new XEasyPdfDefaultFooter(text);
+        }
+
+        /**
+         * 构建页脚
+         * @param fontSize 字体大小
+         * @param text 待写入文本
+         * @return 返回pdf页脚组件
+         */
+        public static XEasyPdfDefaultFooter build(float fontSize, String text) {
+            return new XEasyPdfDefaultFooter(fontSize, text);
         }
     }
 }

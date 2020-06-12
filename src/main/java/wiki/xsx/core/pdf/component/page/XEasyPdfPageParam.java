@@ -12,6 +12,7 @@ import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,14 +96,22 @@ public class XEasyPdfPageParam {
      * 是否允许重置定位
      */
     private boolean allowResetPosition = true;
+    /**
+     * 页面背景色
+     */
+    private Color backgroundColor;
 
     /**
-     * 初始化字体
+     * 初始化
      * @param document pdf文档
+     * @param page pdf页面
      */
-    void initFont(XEasyPdfDocument document, XEasyPdfPage page) {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
         if (this.font==null) {
             this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        }
+        if (this.backgroundColor==null) {
+            this.backgroundColor = document.getBackgroundColor();
         }
     }
 }

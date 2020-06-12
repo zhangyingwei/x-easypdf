@@ -11,6 +11,7 @@ import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +79,10 @@ class XEasyPdfDocumentParam {
      * 是否重置
      */
     private boolean isReset;
+    /**
+     * 文档背景色
+     */
+    private Color backgroundColor = Color.WHITE;
 
     /**
      * 初始化字体

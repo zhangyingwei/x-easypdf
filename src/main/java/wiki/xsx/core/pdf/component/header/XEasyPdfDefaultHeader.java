@@ -37,7 +37,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 有参构造
-     * @param text 待输入文本
+     * @param text 待写入文本
      */
     public XEasyPdfDefaultHeader(String text) {
         this.param.setText(text);
@@ -46,7 +46,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     /**
      * 有参构造
      * @param fontSize 字体大小
-     * @param text 待输入文本
+     * @param text 待写入文本
      */
     public XEasyPdfDefaultHeader(float fontSize, String text) {
         this.param.setText(text);

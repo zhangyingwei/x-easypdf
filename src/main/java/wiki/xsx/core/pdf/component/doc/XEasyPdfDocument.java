@@ -19,6 +19,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 
 /**
  * pdf文档
@@ -119,6 +121,24 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 设置文档背景色
+     * @param backgroundColor 背景色
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setBackgroundColor(Color backgroundColor) {
+        this.param.setBackgroundColor(backgroundColor);
+        return this;
+    }
+
+    /**
+     * 获取文档背景色
+     * @return 返回文档背景色
+     */
+    public Color getBackgroundColor() {
+        return this.param.getBackgroundColor();
+    }
+
+    /**
      * 设置文档水印（每个页面都将添加水印）
      * @param globalWatermark 页面水印
      * @return 返回pdf文档
@@ -128,6 +148,14 @@ public class XEasyPdfDocument {
         this.param.setReset(true);
         this.param.setGlobalWatermark(globalWatermark);
         return this;
+    }
+
+    /**
+     * 获取全局水印
+     * @return 返回pdf水印
+     */
+    public XEasyPdfWatermark getGlobalWatermark() {
+        return this.param.getGlobalWatermark();
     }
 
     /**
@@ -143,6 +171,14 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 获取全局页眉
+     * @return 返回pdf页眉
+     */
+    public XEasyPdfHeader getGlobalHeader() {
+        return this.param.getGlobalHeader();
+    }
+
+    /**
      * 设置文档页脚（每个页面都将添加页脚）
      * @param globalFooter 页脚
      * @return 返回pdf文档
@@ -152,6 +188,14 @@ public class XEasyPdfDocument {
         this.param.setReset(true);
         this.param.setGlobalFooter(globalFooter);
         return this;
+    }
+
+    /**
+     * 获取全局页脚
+     * @return 返回pdf页脚
+     */
+    public XEasyPdfFooter getGlobalFooter() {
+        return this.param.getGlobalFooter();
     }
 
     /**
@@ -185,30 +229,6 @@ public class XEasyPdfDocument {
      */
     public PDFont getFont() {
         return this.param.getFont();
-    }
-
-    /**
-     * 获取全局水印
-     * @return pdf水印
-     */
-    public XEasyPdfWatermark getGlobalWatermark() {
-        return this.param.getGlobalWatermark();
-    }
-
-    /**
-     * 获取全局页眉
-     * @return pdf页眉
-     */
-    public XEasyPdfHeader getGlobalHeader() {
-        return this.param.getGlobalHeader();
-    }
-
-    /**
-     * 获取全局页脚
-     * @return pdf页脚
-     */
-    public XEasyPdfFooter getGlobalFooter() {
-        return this.param.getGlobalFooter();
     }
 
     /**
@@ -384,6 +404,11 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument image(String outputPath, String imageType, String prefix) throws IOException {
+        // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
+        if (prefix==null) {
+            // 初始化文档名称前缀
+            prefix = "x-easypdf";
+        }
         // 获取任务文档
         PDDocument target = this.createTarget();
         // 文件名称构造器
@@ -395,7 +420,7 @@ public class XEasyPdfDocument {
             // 新建文件名称构造器
             fileNameBuilder = new StringBuilder();
             // 构建文件名称
-            fileNameBuilder.append(outputPath).append(File.separator).append(prefix==null?UUID.randomUUID():prefix+i).append('.').append(imageType);
+            fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append('.').append(imageType);
             // 获取输出流
             try (OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
                 // 初始化pdfBox文档渲染器
@@ -479,6 +504,11 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument split(String outputPath, XEasyPdfDocumentSplitter splitter, String prefix) throws IOException {
+        // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
+        if (prefix==null) {
+            // 初始化文档名称前缀
+            prefix = "x-easypdf";
+        }
         // 文件名称构造器
         StringBuilder fileNameBuilder;
         // 如果拆分器不为空，则使用拆分器进行拆分，否则按单页面拆分
@@ -490,7 +520,7 @@ public class XEasyPdfDocument {
                 // 新建文件名称构造器
                 fileNameBuilder = new StringBuilder();
                 // 构建文件名称
-                fileNameBuilder.append(outputPath).append(File.separator).append(prefix==null?UUID.randomUUID():prefix+i).append(".pdf");
+                fileNameBuilder.append(outputPath).append(File.separator).append(prefix+(i+1)).append(".pdf");
                 // 获取输出流
                 try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
                     // 拆分文档
@@ -504,13 +534,13 @@ public class XEasyPdfDocument {
             // 拆分文档
             List<PDDocument> documents = new Splitter().split(source);
             // 定义拆分文档列表索引
-            int index = 0;
+            int index = 1;
             // 遍历拆分文档列表
             for (PDDocument target : documents) {
                 // 新建文件名称构造器
                 fileNameBuilder = new StringBuilder();
                 // 构建文件名称
-                fileNameBuilder.append(outputPath).append(File.separator).append(prefix==null?UUID.randomUUID():prefix+index).append(".pdf");
+                fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(index).append(".pdf");
                 // 获取输出流
                 try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
                     // 设置文档信息及保护策略
@@ -623,6 +653,14 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 设置文档权限
+     * @param permission pdf文档权限
+     */
+    void setPermission(XEasyPdfDocumentPermission permission) {
+        this.param.setPermission(permission);
+    }
+
+    /**
      * 创建任务
      * @return 返回pdfBox文档
      * @throws IOException IO异常
@@ -686,12 +724,12 @@ public class XEasyPdfDocument {
      */
     private void setInfoAndPolicy(PDDocument target) throws IOException {
         // 如果文档信息不为空，则进行设置
-        if (this.param.getDocumentInfo() != null) {
+        if (this.param.getDocumentInfo()!=null) {
             // 设置文档信息
             target.setDocumentInformation(this.param.getDocumentInfo().getInfo());
         }
         // 如果pdfBox保护策略不为空，则进行设置
-        if (this.param.getPermission() != null) {
+        if (this.param.getPermission()!=null) {
             // 设置pdfBox保护策略
             target.protect(this.param.getPermission().getPolicy());
         }

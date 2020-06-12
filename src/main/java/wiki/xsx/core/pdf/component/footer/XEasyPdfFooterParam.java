@@ -89,6 +89,11 @@ class XEasyPdfFooterParam {
      */
     private Float height;
 
+    /**
+     * 初始化
+     * @param page pdf页面
+     * @throws IOException IO异常
+     */
     void init(XEasyPdfPage page) throws IOException {
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {

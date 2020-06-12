@@ -3,14 +3,16 @@ package wiki.xsx.core.pdf.component.page;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.component.footer.XEasyPdfDefaultFooter;
-import wiki.xsx.core.pdf.component.header.XEasyPdfDefaultHeader;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
+import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,26 +68,32 @@ public class XEasyPdfPage {
         }
     }
 
+    /**
+     * 添加pdfBox页面
+    *  @param page pdfBox页面
+     * @return 返回pdf页面
+     */
     public XEasyPdfPage addPage(PDPage page) {
         this.param.getNewPageList().add(page);
         return this;
     }
 
-    public XEasyPdfPage addNewPage(PDRectangle pageSize, XEasyPdfDocument document) throws IOException {
-        // 添加新页面
-        this.param.getNewPageList().add(new PDPage(pageSize));
+    /**
+     * 添加新页面
+     * @param pageSize 页面尺寸
+     * @param document pdf文档
+     * @return 返回pdf页面
+     * @throws IOException IO异常
+     */
+    public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
+        // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
+        this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
+        // 设置背景颜色
+        this.setLastPageBackgroundColor(document);
         // 重置页面X轴Y轴起始坐标
         this.getParam().setPageX(null).setPageY(null);
-        // 如果允许添加页眉，且页眉不为空则进行页眉绘制
-        if (this.param.isAllowHeader()&&this.param.getHeader()!=null) {
-            // 页眉绘制
-            this.param.getHeader().draw(document, this);
-        }
-        // 如果允许添加页脚，且页脚不为空，则进行页脚绘制
-        if (this.param.isAllowFooter()&&this.param.getFooter()!=null) {
-            // 页脚绘制
-            this.param.getFooter().draw(document, this);
-        }
+        // 绘制页眉与页脚
+        this.drawHeaderAndFooter(document);
         return this;
     }
 
@@ -118,13 +126,39 @@ public class XEasyPdfPage {
     }
 
     /**
+     * 设置页面背景色
+     * @param backgroundColor 背景色
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage setBackgroundColor(Color backgroundColor) {
+        this.param.setBackgroundColor(backgroundColor);
+        return this;
+    }
+
+    /**
+     * 获取页面背景色
+     * @return 返回页面背景色
+     */
+    public Color getBackgroundColor() {
+        return this.param.getBackgroundColor();
+    }
+
+    /**
      * 设置水印
      * @param watermark pdf水印
      * @return 返回pdf页面
      */
-    public XEasyPdfPage setWatermark(XEasyPdfDefaultWatermark watermark) {
+    public XEasyPdfPage setWatermark(XEasyPdfWatermark watermark) {
         this.param.setWatermark(watermark);
         return this;
+    }
+
+    /**
+     * 获取水印
+     * @return 返回pdf水印
+     */
+    public XEasyPdfWatermark getWatermark() {
+        return this.param.getWatermark();
     }
 
     /**
@@ -132,9 +166,17 @@ public class XEasyPdfPage {
      * @param header pdf页眉
      * @return 返回pdf页面
      */
-    public XEasyPdfPage setHeader(XEasyPdfDefaultHeader header) {
+    public XEasyPdfPage setHeader(XEasyPdfHeader header) {
         this.param.setHeader(header);
         return this;
+    }
+
+    /**
+     * 获取页眉
+     * @return 返回pdf页眉
+     */
+    public XEasyPdfHeader getHeader() {
+        return this.param.getHeader();
     }
 
     /**
@@ -142,9 +184,27 @@ public class XEasyPdfPage {
      * @param footer pdf页脚
      * @return 返回pdf页面
      */
-    public XEasyPdfPage setFooter(XEasyPdfDefaultFooter footer) {
+    public XEasyPdfPage setFooter(XEasyPdfFooter footer) {
         this.param.setFooter(footer);
         return this;
+    }
+
+    /**
+     * 获取页脚
+     * @return 返回pdf页脚
+     */
+    public XEasyPdfFooter getFooter() {
+        return this.param.getFooter();
+    }
+
+
+    /**
+     * 获取pdfBox最新页面
+     * @return 返回pdfBox最新页面
+     */
+    public PDPage getLastPage() {
+        List<PDPage> pageList = this.param.getNewPageList();
+        return pageList.isEmpty() ? null : pageList.get(pageList.size()-1);
     }
 
     /**
@@ -251,36 +311,71 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
-        // 设置新的页面列表
-        this.param.setNewPageList(new ArrayList<>(10));
-        // 初始化字体
-        this.param.initFont(document, this);
-        // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
-        this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
-        // 绘制页眉与页脚
-        this.drawHeaderAndFooter(document);
-        // 获取pdf组件列表
-        List<XEasyPdfComponent> componentList = this.param.getComponentList();
-        // 如果组件列表不为空，且数量大于0，则进行组件绘制
-        if (componentList!=null&&componentList.size()>0) {
-            // 遍历组件列表
-            for (XEasyPdfComponent component : componentList) {
-                // 组件绘制
-                component.draw(document, this);
+        if (this.param.getComponentList().size()>0) {
+            // 设置新的页面列表
+            this.param.setNewPageList(new ArrayList<>(10));
+            // 添加新页面
+            this.addNewPage(document, pageSize);
+            // 获取pdf组件列表
+            List<XEasyPdfComponent> componentList = this.param.getComponentList();
+            // 如果组件列表不为空，且数量大于0，则进行组件绘制
+            if (componentList!=null&&componentList.size()>0) {
+                // 遍历组件列表
+                for (XEasyPdfComponent component : componentList) {
+                    // 组件绘制
+                    component.draw(document, this);
+                }
             }
         }
+
         // 绘制水印
         this.drawWatermark(document);
         return this;
     }
 
     /**
-     * 获取pdfBox最新页面
-     * @return 返回pdfBox最新页面
+     * 设置最新页面背景颜色
+     * @param document pdf文档
+     * @return 返回pdf页面
+     * @throws IOException IO异常
      */
-    public PDPage getLastPage() {
-        List<PDPage> pageList = this.param.getNewPageList();
-        return pageList.isEmpty()?null:pageList.get(pageList.size()-1);
+    private XEasyPdfPage setLastPageBackgroundColor(XEasyPdfDocument document) throws IOException {
+        // 初始化参数
+        this.param.init(document, this);
+        // 如果背景颜色不为空，且背景颜色不为白色，则进行背景颜色设置
+        if (this.param.getBackgroundColor()!=null&&!Color.WHITE.equals(this.param.getBackgroundColor())) {
+            // 获取pdfBox最新页面
+            PDPage lastPage = this.getLastPage();
+            // 如果最新页面不为空，则进行背景颜色设置
+            if (lastPage!=null) {
+                // 获取页面尺寸
+                PDRectangle rectangle = lastPage.getMediaBox();
+                // 新建内容流
+                PDPageContentStream contentStream = new PDPageContentStream(
+                        document.getDocument(),
+                        lastPage,
+                        PDPageContentStream.AppendMode.APPEND,
+                        true,
+                        false
+                );
+                // 绘制矩形（背景矩形）
+                contentStream.addRect(
+                        0,
+                        0,
+                        rectangle.getWidth(),
+                        rectangle.getHeight()
+                );
+                // 设置矩形颜色（背景颜色）
+                contentStream.setNonStrokingColor(this.param.getBackgroundColor());
+                // 填充矩形（背景矩形）
+                contentStream.fill();
+                // 内容流重置颜色为黑色
+                contentStream.setNonStrokingColor(Color.BLACK);
+                // 关闭内容流
+                contentStream.close();
+            }
+        }
+        return this;
     }
 
     /**

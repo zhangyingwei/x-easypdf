@@ -106,7 +106,7 @@ class XEasyPdfLineParam {
             // 分页判断，如果（当前Y轴坐标-上边距-线宽-页脚高度）小于下边距，则进行分页
             if (page.getParam().getPageY() - this.marginTop - lineWidth - footerHeight <= this.marginBottom) {
                 // 添加新页面
-                page.addNewPage(page.getLastPage().getMediaBox(), document);
+                page.addNewPage(document, page.getLastPage().getMediaBox());
             }
         }
     }

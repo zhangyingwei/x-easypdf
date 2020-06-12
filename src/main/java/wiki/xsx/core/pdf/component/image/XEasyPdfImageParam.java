@@ -166,7 +166,7 @@ class XEasyPdfImageParam {
                 // 如果页面Y轴起始坐标-页脚高度小于等于下边距，则分页
                 if (this.beginY - footerHeight <= this.marginBottom) {
                     // 添加新页面
-                    page.addNewPage(rectangle, document);
+                    page.addNewPage(document, rectangle);
                     // 重置页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
                     this.beginY = page.getParam().getPageY()==null?
                             pageHeight - this.marginTop - this.height:

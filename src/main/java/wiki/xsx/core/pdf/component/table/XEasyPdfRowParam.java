@@ -130,7 +130,7 @@ class XEasyPdfRowParam {
             // 如果当前Y轴起始坐标-页脚高度小于等于表格下边距，则进行分页
             if (currentY - footerHeight <= tableParam.getMarginBottom()) {
                 // 添加新页面
-                page.addNewPage(rectangle, document);
+                page.addNewPage(document, rectangle);
                 // 初始化Y轴起始坐标 = 页面高度 - 表格上边距 - 行高 - 上边距
                 this.beginY = page.getParam().getPageY()==null?
                         rectangle.getHeight() - tableParam.getMarginTop() - this.height - this.marginTop:
