@@ -2,8 +2,8 @@ package wiki.xsx.core.pdf.util;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -3,8 +3,10 @@ package wiki.xsx.core.pdf.component.footer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
@@ -94,7 +96,10 @@ class XEasyPdfFooterParam {
      * @param page pdf页面
      * @throws IOException IO异常
      */
-    void init(XEasyPdfPage page) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        if (this.font==null) {
+            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        }
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {
             // 初始化待添加文本列表

@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.component.doc;
+package wiki.xsx.core.pdf.doc;
 
 import org.apache.pdfbox.pdmodel.encryption.*;
 

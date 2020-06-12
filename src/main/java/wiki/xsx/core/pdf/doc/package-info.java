@@ -15,4 +15,4 @@
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-package wiki.xsx.core.pdf.component.doc;
+package wiki.xsx.core.pdf.doc;

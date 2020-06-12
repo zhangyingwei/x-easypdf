@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.component.page;
+package wiki.xsx.core.pdf.page;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -7,10 +7,10 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 
 import java.awt.*;
 import java.io.IOException;
@@ -74,7 +74,7 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage addPage(PDPage page) {
-        this.param.getNewPageList().add(page);
+        this.param.getPageList().add(page);
         return this;
     }
 
@@ -311,7 +311,7 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
-        if (this.param.getComponentList().size()>0) {
+        if (this.param.getPageList().size()==0) {
             // 设置新的页面列表
             this.param.setNewPageList(new ArrayList<>(10));
             // 添加新页面
@@ -327,7 +327,6 @@ public class XEasyPdfPage {
                 }
             }
         }
-
         // 绘制水印
         this.drawWatermark(document);
         return this;

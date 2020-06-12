@@ -1,10 +1,10 @@
 package wiki.xsx.core.pdf.component.footer;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.awt.*;
 import java.io.IOException;
@@ -166,7 +166,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 初始化参数
-        this.param.init(page);
+        this.param.init(document, page);
         // 关闭页面自动重置定位
         page.disablePosition();
         // 写入文本

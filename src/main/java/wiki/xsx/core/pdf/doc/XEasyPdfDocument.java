@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.component.doc;
+package wiki.xsx.core.pdf.doc;
 
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.multipdf.Splitter;
@@ -13,8 +13,8 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.component.page.XEasyPdfPageParam;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
 import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
@@ -27,8 +27,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * pdf文档

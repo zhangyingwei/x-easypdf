@@ -1,7 +1,8 @@
 package wiki.xsx.core.pdf.component.mark;
 
-import wiki.xsx.core.pdf.component.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.component.page.XEasyPdfPage;
+
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.IOException;
 
