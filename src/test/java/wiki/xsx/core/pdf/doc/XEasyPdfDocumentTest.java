@@ -2,7 +2,6 @@ package wiki.xsx.core.pdf.doc;
 
 import org.junit.Before;
 import org.junit.Test;
-import wiki.xsx.core.pdf.component.doc.XEasyPdfDocumentSplitter;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
