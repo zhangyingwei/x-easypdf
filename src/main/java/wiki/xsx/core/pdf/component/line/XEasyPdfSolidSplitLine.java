@@ -7,6 +7,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -115,6 +116,16 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfComponent {
      */
     public XEasyPdfSolidSplitLine setLineWidth(float lineWidth) {
         this.param.setLineWidth(lineWidth);
+        return this;
+    }
+
+    /**
+     * 设置分割线颜色
+     * @param color 分割线颜色
+     * @return 返回实线分割线组件
+     */
+    public XEasyPdfSolidSplitLine setColor(Color color) {
+        this.param.setColor(color);
         return this;
     }
 

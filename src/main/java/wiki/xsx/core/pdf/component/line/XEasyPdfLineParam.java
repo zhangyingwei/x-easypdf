@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -80,6 +81,10 @@ class XEasyPdfLineParam {
      * 线型
      */
     private XEasyPdfLineCapStyle style = XEasyPdfLineCapStyle.NORMAL;
+    /**
+     * 颜色（默认黑色）
+     */
+    private Color color = Color.BLACK;
     /**
      * 是否完成绘制
      */

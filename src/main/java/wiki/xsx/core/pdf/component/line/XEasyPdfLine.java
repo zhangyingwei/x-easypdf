@@ -7,6 +7,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -79,6 +80,16 @@ public class XEasyPdfLine implements XEasyPdfComponent {
      */
     public XEasyPdfLine setLineWidth(float lineWidth) {
         this.param.setLineWidth(lineWidth);
+        return this;
+    }
+
+    /**
+     * 设置线条颜色
+     * @param color 线条颜色
+     * @return 返回线条组件
+     */
+    public XEasyPdfLine setColor(Color color) {
+        this.param.setColor(color);
         return this;
     }
 
@@ -165,10 +176,14 @@ public class XEasyPdfLine implements XEasyPdfComponent {
         PDPageContentStream contentStream = this.initStream(document, page);
         // 设置定位
         contentStream.moveTo(this.param.getBeginX(), this.param.getBeginY());
+        // 设置颜色
+        contentStream.setStrokingColor(this.param.getColor());
         // 连线
         contentStream.lineTo(this.param.getEndX(), this.param.getEndY());
         // 结束
         contentStream.stroke();
+        // 重置为黑色
+        contentStream.setStrokingColor(Color.BLACK);
         // 关闭内容流
         contentStream.close();
         // 完成标记
