@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ class XEasyPdfTableParam {
     /**
      * 上边距
      */
-    private Float marginTop = 0F;
+    private Float marginTop = 5F;
     /**
      * 下边距
      */
@@ -80,12 +81,13 @@ class XEasyPdfTableParam {
     /**
      * 初始化
      * @param document pdf文档
+     * @param page pdf页面
      */
-    void init(XEasyPdfDocument document) {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
+            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
     }
 }

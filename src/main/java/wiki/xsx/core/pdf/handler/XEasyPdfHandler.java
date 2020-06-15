@@ -20,6 +20,7 @@ import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * pdf助手
@@ -334,6 +335,15 @@ public class XEasyPdfHandler {
             public static XEasyPdfRow build(XEasyPdfCell...cells) {
                 return new XEasyPdfRow(cells);
             }
+
+            /**
+             * 构建表格行
+             * @param cellList 单元格列表
+             * @return 返回pdf表格行组件
+             */
+            public static XEasyPdfRow build(List<XEasyPdfCell> cellList) {
+                return new XEasyPdfRow(cellList);
+            }
         }
 
         /**
@@ -343,6 +353,15 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfTable build(XEasyPdfRow ...rows) {
             return new XEasyPdfTable(rows);
+        }
+
+        /**
+         * 构建表格
+         * @param rowList 表格行列表
+         * @return 返回pdf表格组件
+         */
+        public static XEasyPdfTable build(List<XEasyPdfRow> rowList) {
+            return new XEasyPdfTable(rowList);
         }
     }
 

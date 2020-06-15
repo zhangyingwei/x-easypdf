@@ -469,7 +469,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         stream.beginText();
         // 设置文本定位
         stream.newLineAtOffset(
-                (this.param.getMaxWidth()  - this.param.getMarginLeft() - this.param.getMarginRight() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000)) / 2,
+                this.param.getBeginX() + (this.param.getMaxWidth()  - this.param.getMarginLeft() - this.param.getMarginRight() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000)) / 2,
                 this.param.getBeginY()
         );
         // 文本输入

@@ -43,11 +43,29 @@ public class XEasyPdfRow {
 
     /**
      * 有参构造
+     * @param cellList pdf单元格列表
+     */
+    public XEasyPdfRow(List<XEasyPdfCell> cellList) {
+        this.param.getCells().addAll(cellList);
+    }
+
+    /**
+     * 添加单元格
      * @param cells pdf单元格
      * @return 返回表格行组件
      */
     public XEasyPdfRow addCell(XEasyPdfCell...cells) {
         Collections.addAll(this.param.getCells(), cells);
+        return this;
+    }
+
+    /**
+     * 添加单元格
+     * @param cellList pdf单元格列表
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow addCell(List<XEasyPdfCell> cellList) {
+        this.param.getCells().addAll(cellList);
         return this;
     }
 

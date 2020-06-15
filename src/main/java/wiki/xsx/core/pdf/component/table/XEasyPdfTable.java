@@ -43,12 +43,30 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
+     * 有参构造
+     * @param rowList pdf表格行列表
+     */
+    public XEasyPdfTable(List<XEasyPdfRow> rowList) {
+        this.param.getRows().addAll(rowList);
+    }
+
+    /**
      * 添加表格行
      * @param rows pdf表格行
      * @return 返回表格组件
      */
     public XEasyPdfTable addRow(XEasyPdfRow...rows) {
         Collections.addAll(this.param.getRows(), rows);
+        return this;
+    }
+
+    /**
+     * 添加表格行
+     * @param rowList pdf表格行列表
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
+        this.param.getRows().addAll(rowList);
         return this;
     }
 
@@ -174,7 +192,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         // 关闭页面自动重置定位
         page.disablePosition();
         // 初始化参数
-        this.param.init(document);
+        this.param.init(document, page);
         // 如果X轴起始坐标不为空，则设置页面X轴起始坐标
         if (this.param.getBeginX()!=null) {
             // 设置页面X轴起始坐标 = 表格X轴起始坐标
@@ -182,8 +200,11 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         }
         // 如果Y轴起始坐标不为空，则设置页面Y轴起始坐标
         if (this.param.getBeginY()!=null) {
-            // 设置页面Y轴起始坐标 = 表格Y轴起始坐标
-            page.getParam().setPageY(this.param.getBeginY());
+            // 设置页面Y轴起始坐标 = 表格Y轴起始坐标 - 上边距
+            page.getParam().setPageY(this.param.getBeginY() - this.param.getMarginTop());
+        }else {
+            // 设置页面Y轴起始坐标 = 页面Y轴起始坐标 - 上边距
+            page.getParam().setPageY(page.getParam().getPageY() - this.param.getMarginTop());
         }
         // 获取表格行列表
         List<XEasyPdfRow> rows = this.param.getRows();
