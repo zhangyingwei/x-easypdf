@@ -1,17 +1,20 @@
-package wiki.xsx.core.pdf.component.mark;
+package wiki.xsx.core.pdf.component.table;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * pdf页面水印参数
+ * pdf表格组件参数
  * @author xsx
- * @date 2020/3/25
+ * @date 2020/6/6
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
@@ -27,7 +30,32 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfWatermarkParam {
+class XEasyPdfTableParam {
+
+    /**
+     * 行列表
+     */
+    private List<XEasyPdfRow> rows = new ArrayList<>(10);
+    /**
+     * 左边距
+     */
+    private Float marginLeft = 0F;
+    /**
+     * 上边距
+     */
+    private Float marginTop = 5F;
+    /**
+     * 下边距
+     */
+    private Float marginBottom = 0F;
+    /**
+     * X轴起始坐标
+     */
+    private Float beginX;
+    /**
+     * Y轴起始坐标
+     */
+    private Float beginY;
     /**
      * 字体路径
      */
@@ -39,52 +67,27 @@ class XEasyPdfWatermarkParam {
     /**
      * 字体大小
      */
-    private Float fontSize = 50F;
+    private float fontSize = 12F;
     /**
-     * 透明度（值越小越透明，0.0-1.0）
+     * 文本样式（居左、居中、居右）
+     * 默认居左
      */
-    private Float alpha = 0.1F;
+    private XEasyPdfTextStyle style = XEasyPdfTextStyle.LEFT;
     /**
-     * 文本弧度
+     * 是否完成绘制
      */
-    private Double radians = 120D;
-    /**
-     * 水印文本
-     */
-    private String text;
-    /**
-     * 文本间距
-     */
-    private Float wordSpace;
+    private boolean isDraw = false;
 
     /**
      * 初始化
      * @param document pdf文档
      * @param page pdf页面
-     * @return 返回pdfBox扩展图形对象
      */
-    PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
             this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
-        // 如果水印文本未初始化，则进行初始化
-        if (this.text==null) {
-            // 初始化水印文本
-            this.text = "XEasyPdf";
-        }
-        // 如果文本间距未初始化，则进行初始化
-        if (this.wordSpace==null) {
-            // 初始化文本间距，默认文本间距 = 文本长度 * 字体大小
-            this.wordSpace = this.text.length() * this.fontSize;
-        }
-        // 初始化pdfBox扩展图形对象
-        PDExtendedGraphicsState state = new PDExtendedGraphicsState();
-        // 设置文本透明度
-        state.setNonStrokingAlphaConstant(this.alpha);
-        // 设置透明度标记
-        state.setAlphaSourceFlag(true);
-        return state;
     }
 }

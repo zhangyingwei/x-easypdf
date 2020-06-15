@@ -1,14 +1,13 @@
 package wiki.xsx.core.pdf.component.line;
 
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * 虚线分割线组件
@@ -32,7 +31,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
     /**
      * 分割线参数
      */
-    private XEasyPdfLineParam param = new XEasyPdfLineParam();
+    private final XEasyPdfLineParam param = new XEasyPdfLineParam();
     /**
      * 点线长度
      */
@@ -43,11 +42,28 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
     private Float lineSpace = 10F;
 
     /**
-     * 有参构造
-     * @param fontPath 字体路径
+     * 无参构造
      */
-    public XEasyPdfDottedSplitLine(String fontPath) {
+    public XEasyPdfDottedSplitLine() {}
+
+    /**
+     * 设置字体路径
+     * @param fontPath 字体路径
+     * @return 返回虚线分割线组件
+     */
+    public XEasyPdfDottedSplitLine setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
+        return this;
+    }
+
+    /**
+     * 设置字体
+     * @param font pdfBox字体
+     * @return 返回虚线分割线组件
+     */
+    public XEasyPdfDottedSplitLine setFont(PDFont font) {
+        this.param.setFont(font);
+        return this;
     }
 
     /**
@@ -111,12 +127,22 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
     }
 
     /**
-     * 设置分割线线型
-     * @param XEasyPdfLineCapStyle 分割线线型
+     * 设置分割线颜色
+     * @param color 分割线颜色
      * @return 返回虚线分割线组件
      */
-    public XEasyPdfDottedSplitLine setLineCapStyle(XEasyPdfLineCapStyle XEasyPdfLineCapStyle) {
-        this.param.setStyle(XEasyPdfLineCapStyle);
+    public XEasyPdfDottedSplitLine setColor(Color color) {
+        this.param.setColor(color);
+        return this;
+    }
+
+    /**
+     * 设置分割线线型
+     * @param lineCapStyle 分割线线型
+     * @return 返回虚线分割线组件
+     */
+    public XEasyPdfDottedSplitLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle) {
+        this.param.setStyle(lineCapStyle);
         return this;
     }
 
@@ -141,8 +167,38 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
     }
 
     /**
-     * 画图
-     *
+     * 设置坐标
+     * @param beginX X轴起始坐标
+     * @param beginY Y轴起始坐标
+     * @return 返回虚线分割线组件
+     */
+    @Override
+    public XEasyPdfDottedSplitLine setPosition(float beginX, float beginY) {
+        return this;
+    }
+
+    /**
+     * 设置宽度
+     * @param width 宽度
+     * @return 返回虚线分割线组件
+     */
+    @Override
+    public XEasyPdfDottedSplitLine setWidth(float width) {
+        return this;
+    }
+
+    /**
+     * 设置高度
+     * @param height 高度
+     * @return 返回虚线分割线组件
+     */
+    @Override
+    public XEasyPdfDottedSplitLine setHeight(float height) {
+        return this;
+    }
+
+    /**
+     * 绘制
      * @param document pdf文档
      * @param page     pdf页面
      * @throws IOException IO异常
@@ -177,51 +233,54 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
             // 执行画图
             xpdfLine.draw(document, page);
         }
-        // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
-        page.setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
+        if (page.getParam().isAllowResetPosition()) {
+            // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
+            page.getParam().setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
+        }
+        // 完成标记
+        this.param.setDraw(true);
+    }
+
+    /**
+     * 是否完成绘制
+     * @return 返回布尔值，完成为true，未完成为false
+     */
+    @Override
+    public boolean isDraw() {
+        return this.param.isDraw();
     }
 
     /**
      * 初始化参数
+     * @param document pdf文档
      * @param page pdf页面
      */
     private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 分页检查
+        this.param.checkPage(document, page);
         // 定义线宽
         float lineWidth = this.param.getLineWidth() / 2;
-        // 如果当前页面Y轴坐标不为空，则进行分页判断
-        if (page.getPageY()!=null) {
-            // 分页判断，如果（当前Y轴坐标-上边距-线宽）小于下边距，则进行分页
-            if (page.getPageY() - this.param.getMarginTop() - lineWidth <= this.param.getMarginBottom()) {
-                // 添加新的pdfBox页面
-                page.getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
-                // 设置当前Y轴坐标为空，表示新页面
-                page.setPageY(null);
-            }
-        }
         // 设置X轴Y轴起始结束坐标
         this.param.setBeginX(
-                // 左边距
-                this.param.getMarginLeft()
+            // 左边距
+            this.param.getMarginLeft()
         ).setBeginY(
-                // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getPageY()==null?
-                // pdfBox最新页面高度 - 上边距 - 线宽
-                page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() - lineWidth:
-                // 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getPageY() - this.param.getMarginTop() - lineWidth
+            // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
+            page.getParam().getPageY()==null?
+            // pdfBox最新页面高度 - 上边距 - 线宽
+            page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() - lineWidth:
+            // 当前页面Y轴坐标 - 上边距 - 线宽
+            page.getParam().getPageY() - this.param.getMarginTop() - lineWidth
         ).setEndX(
-                // X轴起始坐标 + 点线长度
-                this.param.getBeginX() + this.lineLength
+            // X轴起始坐标 + 点线长度
+            this.param.getBeginX() + this.lineLength
         ).setEndY(
-                // Y轴起始坐标
-                this.param.getBeginY()
+            // Y轴起始坐标
+            this.param.getBeginY()
         );
-        // 设置字体
-        this.param.setFont(
-                PDType0Font.load(
-                        document.getDocument(),
-                        Files.newInputStream(Paths.get(this.param.getFontPath()))
-                )
-        );
+        if (this.param.getFont()==null) {
+            // 设置字体
+            this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
+        }
     }
 }

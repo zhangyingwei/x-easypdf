@@ -4,14 +4,13 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.TextUtil;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
+import java.awt.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -33,7 +32,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfTextParam {
+class XEasyPdfTextParam {
     /**
      * 字体路径
      */
@@ -94,6 +93,22 @@ public class XEasyPdfTextParam {
      * 页面Y轴起始坐标
      */
     private Float beginY;
+    /**
+     * 字体颜色
+     */
+    private Color fontColor = Color.BLACK;
+    /**
+     * 是否换行
+     */
+    private boolean isNewLine = true;
+    /**
+     * 是否分页检查
+     */
+    private boolean checkPage = true;
+    /**
+     * 是否完成绘制
+     */
+    private boolean isDraw = false;
 
     /**
      * 初始化
@@ -101,7 +116,7 @@ public class XEasyPdfTextParam {
      * @param page pdf页面
      * @throws IOException IO异常
      */
-    public void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果最大宽度未初始化，则进行初始化
@@ -117,10 +132,7 @@ public class XEasyPdfTextParam {
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体
-            this.font = PDType0Font.load(
-                    document.getDocument(),
-                    Files.newInputStream(Paths.get(this.fontPath))
-            );
+            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
         // 如果页面X轴起始坐标未初始化，则进行初始化
         if (this.beginX==null) {
@@ -130,16 +142,16 @@ public class XEasyPdfTextParam {
         // 如果页面Y轴起始坐标未初始化，则进行初始化
         if (this.beginY==null) {
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
-            this.beginY = page.getPageY() == null?
+            this.beginY = page.getParam().getPageY() == null?
                     // 最大高度 - 上边距 - 字体大小 - 行距
                     this.maxHeight - this.marginTop - this.fontSize - this.leading :
                     // 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
-                    page.getPageY() - this.marginTop - this.fontSize - this.leading;
+                    page.getParam().getPageY() - this.marginTop - this.fontSize - this.leading;
         }
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {
             // 初始化待添加文本列表
-            this.splitTextList =  TextUtil.splitLines(
+            this.splitTextList =  XEasyPdfTextUtil.splitLines(
                     // 待输入文本
                     this.text,
                     // 行宽度 = 页面宽度 - 左边距 - 右边距

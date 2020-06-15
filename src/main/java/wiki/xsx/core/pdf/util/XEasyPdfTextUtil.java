@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 文本工具类
+ * 文本工具
  * @author xsx
  * @date 2020/3/24
  * @since 1.8
@@ -23,7 +23,7 @@ import java.util.List;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class TextUtil {
+public class XEasyPdfTextUtil {
     /**
      * 拆分文本段落（换行）
      * @param text 待输入文本
@@ -51,7 +51,7 @@ public class TextUtil {
         count = Math.min(count, text.length());
         // 定义开始索引
         int beginIndex = 0;
-        // 循环文本
+        // 遍历文本
         for (int i = count, len = text.length(); i <= len; i++) {
             // 截取临时文本
             tempText = text.substring(beginIndex, i);

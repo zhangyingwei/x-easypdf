@@ -2,13 +2,12 @@ package wiki.xsx.core.pdf.component.image;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.ImageUtil;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -33,7 +32,7 @@ import java.io.IOException;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfImageParam {
+class XEasyPdfImageParam {
     /**
      * 待添加图片
      */
@@ -86,6 +85,10 @@ public class XEasyPdfImageParam {
      * 页面Y轴起始坐标
      */
     private Float beginY;
+    /**
+     * 是否完成绘制
+     */
+    private boolean isDraw = false;
 
     /**
      * 初始化
@@ -94,7 +97,7 @@ public class XEasyPdfImageParam {
      * @return 返回pdfBox图片对象
      * @throws IOException IO异常
      */
-    public PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 如果图片为空，则抛出异常信息
         if (this.image==null) {
             throw new FileNotFoundException("the image can not be found");
@@ -108,7 +111,7 @@ public class XEasyPdfImageParam {
         // 创建pdfBox图片
         PDImageXObject pdImage = PDImageXObject.createFromByteArray(
                 document.getDocument(),
-                ImageUtil.toBytes(this.image, this.imageType),
+                XEasyPdfImageUtil.toBytes(this.image, this.imageType),
                 this.imageType
         );
         // 获取图片宽度
@@ -139,7 +142,7 @@ public class XEasyPdfImageParam {
                     // pdfBox文档
                     document.getDocument(),
                     // 图片缩放
-                    ImageUtil.scale(
+                    XEasyPdfImageUtil.scale(
                             this.image,
                             this.width,
                             this.height,
@@ -147,39 +150,48 @@ public class XEasyPdfImageParam {
                     )
             );
         }
+        // 如果页面Y轴起始坐标为空，则初始化
+        if (this.beginY==null) {
+            // 定义页脚高度
+            float footerHeight = 0F;
+            // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+                // 初始化页脚高度
+                footerHeight = page.getParam().getFooter().getHeight();
+            }
+            // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
+            if (page.getParam().getPageY()!=null) {
+                // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
+                this.beginY = page.getParam().getPageY() - this.marginTop - this.height;
+                // 如果页面Y轴起始坐标-页脚高度小于等于下边距，则分页
+                if (this.beginY - footerHeight <= this.marginBottom) {
+                    // 添加新页面
+                    page.addNewPage(document, rectangle);
+                    // 重置页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
+                    this.beginY = page.getParam().getPageY()==null?
+                            pageHeight - this.marginTop - this.height:
+                            page.getParam().getPageY() - this.marginTop - this.height;
+                }
+                // 如果pdfBox最新页面当前Y轴坐标为空，则为新页面
+            }else {
+                // 页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
+                this.beginY = pageHeight - this.marginTop - this.height;
+            }
+        }
         // 如果页面X轴起始坐标为空，则初始化
         if (this.beginX==null) {
             // 如果图片样式为空，或图片样式为居中，则初始化页面X轴起始坐标为居中
-            if (this.style==null || this.style== XEasyPdfImageStyle.CENTER) {
+            if (this.style==null || this.style == XEasyPdfImageStyle.CENTER) {
                 // 页面X轴起始坐标 = （页面宽度 - 自定义宽度）/ 2
                 this.beginX = (pageWidth - this.width) / 2;
             // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
-            }else if (this.style== XEasyPdfImageStyle.LEFT) {
+            }else if (this.style == XEasyPdfImageStyle.LEFT) {
                 // 页面X轴起始坐标 = 左边距
                 this.beginX = this.marginLeft;
             // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
             }else {
                 // 页面X轴起始坐标 = 页面宽度 - 自定义宽度 - 右边距
                 this.beginX = pageWidth - this.width - this.marginRight;
-            }
-        }
-        // 如果页面Y轴起始坐标为空，则初始化
-        if (this.beginY==null) {
-            // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
-            if (page.getPageY()!=null) {
-                // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
-                this.beginY = page.getPageY() - this.marginTop - this.height;
-                // 如果页面Y轴起始坐标小于等于下边距，则分页
-                if (this.beginY <= this.marginBottom) {
-                    // 添加新页面
-                    page.getPageList().add(new PDPage(page.getLastPage().getMediaBox()));
-                    // 重置页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
-                    this.beginY = pageHeight - this.marginTop - this.height;
-                }
-            // 如果pdfBox最新页面当前Y轴坐标为空，则为新页面
-            }else {
-                // 页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
-                this.beginY = pageHeight - this.marginTop - this.height;
             }
         }
         return pdImage;

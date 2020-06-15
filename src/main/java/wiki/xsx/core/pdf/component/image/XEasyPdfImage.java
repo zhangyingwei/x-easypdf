@@ -5,8 +5,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.ImageUtil;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.*;
 import java.io.File;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 图片组件
+ * pdf图片组件
  * @author xsx
  * @date 2020/3/30
  * @since 1.8
@@ -33,9 +33,9 @@ import java.io.InputStream;
 public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
-     * 图片参数
+     * pdf图片参数
      */
-    private XEasyPdfImageParam param = new XEasyPdfImageParam();
+    private final XEasyPdfImageParam param = new XEasyPdfImageParam();
 
     /**
      * 有参构造
@@ -43,17 +43,17 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage(File imageFile) {
-        this.param.setImageType(ImageUtil.parseType(imageFile)).setImage(ImageUtil.read(imageFile));
+        this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile)).setImage(XEasyPdfImageUtil.read(imageFile));
     }
 
     /**
      * 有参构造
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型
+     * @param imageType 待添加图片类型（扩展名）
      */
     @SneakyThrows
     public XEasyPdfImage(InputStream imageStream, String imageType) {
-        this.param.setImageType(imageType).setImage(ImageUtil.read(imageStream));
+        this.param.setImageType(imageType).setImage(XEasyPdfImageUtil.read(imageStream));
     }
 
     /**
@@ -64,8 +64,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage(File imageFile, int width, int height) {
-        this.param.setImageType(ImageUtil.parseType(imageFile))
-                .setImage(ImageUtil.read(imageFile))
+        this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile))
+                .setImage(XEasyPdfImageUtil.read(imageFile))
                 .setWidth(width)
                 .setHeight(height);
     }
@@ -73,53 +73,16 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     /**
      * 有参构造
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型
+     * @param imageType 待添加图片类型（扩展名）
      * @param width 图片宽度
      * @param height 图片高度
      */
     @SneakyThrows
     public XEasyPdfImage(InputStream imageStream, String imageType, int width, int height) {
         this.param.setImageType(imageType)
-                .setImage(ImageUtil.read(imageStream))
+                .setImage(XEasyPdfImageUtil.read(imageStream))
                 .setWidth(width)
                 .setHeight(height);
-    }
-
-    /**
-     * 有参构造
-     * @param imageFile 待添加图片
-     * @param width 图片宽度
-     * @param height 图片高度
-     * @param beginX X轴起始坐标
-     * @param beginY Y轴起始坐标
-     */
-    @SneakyThrows
-    public XEasyPdfImage(File imageFile, int width, int height, float beginX, float beginY) {
-        this.param.setImageType(ImageUtil.parseType(imageFile))
-                .setImage(ImageUtil.read(imageFile))
-                .setWidth(width)
-                .setHeight(height)
-                .setBeginX(beginX)
-                .setBeginY(beginY);
-    }
-
-    /**
-     * 有参构造
-     * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型
-     * @param width 图片宽度
-     * @param height 图片高度
-     * @param beginX X轴起始坐标
-     * @param beginY Y轴起始坐标
-     */
-    @SneakyThrows
-    public XEasyPdfImage(InputStream imageStream, String imageType, int width, int height, float beginX, float beginY) {
-        this.param.setImageType(imageType)
-                .setImage(ImageUtil.read(imageStream))
-                .setWidth(width)
-                .setHeight(height)
-                .setBeginX(beginX)
-                .setBeginY(beginY);
     }
 
     /**
@@ -129,7 +92,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage setImage(File imageFile) {
-        this.param.setImageType(ImageUtil.parseType(imageFile)).setImage(ImageUtil.read(imageFile));
+        this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile)).setImage(XEasyPdfImageUtil.read(imageFile));
         return this;
     }
 
@@ -141,27 +104,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @SneakyThrows
     public XEasyPdfImage setImage(InputStream imageStream, String imageType) {
-        this.param.setImageType(imageType).setImage(ImageUtil.read(imageStream));
-        return this;
-    }
-
-    /**
-     * 设置图片宽度
-     * @param width 图片宽度
-     * @return 返回图片组件
-     */
-    public XEasyPdfImage setWidth(int width) {
-        this.param.setWidth(width);
-        return this;
-    }
-
-    /**
-     * 设置图片高度
-     * @param height 图片高度
-     * @return 返回图片组件
-     */
-    public XEasyPdfImage setHeight(int height) {
-        this.param.setHeight(height);
+        this.param.setImageType(imageType).setImage(XEasyPdfImageUtil.read(imageStream));
         return this;
     }
 
@@ -226,22 +169,11 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 设置定位
-     * @param x 当前页面X轴坐标
-     * @param y 当前页面Y轴坐标
-     * @return 返回图片组件
-     */
-    public XEasyPdfImage setPosition(float x, float y) {
-        this.param.setBeginX(x).setBeginY(y);
-        return this;
-    }
-
-    /**
      * 设置图片缩放模式（默认、快速、质量）
      * @param scaleMode 缩放模式
      * @return 返回图片组件
      */
-    public XEasyPdfImage setScaleMode(XEasyPdfImage.ScaleMode scaleMode) {
+    public XEasyPdfImage setScaleMode(ScaleMode scaleMode) {
         this.param.setScaleMode(scaleMode);
         return this;
     }
@@ -257,8 +189,41 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 画图
-     *
+     * 设置定位
+     * @param beginX 当前页面X轴坐标
+     * @param beginY 当前页面Y轴坐标
+     * @return 返回图片组件
+     */
+    @Override
+    public XEasyPdfImage setPosition(float beginX, float beginY) {
+        this.param.setBeginX(beginX).setBeginY(beginY);
+        return this;
+    }
+
+    /**
+     * 设置宽度
+     * @param width 宽度
+     * @return 返回图片组件
+     */
+    @Override
+    public XEasyPdfImage setWidth(float width) {
+        this.param.setWidth((int) width);
+        return this;
+    }
+
+    /**
+     * 设置高度
+     * @param height 高度
+     * @return 返回图片组件
+     */
+    @Override
+    public XEasyPdfImage setHeight(float height) {
+        this.param.setHeight((int) height);
+        return this;
+    }
+
+    /**
+     * 绘制
      * @param document pdf文档
      * @param page     pdf页面
      * @throws IOException IO异常
@@ -279,10 +244,22 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY());
         // 关闭内容流
         contentStream.close();
-        // 设置文档页面X轴坐标
-        page.setPageX(this.param.getBeginX());
-        // 设置文档页面Y轴坐标
-        page.setPageY(this.param.getBeginY());
+        // 如果允许页面重置定位，则进行重置
+        if (page.getParam().isAllowResetPosition()) {
+            // 设置文档页面X轴坐标Y轴坐标
+            page.getParam().setPageX(this.param.getBeginX()).setPageY(this.param.getBeginY());
+        }
+        // 完成标记
+        this.param.setDraw(true);
+    }
+
+    /**
+     * 是否完成绘制
+     * @return 返回布尔值，完成为true，未完成为false
+     */
+    @Override
+    public boolean isDraw() {
+        return this.param.isDraw();
     }
 
     /**
@@ -305,7 +282,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         /**
          * 缩放模式
          */
-        private int mode;
+        private final int mode;
 
         /**
          * 有参构造

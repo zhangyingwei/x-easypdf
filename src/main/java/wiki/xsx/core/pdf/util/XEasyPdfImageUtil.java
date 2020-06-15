@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 图片工具类
+ * 图片工具
  * @author xsx
  * @date 2020/3/30
  * @since 1.8
@@ -25,7 +25,7 @@ import java.io.InputStream;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class ImageUtil {
+public class XEasyPdfImageUtil {
 
     /**
      * 读取文件
@@ -101,10 +101,9 @@ public class ImageUtil {
         if (sourceImage==null) {
             throw new IllegalArgumentException("Image can not be null");
         }
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(sourceImage, imageType, outputStream);
-        byte[] bytes = outputStream.toByteArray();
-        outputStream.close();
-        return bytes;
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(sourceImage, imageType, outputStream);
+            return outputStream.toByteArray();
+        }
     }
 }

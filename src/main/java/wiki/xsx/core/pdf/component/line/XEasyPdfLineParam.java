@@ -3,6 +3,11 @@ package wiki.xsx.core.pdf.component.line;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * pdf线条参数
@@ -23,7 +28,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfLineParam {
+class XEasyPdfLineParam {
     /**
      * 字体路径
      */
@@ -76,4 +81,38 @@ public class XEasyPdfLineParam {
      * 线型
      */
     private XEasyPdfLineCapStyle style = XEasyPdfLineCapStyle.NORMAL;
+    /**
+     * 颜色（默认黑色）
+     */
+    private Color color = Color.BLACK;
+    /**
+     * 是否完成绘制
+     */
+    private boolean isDraw = false;
+
+    /**
+     * 分页检查
+     * @param document pdf文档
+     * @param page pdf页面
+     * @throws IOException IO异常
+     */
+    void checkPage(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 定义页脚高度
+        float footerHeight = 0F;
+        // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+        if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+            // 初始化页脚高度
+            footerHeight = page.getParam().getFooter().getHeight();
+        }
+        // 如果当前页面Y轴坐标不为空，则进行分页判断
+        if (page.getParam().getPageY()!=null) {
+            // 定义线宽
+            float lineWidth = this.lineWidth / 2;
+            // 分页判断，如果（当前Y轴坐标-上边距-线宽-页脚高度）小于下边距，则进行分页
+            if (page.getParam().getPageY() - this.marginTop - lineWidth - footerHeight <= this.marginBottom) {
+                // 添加新页面
+                page.addNewPage(document, page.getLastPage().getMediaBox());
+            }
+        }
+    }
 }
