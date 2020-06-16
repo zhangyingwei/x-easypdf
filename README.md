@@ -2,7 +2,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v1.1.0-brightgreen" />
+    <img src="https://img.shields.io/badge/Current%20Version-v2.0.0-brightgreen" />
     <img src="https://img.shields.io/:License-MulanPSL-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
         <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
@@ -10,10 +10,10 @@
 </p>
 
 #### 更新说明
-第一个版本已基本完善，后面将会以版本进行迭代更新，master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本1.1.0
+master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.0.0
 
 #### 介绍
-x-easypdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单易用，仅需一行代码，便可完成pdf的创建
+x-easypdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单易用，仅需一行代码，便可完成pdf的操作
 
 #### API文档
 https://apidoc.gitee.com/xsxgit/x-easypdf
@@ -22,7 +22,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 1. 轻量级
 > 仅添加pdfbox相关依赖，无其他任何依赖
 2. 简单易用
-> 仅需一行代码，便可完成pdf的创建
+> 仅需一行代码，便可完成pdf的操作
 2. 自动换行分页
 > 文本超出单行显示时，即可自动换行；内容超出单页显示时，即可自动分页
 3. 模板填充
@@ -39,14 +39,18 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 1. document(文档)：PDF文档
 2. page(页面)：若干个页面组成PDF文档
 3. watermark(水印)：每个页面可设置页面级别的独立水印，也可设置文档级别的全局水印，优先级为：页面级别>文档级别
-3. component(组件)：核心，每个页面由若干个组件构成
+4. header(页眉)：每个页面可设置页面级别的独立页眉，也可设置文档级别的全局页眉，优先级为：页面级别>文档级别
+5. footer(页脚)：每个页面可设置页面级别的独立页脚，也可设置文档级别的全局页脚，优先级为：页面级别>文档级别
+6. component(组件)：核心，每个页面由若干个组件构成
 > text(文本组件)：已提供，文本写入组件
 
 > line(线条组件)：已提供，线条写入组件
 
 > image(图片组件)：已提供，图片写入组件
 
-> table(表格组件)：未提供，将在下一个版本提供，表格写入组件，cell(单元格)->row(行)->table(表格)
+> table(表格组件)：已提供，表格写入组件，cell(单元格)->row(行)->table(表格)
+
+> rect(方形组件)：已提供，方形写入组件
 
 > 后续将添加更多其他方便实用的组件。。。
 
