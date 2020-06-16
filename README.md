@@ -54,6 +54,15 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 
 > 后续将添加更多其他方便实用的组件。。。
 
+#### maven坐标
+```maven
+<dependency>
+    <groupId>wiki.xsx</groupId>
+    <artifactId>x-easypdf</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
 #### 安装教程
 ```cmd
 mvn clean install
@@ -68,41 +77,37 @@ public class XpdfTest {
         final String fontPath = "C:\\Windows\\Fonts\\STSONG.TTF";
         final String outputPath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
         // 创建pdf
-        PdfUtil.create(
+        XEasyPdfUtil.create(
                 outputPath
                 // 构建页面
-                ,PdfUtil.Page.build(
+                ,XEasyPdfHandler.Page.build(
                         // 构建文本
-                        PdfUtil.Text.build(
-                                fontPath,
+                        XEasyPdfHandler.Text.build(
                                 "Hello World(这是一个DEMO)"
                         ).setStyle(XEasyPdfTextStyle.CENTER).setFontSize(20F).setMargin(10F)
                         // 构建文本
-                        ,PdfUtil.Text.build(
-                                fontPath,
+                        ,XEasyPdfHandler.Text.build(
                                 "        这里是正文（这是一个基于PDFBOX开源工具，专注于PDF文件导出功能，" +
                                         "以组件形式进行拼接，简单、方便，上手及其容易，" +
                                         "目前有TEXT(文本)、LINE(分割线)等组件，后续还会补充更多组件，满足各种需求）。"
                         ).setStyle(XEasyPdfTextStyle.LEFT).setFontSize(14F).setMargin(10F)
                         // 构建文本
-                        ,PdfUtil.Text.build(
-                                fontPath,
+                        ,XEasyPdfHandler.Text.build(
                                 "-- by xsx"
                         ).setStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
                         // 构建文本
-                        ,PdfUtil.Text.build(
-                                fontPath,
+                        ,XEasyPdfHandler.Text.build(
                                 "2020.03.12"
                         ).setStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
                         // 构建实线分割线
-                        ,PdfUtil.SplitLine.SolidLine.build(fontPath).setMarginTop(10F)
+                        ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F)
                         // 构建虚线分割线
-                        ,PdfUtil.SplitLine.DottedLine.build(fontPath).setLineLength(10F).setMarginTop(10F).setLineWidth(10F)
+                        ,XEasyPdfHandler.SplitLine.DottedLine.build().setLineLength(10F).setMarginTop(10F).setLineWidth(10F)
                         // 构建实线分割线
-                        ,PdfUtil.SplitLine.SolidLine.build(fontPath).setMarginTop(10F)
+                        ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F)
                         // 构建文本
-                        ,PdfUtil.Text.build(fontPath, "完结").setStyle(XEasyPdfTextStyle.CENTER)
-                )
+                        ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
+                ).setFontPath(fontPath)
         );
     }
 }
