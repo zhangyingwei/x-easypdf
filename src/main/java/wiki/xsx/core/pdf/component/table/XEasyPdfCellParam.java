@@ -164,6 +164,8 @@ class XEasyPdfCellParam {
                 this.splitTextList = XEasyPdfTextUtil.splitLines(this.text, (this.width - this.textMarginLeft - this.textMarginRight), this.font, this.fontSize);
             }
         }else {
+            // 初始化待添加文本列表
+            this.splitTextList = new ArrayList<>(0);
             // 如果宽度为空，则初始化宽度与高度为0F
             if (this.width==null) {
                 this.width = 0F;

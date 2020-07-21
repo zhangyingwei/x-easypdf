@@ -204,7 +204,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
             page.getParam().setPageY(this.param.getBeginY() - this.param.getMarginTop());
         }else {
             // 设置页面Y轴起始坐标 = 页面Y轴起始坐标 - 上边距
-            page.getParam().setPageY(page.getParam().getPageY() - this.param.getMarginTop());
+            page.getParam().setPageY(page.getParam().getPageY()==null?page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() : page.getParam().getPageY() - this.param.getMarginTop());
         }
         // 获取表格行列表
         List<XEasyPdfRow> rows = this.param.getRows();

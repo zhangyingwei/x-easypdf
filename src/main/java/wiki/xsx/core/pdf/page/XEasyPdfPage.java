@@ -300,7 +300,7 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document) throws IOException {
-        return this.build(document, PDRectangle.A4);
+        return this.build(document, this.param.getPageSize());
     }
 
     /**
