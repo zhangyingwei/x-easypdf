@@ -234,7 +234,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         PDImageXObject pdImage = this.param.init(document, page);
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
-                document.getDocument(),
+                document.getTarget(),
                 page.getLastPage(),
                 PDPageContentStream.AppendMode.APPEND,
                 true,

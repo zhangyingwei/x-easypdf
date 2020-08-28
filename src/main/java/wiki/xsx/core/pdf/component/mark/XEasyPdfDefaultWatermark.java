@@ -166,7 +166,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         float beginY = 0;
         // 初始化内容流
         PDPageContentStream cs = new PDPageContentStream(
-                document.getDocument(),
+                document.getTarget(),
                 pdPage,
                 PDPageContentStream.AppendMode.APPEND,
                 true,

@@ -431,7 +431,7 @@ public class XEasyPdfUtil {
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
-        new XEasyPdfDocument(templateSourcePath).fillAcroForm(fontPath, formMap).save(outputStream);
+        new XEasyPdfDocument(templateSourcePath).setFontPath(fontPath).fillForm(formMap).save(outputStream);
     }
 
     /**
@@ -469,7 +469,7 @@ public class XEasyPdfUtil {
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
-        new XEasyPdfDocument(templateSourcePath).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(outputStream);
+        new XEasyPdfDocument(templateSourcePath).setFontPath(fontPath).setGlobalWatermark(globalWatermark).fillForm(formMap).save(outputStream);
     }
 
     /**
@@ -503,7 +503,7 @@ public class XEasyPdfUtil {
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
-        new XEasyPdfDocument(templateInputStream).fillAcroForm(fontPath, formMap).save(outputStream);
+        new XEasyPdfDocument(templateInputStream).setFontPath(fontPath).fillForm(formMap).save(outputStream);
     }
 
     /**
@@ -541,7 +541,7 @@ public class XEasyPdfUtil {
             String fontPath,
             Map<String, String> formMap
     ) throws IOException {
-        new XEasyPdfDocument(templateInputStream).setGlobalWatermark(globalWatermark).fillAcroForm(fontPath, formMap).save(outputStream);
+        new XEasyPdfDocument(templateInputStream).setFontPath(fontPath).setGlobalWatermark(globalWatermark).fillForm(formMap).save(outputStream);
     }
 
     /*------------------- fill end -------------------*/

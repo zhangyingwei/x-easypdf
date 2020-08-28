@@ -14,6 +14,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * pdf文档参数
@@ -46,11 +47,19 @@ class XEasyPdfDocumentParam {
     /**
      * pdfBox文档
      */
-    private PDDocument document;
+    private PDDocument source;
+    /**
+     * pdfBox文档（目标文档）
+     */
+    private PDDocument target;
     /**
      * pdf页面列表
      */
-    private List<XEasyPdfPage> pageList = new ArrayList<>(10);
+    private List<XEasyPdfPage> pageList = new ArrayList<>(256);
+    /**
+     * pdf表单字典
+     */
+    private Map<String, String> formMap;
     /**
      * 全局页面水印
      */
@@ -71,10 +80,6 @@ class XEasyPdfDocumentParam {
      * pdf文档信息
      */
     private XEasyPdfDocumentInfo documentInfo;
-    /**
-     * pdfBox文档（目标文档）
-     */
-    private PDDocument target;
     /**
      * 是否重置
      */
@@ -98,8 +103,8 @@ class XEasyPdfDocumentParam {
      * 初始化文档信息
      */
     void initInfo(XEasyPdfDocument document) {
-        if (this.document!=null) {
-            PDDocumentInformation documentInformation = this.document.getDocumentInformation();
+        if (this.source!=null) {
+            PDDocumentInformation documentInformation = this.source.getDocumentInformation();
             this.documentInfo = new XEasyPdfDocumentInfo(document)
                     .setTitle(documentInformation.getTitle())
                     .setAuthor(documentInformation.getAuthor())

@@ -351,7 +351,7 @@ public class XEasyPdfPage {
                 PDRectangle rectangle = lastPage.getMediaBox();
                 // 新建内容流
                 PDPageContentStream contentStream = new PDPageContentStream(
-                        document.getDocument(),
+                        document.getTarget(),
                         lastPage,
                         PDPageContentStream.AppendMode.APPEND,
                         true,

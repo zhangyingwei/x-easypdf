@@ -110,7 +110,7 @@ class XEasyPdfImageParam {
         float pageHeight = rectangle.getHeight();
         // 创建pdfBox图片
         PDImageXObject pdImage = PDImageXObject.createFromByteArray(
-                document.getDocument(),
+                document.getTarget(),
                 XEasyPdfImageUtil.toBytes(this.image, this.imageType),
                 this.imageType
         );
@@ -140,7 +140,7 @@ class XEasyPdfImageParam {
             // 重新创建pdfBox图片
             pdImage = LosslessFactory.createFromImage(
                     // pdfBox文档
-                    document.getDocument(),
+                    document.getTarget(),
                     // 图片缩放
                     XEasyPdfImageUtil.scale(
                             this.image,

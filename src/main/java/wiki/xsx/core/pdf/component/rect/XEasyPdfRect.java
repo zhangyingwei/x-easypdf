@@ -197,7 +197,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
         this.param.init(document, page);
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
-                document.getDocument(),
+                document.getTarget(),
                 page.getLastPage(),
                 PDPageContentStream.AppendMode.APPEND,
                 true,

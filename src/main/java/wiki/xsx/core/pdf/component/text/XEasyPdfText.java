@@ -263,7 +263,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     private PDPageContentStream initPageContentStream(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
-                document.getDocument(),
+                document.getTarget(),
                 page.getLastPage(),
                 PDPageContentStream.AppendMode.APPEND,
                 true,

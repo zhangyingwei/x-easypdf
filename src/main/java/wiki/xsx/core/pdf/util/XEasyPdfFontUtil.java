@@ -51,7 +51,7 @@ public class XEasyPdfFontUtil {
      */
     public static PDFont loadFont(XEasyPdfDocument document, InputStream inputStream) {
         try {
-            return PDType0Font.load(document.getDocument(), inputStream);
+            return PDType0Font.load(document.getTarget(), inputStream);
         }catch (Exception e) {
             throw new RuntimeException("the font can not be loaded");
         }
@@ -65,7 +65,7 @@ public class XEasyPdfFontUtil {
      */
     public static PDFont loadFont(XEasyPdfDocument document, String fontPath) {
         try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
-            return PDType0Font.load(document.getDocument(), inputStream);
+            return PDType0Font.load(document.getTarget(), inputStream);
         }catch (Exception e) {
             throw new RuntimeException("the font can not be loaded");
         }
@@ -101,7 +101,7 @@ public class XEasyPdfFontUtil {
         PDFont font = null;
         if (inputStream!=null) {
             try  {
-                font = PDType0Font.load(document.getDocument(), inputStream);
+                font = PDType0Font.load(document.getTarget(), inputStream);
             }catch (IOException ex) {
                 throw new RuntimeException("the font can not be loaded");
             }
