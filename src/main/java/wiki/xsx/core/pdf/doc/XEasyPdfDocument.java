@@ -76,6 +76,7 @@ public class XEasyPdfDocument {
                 // 添加pdfBox页面
                 this.param.getPageList().add(new XEasyPdfPage(page));
             }
+            // 初始化文档信息
             this.param.initInfo(this);
         }
     }
@@ -95,6 +96,7 @@ public class XEasyPdfDocument {
             // 添加pdfBox页面
             this.param.getPageList().add(new XEasyPdfPage(page));
         }
+        // 初始化文档信息
         this.param.initInfo(this);
     }
 
@@ -115,6 +117,7 @@ public class XEasyPdfDocument {
     public XEasyPdfDocumentPermission setPermission() {
         // 设置重置
         this.param.setReset(true);
+        // 返回文档权限
         return this.param.getPermission() != null ? this.param.getPermission() : new XEasyPdfDocumentPermission(this);
     }
 
@@ -124,6 +127,9 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setBackgroundColor(Color backgroundColor) {
+        // 设置重置
+        this.param.setReset(true);
+        // 设置文档背景色
         this.param.setBackgroundColor(backgroundColor);
         return this;
     }
@@ -144,6 +150,7 @@ public class XEasyPdfDocument {
     public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
         // 设置重置
         this.param.setReset(true);
+        // 设置文档水印
         this.param.setGlobalWatermark(globalWatermark);
         return this;
     }
@@ -164,6 +171,7 @@ public class XEasyPdfDocument {
     public XEasyPdfDocument setGlobalHeader(XEasyPdfHeader globalHeader) {
         // 设置重置
         this.param.setReset(true);
+        // 设置文档页眉
         this.param.setGlobalHeader(globalHeader);
         return this;
     }
@@ -184,6 +192,7 @@ public class XEasyPdfDocument {
     public XEasyPdfDocument setGlobalFooter(XEasyPdfFooter globalFooter) {
         // 设置重置
         this.param.setReset(true);
+        // 设置文档页脚
         this.param.setGlobalFooter(globalFooter);
         return this;
     }
@@ -204,19 +213,8 @@ public class XEasyPdfDocument {
     public XEasyPdfDocument setFontPath(String fontPath) {
         // 设置重置
         this.param.setReset(true);
+        // 设置字体路径
         this.param.setFontPath(fontPath);
-        return this;
-    }
-
-    /**
-     * 设置字体
-     * @param font pdfBox字体
-     * @return 返回pdf文档
-     */
-    public XEasyPdfDocument setFont(PDFont font) {
-        // 设置重置
-        this.param.setReset(true);
-        this.param.setFont(font);
         return this;
     }
 
@@ -548,10 +546,14 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public void close() throws IOException {
+        // 如果源文档不为空，则关闭
         if (this.param.getSource()!=null) {
+            // 如果任务文档不为空，则关闭
             if (this.param.getTarget()!=null) {
+                // 关闭任务文档
                 this.param.getTarget().close();
             }
+            // 关闭源文档
             this.param.getSource().close();
         }
     }
@@ -684,7 +686,6 @@ public class XEasyPdfDocument {
 
     /**
      * 填充表单
-     * @return 返回pdf文档
      * @throws IOException IO异常
      */
     private void fillForm() throws IOException {
