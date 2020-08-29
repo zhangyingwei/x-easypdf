@@ -59,15 +59,15 @@ public class XEasyPdfPageParam {
     /**
      * 包含的pdfBox页面列表
      */
-    private List<PDPage> pageList = new ArrayList<>(10);
+    private List<PDPage> pageList = new ArrayList<>(256);
     /**
      * 新增的pdfBox页面列表
      */
-    private List<PDPage> newPageList = new ArrayList<>(10);
+    private List<PDPage> newPageList = new ArrayList<>(256);
     /**
      * pdf组件列表
      */
-    private List<XEasyPdfComponent> componentList = new ArrayList<>(10);
+    private List<XEasyPdfComponent> componentList = new ArrayList<>(128);
     /**
      * 页面水印
      */

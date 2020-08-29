@@ -606,7 +606,6 @@ public class XEasyPdfDocument {
 
     /**
      * 初始化任务文档
-     * @return 返回pdfBox文档
      * @throws IOException IO异常
      */
     private void initTarget() throws IOException {
