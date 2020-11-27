@@ -18,14 +18,14 @@ import java.util.List;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * x-easypdf is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- * http://license.coscl.org.cn/MulanPSL
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v1 for more details.
+ * x-easypdf is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  * </p>
  */
 public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
@@ -156,14 +156,10 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @throws IOException IO异常
      */
     private void doDraw(XEasyPdfDocument document, PDPage pdPage, PDExtendedGraphicsState state) throws IOException {
-        // 定义循环添加次数
-        int count = 11;
-        // 定义字体颜色
-        float color = 0.3F;
-        // 定义X轴起始坐标
-        float beginX = 0;
-        // 定义Y轴起始坐标
-        float beginY = 0;
+        // 获取页面高度
+        float height = pdPage.getMediaBox().getHeight();
+        // 获取页面宽度
+        float width = pdPage.getMediaBox().getWidth();
         // 初始化内容流
         PDPageContentStream cs = new PDPageContentStream(
                 document.getTarget(),
@@ -175,23 +171,28 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 设置图形参数
         cs.setGraphicsStateParameters(state);
         // 设置字体颜色
-        cs.setNonStrokingColor(color);
-        // Y轴循环添加水印
-        for (int i = 0; i < count; i++) {
-            // 写入文本
-            this.writeText(cs, beginX, beginY);
-            // X轴循环添加水印
-            for (int j = 0; j < count; j++) {
-                // 递增X轴坐标，X轴起始坐标 = X轴起始坐标 + 文本间距
-                beginX += this.param.getWordSpace();
-                // 写入文本
-                this.writeText(cs, beginX, beginY);
-            }
-            // 重置X轴起始坐标
-            beginX = 0;
-            // Y轴起始坐标递增，Y轴起始坐标 = Y轴起始坐标 + 文本间距
-            beginY += this.param.getWordSpace();
+        cs.setNonStrokingColor(0.3F);
+        // 设置行间距
+        cs.setLeading(this.param.getLeading());
+        // 开启文本输入
+        cs.beginText();
+        // 设置字体
+        cs.setFont(this.param.getFont(), this.param.getFontSize());
+        // 设置文本坐标
+        cs.newLineAtOffset(0F, height);
+        // 设置文本弧度
+        cs.setTextMatrix(Matrix.getRotateInstance(this.param.getRadians(), -width, height / 2));
+        // 获取行数
+        int lineCount = (int) (height / (this.param.getFontSize() + this.param.getLeading())) * 2;
+        // 循环写入文本
+        for (int i = 0; i < lineCount; i++) {
+            // 文本输入
+            cs.showText(this.param.getText());
+            // 换行
+            cs.newLine();
         }
+        // 结束文本写入
+        cs.endText();
         // 关闭内容流
         cs.close();
     }

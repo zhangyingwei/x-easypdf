@@ -1,7 +1,9 @@
 package wiki.xsx.core.pdf.doc;
 
 import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.cos.COSString;
 import org.apache.pdfbox.multipdf.Splitter;
+import org.apache.pdfbox.pdfparser.PDFStreamParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
@@ -9,6 +11,8 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.printing.PDFPrintable;
+import org.apache.pdfbox.printing.Scaling;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
@@ -18,8 +22,13 @@ import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
 import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
 
 import javax.imageio.ImageIO;
+import javax.print.PrintServiceLookup;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.print.Book;
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -35,14 +44,14 @@ import java.util.Set;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * x-easypdf is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- * http://license.coscl.org.cn/MulanPSL
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v1 for more details.
+ * x-easypdf is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  * </p>
  */
 public class XEasyPdfDocument {
@@ -512,6 +521,74 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 提取文本
+     * @param list 文本列表（数据接收）
+     * @param regex 正则表达式
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocument extractText(List<String> list, String regex) throws IOException {
+        return this.extractText(list, regex, (int[]) null);
+    }
+
+    /**
+     * 提取文本
+     * @param list 文本列表（数据接收）
+     * @param regex 正则表达式
+     * @param pageIndex 页面索引
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocument extractText(List<String> list, String regex, int ...pageIndex) throws IOException {
+        new XEasyPdfDocumentExtractor(this.createTarget()).extract(list, regex, pageIndex);
+        return this;
+    }
+
+    /**
+     * 提取文本
+     * @param data 文本字典（数据接收）
+     * @param regionArea 提取区域
+     * @param pageIndex 页面索引
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocument extractText(Map<String, String> data, Map<String, Rectangle> regionArea, int ...pageIndex) throws IOException {
+        new XEasyPdfDocumentExtractor(this.createTarget()).addRegion(regionArea).extractRegions(data, pageIndex);
+        return this;
+    }
+
+    public XEasyPdfDocument replace(int startPage, int endPage, List<String> list) throws IOException {
+        PDDocument target = this.createTarget();
+        startPage = Math.max(startPage, 0);
+        endPage = Math.min(endPage, target.getNumberOfPages());
+        for (int i = startPage; i < endPage; i++) {
+            PDPage page = target.getPage(i);
+            PDFont font = page.getResources().getFont(page.getResources().getFontNames().iterator().next());
+            PDFStreamParser parser = new PDFStreamParser(page);
+            Object token = parser.parseNextToken();
+            while (token!=null) {
+                if (token instanceof COSString) {
+                    this.processOperator(font, (COSString) token, list);
+                }
+                token = parser.parseNextToken();
+            }
+        }
+        return this;
+    }
+
+    protected void processOperator(PDFont font, COSString previous, List<String> list) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        try(InputStream in = new ByteArrayInputStream(previous.getBytes())) {
+            while (in.available() > 0) {
+                builder.append(font.toUnicode(font.readCode(in)));
+            }
+            String text = builder.toString();
+//            System.out.println("text = " + text);
+            list.add(text);
+        }
+    }
+
+    /**
      * 保存（页面构建）
      * @param outputPath 文件输出路径
      * @throws IOException IO异常
@@ -529,13 +606,57 @@ public class XEasyPdfDocument {
      */
     public void save(OutputStream outputStream) throws IOException {
         try  {
-            // 定义任务文档
+            // 创建任务文档
             PDDocument target = this.createTarget();
             // 设置文档信息及保护策略
             this.setInfoAndPolicy(target);
             // 保存任务文档
             target.save(outputStream);
         } finally {
+            // 关闭pdfBox文档
+            this.close();
+        }
+    }
+
+    /**
+     * 打印文档（默认打印机）
+     * @param count 打印数量
+     * @throws IOException IO异常
+     * @throws PrinterException 打印异常
+     */
+    public void print(int count) throws IOException, PrinterException {
+        this.print(count, XEasyPdfPrintStyle.PORTRAIT, Scaling.ACTUAL_SIZE);
+    }
+
+    /**
+     * 打印文档（默认打印机）
+     * @param count 打印数量
+     * @param style 打印形式（横向、纵向、反向横向）
+     * @param scaling 缩放比例
+     * @throws IOException IO异常
+     * @throws PrinterException 打印异常
+     */
+    public void print(int count, XEasyPdfPrintStyle style, Scaling scaling) throws IOException, PrinterException {
+        try {
+            // 获取打印任务
+            PrinterJob job = PrinterJob.getPrinterJob();
+            // 设置打印服务（默认）
+            job.setPrintService(PrintServiceLookup.lookupDefaultPrintService());
+            // 创建打印任务
+            Book book = new Book();
+            // 创建页面格式对象
+            PageFormat pageFormat = new PageFormat();
+            // 设置打印方向
+            pageFormat.setOrientation(style.getOrientation());
+            // 设置打印纸张
+            book.append(new PDFPrintable(this.createTarget(), scaling), pageFormat);
+            // 设置打印任务
+            job.setPageable(book);
+            // 设置打印数量
+            job.setCopies(count);
+            // 执行打印
+            job.print();
+        }finally {
             // 关闭pdfBox文档
             this.close();
         }

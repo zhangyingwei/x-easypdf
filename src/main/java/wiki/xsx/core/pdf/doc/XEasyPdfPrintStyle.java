@@ -1,9 +1,9 @@
-package wiki.xsx.core.pdf.component.image;
+package wiki.xsx.core.pdf.doc;
 
 /**
- * 图片样式枚举
+ * pdf打印形式
  * @author xsx
- * @date 2020/3/30
+ * @date 2020/11/14
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
@@ -17,17 +17,37 @@ package wiki.xsx.core.pdf.component.image;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public enum XEasyPdfImageStyle {
+public enum XEasyPdfPrintStyle {
     /**
-     * 居中
+     * 横向
      */
-    CENTER,
+    LANDSCAPE(0),
     /**
-     * 居左
+     * 纵向
      */
-    LEFT,
+    PORTRAIT(1),
     /**
-     * 居右
+     * 反向横向
      */
-    RIGHT;
+    REVERSE_LANDSCAPE(2);
+    /**
+     * 方向
+     */
+    private final int orientation;
+
+    /**
+     * 有参构造
+     * @param orientation 方向
+     */
+    XEasyPdfPrintStyle(int orientation) {
+        this.orientation = orientation;
+    }
+
+    /**
+     * 获取方向
+     * @return 返回方向
+     */
+    public int getOrientation() {
+        return orientation;
+    }
 }

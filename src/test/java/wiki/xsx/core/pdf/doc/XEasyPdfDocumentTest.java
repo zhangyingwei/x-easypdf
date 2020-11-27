@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Calendar;
+import java.util.List;
+import java.util.*;
 
 /**
  * @author xsx
@@ -19,14 +20,14 @@ import java.util.Calendar;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * x-easypdf is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- * http://license.coscl.org.cn/MulanPSL
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v1 for more details.
+ * x-easypdf is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  * </p>
  */
 public class XEasyPdfDocumentTest {
@@ -55,14 +56,15 @@ public class XEasyPdfDocumentTest {
                         XEasyPdfHandler.Text.build("你好，世界！").setStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("我是第二页").setStyle(XEasyPdfTextStyle.RIGHT)
                 )
-        ).setFontPath(FONT_PATH).setBackgroundColor(Color.YELLOW).save(filePath);
+        ).setFontPath(FONT_PATH).save(filePath);
         System.out.println("finish");
     }
 
     @Test
     public void testSave() throws IOException {
+        String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
         String filePath = OUTPUT_PATH + "doc1.pdf";
-        XEasyPdfHandler.Document.build().addPage(
+        XEasyPdfHandler.Document.build(sourcePath).addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("你好，世界！")
@@ -185,7 +187,7 @@ public class XEasyPdfDocumentTest {
 
     @Test
     public void testSplit1() throws IOException {
-        String sourcePath = OUTPUT_PATH + "merge.pdf";
+        String sourcePath = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH;
         XEasyPdfHandler.Document.build(sourcePath).split(filePath).close();
         System.out.println("finish");
@@ -193,11 +195,11 @@ public class XEasyPdfDocumentTest {
 
     @Test
     public void testSplit2() throws IOException {
-        String sourcePath = OUTPUT_PATH + "merge.pdf";
+        String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
         String filePath = OUTPUT_PATH;
         XEasyPdfHandler.Document.build(sourcePath).split(
                 filePath,
-                XEasyPdfDocumentSplitter.build().addDocument(0, 1, 2).addDocument(2, 1, 0),
+                XEasyPdfDocumentSplitter.build().addDocument(1).addDocument(1, 0),
                 "mypdf"
         ).close();
         System.out.println("finish");
@@ -214,5 +216,48 @@ public class XEasyPdfDocumentTest {
             ).close();
         }
         System.out.println("finish");
+    }
+
+    @Test
+    public void testStripText() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = OUTPUT_PATH + "testText.pdf";
+        List<String> list = new ArrayList<>(1024);
+        XEasyPdfHandler.Document.build(sourcePath).extractText(list, "《.*》").close();
+        for (String s : list) {
+            System.out.println("s = " + s);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testStripText2() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = OUTPUT_PATH + "testText.pdf";
+        Map<String, String> data = new HashMap<>();
+        Map<String, Rectangle> regionArea = new HashMap<>();
+        regionArea.put("test1", new Rectangle(600,2000));
+        XEasyPdfHandler.Document.build(sourcePath).extractText(data, regionArea, 0).close();
+        System.out.println("data = " + data);
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testReplaceText() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
+        String filePath = OUTPUT_PATH + "replace.pdf";
+        List<String> list = new ArrayList<>(10);
+        XEasyPdfHandler.Document.build(sourcePath).setFontPath(FONT_PATH).replace(0, 2, list).close();
+        System.out.println("list = " + list.size());
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void test() throws IOException {
+        testStripText();
     }
 }

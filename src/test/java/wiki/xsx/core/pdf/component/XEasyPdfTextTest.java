@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.component;
 
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
@@ -14,19 +15,19 @@ import java.io.IOException;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * x-easypdf is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- * http://license.coscl.org.cn/MulanPSL
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v1 for more details.
+ * x-easypdf is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  * </p>
  */
 public class XEasyPdfTextTest {
 
-    private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
+    private static final String FONT_PATH = "C:\\Windows\\Fonts\\ARIALUNI.TTF";
     private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\text\\";
 
     @Before
@@ -42,6 +43,7 @@ public class XEasyPdfTextTest {
         String filePath = OUTPUT_PATH + "testText.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
+                        PDRectangle.A1,
                         XEasyPdfHandler.Text.build(20F, "贵阳（贵州省省会）").setStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build(
                                 "    贵阳，简称“筑”，别称林城、筑城，是贵州省省会，国务院批复确定的中国西南地区重要的区域创新中心、中国重要的生态休闲度假旅游城市 [1]  。" +
@@ -68,7 +70,7 @@ public class XEasyPdfTextTest {
                 ).setHeader(
                         XEasyPdfHandler.Header.build("页眉")
                 ).setWatermark(
-                        XEasyPdfHandler.Watermark.build("贵阳")
+                        XEasyPdfHandler.Watermark.build("贵阳").setFontSize(150F)
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build("页脚")

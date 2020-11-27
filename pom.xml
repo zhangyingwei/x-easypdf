@@ -21,8 +21,8 @@
 
     <licenses>
         <license>
-            <name>Mulan Permissive Software License，Version 1 (Mulan PSL v1)</name>
-            <url>https://license.coscl.org.cn/MulanPSL</url>
+            <name>Mulan Permissive Software License，Version 2 (Mulan PSL v2)</name>
+            <url>http://license.coscl.org.cn/MulanPSL2</url>
             <distribution>repo</distribution>
         </license>
     </licenses>

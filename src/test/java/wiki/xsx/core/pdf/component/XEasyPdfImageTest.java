@@ -4,10 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author xsx
@@ -15,14 +18,14 @@ import java.io.IOException;
  * @since 1.8
  * <p>
  * Copyright (c) 2020 xsx All Rights Reserved.
- * x-easypdf is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- * http://license.coscl.org.cn/MulanPSL
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v1 for more details.
+ * x-easypdf is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  * </p>
  */
 public class XEasyPdfImageTest {
@@ -86,6 +89,24 @@ public class XEasyPdfImageTest {
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build("this is my footer")
         ).save(filePath);
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testImage3() throws IOException {
+        String sourcePath = OUTPUT_PATH + "testImage2.pdf";
+        String filePath = OUTPUT_PATH + "testImage3.pdf";
+        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        XEasyPdfDocument document = XEasyPdfHandler.Document.build(sourcePath).setFontPath(FONT_PATH);
+        List<XEasyPdfPage> pageList = document.getPageList();
+        XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
+        xEasyPdfPage.addComponent(
+                XEasyPdfHandler.Image.build(new File(imagePath))
+                        .setHeight(50)
+                        .setWidth(50)
+                        .setPosition(20F, 50F)
+        );
+        document.save(filePath);
         System.out.println("finish");
     }
 }
