@@ -14,7 +14,6 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,6 +89,8 @@ public class XEasyPdfPage {
         this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
         // 设置背景颜色
         this.setLastPageBackgroundColor(document);
+        // 绘制背景图片
+        this.drawBackgroundImage(document);
         // 重置页面X轴Y轴起始坐标
         this.getParam().setPageX(null).setPageY(null);
         // 绘制页眉与页脚
@@ -203,8 +204,21 @@ public class XEasyPdfPage {
      * @return 返回pdfBox最新页面
      */
     public PDPage getLastPage() {
+        // 定义pdfbox页面
+        PDPage pdPage;
+        // 获取新页面列表
         List<PDPage> pageList = this.param.getNewPageList();
-        return pageList.isEmpty() ? null : pageList.get(pageList.size()-1);
+        // 如果新页面列表为空，则取旧页面列表，否则取新页面列表中最新一个页面
+        if (pageList.isEmpty()) {
+            // 获取旧页面列表
+            List<PDPage> oldPageList = this.param.getPageList();
+            // 初始化pdfbox页面，如果旧页面列表为空，则初始化为null，否则初始化为最新一个页面
+            pdPage = oldPageList.isEmpty() ? null : oldPageList.get(oldPageList.size()-1);
+        }else {
+            // 初始化pdfbox页面为新页面列表中最新一个页面
+            pdPage = pageList.get(pageList.size()-1);
+        }
+        return pdPage;
     }
 
     /**
@@ -311,20 +325,18 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
-        if (this.param.getPageList().size()==0) {
-            // 设置新的页面列表
-            this.param.setNewPageList(new ArrayList<>(10));
+        if (this.param.getPageList().isEmpty()) {
             // 添加新页面
             this.addNewPage(document, pageSize);
-            // 获取pdf组件列表
-            List<XEasyPdfComponent> componentList = this.param.getComponentList();
-            // 如果组件列表不为空，且数量大于0，则进行组件绘制
-            if (componentList!=null&&componentList.size()>0) {
-                // 遍历组件列表
-                for (XEasyPdfComponent component : componentList) {
-                    // 组件绘制
-                    component.draw(document, this);
-                }
+        }
+        // 获取pdf组件列表
+        List<XEasyPdfComponent> componentList = this.param.getComponentList();
+        // 如果组件列表数量大于0，则进行组件绘制
+        if (!componentList.isEmpty()) {
+            // 遍历组件列表
+            for (XEasyPdfComponent component : componentList) {
+                // 组件绘制
+                component.draw(document, this);
             }
         }
         // 绘制水印
@@ -375,6 +387,31 @@ public class XEasyPdfPage {
             }
         }
         return this;
+    }
+
+    /**
+     * 绘制背景图片
+     * @param document pdf文档
+     * @throws IOException IO异常
+     */
+    private void drawBackgroundImage(XEasyPdfDocument document) throws IOException {
+        // 如果当前pdf页面允许添加页面背景图片，则进行页面背景图片绘制
+        if (this.param.isAllowBackgroundImage()) {
+            // 如果页面背景图片未初始化，则设置全局页面背景图片
+            if (this.param.getBackgroundImage()==null) {
+                // 设置全局页面背景图片
+                this.param.setBackgroundImage(document.getGlobalBackgroundImage());
+            }
+            // 如果页面背景图片不为空，则进行绘制
+            if (this.param.getBackgroundImage()!=null) {
+                // 关闭页面自动重置定位
+                this.disablePosition();
+                // 绘制页面背景图片
+                this.param.getBackgroundImage().draw(document, this);
+                // 开启页面自动重置定位
+                this.enablePosition();
+            }
+        }
     }
 
     /**

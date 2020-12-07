@@ -31,22 +31,31 @@ import java.util.regex.Pattern;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-final class XEasyPdfDocumentExtractor extends PDFTextStripper {
+public class XEasyPdfDocumentExtractor {
 
-    private final PDDocument document;
-    private final XEasyPdfDocumentRectangleExtractor rectangleExtractor = new XEasyPdfDocumentRectangleExtractor();
+
+    private PDDocument document;
+    private XEasyPdfDocumentRectangleExtractor rectangleExtractor;
+
+    private XEasyPdfDocumentExtractor() {}
+
+    public static XEasyPdfDocumentExtractor build() {
+        return new XEasyPdfDocumentExtractor();
+    }
+
+    public XEasyPdfDocumentExtractor addRegion(Map<String, Rectangle> regionArea) {
+        rectangleExtractor.addRegion(regionArea);
+        return this;
+    }
 
     /**
-     * 构造方法
+     * 初始化方法
      * @param document pdfbox文档
      * @throws IOException IO异常
      */
-    public XEasyPdfDocumentExtractor(PDDocument document) throws IOException {
+    XEasyPdfDocumentExtractor init(PDDocument document) throws IOException {
         this.document = document;
-    }
-
-    XEasyPdfDocumentExtractor addRegion(Map<String, Rectangle> regionArea) {
-        this.rectangleExtractor.addRegion(regionArea);
+        this.rectangleExtractor = new XEasyPdfDocumentRectangleExtractor();
         return this;
     }
 
@@ -69,27 +78,44 @@ final class XEasyPdfDocumentExtractor extends PDFTextStripper {
      * @param pageIndex 页面索引
      */
     void extract(List<String> textList, String regex, int ...pageIndex) throws IOException {
-        if (pageIndex!=null&&pageIndex.length>0) {
-            for (int index : pageIndex) {
-                this.setStartPage(index);
-                this.setEndPage(index);
-                this.extract(textList, regex);
-            }
-        }else {
-            this.extract(textList, regex);
-        }
+        new XEasyPdfDocumentSimpleExtractor(this.document).extract(textList, regex, pageIndex);
     }
 
+    private class XEasyPdfDocumentSimpleExtractor extends PDFTextStripper {
+        private PDDocument document;
 
-    private void extract(List<String> textList, String regex) throws IOException {
-        String text = this.getText(this.document);
-        if (regex!=null&&regex.trim().length()>0) {
-            Matcher matcher = Pattern.compile(regex).matcher(text);
-            while (matcher.find()) {
-                textList.add(matcher.group());
+        public XEasyPdfDocumentSimpleExtractor(PDDocument document) throws IOException {
+            this.document = document;
+        }
+
+        /**
+         * 提取文本
+         * @param textList 文本列表
+         * @param regex 正则表达式
+         * @param pageIndex 页面索引
+         */
+        void extract(List<String> textList, String regex, int ...pageIndex) throws IOException {
+            if (pageIndex!=null&&pageIndex.length>0) {
+                for (int index : pageIndex) {
+                    this.setStartPage(index);
+                    this.setEndPage(index);
+                    this.extract(textList, regex);
+                }
+            }else {
+                this.extract(textList, regex);
             }
-        }else {
-            textList.add(text);
+        }
+
+        private void extract(List<String> textList, String regex) throws IOException {
+            String text = this.getText(this.document);
+            if (regex!=null&&regex.trim().length()>0) {
+                Matcher matcher = Pattern.compile(regex).matcher(text);
+                while (matcher.find()) {
+                    textList.add(matcher.group());
+                }
+            }else {
+                textList.add(text);
+            }
         }
     }
 

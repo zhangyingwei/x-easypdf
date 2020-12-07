@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.doc;
 
 import org.junit.Before;
 import org.junit.Test;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
@@ -117,7 +118,34 @@ public class XEasyPdfDocumentTest {
                 XEasyPdfHandler.Page.build(),
                 XEasyPdfHandler.Page.build()
         ).setFontPath(FONT_PATH)
-                .setBackgroundColor(Color.YELLOW)
+                .setGlobalBackgroundColor(Color.YELLOW)
+                .save(filePath);
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testSetBackgroundImage() throws IOException {
+        String filePath = OUTPUT_PATH + "backgroundImage.pdf";
+        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build().addComponent(
+                        XEasyPdfHandler.Text.build(
+                                "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                                        + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!" + "hello world!!!"
+                        ).setFontSize(20)
+                ).setBackgroundColor(Color.WHITE),
+                XEasyPdfHandler.Page.build()
+        ).setFontPath(FONT_PATH)
+                .setGlobalBackgroundColor(new Color(0,191,255))
+                .setGlobalBackgroundImage(XEasyPdfHandler.Image.build(new File(imagePath)).setStyle(XEasyPdfImageStyle.CENTER).setMarginTop(300))
                 .save(filePath);
         System.out.println("finish");
     }
@@ -133,7 +161,7 @@ public class XEasyPdfDocumentTest {
                 100,
                 XEasyPdfHandler.Page.build(XEasyPdfHandler.Text.build("插入尾页"))
         ).setFontPath(FONT_PATH)
-                .setBackgroundColor(Color.BLUE)
+                .setGlobalBackgroundColor(new Color(0,191,255))
                 .save(filePath);
         System.out.println("finish");
     }
@@ -238,7 +266,7 @@ public class XEasyPdfDocumentTest {
         Map<String, String> data = new HashMap<>();
         Map<String, Rectangle> regionArea = new HashMap<>();
         regionArea.put("test1", new Rectangle(600,2000));
-        XEasyPdfHandler.Document.build(sourcePath).extractText(data, regionArea, 0).close();
+        XEasyPdfHandler.Document.build(sourcePath).extractText(data, XEasyPdfDocumentExtractor.build().addRegion(regionArea), 0).close();
         System.out.println("data = " + data);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");

@@ -16,6 +16,7 @@ import org.apache.pdfbox.printing.Scaling;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
@@ -32,10 +33,8 @@ import java.awt.print.PrinterJob;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * pdf文档
@@ -135,7 +134,7 @@ public class XEasyPdfDocument {
      * @param backgroundColor 背景色
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument setBackgroundColor(Color backgroundColor) {
+    public XEasyPdfDocument setGlobalBackgroundColor(Color backgroundColor) {
         // 设置重置
         this.param.setReset(true);
         // 设置文档背景色
@@ -147,8 +146,29 @@ public class XEasyPdfDocument {
      * 获取文档背景色
      * @return 返回文档背景色
      */
-    public Color getBackgroundColor() {
+    public Color getGlobalBackgroundColor() {
         return this.param.getBackgroundColor();
+    }
+
+    /**
+     * 设置文档背景图片（每个页面都将添加背景图片）
+     * @param globalBackgroundImage 背景图片
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setGlobalBackgroundImage(XEasyPdfImage globalBackgroundImage) {
+        // 设置重置
+        this.param.setReset(true);
+        // 设置背景图片
+        this.param.setGlobalBackgroundImage(globalBackgroundImage);
+        return this;
+    }
+
+    /**
+     * 获取文档背景图片
+     * @return 返回pdf图片
+     */
+    public XEasyPdfImage getGlobalBackgroundImage() {
+        return this.param.getGlobalBackgroundImage();
     }
 
     /**
@@ -290,6 +310,24 @@ public class XEasyPdfDocument {
         }else {
             // 添加页面
             this.addPage(pages);
+        }
+        return this;
+    }
+
+    /**
+     * 移除pdf页面
+     * @param pageIndex 页面索引
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument removePage(int ...pageIndex) {
+        // 设置重置
+        this.param.setReset(true);
+        // 获取pdf页面列表
+        List<XEasyPdfPage> pageList = this.param.getPageList();
+        // 遍历页面索引
+        for (int index : pageIndex) {
+            // 移除页面
+            pageList.remove(index);
         }
         return this;
     }
@@ -540,20 +578,20 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument extractText(List<String> list, String regex, int ...pageIndex) throws IOException {
-        new XEasyPdfDocumentExtractor(this.createTarget()).extract(list, regex, pageIndex);
+        XEasyPdfDocumentExtractor.build().init(this.createTarget()).extract(list, regex, pageIndex);
         return this;
     }
 
     /**
      * 提取文本
      * @param data 文本字典（数据接收）
-     * @param regionArea 提取区域
+     * @param extractor pdf提取器
      * @param pageIndex 页面索引
      * @return 返回pdf文档
      * @throws IOException IO异常
      */
-    public XEasyPdfDocument extractText(Map<String, String> data, Map<String, Rectangle> regionArea, int ...pageIndex) throws IOException {
-        new XEasyPdfDocumentExtractor(this.createTarget()).addRegion(regionArea).extractRegions(data, pageIndex);
+    public XEasyPdfDocument extractText(Map<String, String> data, XEasyPdfDocumentExtractor extractor, int ...pageIndex) throws IOException {
+        extractor.init(this.createTarget()).extractRegions(data, pageIndex);
         return this;
     }
 

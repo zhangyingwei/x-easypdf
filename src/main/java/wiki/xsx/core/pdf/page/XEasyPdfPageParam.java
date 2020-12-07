@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -73,6 +74,10 @@ public class XEasyPdfPageParam {
      */
     private XEasyPdfWatermark watermark;
     /**
+     * 页面背景图片
+     */
+    private XEasyPdfImage backgroundImage;
+    /**
      * 页眉
      */
     private XEasyPdfHeader header;
@@ -84,6 +89,10 @@ public class XEasyPdfPageParam {
      * 是否允许添加水印
      */
     private boolean allowWatermark = true;
+    /**
+     * 是否允许添加背景图片
+     */
+    private boolean allowBackgroundImage = true;
     /**
      * 是否允许添加页眉
      */
@@ -111,7 +120,7 @@ public class XEasyPdfPageParam {
             this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
         if (this.backgroundColor==null) {
-            this.backgroundColor = document.getBackgroundColor();
+            this.backgroundColor = document.getGlobalBackgroundColor();
         }
     }
 }

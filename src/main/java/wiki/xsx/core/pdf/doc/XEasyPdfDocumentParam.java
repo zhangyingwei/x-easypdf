@@ -7,6 +7,7 @@ import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -60,6 +61,10 @@ class XEasyPdfDocumentParam {
      * pdf表单字典
      */
     private Map<String, String> formMap;
+    /**
+     * 全局页面背景图片
+     */
+    private XEasyPdfImage globalBackgroundImage;
     /**
      * 全局页面水印
      */

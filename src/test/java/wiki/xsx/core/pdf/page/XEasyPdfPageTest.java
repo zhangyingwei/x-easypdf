@@ -3,10 +3,12 @@ package wiki.xsx.core.pdf.page;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author xsx
@@ -50,5 +52,20 @@ public class XEasyPdfPageTest {
         System.out.println("finish");
     }
 
-
+    @Test
+    public void testAddComponent2() throws IOException {
+        String sourcePath = OUTPUT_PATH + "testAddComponent.pdf";
+        String filePath = OUTPUT_PATH + "testAddComponent2.pdf";
+        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        XEasyPdfDocument document = XEasyPdfHandler.Document.build(sourcePath);
+        List<XEasyPdfPage> pageList = document.getPageList();
+        XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
+        xEasyPdfPage.addComponent(
+                XEasyPdfHandler.Image.build(new File(imagePath))
+                        .setPosition(200, 200)
+                        .setWidth(200).setHeight(200)
+        );
+        document.save(filePath);
+        System.out.println("finish");
+    }
 }

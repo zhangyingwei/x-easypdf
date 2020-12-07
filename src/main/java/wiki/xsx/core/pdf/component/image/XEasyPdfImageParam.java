@@ -129,7 +129,7 @@ class XEasyPdfImageParam {
             this.height = imageHeight;
         }
         // 如果开启自适应图片大小，则自动调整自定义宽度与高度
-        if (enableSelfAdaption&&(this.width + this.marginLeft + this.marginRight)>pageWidth) {
+        if (this.enableSelfAdaption&&(this.width + this.marginLeft + this.marginRight)>pageWidth) {
             // 自定义宽度 = 页面宽度 - 左边距 - 右边距
             this.width = (int) (pageWidth - this.marginLeft - this.marginRight);
             // 自定义高度 = 自定义宽度 / 图片宽度 * 图片高度，即图片宽度的缩放比率 * 图片高度
