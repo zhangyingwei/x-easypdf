@@ -2,16 +2,12 @@ package wiki.xsx.core.pdf.component.footer;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
-import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * pdf页脚组件参数
@@ -36,36 +32,11 @@ class XEasyPdfFooterParam {
     /**
      * 文本
      */
-    private String text;
+    private XEasyPdfText text;
     /**
-     * 拆分后的待添加文本列表
+     * 图片
      */
-    private List<String> splitTextList;
-    /**
-     * 字体路径
-     */
-    private String fontPath;
-    /**
-     * 字体
-     */
-    private PDFont font;
-    /**
-     * 字体大小
-     */
-    private Float fontSize = 10F;
-    /**
-     * 行间距
-     */
-    private Float leading = 1F;
-    /**
-     * 字体颜色
-     */
-    private Color fontColor = Color.BLACK;
-    /**
-     * 文本样式（居左、居中、居右）
-     * 默认居中
-     */
-    private XEasyPdfTextStyle style = XEasyPdfTextStyle.CENTER;
+    private XEasyPdfImage image;
     /**
      * 左边距
      */
@@ -93,32 +64,26 @@ class XEasyPdfFooterParam {
 
     /**
      * 初始化
+     * @param document pdf文档
      * @param page pdf页面
      * @throws IOException IO异常
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
-        if (this.font==null) {
-            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
-        }
-        // 如果拆分后的待添加文本列表未初始化，则进行初始化
-        if (this.splitTextList==null) {
-            // 初始化待添加文本列表
-            this.splitTextList =  XEasyPdfTextUtil.splitLines(
-                    // 待输入文本
-                    this.text,
-                    // 行宽度 = 页面宽度 - 左边距 - 右边距
-                    page.getLastPage().getMediaBox().getWidth() - this.marginLeft - this.marginRight,
-                    // 字体
-                    this.font,
-                    // 字体大小
-                    this.fontSize
-            );
+        // 如果文本和图片都未初始化，则抛出异常信息
+        if (this.text==null&&this.image==null) {
+            throw new IllegalArgumentException("text or image can not be found");
         }
         // 初始化X轴起始坐标
         this.beginX = this.marginLeft;
         // 初始化Y轴起始坐标
-        this.beginY = this.marginBottom + this.fontSize * (this.splitTextList.size() - 1);
-        // 初始化高度
-        this.height = this.beginY;
+        this.beginY = this.text==null?0:this.text.getTextHeight(document, page);
+        // 如果高度未初始化，则进行初始化
+        if (this.height==null) {
+            // 初始化高度，文本高度与图片高度取最大值，加上下边距
+            this.height = Math.max(
+                    this.beginY,
+                    this.image==null?0:this.image.getHeight(document, page)
+            ) + this.marginBottom;
+        }
     }
 }

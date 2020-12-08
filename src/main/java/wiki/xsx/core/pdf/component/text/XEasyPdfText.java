@@ -50,11 +50,28 @@ public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     * @param textList 待输入文本列表
+     */
+    public XEasyPdfText(List<String> textList) {
+        this.param.setSplitTextList(textList);
+    }
+
+    /**
+     * 有参构造
      * @param fontSize 字体大小
      * @param text 待输入文本
      */
     public XEasyPdfText(float fontSize, String text) {
-        this.param.setText(text);
+        this.param.setFontSize(fontSize).setText(text);
+    }
+
+    /**
+     * 有参构造
+     * @param fontSize 字体大小
+     * @param textList 待输入文本列表
+     */
+    public XEasyPdfText(float fontSize, List<String> textList) {
+        this.param.setFontSize(fontSize).setSplitTextList(textList);
     }
 
     /**
@@ -234,6 +251,17 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 设置内容模式
+     * @param mode 内容模式
+     * @return 返回pdf组件
+     */
+    @Override
+    public XEasyPdfText setContentMode(ContentMode mode) {
+        this.param.setContentMode(mode);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
@@ -254,6 +282,17 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 获取文本高度
+     * @param document pdf文档
+     * @param page pdf页面
+     * @return 返回文本高度
+     * @throws IOException IO异常
+     */
+    public float getTextHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        return this.param.getTextHeight(document, page);
+    }
+
+    /**
      * 初始化内容流
      * @param document pdf文档
      * @param page pdf页面
@@ -265,7 +304,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         PDPageContentStream contentStream = new PDPageContentStream(
                 document.getTarget(),
                 page.getLastPage(),
-                PDPageContentStream.AppendMode.APPEND,
+                this.param.getContentMode().getMode(),
                 true,
                 false
         );

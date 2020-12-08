@@ -52,7 +52,7 @@ public class XEasyPdfImageTest {
                         XEasyPdfHandler.Header.build("My Header")
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
-                XEasyPdfHandler.Footer.build("this is my footer")
+                XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
         ).save(filePath);
         System.out.println("finish");
     }
@@ -87,7 +87,7 @@ public class XEasyPdfImageTest {
                         XEasyPdfHandler.Header.build("My Header")
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
-                XEasyPdfHandler.Footer.build("this is my footer")
+                XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
         ).save(filePath);
         System.out.println("finish");
     }

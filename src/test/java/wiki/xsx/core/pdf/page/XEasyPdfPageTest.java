@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.page;
 
 import org.junit.Before;
 import org.junit.Test;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
@@ -61,9 +62,7 @@ public class XEasyPdfPageTest {
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(
-                XEasyPdfHandler.Image.build(new File(imagePath))
-                        .setPosition(200, 200)
-                        .setWidth(200).setHeight(200)
+                XEasyPdfHandler.Image.build(new File(imagePath)).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
         );
         document.save(filePath);
         System.out.println("finish");

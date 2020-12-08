@@ -294,11 +294,12 @@ public class XEasyPdfCell {
                 row.getParam().getHeight(),
                 row.getParam().getBeginX(),
                 row.getParam().getBeginY() - this.param.getMarginTop()
-        ).setHasBorder(true)
+        ).setContentMode(this.param.getContentMode())
         .setBackgroundColor(this.param.getBackgroundColor())
         .setBorderColor(this.param.getBorderColor())
         .setCheckPage(false)
         .setNewLine(false)
+        .setHasBorder(true)
         .draw(document, page);
     }
 
@@ -310,7 +311,8 @@ public class XEasyPdfCell {
      * @throws IOException IO异常
      */
     private void writeText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) throws IOException {
-        new XEasyPdfText(null)
+        new XEasyPdfText(this.param.getSplitTextList())
+                .setContentMode(this.param.getContentMode())
                 .setFont(this.param.getFont())
                 .setFontSize(this.param.getFontSize())
                 .setFontColor(this.param.getFontColor())
@@ -320,7 +322,6 @@ public class XEasyPdfCell {
                 .setMarginRight(this.param.getTextMarginRight())
                 .setMarginTop(this.param.getTextMarginTop())
                 .setMarginBottom(this.param.getTextMarginBottom())
-                .setSplitTextList(this.param.getSplitTextList())
                 .setStyle(this.param.getStyle())
                 .setPosition(
                         row.getParam().getBeginX() + 1,

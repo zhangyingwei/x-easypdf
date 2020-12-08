@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.table;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -33,6 +34,10 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 class XEasyPdfCellParam {
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode;
     /**
      * 是否带有边框
      */
@@ -120,6 +125,11 @@ class XEasyPdfCellParam {
     void init(XEasyPdfDocument document, XEasyPdfRow row) throws IOException {
         // 获取pdf表格行参数
         XEasyPdfRowParam rowParam = row.getParam();
+        // 如果内容模式未初始化，则进行初始化
+        if (this.contentMode==null) {
+            // 初始化内容模式
+            this.contentMode = rowParam.getContentMode();
+        }
         // 如果字体未初始化，则进行初始化
         if (this.font==null) {
             // 初始化字体

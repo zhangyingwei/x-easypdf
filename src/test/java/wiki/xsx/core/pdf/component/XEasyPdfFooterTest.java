@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author xsx
@@ -42,7 +44,7 @@ public class XEasyPdfFooterTest {
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build()
         ).setFontPath(FONT_PATH).setGlobalFooter(
-                XEasyPdfHandler.Footer.build("Hello World")
+                XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("Hello World"))
         ).save(filePath);
         System.out.println("finish");
     }
@@ -52,11 +54,47 @@ public class XEasyPdfFooterTest {
         String filePath = OUTPUT_PATH + "testPageFooter.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().setFooter(
-                        XEasyPdfHandler.Footer.build("Hello XSX")
+                        XEasyPdfHandler.Footer.build(
+                                XEasyPdfHandler.Text.build(
+                                        Arrays.asList(
+                                                "Hello XSX",
+                                                "Hello World",
+                                                "HELLO X-EASYPDF"
+                                        )
+                                )
+                        )
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
-                XEasyPdfHandler.Footer.build("Hello World")
+                XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("Hello World"))
         ).save(filePath);
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testPageFooter2() throws IOException {
+        String filePath = OUTPUT_PATH + "testPageFooter2.pdf";
+        String imagePath = "D:\\temp\\footer2.png";
+        String backgroundImagePath = "D:\\temp\\20120812103739.jpg";
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build().setFooter(
+                        XEasyPdfHandler.Footer.build(
+                                XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(200).disableSelfAdaption(),
+                                XEasyPdfHandler.Text.build(
+                                        Arrays.asList(
+                                                "Hello XSX",
+                                                "Hello World",
+                                                "HELLO X-EASYPDF"
+                                        )
+                                ).setFontColor(Color.RED)
+                        )
+                )
+        ).setGlobalBackgroundImage(
+                XEasyPdfHandler.Image.build(new File(backgroundImagePath)).setPosition(0, 0)
+        ).setFontPath(FONT_PATH).setGlobalFooter(
+                XEasyPdfHandler.Footer.build(
+                        XEasyPdfHandler.Text.build("Hello World")
+                )
+        ).setGlobalBackgroundColor(new Color(0,191,255)).save(filePath);
         System.out.println("finish");
     }
 }

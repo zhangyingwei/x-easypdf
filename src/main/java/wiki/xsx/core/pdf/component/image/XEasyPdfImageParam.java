@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
@@ -33,6 +34,10 @@ import java.io.IOException;
 @Data
 @Accessors(chain = true)
 class XEasyPdfImageParam {
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
     /**
      * 待添加图片
      */
@@ -106,8 +111,6 @@ class XEasyPdfImageParam {
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 获取页面宽度
         float pageWidth = rectangle.getWidth();
-        // 获取页面高度
-        float pageHeight = rectangle.getHeight();
         // 创建pdfBox图片
         PDImageXObject pdImage = PDImageXObject.createFromByteArray(
                 document.getTarget(),
@@ -150,6 +153,16 @@ class XEasyPdfImageParam {
                     )
             );
         }
+        return pdImage;
+    }
+
+    void initPosition(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 获取页面尺寸
+        PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 获取页面宽度
+        float pageWidth = rectangle.getWidth();
+        // 获取页面高度
+        float pageHeight = rectangle.getHeight();
         // 如果页面Y轴起始坐标为空，则初始化
         if (this.beginY==null) {
             // 定义页脚高度
@@ -184,16 +197,15 @@ class XEasyPdfImageParam {
             if (this.style==null || this.style == XEasyPdfImageStyle.CENTER) {
                 // 页面X轴起始坐标 = （页面宽度 - 自定义宽度）/ 2
                 this.beginX = (pageWidth - this.width) / 2;
-            // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
+                // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
             }else if (this.style == XEasyPdfImageStyle.LEFT) {
                 // 页面X轴起始坐标 = 左边距
                 this.beginX = this.marginLeft;
-            // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
+                // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
             }else {
                 // 页面X轴起始坐标 = 页面宽度 - 自定义宽度 - 右边距
                 this.beginX = pageWidth - this.width - this.marginRight;
             }
         }
-        return pdImage;
     }
 }

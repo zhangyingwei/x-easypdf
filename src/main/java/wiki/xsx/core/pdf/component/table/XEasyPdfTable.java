@@ -175,6 +175,18 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
+     * 设置内容模式
+     *
+     * @param mode 内容模式
+     * @return 返回pdf组件
+     */
+    @Override
+    public XEasyPdfTable setContentMode(ContentMode mode) {
+        this.param.setContentMode(mode);
+        return this;
+    }
+
+    /**
      * 获取pdf表格参数
      * @return 返回表格参数
      */

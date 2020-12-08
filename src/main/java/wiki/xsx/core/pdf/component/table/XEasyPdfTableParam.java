@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.table;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
@@ -31,7 +32,10 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 class XEasyPdfTableParam {
-
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
     /**
      * 行列表
      */

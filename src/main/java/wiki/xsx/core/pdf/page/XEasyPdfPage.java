@@ -87,14 +87,14 @@ public class XEasyPdfPage {
     public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
         this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
-        // 设置背景颜色
-        this.setLastPageBackgroundColor(document);
-        // 绘制背景图片
-        this.drawBackgroundImage(document);
         // 重置页面X轴Y轴起始坐标
         this.getParam().setPageX(null).setPageY(null);
         // 绘制页眉与页脚
         this.drawHeaderAndFooter(document);
+        // 绘制背景图片
+        this.drawBackgroundImage(document);
+        // 设置背景颜色
+        this.setLastPageBackgroundColor(document);
         return this;
     }
 
@@ -213,7 +213,7 @@ public class XEasyPdfPage {
             // 获取旧页面列表
             List<PDPage> oldPageList = this.param.getPageList();
             // 初始化pdfbox页面，如果旧页面列表为空，则初始化为null，否则初始化为最新一个页面
-            pdPage = oldPageList.isEmpty() ? null : oldPageList.get(oldPageList.size()-1);
+            pdPage = oldPageList.isEmpty()?null:oldPageList.get(oldPageList.size()-1);
         }else {
             // 初始化pdfbox页面为新页面列表中最新一个页面
             pdPage = pageList.get(pageList.size()-1);
@@ -325,6 +325,7 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
+        // 如果原有pdfbox页面列表为空，则添加新页面
         if (this.param.getPageList().isEmpty()) {
             // 添加新页面
             this.addNewPage(document, pageSize);
@@ -365,7 +366,7 @@ public class XEasyPdfPage {
                 PDPageContentStream contentStream = new PDPageContentStream(
                         document.getTarget(),
                         lastPage,
-                        PDPageContentStream.AppendMode.APPEND,
+                        PDPageContentStream.AppendMode.PREPEND,
                         true,
                         false
                 );
@@ -407,7 +408,7 @@ public class XEasyPdfPage {
                 // 关闭页面自动重置定位
                 this.disablePosition();
                 // 绘制页面背景图片
-                this.param.getBackgroundImage().draw(document, this);
+                this.param.getBackgroundImage().setContentMode(XEasyPdfComponent.ContentMode.PREPEND).draw(document, this);
                 // 开启页面自动重置定位
                 this.enablePosition();
             }

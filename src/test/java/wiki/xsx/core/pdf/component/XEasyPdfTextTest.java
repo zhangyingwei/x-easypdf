@@ -73,7 +73,7 @@ public class XEasyPdfTextTest {
                         XEasyPdfHandler.Watermark.build("贵阳").setFontSize(150F)
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
-                XEasyPdfHandler.Footer.build("页脚")
+                XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("页脚"))
         ).save(filePath);
         System.out.println("finish");
     }
@@ -95,7 +95,7 @@ public class XEasyPdfTextTest {
                         XEasyPdfHandler.Header.build("页眉")
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
-                XEasyPdfHandler.Footer.build("页脚")
+                XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("页脚"))
         ).setGlobalWatermark(
                 XEasyPdfHandler.Watermark.build("贵阳")
         ).save(filePath);

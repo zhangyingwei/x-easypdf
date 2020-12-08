@@ -119,6 +119,24 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
+     * 开启图片大小自适应
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage enableSelfAdaption() {
+        this.param.setEnableSelfAdaption(true);
+        return this;
+    }
+
+    /**
+     * 关闭图片大小自适应
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage disableSelfAdaption() {
+        this.param.setEnableSelfAdaption(false);
+        return this;
+    }
+
+    /**
      * 设置边距（上下左右）
      * @param margin 边距
      * @return 返回图片组件
@@ -223,6 +241,18 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
+     * 设置内容模式
+     *
+     * @param mode 内容模式
+     * @return 返回图片组件
+     */
+    @Override
+    public XEasyPdfImage setContentMode(ContentMode mode) {
+        this.param.setContentMode(mode);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
@@ -232,11 +262,13 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 初始化pdfBox图片
         PDImageXObject pdImage = this.param.init(document, page);
+        // 初始化位置
+        this.param.initPosition(document, page);
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
                 document.getTarget(),
                 page.getLastPage(),
-                PDPageContentStream.AppendMode.APPEND,
+                this.param.getContentMode().getMode(),
                 true,
                 false
         );
@@ -261,6 +293,27 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     public boolean isDraw() {
         return this.param.isDraw();
     }
+
+    /**
+     * 获取图片宽度
+     * @param document pdf文档
+     * @param page     pdf页面
+     * @return 返回图片宽度
+     */
+    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        return this.param.init(document, page).getWidth();
+    }
+
+    /**
+     * 获取图片高度
+     * @param document pdf文档
+     * @param page     pdf页面
+     * @return 返回图片高度
+     */
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        return this.param.init(document, page).getHeight();
+    }
+
 
     /**
      * 图片缩放模式枚举

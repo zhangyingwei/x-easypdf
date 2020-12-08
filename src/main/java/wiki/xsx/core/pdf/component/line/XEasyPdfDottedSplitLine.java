@@ -198,6 +198,17 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
     }
 
     /**
+     * 设置内容模式
+     * @param mode 内容模式
+     * @return 返回pdf组件
+     */
+    @Override
+    public XEasyPdfDottedSplitLine setContentMode(ContentMode mode) {
+        this.param.setContentMode(mode);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面

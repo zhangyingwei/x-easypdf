@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
@@ -33,6 +34,10 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 class XEasyPdfRowParam {
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode;
     /**
      * 单元格列表
      */
@@ -86,6 +91,11 @@ class XEasyPdfRowParam {
     void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table, XEasyPdfRow row) throws IOException {
         // 获取表格参数
         XEasyPdfTableParam tableParam = table.getParam();
+        // 如果内容模式未初始化，则进行初始化
+        if (this.contentMode==null) {
+            // 初始化内容模式
+            this.contentMode = tableParam.getContentMode();
+        }
         // 如果文本样式未初始化，则进行初始化
         if (this.style==null) {
             // 初始化文本样式

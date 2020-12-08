@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.line;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -29,6 +30,10 @@ import java.io.IOException;
 @Data
 @Accessors(chain = true)
 class XEasyPdfLineParam {
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
     /**
      * 字体路径
      */

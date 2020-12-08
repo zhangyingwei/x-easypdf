@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -33,6 +34,10 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 class XEasyPdfTextParam {
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
     /**
      * 字体路径
      */
@@ -134,20 +139,6 @@ class XEasyPdfTextParam {
             // 初始化字体
             this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
-        // 如果页面X轴起始坐标未初始化，则进行初始化
-        if (this.beginX==null) {
-            // 初始化页面X轴起始坐标，起始坐标 = 左边距
-            this.beginX = this.marginLeft;
-        }
-        // 如果页面Y轴起始坐标未初始化，则进行初始化
-        if (this.beginY==null) {
-            // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
-            this.beginY = page.getParam().getPageY() == null?
-                    // 最大高度 - 上边距 - 字体大小 - 行距
-                    this.maxHeight - this.marginTop - this.fontSize - this.leading :
-                    // 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
-                    page.getParam().getPageY() - this.marginTop - this.fontSize - this.leading;
-        }
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {
             // 初始化待添加文本列表
@@ -162,5 +153,31 @@ class XEasyPdfTextParam {
                     this.fontSize
             );
         }
+        // 如果页面X轴起始坐标未初始化，则进行初始化
+        if (this.beginX==null) {
+            // 初始化页面X轴起始坐标，起始坐标 = 左边距
+            this.beginX = this.marginLeft;
+        }
+        // 如果页面Y轴起始坐标未初始化，则进行初始化
+        if (this.beginY==null) {
+            // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
+            this.beginY = page.getParam().getPageY() == null?
+                    // 最大高度 - 上边距 - 字体大小 - 行距
+                    this.maxHeight - this.marginTop - this.fontSize - this.leading :
+                    // 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
+                    page.getParam().getPageY() - this.marginTop - this.fontSize - this.leading;
+        }
+    }
+
+    /**
+     * 获取文本高度
+     * @param document pdf文档
+     * @param page pdf页面
+     * @return 返回文本高度
+     * @throws IOException IO异常
+     */
+    float getTextHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        this.init(document, page);
+        return this.fontSize * (this.splitTextList.size() - 1);
     }
 }

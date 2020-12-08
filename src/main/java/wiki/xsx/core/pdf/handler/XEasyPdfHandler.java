@@ -154,12 +154,29 @@ public class XEasyPdfHandler {
         }
         /**
          * 构建文本
+         * @param textList 待写入文本列表
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(List<String> textList) {
+            return new XEasyPdfText(textList);
+        }
+        /**
+         * 构建文本
          * @param fontSize 字体大小
          * @param text 待写入文本
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(float fontSize, String text) {
             return new XEasyPdfText(fontSize, text);
+        }
+        /**
+         * 构建文本
+         * @param fontSize 字体大小
+         * @param textList 待写入文本列表
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(float fontSize, List<String> textList) {
+            return new XEasyPdfText(fontSize, textList);
         }
     }
 
@@ -398,18 +415,27 @@ public class XEasyPdfHandler {
          * @param text 待写入文本
          * @return 返回pdf页脚组件
          */
-        public static XEasyPdfDefaultFooter build(String text) {
+        public static XEasyPdfDefaultFooter build(XEasyPdfText text) {
             return new XEasyPdfDefaultFooter(text);
         }
 
         /**
          * 构建页脚
-         * @param fontSize 字体大小
+         * @param image 待绘制图片
+         * @return 返回pdf页脚组件
+         */
+        public static XEasyPdfDefaultFooter build(XEasyPdfImage image) {
+            return new XEasyPdfDefaultFooter(image);
+        }
+
+        /**
+         * 构建页脚
+         * @param image 待绘制图片
          * @param text 待写入文本
          * @return 返回pdf页脚组件
          */
-        public static XEasyPdfDefaultFooter build(float fontSize, String text) {
-            return new XEasyPdfDefaultFooter(fontSize, text);
+        public static XEasyPdfDefaultFooter build(XEasyPdfImage image, XEasyPdfText text) {
+            return new XEasyPdfDefaultFooter(image, text);
         }
     }
 }
