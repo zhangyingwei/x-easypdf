@@ -79,7 +79,7 @@ public class XEasyPdfDocumentTest {
         String filePath = OUTPUT_PATH + "info.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build()
-        ).setFontPath(FONT_PATH).setInfo()
+        ).setFontPath(FONT_PATH).information()
             .setTitle("test info")
             .setAuthor("xsx")
             .setSubject("info")
@@ -97,7 +97,7 @@ public class XEasyPdfDocumentTest {
         String filePath = OUTPUT_PATH + "permission.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build()
-        ).setFontPath(FONT_PATH).setPermission()
+        ).setFontPath(FONT_PATH).permission()
                 .setCanPrintDegraded(false)
                 .setCanPrint(false)
                 .setCanAssembleDocument(false)
@@ -217,7 +217,7 @@ public class XEasyPdfDocumentTest {
     public void testSplit1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.build(sourcePath).split(filePath).close();
+        XEasyPdfHandler.Document.build(sourcePath).splitter().split(filePath).finish().close();
         System.out.println("finish");
     }
 
@@ -225,11 +225,13 @@ public class XEasyPdfDocumentTest {
     public void testSplit2() throws IOException {
         String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
         String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.build(sourcePath).split(
-                filePath,
-                XEasyPdfDocumentSplitter.build().addDocument(1).addDocument(1, 0),
-                "mypdf"
-        ).close();
+        XEasyPdfHandler.Document.build(sourcePath)
+                .splitter()
+                .addDocument(1)
+                .addDocument(1, 0)
+                .split(filePath, "mypdf")
+                .finish()
+                .close();
         System.out.println("finish");
     }
 
@@ -238,10 +240,7 @@ public class XEasyPdfDocumentTest {
         String sourcePath = OUTPUT_PATH + "merge.pdf";
         String filePath = OUTPUT_PATH + "test.pdf";
         try(OutputStream outputStream = Files.newOutputStream(Paths.get(filePath))) {
-            XEasyPdfHandler.Document.build(sourcePath).split(
-                    outputStream,
-                    3, 4, 5, 6
-            ).close();
+            XEasyPdfHandler.Document.build(sourcePath).splitter().split(outputStream, 3, 4, 5, 6).finish().close();
         }
         System.out.println("finish");
     }
@@ -251,7 +250,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "testText.pdf";
         List<String> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.build(sourcePath).extractText(list, "《.*》").close();
+        XEasyPdfHandler.Document.build(sourcePath).extractor().extract(list, "《.*》").finish().close();
         for (String s : list) {
             System.out.println("s = " + s);
         }
@@ -263,29 +262,10 @@ public class XEasyPdfDocumentTest {
     public void testStripText2() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "testText.pdf";
-        Map<String, String> data = new HashMap<>();
-        Map<String, Rectangle> regionArea = new HashMap<>();
-        regionArea.put("test1", new Rectangle(600,2000));
-        XEasyPdfHandler.Document.build(sourcePath).extractText(data, XEasyPdfDocumentExtractor.build().addRegion(regionArea), 0).close();
-        System.out.println("data = " + data);
+        List<Map<String, String>> dataList = new ArrayList<>();
+        XEasyPdfHandler.Document.build(sourcePath).extractor().addRegion("test1", new Rectangle(600,2000)).extractByRegions(dataList, 0).finish().close();
+        System.out.println("dataList = " + dataList);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
-    }
-
-    @Test
-    public void testReplaceText() throws IOException {
-        long begin = System.currentTimeMillis();
-        final String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
-        String filePath = OUTPUT_PATH + "replace.pdf";
-        List<String> list = new ArrayList<>(10);
-        XEasyPdfHandler.Document.build(sourcePath).setFontPath(FONT_PATH).replace(0, 2, list).close();
-        System.out.println("list = " + list.size());
-        long end = System.currentTimeMillis();
-        System.out.println("finish("+(end-begin)+"ms)");
-    }
-
-    @Test
-    public void test() throws IOException {
-        testStripText();
     }
 }

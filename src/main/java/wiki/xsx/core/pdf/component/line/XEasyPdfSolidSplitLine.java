@@ -178,9 +178,8 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
 
     /**
      * 设置内容模式
-     *
      * @param mode 内容模式
-     * @return 返回pdf组件
+     * @return 返回实线分割线组件
      */
     @Override
     public XEasyPdfSolidSplitLine setContentMode(ContentMode mode) {
@@ -221,6 +220,7 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      * 初始化参数
      * @param document pdf文档
      * @param page pdf页面
+     * @throws IOException IO异常
      */
     private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 分页检查
@@ -247,8 +247,9 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
                 // Y轴起始坐标
                 this.param.getBeginY()
         );
+        // 如果字体为空，则加载全局字体
         if (this.param.getFont()==null) {
-            // 设置字体
+            // 设置全局字体
             this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
         }
     }

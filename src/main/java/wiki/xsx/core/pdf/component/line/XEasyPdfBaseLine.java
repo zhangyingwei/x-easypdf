@@ -1,6 +1,7 @@
 package wiki.xsx.core.pdf.component.line;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
@@ -79,9 +80,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @param margin 边距
      * @return 返回基础线条组件
      */
-    @Deprecated
     @Override
     public XEasyPdfBaseLine setMarginLeft(float margin) {
+        this.param.setMarginLeft(margin);
         return this;
     }
 
@@ -90,9 +91,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @param margin 边距
      * @return 返回基础线条组件
      */
-    @Deprecated
     @Override
     public XEasyPdfBaseLine setMarginRight(float margin) {
+        this.param.setMarginRight(margin);
         return this;
     }
 
@@ -148,9 +149,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @param beginY Y轴起始坐标
      * @return 返回基础线条组件
      */
-    @Deprecated
     @Override
     public XEasyPdfBaseLine setPosition(float beginX, float beginY) {
+        this.param.setBeginX(beginX).setBeginY(beginY);
         return this;
     }
 
@@ -195,20 +196,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
-        // X轴Y轴起始结束坐标判断
-        if (
-                this.param.getBeginX()==null ||
-                this.param.getBeginY()==null ||
-                this.param.getEndX()==null ||
-                this.param.getEndY()==null
-        ) {
-            throw new RuntimeException("beginX or beginY or endX or endY can not null");
-        }
-        // 字体判断
-        if (this.param.getFont()==null) {
-            // 设置字体
-            this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
-        }
+
         // 初始化内容流
         PDPageContentStream contentStream = this.initStream(document, page);
         // 设置定位
@@ -244,6 +232,8 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @throws IOException IO异常
      */
     private PDPageContentStream initStream(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 初始化参数
+        this.init(document, page);
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
                 document.getTarget(),
@@ -259,5 +249,40 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
         // 设置线型
         contentStream.setLineCapStyle(this.param.getStyle().getType());
         return contentStream;
+    }
+
+    /**
+     * 初始化参数
+     * @param document pdf文档
+     * @param page pdf页面
+     */
+    private void init(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 获取页面尺寸
+        PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 如果X轴起始坐标为空，则初始化为左边距
+        if (this.param.getBeginX()==null) {
+            // 初始化X轴起始坐标为左边距
+            this.param.setBeginX(page.getParam().getPageX()==null?this.param.getMarginLeft():page.getParam().getPageX());
+        }
+        // 如果Y轴起始坐标为空，则初始化为上边距
+        if (this.param.getBeginY()==null) {
+            // 初始化Y轴起始坐标为上边距
+            this.param.setBeginY(page.getParam().getPageY()==null?this.param.getMarginTop():page.getParam().getPageY());
+        }
+        // 如果X轴结束坐标为空，则初始化为页面宽度
+        if (this.param.getEndX()==null) {
+            // 初始化X轴结束坐标为页面宽度
+            this.param.setEndX(rectangle.getWidth());
+        }
+        // 如果Y轴结束坐标为空，则初始化为页面高度
+        if (this.param.getEndY()==null) {
+            // 初始化Y轴结束坐标为页面高度
+            this.param.setEndY(rectangle.getHeight());
+        }
+        // 如果字体为空，则加载全局字体
+        if (this.param.getFont()==null) {
+            // 设置全局字体
+            this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
+        }
     }
 }

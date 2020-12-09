@@ -55,20 +55,20 @@ public class XEasyPdfHandler {
         }
 
         /**
-         * 构建pdf
+         * 读取pdf
          * @param sourcePath 源文件路径
          */
         @SneakyThrows
-        public static XEasyPdfDocument build(String sourcePath) {
+        public static XEasyPdfDocument load(String sourcePath) {
             return new XEasyPdfDocument(sourcePath);
         }
 
         /**
-         * 构建pdf
+         * 读取pdf
          * @param sourceInputStream 源文件数据流
          */
         @SneakyThrows
-        public static XEasyPdfDocument build(InputStream sourceInputStream) {
+        public static XEasyPdfDocument load(InputStream sourceInputStream) {
             return new XEasyPdfDocument(sourceInputStream);
         }
     }

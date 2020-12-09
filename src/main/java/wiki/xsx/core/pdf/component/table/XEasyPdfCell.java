@@ -297,9 +297,9 @@ public class XEasyPdfCell {
         ).setContentMode(this.param.getContentMode())
         .setBackgroundColor(this.param.getBackgroundColor())
         .setBorderColor(this.param.getBorderColor())
-        .setCheckPage(false)
         .setNewLine(false)
         .setHasBorder(true)
+        .disableCheckPage()
         .draw(document, page);
     }
 

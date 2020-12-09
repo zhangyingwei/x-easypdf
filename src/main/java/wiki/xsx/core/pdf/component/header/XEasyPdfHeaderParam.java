@@ -95,14 +95,14 @@ class XEasyPdfHeaderParam {
         this.beginX = this.marginLeft;
         // 初始化Y轴起始坐标
         this.beginY = rectangle.getHeight() - imageHeight - this.marginTop;
-        // 如果文本不为空或文本高度小于图片
+        // 如果图片高度大于文本高度，则重置文本定位为否
         if (imageHeight>textHeight) {
             // 设置文本定位为否
             this.isTextPosition = false;
         }
         // 如果高度未初始化，则进行初始化
         if (this.height==null) {
-            // 初始化高度，文本高度与图片高度取最大值
+            // 初始化高度，文本高度与图片高度取最大值 + 上边距
             this.height = Math.max(imageHeight, textHeight) + this.marginTop;
         }
     }

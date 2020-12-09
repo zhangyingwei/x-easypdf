@@ -156,6 +156,12 @@ class XEasyPdfImageParam {
         return pdImage;
     }
 
+    /**
+     * 初始化定位
+     * @param document pdf文档
+     * @param page pdf页面
+     * @throws IOException IO异常
+     */
     void initPosition(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();

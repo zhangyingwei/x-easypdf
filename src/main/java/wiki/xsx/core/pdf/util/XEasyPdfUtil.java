@@ -3,7 +3,6 @@ package wiki.xsx.core.pdf.util;
 
 import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocumentSplitter;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.IOException;
@@ -14,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 /**
- * pdf工具
+ * pdf工具(v2.2.0版本将移除)
  * @author xsx
  * @date 2019/12/19
  * @since 1.8
@@ -30,6 +29,7 @@ import java.util.Map;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
+@Deprecated
 public class XEasyPdfUtil {
 
     /*------------------- create -------------------*/
@@ -702,22 +702,7 @@ public class XEasyPdfUtil {
             String sourcePath,
             String outputPath
     ) throws IOException {
-        split(sourcePath, outputPath, (XEasyPdfDocumentSplitter) null);
-    }
-
-    /**
-     * 拆分pdf
-     * @param sourcePath 源文件路径
-     * @param outputPath 文件输出路径（目录）
-     * @param splitter pdf文档拆分器
-     * @throws IOException IO异常
-     */
-    public static void split(
-            String sourcePath,
-            String outputPath,
-            XEasyPdfDocumentSplitter splitter
-    ) throws IOException {
-        split(sourcePath, outputPath, splitter, null);
+        split(sourcePath, outputPath, (XEasyPdfDefaultWatermark) null);
     }
 
     /**
@@ -732,24 +717,7 @@ public class XEasyPdfUtil {
             String outputPath,
             XEasyPdfDefaultWatermark globalWatermark
     ) throws IOException {
-        split(sourcePath, outputPath, globalWatermark, (XEasyPdfDocumentSplitter) null);
-    }
-
-    /**
-     * 拆分pdf
-     * @param sourcePath 源文件路径
-     * @param outputPath 文件输出路径（目录）
-     * @param globalWatermark 全局水印
-     * @param splitter pdf文档拆分器
-     * @throws IOException IO异常
-     */
-    public static void split(
-            String sourcePath,
-            String outputPath,
-            XEasyPdfDefaultWatermark globalWatermark,
-            XEasyPdfDocumentSplitter splitter
-    ) throws IOException {
-        split(sourcePath, outputPath, globalWatermark, splitter, null);
+        split(sourcePath, outputPath, globalWatermark, (String) null);
     }
 
     /**
@@ -762,22 +730,7 @@ public class XEasyPdfUtil {
             InputStream sourceInputStream,
             String outputPath
     ) throws IOException {
-        split(sourceInputStream, outputPath, (XEasyPdfDocumentSplitter) null);
-    }
-
-    /**
-     * 拆分pdf
-     * @param sourceInputStream 源文件数据流
-     * @param outputPath 文件输出路径（目录）
-     * @param splitter pdf文档拆分器
-     * @throws IOException IO异常
-     */
-    public static void split(
-            InputStream sourceInputStream,
-            String outputPath,
-            XEasyPdfDocumentSplitter splitter
-    ) throws IOException {
-        split(sourceInputStream, outputPath, splitter, null);
+        split(sourceInputStream, outputPath, (XEasyPdfDefaultWatermark) null);
     }
 
     /**
@@ -792,24 +745,7 @@ public class XEasyPdfUtil {
             String outputPath,
             XEasyPdfDefaultWatermark globalWatermark
     ) throws IOException {
-        split(sourceInputStream, outputPath, globalWatermark, (XEasyPdfDocumentSplitter) null);
-    }
-
-    /**
-     * 拆分pdf
-     * @param sourceInputStream 源文件数据流
-     * @param outputPath 文件输出路径（目录）
-     * @param globalWatermark 全局水印
-     * @param splitter pdf文档拆分器
-     * @throws IOException IO异常
-     */
-    public static void split(
-            InputStream sourceInputStream,
-            String outputPath,
-            XEasyPdfDefaultWatermark globalWatermark,
-            XEasyPdfDocumentSplitter splitter
-    ) throws IOException {
-        split(sourceInputStream, outputPath, globalWatermark, splitter, null);
+        split(sourceInputStream, outputPath, globalWatermark, (String) null);
     }
 
     /**
@@ -824,25 +760,9 @@ public class XEasyPdfUtil {
             String outputPath,
             String prefix
     ) throws IOException {
-        new XEasyPdfDocument(sourcePath).split(outputPath, prefix).close();
+        new XEasyPdfDocument(sourcePath).splitter().split(outputPath, prefix).finish().close();
     }
 
-    /**
-     * 拆分pdf
-     * @param sourcePath 源文件路径
-     * @param outputPath 文件输出路径（目录）
-     * @param splitter pdf文档拆分器
-     * @param prefix 文档名称前缀
-     * @throws IOException IO异常
-     */
-    public static void split(
-            String sourcePath,
-            String outputPath,
-            XEasyPdfDocumentSplitter splitter,
-            String prefix
-    ) throws IOException {
-        new XEasyPdfDocument(sourcePath).split(outputPath, splitter, prefix).close();
-    }
 
     /**
      * 拆分pdf
@@ -858,26 +778,7 @@ public class XEasyPdfUtil {
             XEasyPdfDefaultWatermark globalWatermark,
             String prefix
     ) throws IOException {
-        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputPath, prefix).close();
-    }
-
-    /**
-     * 拆分pdf
-     * @param sourcePath 源文件路径
-     * @param outputPath 文件输出路径（目录）
-     * @param globalWatermark 全局水印
-     * @param splitter pdf文档拆分器
-     * @param prefix 文档名称前缀
-     * @throws IOException IO异常
-     */
-    public static void split(
-            String sourcePath,
-            String outputPath,
-            XEasyPdfDefaultWatermark globalWatermark,
-            XEasyPdfDocumentSplitter splitter,
-            String prefix
-    ) throws IOException {
-        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputPath, splitter, prefix).close();
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).splitter().split(outputPath, prefix).finish().close();
     }
 
     /**
@@ -892,24 +793,7 @@ public class XEasyPdfUtil {
             String outputPath,
             String prefix
     ) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).split(outputPath, prefix).close();
-    }
-
-    /**
-     * 拆分pdf
-     * @param sourceInputStream 源文件数据流
-     * @param outputPath 文件输出路径（目录）
-     * @param splitter pdf文档拆分器
-     * @param prefix 文档名称前缀
-     * @throws IOException IO异常
-     */
-    public static void split(
-            InputStream sourceInputStream,
-            String outputPath,
-            XEasyPdfDocumentSplitter splitter,
-            String prefix
-    ) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).split(outputPath, splitter, prefix).close();
+        new XEasyPdfDocument(sourceInputStream).splitter().split(outputPath, prefix).finish().close();
     }
 
     /**
@@ -926,26 +810,7 @@ public class XEasyPdfUtil {
             XEasyPdfDefaultWatermark globalWatermark,
             String prefix
     ) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputPath, prefix).close();
-    }
-
-    /**
-     * 拆分pdf
-     * @param sourceInputStream 源文件数据流
-     * @param outputPath 文件输出路径（目录）
-     * @param globalWatermark 全局水印
-     * @param splitter pdf文档拆分器
-     * @param prefix 文档名称前缀
-     * @throws IOException IO异常
-     */
-    public static void split(
-            InputStream sourceInputStream,
-            String outputPath,
-            XEasyPdfDefaultWatermark globalWatermark,
-            XEasyPdfDocumentSplitter splitter,
-            String prefix
-    ) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputPath, splitter, prefix).close();
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).splitter().split(outputPath, prefix).finish().close();
     }
 
     /**
@@ -977,7 +842,7 @@ public class XEasyPdfUtil {
             OutputStream outputStream,
             int ...pageIndex
     ) throws IOException {
-        new XEasyPdfDocument(sourcePath).split(outputStream, pageIndex).close();
+        new XEasyPdfDocument(sourcePath).splitter().split(outputStream, pageIndex).finish().close();
     }
 
     /**
@@ -1013,7 +878,7 @@ public class XEasyPdfUtil {
             XEasyPdfDefaultWatermark globalWatermark,
             int ...pageIndex
     ) throws IOException {
-        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).split(outputStream, pageIndex).close();
+        new XEasyPdfDocument(sourcePath).setGlobalWatermark(globalWatermark).splitter().split(outputStream, pageIndex).finish().close();
     }
 
     /**
@@ -1045,7 +910,7 @@ public class XEasyPdfUtil {
             OutputStream outputStream,
             int ...pageIndex
     ) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).split(outputStream, pageIndex).close();
+        new XEasyPdfDocument(sourceInputStream).splitter().split(outputStream, pageIndex).finish().close();
     }
 
     /**
@@ -1081,7 +946,7 @@ public class XEasyPdfUtil {
             XEasyPdfDefaultWatermark globalWatermark,
             int ...pageIndex
     ) throws IOException {
-        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).split(outputStream, pageIndex).close();
+        new XEasyPdfDocument(sourceInputStream).setGlobalWatermark(globalWatermark).splitter().split(outputStream, pageIndex).finish().close();
     }
 
     /*------------------- split end -------------------*/

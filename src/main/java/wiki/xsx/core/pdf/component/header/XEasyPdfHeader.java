@@ -27,7 +27,7 @@ public interface XEasyPdfHeader {
 
     /**
      * 添加分割线
-     * @param splitLine 分割线
+     * @param splitLine pdf分割线
      * @return 返回页眉组件
      */
     XEasyPdfHeader addSplitLine(XEasyPdfLine ...splitLine);

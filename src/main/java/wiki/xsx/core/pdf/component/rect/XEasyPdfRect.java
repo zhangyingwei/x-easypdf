@@ -53,6 +53,24 @@ public class XEasyPdfRect implements XEasyPdfComponent {
     }
 
     /**
+     * 开启检查页面（自动分页）
+     * @return 返回矩形组件
+     */
+    public XEasyPdfRect enableCheckPage() {
+        this.param.setCheckPage(true);
+        return this;
+    }
+
+    /**
+     * 关闭检查页面（自动分页）
+     * @return 返回矩形组件
+     */
+    public XEasyPdfRect disableCheckPage() {
+        this.param.setCheckPage(false);
+        return this;
+    }
+
+    /**
      * 设置边距（上下左右）
      * @param margin 边距
      * @return 返回矩形组件
@@ -133,16 +151,6 @@ public class XEasyPdfRect implements XEasyPdfComponent {
     }
 
     /**
-     * 设置是否检查页面（自动分页）
-     * @param checkPage 是否检查页面
-     * @return 返回矩形组件
-     */
-    public XEasyPdfRect setCheckPage(boolean checkPage) {
-        this.param.setCheckPage(checkPage);
-        return this;
-    }
-
-    /**
      * 设置是否换行
      * @param newLine 是否换行
      * @return 返回矩形组件
@@ -188,9 +196,8 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置内容模式
-     *
      * @param mode 内容模式
-     * @return 返回pdf组件
+     * @return 返回矩形组件
      */
     @Override
     public XEasyPdfRect setContentMode(ContentMode mode) {

@@ -109,16 +109,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 设置图片大小自适应
-     * @param enableSelfAdaption 图片大小自适应
-     * @return 返回图片组件
-     */
-    public XEasyPdfImage setEnableSelfAdaption(boolean enableSelfAdaption) {
-        this.param.setEnableSelfAdaption(enableSelfAdaption);
-        return this;
-    }
-
-    /**
      * 开启图片大小自适应
      * @return 返回图片组件
      */
@@ -242,7 +232,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置内容模式
-     *
      * @param mode 内容模式
      * @return 返回图片组件
      */

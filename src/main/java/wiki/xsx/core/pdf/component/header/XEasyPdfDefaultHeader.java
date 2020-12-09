@@ -61,8 +61,8 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     }
 
     /**
-     * 设置是否有分割线
-     * @param splitLine 是否有分割线
+     * 添加分割线
+     * @param splitLine pdf分割线
      * @return 返回页眉组件
      */
     @Override

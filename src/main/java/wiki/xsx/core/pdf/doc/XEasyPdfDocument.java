@@ -2,7 +2,6 @@ package wiki.xsx.core.pdf.doc;
 
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSString;
-import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdfparser.PDFStreamParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -20,7 +19,6 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
-import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
 
 import javax.imageio.ImageIO;
 import javax.print.PrintServiceLookup;
@@ -33,8 +31,10 @@ import java.awt.print.PrinterJob;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * pdf文档
@@ -112,21 +112,21 @@ public class XEasyPdfDocument {
      * 设置文档信息
      * @return 返回pdf文档
      */
-    public XEasyPdfDocumentInfo setInfo() {
+    public XEasyPdfDocumentInfo information() {
         // 设置重置
         this.param.setReset(true);
-        return this.param.getDocumentInfo() != null ? this.param.getDocumentInfo() : new XEasyPdfDocumentInfo(this);
+        return this.param.getDocumentInfo()!=null?this.param.getDocumentInfo():new XEasyPdfDocumentInfo(this);
     }
 
     /**
      * 设置文档权限
      * @return 返回pdf文档
      */
-    public XEasyPdfDocumentPermission setPermission() {
+    public XEasyPdfDocumentPermission permission() {
         // 设置重置
         this.param.setReset(true);
         // 返回文档权限
-        return this.param.getPermission() != null ? this.param.getPermission() : new XEasyPdfDocumentPermission(this);
+        return this.param.getPermission()!=null?this.param.getPermission():new XEasyPdfDocumentPermission(this);
     }
 
     /**
@@ -434,196 +434,19 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 拆分文档
-     * @param outputPath 输出路径（目录）
+     * 文档拆分器
      * @return 返回pdf文档
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocument split(String outputPath) throws IOException {
-        return this.split(outputPath, null, null);
-    }
-    /**
-     * 拆分文档
-     * @param outputPath 输出路径（目录）
-     * @param splitter pdf拆分器
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument split(String outputPath, XEasyPdfDocumentSplitter splitter) throws IOException {
-        return this.split(outputPath, splitter, null);
+    public XEasyPdfDocumentSplitter splitter() {
+        return new XEasyPdfDocumentSplitter(this);
     }
 
     /**
-     * 拆分文档
-     * @param outputPath 输出路径（目录）
-     * @param prefix 文档名称前缀
-     * @return 返回pdf文档
-     * @throws IOException IO异常
+     * 提取文本器
+     * @return 返回pdf文档提取器
      */
-    public XEasyPdfDocument split(String outputPath, String prefix) throws IOException {
-        return this.split(outputPath, null, prefix);
-    }
-
-    /**
-     * 拆分文档
-     * @param outputPath 输出路径（目录）
-     * @param splitter pdf拆分器
-     * @param prefix 文档名称前缀
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument split(String outputPath, XEasyPdfDocumentSplitter splitter, String prefix) throws IOException {
-        // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
-        if (prefix==null) {
-            // 初始化文档名称前缀
-            prefix = "x-easypdf";
-        }
-        // 文件名称构造器
-        StringBuilder fileNameBuilder;
-        // 如果拆分器不为空，则使用拆分器进行拆分，否则按单页面拆分
-        if (splitter!=null) {
-            // 获取拆分页面列表
-            List<List<Integer>> pageList = splitter.getDocumentList();
-            // 遍历拆分页面列表
-            for (int i = 0, count = pageList.size(); i < count; i++) {
-                // 新建文件名称构造器
-                fileNameBuilder = new StringBuilder();
-                // 构建文件名称
-                fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append(".pdf");
-                // 获取输出流
-                try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
-                    // 拆分文档
-                    this.split(outputStream, XEasyPdfConvertUtil.toInt(pageList.get(i)));
-                }
-            }
-        //  按单页面拆分
-        }else {
-            // 初始化源文档
-            PDDocument source = this.createTarget();
-            // 拆分文档
-            List<PDDocument> documents = new Splitter().split(source);
-            // 定义拆分文档列表索引
-            int index = 1;
-            // 遍历拆分文档列表
-            for (PDDocument target : documents) {
-                // 新建文件名称构造器
-                fileNameBuilder = new StringBuilder();
-                // 构建文件名称
-                fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(index).append(".pdf");
-                // 获取输出流
-                try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
-                    // 设置文档信息及保护策略
-                    this.setInfoAndPolicy(target);
-                    // 保存文档
-                    target.save(outputStream);
-                    // 关闭文档
-                    target.close();
-                }
-                // 拆分文档列表索引自增
-                index++;
-            }
-        }
-        return this;
-    }
-
-    /**
-     * 拆分文档
-     * @param outputStream 输出流
-     * @param pageIndex 页面索引
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument split(OutputStream outputStream, int ...pageIndex) throws IOException {
-        // 新建任务文档
-        try(PDDocument target = new PDDocument()) {
-            // 初始化源文档
-            PDDocument source = this.createTarget();
-            // 获取源文档页面树
-            PDPageTree sourcePages = source.getPages();
-            // 遍历页面索引
-            for (int index : pageIndex) {
-                // 获取源文档页面
-                PDPage pdPage = sourcePages.get(index);
-                // 任务文档添加页面
-                PDPage importPage = target.importPage(pdPage);
-                // 设置页面资源缓存
-                importPage.setResources(pdPage.getResources());
-            }
-            // 设置文档信息及保护策略
-            this.setInfoAndPolicy(target);
-            // 保存任务文档
-            target.save(outputStream);
-            // 关闭文档
-        }
-        return this;
-    }
-
-    /**
-     * 提取文本
-     * @param list 文本列表（数据接收）
-     * @param regex 正则表达式
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument extractText(List<String> list, String regex) throws IOException {
-        return this.extractText(list, regex, (int[]) null);
-    }
-
-    /**
-     * 提取文本
-     * @param list 文本列表（数据接收）
-     * @param regex 正则表达式
-     * @param pageIndex 页面索引
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument extractText(List<String> list, String regex, int ...pageIndex) throws IOException {
-        XEasyPdfDocumentExtractor.build().init(this.createTarget()).extract(list, regex, pageIndex);
-        return this;
-    }
-
-    /**
-     * 提取文本
-     * @param data 文本字典（数据接收）
-     * @param extractor pdf提取器
-     * @param pageIndex 页面索引
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument extractText(Map<String, String> data, XEasyPdfDocumentExtractor extractor, int ...pageIndex) throws IOException {
-        extractor.init(this.createTarget()).extractRegions(data, pageIndex);
-        return this;
-    }
-
-    public XEasyPdfDocument replace(int startPage, int endPage, List<String> list) throws IOException {
-        PDDocument target = this.createTarget();
-        startPage = Math.max(startPage, 0);
-        endPage = Math.min(endPage, target.getNumberOfPages());
-        for (int i = startPage; i < endPage; i++) {
-            PDPage page = target.getPage(i);
-            PDFont font = page.getResources().getFont(page.getResources().getFontNames().iterator().next());
-            PDFStreamParser parser = new PDFStreamParser(page);
-            Object token = parser.parseNextToken();
-            while (token!=null) {
-                if (token instanceof COSString) {
-                    this.processOperator(font, (COSString) token, list);
-                }
-                token = parser.parseNextToken();
-            }
-        }
-        return this;
-    }
-
-    protected void processOperator(PDFont font, COSString previous, List<String> list) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        try(InputStream in = new ByteArrayInputStream(previous.getBytes())) {
-            while (in.available() > 0) {
-                builder.append(font.toUnicode(font.readCode(in)));
-            }
-            String text = builder.toString();
-//            System.out.println("text = " + text);
-            list.add(text);
-        }
+    public XEasyPdfDocumentExtractor extractor() {
+        return new XEasyPdfDocumentExtractor(this);
     }
 
     /**
@@ -720,9 +543,10 @@ public class XEasyPdfDocument {
     /**
      * 获取任务文档
      * @return 返回任务文档
+     * @throws IOException IO异常
      */
-    public PDDocument getTarget() {
-        return this.param.getTarget();
+    public PDDocument getTarget() throws IOException {
+        return this.createTarget();
     }
 
     /**
@@ -747,6 +571,24 @@ public class XEasyPdfDocument {
      */
     void setPermission(XEasyPdfDocumentPermission permission) {
         this.param.setPermission(permission);
+    }
+
+    /**
+     * 设置文档信息及保护策略
+     * @param target 任务文档
+     * @throws IOException IO异常
+     */
+    void setInfoAndPolicy(PDDocument target) throws IOException {
+        // 如果文档信息不为空，则进行设置
+        if (this.param.getDocumentInfo()!=null) {
+            // 设置文档信息
+            target.setDocumentInformation(this.param.getDocumentInfo().getInfo());
+        }
+        // 如果pdfBox保护策略不为空，则进行设置
+        if (this.param.getPermission()!=null) {
+            // 设置pdfBox保护策略
+            target.protect(this.param.getPermission().getPolicy());
+        }
     }
 
     /**
@@ -825,24 +667,6 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 设置文档信息及保护策略
-     * @param target 任务文档
-     * @throws IOException IO异常
-     */
-    private void setInfoAndPolicy(PDDocument target) throws IOException {
-        // 如果文档信息不为空，则进行设置
-        if (this.param.getDocumentInfo()!=null) {
-            // 设置文档信息
-            target.setDocumentInformation(this.param.getDocumentInfo().getInfo());
-        }
-        // 如果pdfBox保护策略不为空，则进行设置
-        if (this.param.getPermission()!=null) {
-            // 设置pdfBox保护策略
-            target.protect(this.param.getPermission().getPolicy());
-        }
-    }
-
-    /**
      * 填充表单
      * @throws IOException IO异常
      */
@@ -882,6 +706,53 @@ public class XEasyPdfDocument {
                     }
                 }
             }
+        }
+    }
+
+
+    /**
+     * 文本替换（预留，未实现）
+     * @param startPage 起始页面
+     * @param endPage 结束页面
+     * @param list 待替换字符串列表
+     * @return 返回pdf文档
+     * @throws IOException IO异常
+     */
+    protected XEasyPdfDocument replace(int startPage, int endPage, List<String> list) throws IOException {
+        PDDocument target = this.createTarget();
+        startPage = Math.max(startPage, 0);
+        endPage = Math.min(endPage, target.getNumberOfPages());
+        for (int i = startPage; i < endPage; i++) {
+            PDPage page = target.getPage(i);
+            PDFont font = page.getResources().getFont(page.getResources().getFontNames().iterator().next());
+            PDFStreamParser parser = new PDFStreamParser(page);
+            Object token = parser.parseNextToken();
+            while (token!=null) {
+                if (token instanceof COSString) {
+                    this.processOperator(font, (COSString) token, list);
+                }
+                token = parser.parseNextToken();
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 处理操作符
+     * @param font pdfbox字体
+     * @param previous 原有字符串
+     * @param list 待替换字符串列表
+     * @throws IOException IO异常
+     */
+    protected void processOperator(PDFont font, COSString previous, List<String> list) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        try(InputStream in = new ByteArrayInputStream(previous.getBytes())) {
+            while (in.available() > 0) {
+                builder.append(font.toUnicode(font.readCode(in)));
+            }
+            String text = builder.toString();
+//            System.out.println("text = " + text);
+            list.add(text);
         }
     }
 }

@@ -253,7 +253,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     /**
      * 设置内容模式
      * @param mode 内容模式
-     * @return 返回pdf组件
+     * @return 返回文本组件
      */
     @Override
     public XEasyPdfText setContentMode(ContentMode mode) {

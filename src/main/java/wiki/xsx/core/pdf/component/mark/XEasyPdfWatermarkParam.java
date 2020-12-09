@@ -117,7 +117,7 @@ class XEasyPdfWatermarkParam {
             // 循环添加空格
             for (int j = 0; j < blankCount; j++) {
                 // 添加空格
-                builder.append(" ");
+                builder.append(' ');
             }
         }
         // 初始化水印文本
