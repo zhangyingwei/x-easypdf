@@ -58,7 +58,7 @@ public class XEasyPdfPageTest {
         String sourcePath = OUTPUT_PATH + "testAddComponent.pdf";
         String filePath = OUTPUT_PATH + "testAddComponent2.pdf";
         String imagePath = "D:\\temp\\0020033143720852_b.jpg";
-        XEasyPdfDocument document = XEasyPdfHandler.Document.build(sourcePath);
+        XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(

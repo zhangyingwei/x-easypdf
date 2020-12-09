@@ -97,7 +97,7 @@ public class XEasyPdfImageTest {
         String sourcePath = OUTPUT_PATH + "testImage2.pdf";
         String filePath = OUTPUT_PATH + "testImage3.pdf";
         String imagePath = "D:\\temp\\0020033143720852_b.jpg";
-        XEasyPdfDocument document = XEasyPdfHandler.Document.build(sourcePath).setFontPath(FONT_PATH);
+        XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(

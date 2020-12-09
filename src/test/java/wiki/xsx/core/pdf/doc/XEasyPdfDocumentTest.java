@@ -65,7 +65,7 @@ public class XEasyPdfDocumentTest {
     public void testSave() throws IOException {
         String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
         String filePath = OUTPUT_PATH + "doc1.pdf";
-        XEasyPdfHandler.Document.build(sourcePath).addPage(
+        XEasyPdfHandler.Document.load(sourcePath).addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("你好，世界！")
@@ -154,7 +154,7 @@ public class XEasyPdfDocumentTest {
     public void testInsertPage() throws IOException {
         String sourcePath = OUTPUT_PATH + "backgroundColor.pdf";
         String filePath = OUTPUT_PATH + "insertPage.pdf";
-        XEasyPdfHandler.Document.build(sourcePath).insertPage(
+        XEasyPdfHandler.Document.load(sourcePath).insertPage(
                 -100,
                 XEasyPdfHandler.Page.build(XEasyPdfHandler.Text.build("插入首页"))
         ).insertPage(
@@ -172,9 +172,9 @@ public class XEasyPdfDocumentTest {
         String mergePath1 = OUTPUT_PATH + "insertPage.pdf";
         String mergePath2 = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH + "merge.pdf";
-        XEasyPdfHandler.Document.build(sourcePath).merge(
-                XEasyPdfHandler.Document.build(mergePath1),
-                XEasyPdfHandler.Document.build(mergePath2)
+        XEasyPdfHandler.Document.load(sourcePath).merge(
+                XEasyPdfHandler.Document.load(mergePath1),
+                XEasyPdfHandler.Document.load(mergePath2)
         ).setFontPath(FONT_PATH).save(filePath);
         System.out.println("finish");
     }
@@ -183,7 +183,7 @@ public class XEasyPdfDocumentTest {
     public void testImage1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.build(sourcePath).image(filePath, "png").close();
+        XEasyPdfHandler.Document.load(sourcePath).image(filePath, "png").close();
         System.out.println("finish");
     }
 
@@ -192,7 +192,7 @@ public class XEasyPdfDocumentTest {
         String sourcePath = OUTPUT_PATH + "insertPage.pdf";
         String filePath = OUTPUT_PATH;
         String prefix = "x-easypdf";
-        XEasyPdfHandler.Document.build(sourcePath).image(filePath, "jpg", prefix).close();
+        XEasyPdfHandler.Document.load(sourcePath).image(filePath, "jpg", prefix).close();
         System.out.println("finish");
     }
 
@@ -205,7 +205,7 @@ public class XEasyPdfDocumentTest {
                 OutputStream outputStream1 = Files.newOutputStream(Paths.get(filePath1));
                 OutputStream outputStream2 = Files.newOutputStream(Paths.get(filePath2))
         ) {
-            XEasyPdfHandler.Document.build(sourcePath)
+            XEasyPdfHandler.Document.load(sourcePath)
                     .image(outputStream1, "jpg", 0)
                     .image(outputStream2, "jpg", 6)
                     .close();
@@ -217,7 +217,7 @@ public class XEasyPdfDocumentTest {
     public void testSplit1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.build(sourcePath).splitter().split(filePath).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).splitter().split(filePath).finish().close();
         System.out.println("finish");
     }
 
@@ -225,7 +225,7 @@ public class XEasyPdfDocumentTest {
     public void testSplit2() throws IOException {
         String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
         String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.build(sourcePath)
+        XEasyPdfHandler.Document.load(sourcePath)
                 .splitter()
                 .addDocument(1)
                 .addDocument(1, 0)
@@ -240,7 +240,7 @@ public class XEasyPdfDocumentTest {
         String sourcePath = OUTPUT_PATH + "merge.pdf";
         String filePath = OUTPUT_PATH + "test.pdf";
         try(OutputStream outputStream = Files.newOutputStream(Paths.get(filePath))) {
-            XEasyPdfHandler.Document.build(sourcePath).splitter().split(outputStream, 3, 4, 5, 6).finish().close();
+            XEasyPdfHandler.Document.load(sourcePath).splitter().split(outputStream, 3, 4, 5, 6).finish().close();
         }
         System.out.println("finish");
     }
@@ -250,7 +250,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "testText.pdf";
         List<String> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.build(sourcePath).extractor().extract(list, "《.*》").finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list, "《.*》").finish().close();
         for (String s : list) {
             System.out.println("s = " + s);
         }
@@ -263,7 +263,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "testText.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
-        XEasyPdfHandler.Document.build(sourcePath).extractor().addRegion("test1", new Rectangle(600,2000)).extractByRegions(dataList, 0).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(600,2000)).extractByRegions(dataList, 0).finish().close();
         System.out.println("dataList = " + dataList);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");

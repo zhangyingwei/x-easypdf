@@ -55,7 +55,7 @@ public class XEasyPdfHandler {
         }
 
         /**
-         * 读取pdf
+         * 加载pdf
          * @param sourcePath 源文件路径
          */
         @SneakyThrows
@@ -64,7 +64,7 @@ public class XEasyPdfHandler {
         }
 
         /**
-         * 读取pdf
+         * 加载pdf
          * @param sourceInputStream 源文件数据流
          */
         @SneakyThrows
