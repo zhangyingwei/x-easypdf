@@ -49,7 +49,7 @@ public class XEasyPdfImageTest {
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Image.build(new File(imagePath)).setMarginLeft(50F)
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("My Header")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("My Header"))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
@@ -84,7 +84,7 @@ public class XEasyPdfImageTest {
                                 .setWidth(300F)
                                 .setHeight(300F)
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("My Header")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("My Header"))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))

@@ -3,7 +3,6 @@ package wiki.xsx.core.pdf.component.footer;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -35,7 +34,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
 
     /**
      * 有参构造
-     * @param image 待绘制图片
+     * @param image pdf图片
      */
     public XEasyPdfDefaultFooter(XEasyPdfImage image) {
         this.param.setImage(image);
@@ -43,7 +42,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
 
     /**
      * 有参构造
-     * @param text 待写入文本
+     * @param text pdf文本
      */
     public XEasyPdfDefaultFooter(XEasyPdfText text) {
         this.param.setText(text);
@@ -51,20 +50,11 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
 
     /**
      * 有参构造
-     * @param image 待绘制图片
-     * @param text 待写入文本
+     * @param image pdf图片
+     * @param text pdf文本
      */
     public XEasyPdfDefaultFooter(XEasyPdfImage image, XEasyPdfText text) {
         this.param.setImage(image).setText(text);
-    }
-
-    /**
-     * 设置页脚高度
-     * @return 返回页脚组件
-     */
-    public XEasyPdfFooter setHeight(float height) {
-        this.param.setHeight(height);
-        return this;
     }
 
     /**
@@ -72,6 +62,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * @param margin 边距
      * @return 返回页脚组件
      */
+    @Override
     public XEasyPdfDefaultFooter setMargin(float margin) {
         this.param.setMarginLeft(margin).setMarginRight(margin).setMarginBottom(margin);
         return this;
@@ -82,6 +73,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * @param margin 边距
      * @return 返回页脚组件
      */
+    @Override
     public XEasyPdfDefaultFooter setMarginLeft(float margin) {
         this.param.setMarginLeft(margin);
         return this;
@@ -92,6 +84,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * @param margin 边距
      * @return 返回页脚组件
      */
+    @Override
     public XEasyPdfDefaultFooter setMarginRight(float margin) {
         this.param.setMarginRight(margin);
         return this;
@@ -102,11 +95,27 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * @param margin 边距
      * @return 返回页脚组件
      */
+    @Override
     public XEasyPdfDefaultFooter setMarginBottom(float margin) {
         this.param.setMarginBottom(margin);
         return this;
     }
 
+    /**
+     * 获取页脚高度
+     * @return 返回页脚高度
+     */
+    @Override
+    public float getHeight() {
+        return this.param.getHeight()==null?0F:this.param.getHeight();
+    }
+
+    /**
+     * 绘制
+     * @param document pdf文档
+     * @param page     pdf页面
+     * @throws IOException IO异常
+     */
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         // 初始化参数
@@ -132,16 +141,10 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
                     .setMarginRight(this.param.getMarginRight())
                     .setMarginBottom(this.param.getMarginBottom())
                     .setPosition(this.param.getBeginX(), this.param.getBeginY())
-                    .setStyle(XEasyPdfTextStyle.CENTER)
                     .setCheckPage(false)
                     .draw(document, page);
         }
         // 开启页面自动重置定位
         page.enablePosition();
-    }
-
-    @Override
-    public float getHeight() {
-        return this.param.getHeight()==null?0F:this.param.getHeight();
     }
 }

@@ -68,7 +68,7 @@ public class XEasyPdfTextTest {
                         ).setMargin(10F),
                         XEasyPdfHandler.Text.build("-- 摘自百度百科").setStyle(XEasyPdfTextStyle.RIGHT).setMarginRight(10F)
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("页眉")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉"))
                 ).setWatermark(
                         XEasyPdfHandler.Watermark.build("贵阳").setFontSize(150F)
                 )
@@ -92,7 +92,7 @@ public class XEasyPdfTextTest {
                                 textBuild.toString()
                         ).setStyle(XEasyPdfTextStyle.CENTER)
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("页眉")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉"))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("页脚"))

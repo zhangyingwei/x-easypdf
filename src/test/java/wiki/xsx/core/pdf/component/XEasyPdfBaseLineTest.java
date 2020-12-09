@@ -24,7 +24,7 @@ import java.io.IOException;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfLineTest {
+public class XEasyPdfBaseLineTest {
 
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
     private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\line\\";
@@ -46,7 +46,7 @@ public class XEasyPdfLineTest {
                         XEasyPdfHandler.Line.build(100F, 100F, 150F, 50F).setLineWidth(20F).setColor(Color.ORANGE),
                         XEasyPdfHandler.Line.build(150F, 50F, 50F, 50F).setLineWidth(20F).setColor(Color.CYAN)
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("My Header")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("My Header"))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
@@ -63,7 +63,7 @@ public class XEasyPdfLineTest {
                         XEasyPdfHandler.SplitLine.SolidLine.build().setLineWidth(10F).setColor(Color.RED),
                         XEasyPdfHandler.SplitLine.SolidLine.build()
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("My Header")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("My Header"))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
@@ -80,7 +80,7 @@ public class XEasyPdfLineTest {
                         XEasyPdfHandler.SplitLine.DottedLine.build().setMarginTop(10F).setColor(Color.RED),
                         XEasyPdfHandler.SplitLine.DottedLine.build().setMarginTop(10F).setColor(Color.BLUE)
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("My Header")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("My Header"))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))

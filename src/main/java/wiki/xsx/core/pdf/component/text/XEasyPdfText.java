@@ -288,8 +288,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本高度
      * @throws IOException IO异常
      */
-    public float getTextHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
-        return this.param.getTextHeight(document, page);
+    public float getTextHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+        return this.param.getTextHeight(document, page, marginLeft, marginRight);
     }
 
     /**

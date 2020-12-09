@@ -1,14 +1,14 @@
 package wiki.xsx.core.pdf.component.header;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
-import java.awt.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,19 +37,38 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 有参构造
-     * @param text 待写入文本
+     * @param image pdf图片
      */
-    public XEasyPdfDefaultHeader(String text) {
+    public XEasyPdfDefaultHeader(XEasyPdfImage image) {
+        this.param.setImage(image);
+    }
+
+    /**
+     * 有参构造
+     * @param text pdf文本
+     */
+    public XEasyPdfDefaultHeader(XEasyPdfText text) {
         this.param.setText(text);
     }
 
     /**
      * 有参构造
-     * @param fontSize 字体大小
-     * @param text 待写入文本
+     * @param image pdf图片
+     * @param text pdf文本
      */
-    public XEasyPdfDefaultHeader(float fontSize, String text) {
-        this.param.setText(text);
+    public XEasyPdfDefaultHeader(XEasyPdfImage image, XEasyPdfText text) {
+        this.param.setImage(image).setText(text);
+    }
+
+    /**
+     * 设置是否有分割线
+     * @param splitLine 是否有分割线
+     * @return 返回页眉组件
+     */
+    @Override
+    public XEasyPdfDefaultHeader addSplitLine(XEasyPdfLine ...splitLine) {
+        this.param.getLineList().addAll(Arrays.asList(splitLine));
+        return this;
     }
 
     /**
@@ -57,6 +76,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param margin 边距
      * @return 返回页眉组件
      */
+    @Override
     public XEasyPdfDefaultHeader setMargin(float margin) {
         this.param.setMarginLeft(margin).setMarginRight(margin).setMarginTop(margin);
         return this;
@@ -67,6 +87,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param margin 边距
      * @return 返回页眉组件
      */
+    @Override
     public XEasyPdfDefaultHeader setMarginLeft(float margin) {
         this.param.setMarginLeft(margin);
         return this;
@@ -77,6 +98,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param margin 边距
      * @return 返回页眉组件
      */
+    @Override
     public XEasyPdfDefaultHeader setMarginRight(float margin) {
         this.param.setMarginRight(margin);
         return this;
@@ -87,127 +109,85 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param margin 边距
      * @return 返回页眉组件
      */
+    @Override
     public XEasyPdfDefaultHeader setMarginTop(float margin) {
         this.param.setMarginTop(margin);
         return this;
     }
 
     /**
-     * 设置行间距
-     * @param leading 行间距
-     * @return 返回页眉组件
+     * 获取页脚高度
+     * @return 返回页脚高度
      */
-    public XEasyPdfDefaultHeader setLeading(float leading) {
-        if (leading>0) {
-            this.param.setLeading(leading);
-        }
-        return this;
+    @Override
+    public float getHeight() {
+        return this.param.getHeight()==null?0F:this.param.getHeight();
     }
 
     /**
-     * 设置字体路径
-     * @param fontPath 字体路径
-     * @return 返回页眉组件
+     * 绘制
+     * @param document pdf文档
+     * @param page     pdf页面
+     * @throws IOException IO异常
      */
-    public XEasyPdfDefaultHeader setFontPath(String fontPath) {
-        this.param.setFontPath(fontPath);
-        return this;
-    }
-
-    /**
-     * 设置字体
-     * @param font pdfBox字体
-     * @return 返回页眉组件
-     */
-    public XEasyPdfDefaultHeader setFont(PDFont font) {
-        this.param.setFont(font);
-        return this;
-    }
-
-    /**
-     * 设置字体大小
-     * @param fontSize 字体大小
-     * @return 返回页眉组件
-     */
-    public XEasyPdfDefaultHeader setFontSize(float fontSize) {
-        this.param.setFontSize(fontSize);
-        return this;
-    }
-
-    /**
-     * 设置字体颜色
-     * @param fontColor 字体颜色
-     * @return 返回页眉组件
-     */
-    public XEasyPdfDefaultHeader setFontColor(Color fontColor) {
-        this.param.setFontColor(fontColor);
-        return this;
-    }
-
-    /**
-     * 设置文本样式（居左、居中、居右）
-     * @param style 样式
-     * @return 返回页眉组件
-     */
-    public XEasyPdfDefaultHeader setStyle(XEasyPdfTextStyle style) {
-        this.param.setStyle(style);
-        return this;
-    }
-
-    /**
-     * 设置拆分后的待添加文本列表
-     * @param splitTextList 拆分后的待添加文本列表
-     * @return 返回页眉组件
-     */
-    public XEasyPdfDefaultHeader setSplitTextList(List<String> splitTextList) {
-        this.param.setSplitTextList(splitTextList);
-        return this;
-    }
-
-    /**
-     * 设置是否有分割线
-     * @param hasSplitLine 是否有分割线
-     * @return 返回页眉组件
-     */
-    public XEasyPdfDefaultHeader setHasSplitLine(boolean hasSplitLine) {
-        this.param.setHasSplitLine(hasSplitLine);
-        return this;
-    }
-
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
-        // 写入文本
-        new XEasyPdfText(this.param.getText())
-                .setFontPath(this.param.getFontPath())
-                .setFont(this.param.getFont())
-                .setFontSize(this.param.getFontSize())
-                .setLeading(this.param.getLeading())
-                .setFontColor(this.param.getFontColor())
-                .setMarginLeft(this.param.getMarginLeft())
-                .setMarginRight(this.param.getMarginRight())
-                .setMarginTop(this.param.getMarginTop())
-                .setSplitTextList(this.param.getSplitTextList())
-                .setStyle(this.param.getStyle())
-                .draw(document, page);
-        // 如果带有分割线，则进行分割线绘制
-        if (this.param.isHasSplitLine()) {
-            // 定义分割线边距
-            float margin = 5F;
-            // 绘制分割线
-            new XEasyPdfSolidSplitLine()
-                    .setFontPath(this.param.getFontPath())
-                    .setFont(this.param.getFont())
-                    .setMarginLeft(margin)
-                    .setMarginRight(margin)
+        // 初始化参数
+        this.param.init(document, page);
+        // 如果为文本定位，则对文本组件进行页面坐标重置
+        if (this.param.isTextPosition()) {
+            // 如果图片不为空，则进行图片绘制
+            if (this.param.getImage()!=null) {
+                // 关闭页面自动重置定位
+                page.disablePosition();
+                // 绘制图片
+                this.param.getImage()
+                        .setMarginTop(this.param.getMarginTop())
+                        .setPosition(this.param.getBeginX(), this.param.getBeginY())
+                        .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                        .draw(document, page);
+                // 开启页面自动重置定位
+                page.enablePosition();
+            }
+            // 写入文本
+            this.param.getText()
+                    .setMarginTop(this.param.getMarginTop())
+                    .setMarginLeft(this.param.getMarginLeft())
+                    .setMarginRight(this.param.getMarginRight())
+                    .setCheckPage(false)
                     .draw(document, page);
-            // 绘制分割线
-            new XEasyPdfSolidSplitLine()
-                    .setFontPath(this.param.getFontPath())
-                    .setFont(this.param.getFont())
-                    .setMarginTop(1F)
-                    .setMarginLeft(margin)
-                    .setMarginRight(margin)
+            // 如果不为文本定位，则对图片进行页面坐标重置
+        } else {
+            // 如果文本不为空，则进行文本绘制
+            if (this.param.getText()!=null) {
+                // 关闭页面自动重置定位
+                page.disablePosition();
+                // 写入文本
+                this.param.getText()
+                        .setMarginTop(this.param.getMarginTop())
+                        .setMarginLeft(this.param.getMarginLeft())
+                        .setMarginRight(this.param.getMarginRight())
+                        .setCheckPage(false)
+                        .draw(document, page);
+                // 开启页面自动重置定位
+                page.enablePosition();
+            }
+            // 绘制图片
+            this.param.getImage()
+                    .setMarginTop(this.param.getMarginTop())
+                    .setPosition(this.param.getBeginX(), this.param.getBeginY())
+                    .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
                     .draw(document, page);
+        }
+        // 如果分割线列表不为空，则进行分割线绘制
+        if (!this.param.getLineList().isEmpty()) {
+            // 获取分割线列表
+            List<XEasyPdfLine> lineList = this.param.getLineList();
+            // 遍历分割线列表
+            for (XEasyPdfLine xEasyPdfLine : lineList) {
+                // 绘制分割线
+                xEasyPdfLine.setMarginLeft(this.param.getMarginLeft()).setMarginRight(this.param.getMarginRight()).draw(document, page);
+            }
         }
     }
 }

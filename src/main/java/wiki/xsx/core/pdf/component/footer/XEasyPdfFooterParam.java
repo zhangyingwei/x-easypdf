@@ -76,7 +76,7 @@ class XEasyPdfFooterParam {
         // 初始化X轴起始坐标
         this.beginX = this.marginLeft;
         // 初始化Y轴起始坐标
-        this.beginY = this.text==null?0:this.text.getTextHeight(document, page);
+        this.beginY = this.text==null?0:this.text.getTextHeight(document, page, this.marginLeft, this.marginRight);
         // 如果高度未初始化，则进行初始化
         if (this.height==null) {
             // 初始化高度，文本高度与图片高度取最大值，加上下边距

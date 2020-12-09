@@ -2,10 +2,15 @@ package wiki.xsx.core.pdf.component.header;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
+import wiki.xsx.core.pdf.component.text.XEasyPdfText;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
-import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,36 +36,15 @@ class XEasyPdfHeaderParam {
     /**
      * 文本
      */
-    private String text;
+    private XEasyPdfText text;
     /**
-     * 拆分后的待添加文本列表
+     * 图片
      */
-    private List<String> splitTextList;
+    private XEasyPdfImage image;
     /**
-     * 字体路径
+     * 分割线列表
      */
-    private String fontPath;
-    /**
-     * 字体
-     */
-    private PDFont font;
-    /**
-     * 字体大小
-     */
-    private Float fontSize = 10F;
-    /**
-     * 行间距
-     */
-    private Float leading = 1F;
-    /**
-     * 字体颜色
-     */
-    private Color fontColor = Color.BLACK;
-    /**
-     * 文本样式（居左、居中、居右）
-     * 默认居中
-     */
-    private XEasyPdfTextStyle style = XEasyPdfTextStyle.CENTER;
+    private List<XEasyPdfLine> lineList = new ArrayList<>(6);
     /**
      * 左边距
      */
@@ -74,7 +58,52 @@ class XEasyPdfHeaderParam {
      */
     private Float marginTop = 5F;
     /**
-     * 是否有分割线
+     * 页面X轴起始坐标
      */
-    private boolean hasSplitLine = true;
+    private Float beginX;
+    /**
+     * 页面Y轴起始坐标
+     */
+    private Float beginY;
+    /**
+     * 高度
+     */
+    private Float height;
+    /**
+     * 文本定位（重置页面X轴Y轴坐标）
+     */
+    private boolean isTextPosition = true;
+
+    /**
+     * 初始化
+     * @param document pdf文档
+     * @param page pdf页面
+     * @throws IOException IO异常
+     */
+    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 如果文本和图片都未初始化，则抛出异常信息
+        if (this.text==null&&this.image==null) {
+            throw new IllegalArgumentException("text or image can not be found");
+        }
+        // 计算图片高度
+        float imageHeight = this.image!=null?this.image.getHeight(document, page):0F;
+        // 计算文本高度
+        float textHeight = this.text!=null?this.text.getTextHeight(document, page, this.marginLeft, this.marginRight):0F;
+        // 获取pdfBox最新页面尺寸
+        PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 初始化X轴起始坐标
+        this.beginX = this.marginLeft;
+        // 初始化Y轴起始坐标
+        this.beginY = rectangle.getHeight() - imageHeight - this.marginTop;
+        // 如果文本不为空或文本高度小于图片
+        if (imageHeight>textHeight) {
+            // 设置文本定位为否
+            this.isTextPosition = false;
+        }
+        // 如果高度未初始化，则进行初始化
+        if (this.height==null) {
+            // 初始化高度，文本高度与图片高度取最大值
+            this.height = Math.max(imageHeight, textHeight) + this.marginTop;
+        }
+    }
 }

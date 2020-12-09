@@ -176,8 +176,10 @@ class XEasyPdfTextParam {
      * @return 返回文本高度
      * @throws IOException IO异常
      */
-    float getTextHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    float getTextHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+        this.marginLeft = marginLeft;
+        this.marginRight = marginRight;
         this.init(document, page);
-        return this.fontSize * (this.splitTextList.size() - 1);
+        return (this.fontSize + this.leading) * this.splitTextList.size() + this.marginTop;
     }
 }

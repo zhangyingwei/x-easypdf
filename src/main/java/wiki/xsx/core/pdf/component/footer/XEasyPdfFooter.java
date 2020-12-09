@@ -26,16 +26,44 @@ import java.io.IOException;
 public interface XEasyPdfFooter {
 
     /**
+     * 设置边距（左右下）
+     * @param margin 边距
+     * @return 返回页脚组件
+     */
+    XEasyPdfFooter setMargin(float margin);
+
+    /**
+     * 设置左边距
+     * @param margin 边距
+     * @return 返回页脚组件
+     */
+    XEasyPdfFooter setMarginLeft(float margin);
+
+    /**
+     * 设置右边距
+     * @param margin 边距
+     * @return 返回页脚组件
+     */
+    XEasyPdfFooter setMarginRight(float margin);
+
+    /**
+     * 设置下边距
+     * @param margin 边距
+     * @return 返回页脚组件
+     */
+    XEasyPdfFooter setMarginBottom(float margin);
+
+    /**
+     * 获取页脚高度
+     * @return 返回页脚高度
+     */
+    float getHeight();
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
      * @throws IOException IO异常
      */
     void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
-
-    /**
-     * 页脚高度
-     * @return 返回页脚高度
-     */
-    float getHeight();
 }

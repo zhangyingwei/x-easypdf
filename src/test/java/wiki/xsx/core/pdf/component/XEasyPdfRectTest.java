@@ -49,7 +49,7 @@ public class XEasyPdfRectTest {
                         XEasyPdfHandler.Rect.build(50F, 50F, 200F, 200F)
                                 .setBackgroundColor(Color.GREEN)
                 ).setHeader(
-                        XEasyPdfHandler.Header.build("My Header")
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("My Header"))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))

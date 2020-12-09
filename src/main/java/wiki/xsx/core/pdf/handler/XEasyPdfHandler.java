@@ -4,10 +4,12 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.footer.XEasyPdfDefaultFooter;
+import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.component.header.XEasyPdfDefaultHeader;
+import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.component.line.XEasyPdfBaseLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
-import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
@@ -192,8 +194,8 @@ public class XEasyPdfHandler {
          * @param endY 当前页面Y轴结束坐标
          * @return 返回pdf线条组件
          */
-        public static XEasyPdfLine build(float beginX, float beginY, float endX, float endY) {
-            return new XEasyPdfLine(beginX, beginY, endX, endY);
+        public static XEasyPdfBaseLine build(float beginX, float beginY, float endX, float endY) {
+            return new XEasyPdfBaseLine(beginX, beginY, endX, endY);
         }
     }
 
@@ -388,21 +390,30 @@ public class XEasyPdfHandler {
     public static class Header {
         /**
          * 构建页眉
-         * @param text 待写入文本
+         * @param text 文本组件
          * @return 返回pdf页眉组件
          */
-        public static XEasyPdfDefaultHeader build(String text) {
+        public static XEasyPdfHeader build(XEasyPdfText text) {
             return new XEasyPdfDefaultHeader(text);
         }
 
         /**
          * 构建页眉
-         * @param fontSize 字体大小
+         * @param image 图片组件
+         * @return 返回pdf页眉组件
+         */
+        public static XEasyPdfHeader build(XEasyPdfImage image) {
+            return new XEasyPdfDefaultHeader(image);
+        }
+
+        /**
+         * 构建页眉
+         * @param image 待绘制图片
          * @param text 待写入文本
          * @return 返回pdf页眉组件
          */
-        public static XEasyPdfDefaultHeader build(float fontSize, String text) {
-            return new XEasyPdfDefaultHeader(fontSize, text);
+        public static XEasyPdfHeader build(XEasyPdfImage image, XEasyPdfText text) {
+            return new XEasyPdfDefaultHeader(image, text);
         }
     }
 
@@ -412,29 +423,29 @@ public class XEasyPdfHandler {
     public static class Footer {
         /**
          * 构建页脚
-         * @param text 待写入文本
+         * @param text 文本组件
          * @return 返回pdf页脚组件
          */
-        public static XEasyPdfDefaultFooter build(XEasyPdfText text) {
+        public static XEasyPdfFooter build(XEasyPdfText text) {
             return new XEasyPdfDefaultFooter(text);
         }
 
         /**
          * 构建页脚
-         * @param image 待绘制图片
+         * @param image 图片组件
          * @return 返回pdf页脚组件
          */
-        public static XEasyPdfDefaultFooter build(XEasyPdfImage image) {
+        public static XEasyPdfFooter build(XEasyPdfImage image) {
             return new XEasyPdfDefaultFooter(image);
         }
 
         /**
          * 构建页脚
-         * @param image 待绘制图片
-         * @param text 待写入文本
+         * @param image 文本组件
+         * @param text 图片组件
          * @return 返回pdf页脚组件
          */
-        public static XEasyPdfDefaultFooter build(XEasyPdfImage image, XEasyPdfText text) {
+        public static XEasyPdfFooter build(XEasyPdfImage image, XEasyPdfText text) {
             return new XEasyPdfDefaultFooter(image, text);
         }
     }

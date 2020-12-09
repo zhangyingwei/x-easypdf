@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.component.header;
 
+import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -23,6 +24,47 @@ import java.io.IOException;
  * </p>
  */
 public interface XEasyPdfHeader {
+
+    /**
+     * 添加分割线
+     * @param splitLine 分割线
+     * @return 返回页眉组件
+     */
+    XEasyPdfHeader addSplitLine(XEasyPdfLine ...splitLine);
+
+    /**
+     * 设置边距（上左右）
+     * @param margin 边距
+     * @return 返回页眉组件
+     */
+    XEasyPdfHeader setMargin(float margin);
+
+    /**
+     * 设置左边距
+     * @param margin 边距
+     * @return 返回页眉组件
+     */
+    XEasyPdfHeader setMarginLeft(float margin);
+
+    /**
+     * 设置右边距
+     * @param margin 边距
+     * @return 返回页眉组件
+     */
+    XEasyPdfHeader setMarginRight(float margin);
+
+    /**
+     * 设置上边距
+     * @param margin 边距
+     * @return 返回页眉组件
+     */
+    XEasyPdfHeader setMarginTop(float margin);
+
+    /**
+     * 获取页眉高度
+     * @return 返回页眉高度
+     */
+    float getHeight();
 
     /**
      * 绘制

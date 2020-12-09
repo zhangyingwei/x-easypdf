@@ -1,7 +1,6 @@
 package wiki.xsx.core.pdf.component.line;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -26,7 +25,7 @@ import java.io.IOException;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
+public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 分割线参数
@@ -51,6 +50,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param fontPath 字体路径
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
         return this;
@@ -61,6 +61,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param font pdfBox字体
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine setFont(PDFont font) {
         this.param.setFont(font);
         return this;
@@ -81,6 +82,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine setMarginLeft(float margin) {
         this.param.setMarginLeft(margin);
         return this;
@@ -91,6 +93,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine setMarginRight(float margin) {
         this.param.setMarginRight(margin);
         return this;
@@ -121,6 +124,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param lineWidth 分割线宽度
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine setLineWidth(float lineWidth) {
         this.param.setLineWidth(lineWidth);
         return this;
@@ -131,6 +135,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param color 分割线颜色
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine setColor(Color color) {
         this.param.setColor(color);
         return this;
@@ -141,6 +146,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
      * @param lineCapStyle 分割线线型
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle) {
         this.param.setStyle(lineCapStyle);
         return this;
@@ -219,9 +225,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
         // 初始化虚线分割线参数
         this.init(document, page);
         // 定义线条组件
-        XEasyPdfLine xpdfLine;
+        XEasyPdfBaseLine xpdfLine;
         // 初始化线条组件
-        xpdfLine = new XEasyPdfLine(this.param);
+        xpdfLine = new XEasyPdfBaseLine(this.param);
         // 执行画图
         xpdfLine.draw(document, page);
         // 计算点线数量，点线数量 = (pdfBox最新页面宽度 - 左边距 - 右边距) / (点线长度 + 点线间隔)
@@ -240,7 +246,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfComponent {
                     this.param.getBeginX() + this.lineLength
             );
             // 重新初始化线条组件
-            xpdfLine = new XEasyPdfLine(this.param);
+            xpdfLine = new XEasyPdfBaseLine(this.param);
             // 执行画图
             xpdfLine.draw(document, page);
         }
