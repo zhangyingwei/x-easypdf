@@ -614,6 +614,8 @@ public class XEasyPdfDocument {
         PDDocument target = new PDDocument();
         // 初始化新任务文档
         this.param.setTarget(target);
+        // 关闭文档重置
+        this.param.setReset(false);
         // 初始化字体
         this.param.initFont(this);
         // 获取pdf页面列表
@@ -645,8 +647,6 @@ public class XEasyPdfDocument {
         this.fillForm();
         // 设置新任务文档
         this.param.setTarget(this.recreateTarget(target));
-        // 关闭文档重置
-        this.param.setReset(false);
     }
 
     /**
