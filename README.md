@@ -75,9 +75,30 @@ mvn clean install
 public class XpdfTest {
     public static void main(String[] args) throws IOException {
         final String fontPath = "C:\\Windows\\Fonts\\STSONG.TTF";
+        final String backgroundImagePath = "D:\\temp\\background.jpg";
         final String outputPath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
-        // 创建pdf
-        XEasyPdfHandler.Document.build().addPage(
+
+        // 设置背景图片
+        XEasyPdfHandler.Document.build().setGlobalBackgroundImage(
+                // 构建图片
+                XEasyPdfHandler.Image.build(new File(backgroundImagePath)).setHeight(800F)
+                // 设置全局页眉
+        ).setGlobalHeader(
+                // 构建页眉
+                XEasyPdfHandler.Header.build(
+                        // 构建页眉文本，并居中显示
+                        XEasyPdfHandler.Text.build("这是页眉").setStyle(XEasyPdfTextStyle.CENTER)
+                )
+                // 设置全局页脚
+        ).setGlobalFooter(
+                // 构建页脚
+                XEasyPdfHandler.Footer.build(
+                        // 构建页脚文本
+                        XEasyPdfHandler.Text.build("这是页脚")
+                )
+                // 添加页面
+        ).addPage(
+                // 构建页面
                 XEasyPdfHandler.Page.build(
                         // 构建文本
                         XEasyPdfHandler.Text.build(
@@ -105,15 +126,16 @@ public class XpdfTest {
                         ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F)
                         // 构建文本
                         ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
-                ).setFontPath(fontPath)
-        ).save(outputPath);
+                )
+                // 设置字体路径，并保存
+        ).setFontPath(fontPath).save(outputPath);
     }
 }
 ```
 
 > 效果如下：
 
-![示例效果](https://images.gitee.com/uploads/images/2020/0326/113340_f421727f_1494292.png "pdf.png")
+![示例效果](https://images.gitee.com/uploads/images/2020/1217/113846_115f5e8f_1494292.png "pdf.png")
 
 2. 使用说明
 

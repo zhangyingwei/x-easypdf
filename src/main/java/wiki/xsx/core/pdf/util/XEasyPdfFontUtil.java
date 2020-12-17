@@ -126,7 +126,8 @@ public class XEasyPdfFontUtil {
     public static void addToSubset(PDFont font, String text) {
         if (font.willBeSubset()) {
             int offset = 0;
-            while (offset < text.length()) {
+            int length = text.length();
+            while (offset < length) {
                 int codePoint = text.codePointAt(offset);
                 font.addToSubset(codePoint);
                 offset += Character.charCount(codePoint);
