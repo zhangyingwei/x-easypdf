@@ -321,16 +321,6 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testReplace() throws IOException {
-        long begin = System.currentTimeMillis();
-        String filePath = OUTPUT_PATH + "replace.pdf";
-        final String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
-        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).replace("世界", "中英文混合abcdefg", 0).close();
-        long end = System.currentTimeMillis();
-        System.out.println("finish("+(end-begin)+"ms)");
-    }
-
-    @Test
     public void testFillForm() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "test_fill.pdf";
