@@ -148,6 +148,8 @@ public class XEasyPdfDocumentSplitter {
             PDPageTree sourcePages = this.document.getPages();
             // 遍历页面索引
             for (int index : pageIndex) {
+                // 任务文档添加页面
+                target.addPage(sourcePages.get(index));
                 // 获取源文档页面
                 PDPage pdPage = sourcePages.get(index);
                 // 任务文档添加页面

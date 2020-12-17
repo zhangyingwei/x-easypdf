@@ -64,6 +64,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
     @Override
     public XEasyPdfDottedSplitLine setFont(PDFont font) {
         this.param.setFont(font);
+        this.param.setFontPath("");
         return this;
     }
 
@@ -256,6 +257,13 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
         }
         // 完成标记
         this.param.setDraw(true);
+        // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
+        if (this.param.getFontPath()!=null) {
+            // 关联字体
+            this.param.getFont().subset();
+            // 重置字体为null
+            this.param.setFont(null);
+        }
     }
 
     /**

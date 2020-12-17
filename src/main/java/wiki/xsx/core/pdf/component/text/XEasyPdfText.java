@@ -153,6 +153,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfText setFont(PDFont font) {
         this.param.setFont(font);
+        this.param.setFontPath("");
         return this;
     }
 
@@ -270,6 +271,13 @@ public class XEasyPdfText implements XEasyPdfComponent {
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         this.doDraw(document, page);
+        // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
+        if (this.param.getFontPath()!=null) {
+            // 关联字体
+            this.param.getFont().subset();
+            // 重置字体为null
+            this.param.setFont(null);
+        }
     }
 
     /**

@@ -118,4 +118,19 @@ public class XEasyPdfFontUtil {
         return font;
     }
 
+    /**
+     * 添加文本关联
+     * @param font pdfbox字体
+     * @param text 文本
+     */
+    public static void addToSubset(PDFont font, String text) {
+        if (font.willBeSubset()) {
+            int offset = 0;
+            while (offset < text.length()) {
+                int codePoint = text.codePointAt(offset);
+                font.addToSubset(codePoint);
+                offset += Character.charCount(codePoint);
+            }
+        }
+    }
 }

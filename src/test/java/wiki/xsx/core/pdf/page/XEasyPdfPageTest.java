@@ -62,8 +62,9 @@ public class XEasyPdfPageTest {
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(
-                XEasyPdfHandler.Image.build(new File(imagePath)).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
-        );
+                XEasyPdfHandler.Image.build(new File(imagePath)).setContentMode(XEasyPdfComponent.ContentMode.PREPEND),
+                XEasyPdfHandler.Text.build("xxxx")
+        ).setFontPath(FONT_PATH);
         document.save(filePath);
         System.out.println("finish");
     }

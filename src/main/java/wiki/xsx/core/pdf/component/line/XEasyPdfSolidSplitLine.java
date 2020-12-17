@@ -57,6 +57,7 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
     @Override
     public XEasyPdfSolidSplitLine setFont(PDFont font) {
         this.param.setFont(font);
+        this.param.setFontPath("");
         return this;
     }
 
@@ -199,12 +200,20 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
         this.init(document, page);
         // 执行画图
         new XEasyPdfBaseLine(this.param).draw(document, page);
+        // 如果允许重置定位，则重置pdf页面Y轴坐标
         if (page.getParam().isAllowResetPosition()) {
             // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
             page.getParam().setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
         }
         // 完成标记
         this.param.setDraw(true);
+        // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
+        if (this.param.getFontPath()!=null) {
+            // 关联字体
+            this.param.getFont().subset();
+            // 重置字体为null
+            this.param.setFont(null);
+        }
     }
 
     /**

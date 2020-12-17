@@ -115,6 +115,7 @@ public class XEasyPdfPage {
      */
     public XEasyPdfPage setFont(PDFont font) {
         this.param.setFont(font);
+        this.param.setFontPath("");
         return this;
     }
 
@@ -325,6 +326,8 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
+        // 初始化参数
+        this.param.init(document, this);
         // 如果原有pdfbox页面列表为空，则添加新页面
         if (this.param.getPageList().isEmpty()) {
             // 添加新页面
@@ -342,6 +345,13 @@ public class XEasyPdfPage {
         }
         // 绘制水印
         this.drawWatermark(document);
+        // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
+        if (this.param.getFontPath()!=null) {
+            // 关联字体
+            this.param.getFont().subset();
+            // 重置字体为null
+            this.param.setFont(null);
+        }
         return this;
     }
 
@@ -352,8 +362,6 @@ public class XEasyPdfPage {
      * @throws IOException IO异常
      */
     private XEasyPdfPage setLastPageBackgroundColor(XEasyPdfDocument document) throws IOException {
-        // 初始化参数
-        this.param.init(document, this);
         // 如果背景颜色不为空，且背景颜色不为白色，则进行背景颜色设置
         if (this.param.getBackgroundColor()!=null&&!Color.WHITE.equals(this.param.getBackgroundColor())) {
             // 获取pdfBox最新页面

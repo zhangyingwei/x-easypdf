@@ -1,8 +1,7 @@
 package wiki.xsx.core.pdf.doc;
 
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.cos.COSString;
-import org.apache.pdfbox.pdfparser.PDFStreamParser;
+import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
@@ -19,6 +18,7 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import javax.imageio.ImageIO;
 import javax.print.PrintServiceLookup;
@@ -28,7 +28,10 @@ import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -466,13 +469,13 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public void save(OutputStream outputStream) throws IOException {
-        try  {
+        try(COSWriter writer = new COSWriter(outputStream))  {
             // 创建任务文档
             PDDocument target = this.createTarget();
             // 设置文档信息及保护策略
             this.setInfoAndPolicy(target);
-            // 保存任务文档
-            target.save(outputStream);
+            // 写入文档
+            writer.write(target);
         } finally {
             // 关闭pdfBox文档
             this.close();
@@ -528,13 +531,13 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public void close() throws IOException {
+        // 如果任务文档不为空，则关闭
+        if (this.param.getTarget()!=null) {
+            // 关闭任务文档
+            this.param.getTarget().close();
+        }
         // 如果源文档不为空，则关闭
         if (this.param.getSource()!=null) {
-            // 如果任务文档不为空，则关闭
-            if (this.param.getTarget()!=null) {
-                // 关闭任务文档
-                this.param.getTarget().close();
-            }
             // 关闭源文档
             this.param.getSource().close();
         }
@@ -547,6 +550,14 @@ public class XEasyPdfDocument {
      */
     public PDDocument getTarget() throws IOException {
         return this.createTarget();
+    }
+
+    /**
+     * 获取源文档
+     * @return 返回源文档
+     */
+    public PDDocument getSource() {
+        return this.param.getSource();
     }
 
     /**
@@ -612,6 +623,11 @@ public class XEasyPdfDocument {
     private void initTarget() throws IOException {
         // 新建任务文档
         PDDocument target = new PDDocument();
+        // 如果源文档不为空，则设置文档表单
+        if (this.getSource()!=null) {
+            // 设置文档表单
+            target.getDocumentCatalog().setAcroForm(this.getSource().getDocumentCatalog().getAcroForm());
+        }
         // 初始化新任务文档
         this.param.setTarget(target);
         // 关闭文档重置
@@ -645,25 +661,13 @@ public class XEasyPdfDocument {
         }
         // 填充表单
         this.fillForm();
-        // 设置新任务文档
-        this.param.setTarget(this.recreateTarget(target));
-    }
-
-    /**
-     * 重新创建任务文档（用于关联字体）
-     * @param document pdfBox文档
-     * @return 返回任务文档
-     * @throws IOException IO异常
-     */
-    private PDDocument recreateTarget(PDDocument document) throws IOException {
-        // 初始化字节流
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
-        // 保存文档
-        document.save(byteArrayOutputStream);
-        // 关闭文档
-        document.close();
-        // 重新读取文档
-        return PDDocument.load(byteArrayOutputStream.toByteArray());
+        // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
+        if (this.param.getFontPath()!=null) {
+            // 关联字体
+            this.param.getFont().subset();
+            // 重置字体为null
+            this.param.setFont(null);
+        }
     }
 
     /**
@@ -676,7 +680,7 @@ public class XEasyPdfDocument {
         // 如果表单字典有内容，则进行填充
         if (formMap!=null&&formMap.size()>0) {
             // 如果文档字体未初始化，则提示错误
-            if (this.getFont()==null) {
+            if (this.param.getFontPath()==null) {
                 throw new RuntimeException("the document font must be set");
             }
             // 定义pdfBox表单字段
@@ -701,58 +705,12 @@ public class XEasyPdfDocument {
                     field = acroForm.getField(entry.getKey());
                     // 如果pdfBox表单字段不为空，则填充值
                     if (field!=null) {
+                        XEasyPdfFontUtil.addToSubset(this.getFont(), entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
                     }
                 }
             }
-        }
-    }
-
-
-    /**
-     * 文本替换（预留，未实现）
-     * @param startPage 起始页面
-     * @param endPage 结束页面
-     * @param list 待替换字符串列表
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    protected XEasyPdfDocument replace(int startPage, int endPage, List<String> list) throws IOException {
-        PDDocument target = this.createTarget();
-        startPage = Math.max(startPage, 0);
-        endPage = Math.min(endPage, target.getNumberOfPages());
-        for (int i = startPage; i < endPage; i++) {
-            PDPage page = target.getPage(i);
-            PDFont font = page.getResources().getFont(page.getResources().getFontNames().iterator().next());
-            PDFStreamParser parser = new PDFStreamParser(page);
-            Object token = parser.parseNextToken();
-            while (token!=null) {
-                if (token instanceof COSString) {
-                    this.processOperator(font, (COSString) token, list);
-                }
-                token = parser.parseNextToken();
-            }
-        }
-        return this;
-    }
-
-    /**
-     * 处理操作符
-     * @param font pdfbox字体
-     * @param previous 原有字符串
-     * @param list 待替换字符串列表
-     * @throws IOException IO异常
-     */
-    protected void processOperator(PDFont font, COSString previous, List<String> list) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        try(InputStream in = new ByteArrayInputStream(previous.getBytes())) {
-            while (in.available() > 0) {
-                builder.append(font.toUnicode(font.readCode(in)));
-            }
-            String text = builder.toString();
-//            System.out.println("text = " + text);
-            list.add(text);
         }
     }
 }

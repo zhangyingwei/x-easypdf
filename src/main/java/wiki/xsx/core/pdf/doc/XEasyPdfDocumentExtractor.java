@@ -59,7 +59,7 @@ public class XEasyPdfDocumentExtractor {
     XEasyPdfDocumentExtractor(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.getTarget();
-        this.simpleExtractor = new SimpleExtractor();
+        this.simpleExtractor = new SimpleExtractor(this.document);
         this.regionExtractor = new RegionExtractor();
     }
 
@@ -101,6 +101,17 @@ public class XEasyPdfDocumentExtractor {
     }
 
     /**
+     * 提取文本(全部)
+     * @param textList 文本列表
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocumentExtractor extract(List<String> textList, int ...pageIndex) throws IOException {
+        this.extract(textList, null, pageIndex);
+        return this;
+    }
+
+    /**
      * 提取文本
      * @param textList 文本列表
      * @param regex 正则表达式
@@ -108,6 +119,21 @@ public class XEasyPdfDocumentExtractor {
      */
     public XEasyPdfDocumentExtractor extract(List<String> textList, String regex, int ...pageIndex) throws IOException {
         this.simpleExtractor.extract(textList, regex, pageIndex);
+        return this;
+    }
+
+    /**
+     * 提取表格文本(单行列)
+     * @param textList 文本列表（第一层为行，第二层为列）
+     * @param pageIndex 页面索引
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocumentExtractor extractBySimpleTable(List<List<String>> textList, int pageIndex) throws IOException {
+        List<String> sourceList = new ArrayList<>(1024);
+        this.extract(sourceList, "(\\S[^\\n&]+)", pageIndex);
+        for (String rowText : sourceList) {
+            textList.add(Arrays.asList(rowText.split("\\s")));
+        }
         return this;
     }
 
@@ -141,16 +167,25 @@ public class XEasyPdfDocumentExtractor {
     private static class SimpleExtractor extends PDFTextStripper {
 
         /**
-         * 无参构造
+         * pdfbox文档
+         */
+        private final PDDocument document;
+
+        /**
+         * 有参构造
+         * @param document pdfbox文档
          * @throws IOException IO异常
          */
-        public SimpleExtractor() throws IOException {}
+        public SimpleExtractor(PDDocument document) throws IOException {
+            this.document = document;
+        }
 
         /**
          * 提取文本
          * @param textList 文本列表
          * @param regex 正则表达式
          * @param pageIndex 页面索引
+         * @throws IOException IO异常
          */
         void extract(List<String> textList, String regex, int ...pageIndex) throws IOException {
             // 如果页面索引有内容，则根据页面索引提取文本
@@ -158,9 +193,9 @@ public class XEasyPdfDocumentExtractor {
                 // 遍历页面索引
                 for (int index : pageIndex) {
                     // 设置起始页面
-                    this.setStartPage(index);
+                    this.setStartPage(index+1);
                     // 设置结束页面
-                    this.setEndPage(index);
+                    this.setEndPage(index+1);
                     // 提取文本
                     this.extract(textList, regex);
                 }
@@ -170,6 +205,7 @@ public class XEasyPdfDocumentExtractor {
                 this.extract(textList, regex);
             }
         }
+
 
         /**
          * 提取文本

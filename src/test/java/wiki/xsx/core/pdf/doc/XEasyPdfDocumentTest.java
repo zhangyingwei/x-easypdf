@@ -33,7 +33,8 @@ import java.util.*;
  */
 public class XEasyPdfDocumentTest {
 
-    private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
+    private static final String FONT_PATH = "C:\\Windows\\Fonts\\ARIALUNI.TTF";
+//    private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
     private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\doc\\";
 
     @Before
@@ -50,7 +51,7 @@ public class XEasyPdfDocumentTest {
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
-                        XEasyPdfHandler.Text.build("你好，世界！"),
+                        XEasyPdfHandler.Text.build("可以，世界！"),
                         XEasyPdfHandler.Text.build("我是第一页")
                 ),
                 XEasyPdfHandler.Page.build(
@@ -237,10 +238,10 @@ public class XEasyPdfDocumentTest {
 
     @Test
     public void testSplit3() throws IOException {
-        String sourcePath = OUTPUT_PATH + "merge.pdf";
+        String sourcePath = "C:\\Users\\xsx\\Desktop\\spring-boot-reference .pdf";
         String filePath = OUTPUT_PATH + "test.pdf";
         try(OutputStream outputStream = Files.newOutputStream(Paths.get(filePath))) {
-            XEasyPdfHandler.Document.load(sourcePath).splitter().split(outputStream, 3, 4, 5, 6).finish().close();
+            XEasyPdfHandler.Document.load(sourcePath).splitter().split(outputStream, 41).finish().close();
         }
         System.out.println("finish");
     }
@@ -259,12 +260,82 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testStripText2() throws IOException {
+    public void testStripText1() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "testText.pdf";
+        List<String> list = new ArrayList<>(1024);
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list).finish().close();
+        for (String s : list) {
+            System.out.println("s = " + s);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testStripText2() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\table\\testTable.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
         XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(600,2000)).extractByRegions(dataList, 0).finish().close();
         System.out.println("dataList = " + dataList);
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testStripTable() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\table\\testTable.pdf";
+        List<String> list = new ArrayList<>(1024);
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list, "(\\S[^\\n&]+)").finish().close();
+        for (String s : list) {
+            System.out.println("s = " + s);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testStripTable2() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\doc\\test.pdf";
+        List<List<String>> list = new ArrayList<>(1024);
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractBySimpleTable(list, 0).finish().close();
+        for (List<String> s : list) {
+            System.out.println("s = " + s);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testStripTable3() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\doc\\test.pdf";
+        List<Map<String, String>> dataList = new ArrayList<>();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(0,320,800,540)).extractByRegions(dataList, 0).finish().close();
+        System.out.println("dataList = " + dataList);
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testReplace() throws IOException {
+        long begin = System.currentTimeMillis();
+        String filePath = OUTPUT_PATH + "replace.pdf";
+        final String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).replace("世界", "中英文混合abcdefg", 0).close();
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void testFillForm() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = OUTPUT_PATH + "test_fill.pdf";
+        String filePath = OUTPUT_PATH + "fillForm.pdf";
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).fillForm(Collections.singletonMap("test", "爽爽的贵阳")).save(filePath);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }
