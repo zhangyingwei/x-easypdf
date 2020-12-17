@@ -34,7 +34,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 
 #### 软件架构
 
-![软件架构](https://images.gitee.com/uploads/images/2020/0331/134211_0652923a_1494292.png "xpdf整体架构.png")
+![软件架构](https://images.gitee.com/uploads/images/2020/1217/110553_4e3dfc03_1494292.png "xpdf整体架构.png")
 
 1. document(文档)：PDF文档
 2. page(页面)：若干个页面组成PDF文档
@@ -77,10 +77,8 @@ public class XpdfTest {
         final String fontPath = "C:\\Windows\\Fonts\\STSONG.TTF";
         final String outputPath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
         // 创建pdf
-        XEasyPdfUtil.create(
-                outputPath
-                // 构建页面
-                ,XEasyPdfHandler.Page.build(
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build(
                         // 构建文本
                         XEasyPdfHandler.Text.build(
                                 "Hello World(这是一个DEMO)"
@@ -108,7 +106,7 @@ public class XpdfTest {
                         // 构建文本
                         ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
                 ).setFontPath(fontPath)
-        );
+        ).save(outputPath);
     }
 }
 ```

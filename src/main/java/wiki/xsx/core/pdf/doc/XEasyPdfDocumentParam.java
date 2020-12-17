@@ -99,10 +99,9 @@ class XEasyPdfDocumentParam {
      * @param document pdf文档
      */
     void initFont(XEasyPdfDocument document) {
-//        if (this.fontPath!=null&&this.font==null) {
-//            this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
-//        }
-        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
+        if (this.fontPath!=null) {
+            this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
+        }
     }
 
     /**
