@@ -1,7 +1,6 @@
 package wiki.xsx.core.pdf.component.table;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -47,26 +46,6 @@ public class XEasyPdfRow {
      */
     public XEasyPdfRow(List<XEasyPdfCell> cellList) {
         this.param.getCells().addAll(cellList);
-    }
-
-    /**
-     * 添加单元格
-     * @param cells pdf单元格
-     * @return 返回表格行组件
-     */
-    public XEasyPdfRow addCell(XEasyPdfCell...cells) {
-        Collections.addAll(this.param.getCells(), cells);
-        return this;
-    }
-
-    /**
-     * 添加单元格
-     * @param cellList pdf单元格列表
-     * @return 返回表格行组件
-     */
-    public XEasyPdfRow addCell(List<XEasyPdfCell> cellList) {
-        this.param.getCells().addAll(cellList);
-        return this;
     }
 
     /**
@@ -121,12 +100,42 @@ public class XEasyPdfRow {
     }
 
     /**
-     * 设置文本样式（居左、居中、居右）
+     * 设置表格样式（居左、居中、居右）
      * @param style 样式
      * @return 返回表格行组件
      */
-    public XEasyPdfRow setStyle(XEasyPdfTextStyle style) {
+    public XEasyPdfRow setStyle(XEasyPdfTableStyle style) {
         this.param.setStyle(style);
+        return this;
+    }
+
+    /**
+     * 设置行高
+     * @param height 行高
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setHeight(float height) {
+        this.param.setHeight(height);
+        return this;
+    }
+
+    /**
+     * 添加单元格
+     * @param cells pdf单元格
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow addCell(XEasyPdfCell...cells) {
+        Collections.addAll(this.param.getCells(), cells);
+        return this;
+    }
+
+    /**
+     * 添加单元格
+     * @param cellList pdf单元格列表
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow addCell(List<XEasyPdfCell> cellList) {
+        this.param.getCells().addAll(cellList);
         return this;
     }
 
@@ -154,16 +163,17 @@ public class XEasyPdfRow {
         for (XEasyPdfCell cell : cells) {
             // 如果单元格不为空，则进行绘制
             if (cell!=null) {
+                this.param.setBeginX(this.param.getBeginX()+cell.getParam().getMarginLeft());
                 // 绘制单元格
                 cell.doDraw(document, page, this);
                 // 重置X轴起始坐标
-                this.param.setBeginX(this.param.getBeginX()+cell.getParam().getMarginLeft()+cell.getParam().getWidth()-1F);
+                this.param.setBeginX(this.param.getBeginX()+cell.getParam().getWidth()-1F);
             }
         }
         // 重置页面Y轴起始坐标
         page.getParam().setPageY(this.param.getBeginY());
         // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
-        if (this.param.getFontPath()!=null) {
+        if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
             // 关联字体
             this.param.getFont().subset();
             // 重置字体为null

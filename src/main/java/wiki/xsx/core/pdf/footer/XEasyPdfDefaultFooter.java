@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.component.footer;
+package wiki.xsx.core.pdf.footer;
 
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;

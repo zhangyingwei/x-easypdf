@@ -45,7 +45,7 @@ public class XEasyPdfFooterTest {
                 XEasyPdfHandler.Page.build()
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("Hello World"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -66,7 +66,7 @@ public class XEasyPdfFooterTest {
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("Hello World"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -94,7 +94,7 @@ public class XEasyPdfFooterTest {
                 XEasyPdfHandler.Footer.build(
                         XEasyPdfHandler.Text.build("Hello World")
                 )
-        ).setGlobalBackgroundColor(new Color(0,191,255)).save(filePath);
+        ).setGlobalBackgroundColor(new Color(0,191,255)).save(filePath).close();
         System.out.println("finish");
     }
 }

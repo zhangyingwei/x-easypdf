@@ -58,7 +58,7 @@ public class XEasyPdfDocumentTest {
                         XEasyPdfHandler.Text.build("你好，世界！").setStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("我是第二页").setStyle(XEasyPdfTextStyle.RIGHT)
                 )
-        ).setFontPath(FONT_PATH).save(filePath);
+        ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -71,7 +71,7 @@ public class XEasyPdfDocumentTest {
                         XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("你好，世界！")
                 ).setFontPath(FONT_PATH)
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -89,7 +89,8 @@ public class XEasyPdfDocumentTest {
             .setCreateTime(Calendar.getInstance())
             .setUpdateTime(Calendar.getInstance())
             .finish()
-            .save(filePath);
+            .save(filePath)
+            .close();
         System.out.println("finish");
     }
 
@@ -108,7 +109,8 @@ public class XEasyPdfDocumentTest {
                 .setCanModify(false)
                 .setCanModifyAnnotations(false)
                 .finish()
-                .save(filePath);
+                .save(filePath)
+                .close();
         System.out.println("finish");
     }
 
@@ -120,7 +122,8 @@ public class XEasyPdfDocumentTest {
                 XEasyPdfHandler.Page.build()
         ).setFontPath(FONT_PATH)
                 .setGlobalBackgroundColor(Color.YELLOW)
-                .save(filePath);
+                .save(filePath)
+                .close();
         System.out.println("finish");
     }
 
@@ -147,7 +150,8 @@ public class XEasyPdfDocumentTest {
         ).setFontPath(FONT_PATH)
                 .setGlobalBackgroundColor(new Color(0,191,255))
                 .setGlobalBackgroundImage(XEasyPdfHandler.Image.build(new File(imagePath)).setStyle(XEasyPdfImageStyle.CENTER).setMarginTop(300))
-                .save(filePath);
+                .save(filePath)
+                .close();
         System.out.println("finish");
     }
 
@@ -163,7 +167,8 @@ public class XEasyPdfDocumentTest {
                 XEasyPdfHandler.Page.build(XEasyPdfHandler.Text.build("插入尾页"))
         ).setFontPath(FONT_PATH)
                 .setGlobalBackgroundColor(new Color(0,191,255))
-                .save(filePath);
+                .save(filePath)
+                .close();
         System.out.println("finish");
     }
 
@@ -176,7 +181,7 @@ public class XEasyPdfDocumentTest {
         XEasyPdfHandler.Document.load(sourcePath).merge(
                 XEasyPdfHandler.Document.load(mergePath1),
                 XEasyPdfHandler.Document.load(mergePath2)
-        ).setFontPath(FONT_PATH).save(filePath);
+        ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -184,7 +189,7 @@ public class XEasyPdfDocumentTest {
     public void testImage1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.load(sourcePath).image(filePath, "png").close();
+        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, "png").finish().close();
         System.out.println("finish");
     }
 
@@ -193,7 +198,7 @@ public class XEasyPdfDocumentTest {
         String sourcePath = OUTPUT_PATH + "insertPage.pdf";
         String filePath = OUTPUT_PATH;
         String prefix = "x-easypdf";
-        XEasyPdfHandler.Document.load(sourcePath).image(filePath, "jpg", prefix).close();
+        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, "jpg", prefix).finish().close();
         System.out.println("finish");
     }
 
@@ -207,8 +212,10 @@ public class XEasyPdfDocumentTest {
                 OutputStream outputStream2 = Files.newOutputStream(Paths.get(filePath2))
         ) {
             XEasyPdfHandler.Document.load(sourcePath)
+                    .imager()
                     .image(outputStream1, "jpg", 0)
                     .image(outputStream2, "jpg", 6)
+                    .finish()
                     .close();
         }
         System.out.println("finish");
@@ -286,10 +293,10 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripTable() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\table\\testTable.pdf";
-        List<String> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list, "(\\S[^\\n&]+)").finish().close();
-        for (String s : list) {
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\RyxtaeBSbg3z6y9rK9BX0-ccgfdt-u4q3a4UL9y05FS51LrPcf6wJVdpHC5T4Z6iVCjkkZQym4pZ4Wn0AQ8ScQ.pdf";
+        List<List<String>> list = new ArrayList<>(1024);
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractForSimpleTable(list, 0).finish().close();
+        for (List<String> s : list) {
             System.out.println("s = " + s);
         }
         long end = System.currentTimeMillis();
@@ -299,9 +306,9 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripTable2() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\doc\\test.pdf";
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\spring-boot-reference .pdf";
         List<List<String>> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.load(sourcePath).extractor().extractBySimpleTable(list, 0).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractByRegionsForSimpleTable(list, new Rectangle(0,0, 800, 170),320).finish().close();
         for (List<String> s : list) {
             System.out.println("s = " + s);
         }
@@ -312,7 +319,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripTable3() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\doc\\test.pdf";
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\spring-boot-reference .pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
         XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(0,320,800,540)).extractByRegions(dataList, 0).finish().close();
         System.out.println("dataList = " + dataList);
@@ -325,7 +332,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "test_fill.pdf";
         String filePath = OUTPUT_PATH + "fillForm.pdf";
-        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).fillForm(Collections.singletonMap("test", "爽爽的贵阳")).save(filePath);
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).fillForm(Collections.singletonMap("test", "爽爽的贵阳")).save(filePath).close();
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }
@@ -386,6 +393,6 @@ public class XEasyPdfDocumentTest {
                         ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
                 )
             // 设置字体路径，并保存
-        ).setFontPath(fontPath).save(outputPath);
+        ).setFontPath(fontPath).save(outputPath).close();
     }
 }

@@ -6,10 +6,10 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
-import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
@@ -57,6 +57,10 @@ public class XEasyPdfPageParam {
      * pdfBox页面尺寸
      */
     private PDRectangle pageSize = PDRectangle.A4;
+    /**
+     * pdfBox页面尺寸（手动修改）
+     */
+    private PDRectangle modifyPageSize;
     /**
      * 包含的pdfBox页面列表
      */
@@ -116,7 +120,7 @@ public class XEasyPdfPageParam {
      * @param page pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (this.font==null) {
+        if (this.fontPath!=null) {
             this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
         if (this.backgroundColor==null) {

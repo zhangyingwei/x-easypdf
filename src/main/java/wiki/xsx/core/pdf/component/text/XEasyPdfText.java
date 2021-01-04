@@ -75,6 +75,24 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 开启自身样式
+     * @return 返回文本组件
+     */
+    public XEasyPdfText enableSelfStyle() {
+        this.param.setUseSelfStyle(true);
+        return this;
+    }
+
+    /**
+     * 关闭自身样式
+     * @return 返回文本组件
+     */
+    public XEasyPdfText disableSelfStyle() {
+        this.param.setUseSelfStyle(false);
+        return this;
+    }
+
+    /**
      * 设置边距（上下左右）
      * @param margin 边距
      * @return 返回文本组件
@@ -272,7 +290,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
         this.doDraw(document, page);
         // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
-        if (this.param.getFontPath()!=null) {
+        if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
             // 关联字体
             this.param.getFont().subset();
             // 重置字体为null
@@ -290,14 +308,77 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 获取文本高度
+     * 获取高度
      * @param document pdf文档
      * @param page pdf页面
+     * @param marginLeft 左边距
+     * @param marginRight 右边距
      * @return 返回文本高度
      * @throws IOException IO异常
      */
-    public float getTextHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
-        return this.param.getTextHeight(document, page, marginLeft, marginRight);
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+        return this.param.getHeight(document, page, marginLeft, marginRight);
+    }
+
+    /**
+     * 获取宽度
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param marginLeft 左边距
+     * @param marginRight 右边距
+     * @return 返回文本宽度
+     * @throws IOException
+     */
+    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+        return this.param.getWidth(document, page, marginLeft, marginRight);
+    }
+
+    /**
+     * 获取上边距
+     * @return 返回上边距
+     */
+    public float getMarginTop() {
+        return this.param.getMarginTop();
+    }
+
+    /**
+     * 获取下边距
+     * @return 返回下边距
+     */
+    public float getMarginBottom() {
+        return this.param.getMarginBottom();
+    }
+
+    /**
+     * 获取左边距
+     * @return 返回左边距
+     */
+    public float getMarginLeft() {
+        return this.param.getMarginLeft();
+    }
+
+    /**
+     * 获取右边距
+     * @return 返回右边距
+     */
+    public float getMarginRight() {
+        return this.param.getMarginRight();
+    }
+
+    /**
+     * 获取文本样式
+     * @return 返回文本样式
+     */
+    public XEasyPdfTextStyle getStyle() {
+        return this.param.getStyle();
+    }
+
+    /**
+     * 是否使用自身样式
+     * @return 返回布尔值，是为true，否为false
+     */
+    public boolean isUseSelfStyle() {
+        return this.param.isUseSelfStyle();
     }
 
     /**
@@ -321,7 +402,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 设置字体颜色
         contentStream.setNonStrokingColor(this.param.getFontColor());
         // 设置行间距
-        contentStream.setLeading(this.param.getLeading() + this.param.getFontSize());
+        contentStream.setLeading(this.param.getLeading() + this.param.getFontHeight());
         return contentStream;
     }
 
@@ -343,8 +424,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
         List<String> splitTextList = this.param.getSplitTextList();
         // 文本总行数索引
         int totalLineIndex = splitTextList.size() - 1;
-        // 当前文本行索引
-        int lineIndex = 0;
         // 定义内容流
         PDPageContentStream stream = null;
         // 居左样式
@@ -362,8 +441,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 if (totalLineIndex>-1) {
                     // 重置Y轴起始坐标
                     this.param.setBeginY(
-                            // Y轴起始坐标 = Y轴起始坐标 - (当前页面文本最后一行索引 - 1) * (字体大小 + 行间距) - 行间距
-                            this.param.getBeginY() - (this.lastLineIndex - 1)  * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()
+                            // Y轴起始坐标 = Y轴起始坐标 - (当前页面文本最后一行索引 - 1) * (字体高度 + 行间距) - 行间距
+                            this.param.getBeginY() - (this.lastLineIndex - 1)  * (this.param.getFontHeight() + this.param.getLeading()) - this.param.getLeading()
                     );
                 }
             }
@@ -376,8 +455,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
             }
             // 如果文本总行数索引大于-1，则重置Y轴起始坐标
             if (totalLineIndex>-1) {
-                // Y轴起始坐标 = Y轴起始坐标 + 字体大小 + 行间距，由于之前多减一行，所以现在加回来
-                this.param.setBeginY(this.param.getBeginY() + this.param.getFontSize() + this.param.getLeading());
+                // Y轴起始坐标 = Y轴起始坐标 + 字体高度，由于之前多减一行，所以现在加回来
+                this.param.setBeginY(this.param.getBeginY() + this.param.getFontHeight());
             }
         // 居右样式
         }else {
@@ -388,12 +467,15 @@ public class XEasyPdfText implements XEasyPdfComponent {
             }
             // 如果文本总行数索引大于-1，则重置Y轴起始坐标
             if (totalLineIndex>-1) {
-                // Y轴起始坐标 = Y轴起始坐标 + 字体大小 + 行间距，由于之前多减一行，所以现在加回来
-                this.param.setBeginY(this.param.getBeginY() + this.param.getFontSize() + this.param.getLeading());
+                // Y轴起始坐标 = Y轴起始坐标 + 字体高度，由于之前多减一行，所以现在加回来
+                this.param.setBeginY(this.param.getBeginY() + this.param.getFontHeight());
             }
         }
+        // 如果文本列表不为空，则设置页面X轴坐标
         if (splitTextList.size()>0) {
+            // 获取文本宽度
             float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
+            // 设置页面X轴坐标
             page.getParam().setPageX(page.getParam().getPageX()==null?textWidth:textWidth+page.getParam().getPageX());
         }
         // 如果内容流不为空，则关闭内容流，并重置文档页面Y轴坐标
@@ -405,7 +487,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 如果允许页面重置定位，则进行重置
             if (page.getParam().isAllowResetPosition()) {
                 // 设置文档页面Y轴坐标
-                page.getParam().setPageY(this.param.getBeginY() - this.param.getFontSize() / 3);
+                page.getParam().setPageY(this.param.getBeginY());
             }
         }
         // 完成标记
@@ -429,7 +511,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 footerHeight = page.getParam().getFooter().getHeight();
             }
             // 分页检查
-            if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontSize() + this.param.getLeading()) - this.param.getLeading()) - footerHeight <= this.param.getMarginBottom()) {
+            if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontHeight() + this.param.getLeading()) - this.param.getLeading()) - footerHeight <= this.param.getMarginBottom()) {
                 // 如果内容流不为空，则关闭并设置为空
                 if (stream!=null) {
                     // 关闭内容流
@@ -445,10 +527,10 @@ public class XEasyPdfText implements XEasyPdfComponent {
                         // X轴起始坐标 = 左边距
                         this.param.getMarginLeft()
                 ).setBeginY(
-                        // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行间距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行间距
+                        // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体高度 - 行间距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体高度 - 行间距
                         page.getParam().getPageY()==null?
-                                rectangle.getHeight() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading():
-                                page.getParam().getPageY() - this.param.getMarginTop() - this.param.getFontSize() - this.param.getLeading()
+                                rectangle.getHeight() - this.param.getMarginTop() - this.param.getFontHeight() - this.param.getLeading():
+                                page.getParam().getPageY() - this.param.getMarginTop() - this.param.getFontHeight() - this.param.getLeading()
                 );
             }
         }
@@ -485,8 +567,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
         stream.showText(text);
         // 换行
         stream.newLine();
-        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体大小 - 行间距
-        this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
+        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
+        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
         return stream;
     }
 
@@ -523,8 +605,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
         stream.showText(text);
         // 结束文本写入
         stream.endText();
-        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体大小 - 行间距
-        this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
+        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
+        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
         return stream;
     }
 
@@ -563,8 +645,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
         stream.showText(text);
         // 结束文本写入
         stream.endText();
-        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体大小 - 行间距
-        this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
+        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
+        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
         return stream;
     }
 }

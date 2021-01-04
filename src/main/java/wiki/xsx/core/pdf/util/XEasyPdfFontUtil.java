@@ -134,4 +134,14 @@ public class XEasyPdfFontUtil {
             }
         }
     }
+
+    /**
+     * 获取字体高度
+     * @param font pdfbox字体
+     * @param fontSize 字体大小
+     * @return 返回字体高度
+     */
+    public static float getFontHeight(PDFont font, float fontSize) {
+        return font.getFontDescriptor().getCapHeight() / 1000F * fontSize;
+    }
 }

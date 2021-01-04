@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -76,7 +75,7 @@ class XEasyPdfTableParam {
      * 文本样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTextStyle style = XEasyPdfTextStyle.LEFT;
+    private XEasyPdfTableStyle style = XEasyPdfTableStyle.LEFT;
     /**
      * 是否完成绘制
      */

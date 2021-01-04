@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.doc;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 
@@ -50,6 +51,10 @@ public class XEasyPdfDocumentExtractor {
      * 区域提取器
      */
     private final RegionExtractor regionExtractor;
+    /**
+     * 表格正则（单行单列）
+     */
+    private static final Pattern TABLE_PATTERN = Pattern.compile("(\\S[^\\n\\r]+)");
 
     /**
      * 构造方法
@@ -102,8 +107,9 @@ public class XEasyPdfDocumentExtractor {
 
     /**
      * 提取文本(全部)
-     * @param textList 文本列表
+     * @param textList 待接收文本列表
      * @param pageIndex 页面索引
+     * @return 返回pdf文档提取器
      * @throws IOException IO异常
      */
     public XEasyPdfDocumentExtractor extract(List<String> textList, int ...pageIndex) throws IOException {
@@ -113,9 +119,11 @@ public class XEasyPdfDocumentExtractor {
 
     /**
      * 提取文本
-     * @param textList 文本列表
+     * @param textList 待接收文本列表
      * @param regex 正则表达式
      * @param pageIndex 页面索引
+     * @return 返回pdf文档提取器
+     * @throws IOException IO异常
      */
     public XEasyPdfDocumentExtractor extract(List<String> textList, String regex, int ...pageIndex) throws IOException {
         this.simpleExtractor.extract(textList, regex, pageIndex);
@@ -123,16 +131,55 @@ public class XEasyPdfDocumentExtractor {
     }
 
     /**
-     * 提取表格文本(单行列)
-     * @param textList 文本列表（第一层为行，第二层为列）
+     * 提取表格文本(单行单列)
+     * @param textList 待接收文本列表（第一层为行，第二层为列）
      * @param pageIndex 页面索引
+     * @return 返回pdf文档提取器
      * @throws IOException IO异常
      */
-    public XEasyPdfDocumentExtractor extractBySimpleTable(List<List<String>> textList, int pageIndex) throws IOException {
-        List<String> sourceList = new ArrayList<>(1024);
-        this.extract(sourceList, "(\\S[^\\n&]+)", pageIndex);
-        for (String rowText : sourceList) {
-            textList.add(Arrays.asList(rowText.split("\\s")));
+    public XEasyPdfDocumentExtractor extractForSimpleTable(List<List<String>> textList, int pageIndex) throws IOException {
+        // 获取给定页面索引的页面尺寸
+        PDRectangle mediaBox = this.document.getPage(pageIndex).getMediaBox();
+        // 提取区域表格文本(单行单列)
+        this.extractByRegionsForSimpleTable(textList, new Rectangle((int) mediaBox.getWidth()+1, (int) mediaBox.getHeight()+1), pageIndex);
+        return this;
+    }
+
+    /**
+     * 提取区域表格文本(单行单列)
+     * @param textList 待接收文本列表（第一层为行，第二层为列）
+     * @param rectangle 区域图形
+     * @param pageIndex 页面索引
+     * @return 返回pdf文档提取器
+     * @throws IOException IO异常
+     */
+    public XEasyPdfDocumentExtractor extractByRegionsForSimpleTable(List<List<String>> textList, Rectangle rectangle, int pageIndex) throws IOException {
+        // 定义区域key
+        final String key = "table";
+        // 定义分词
+        final String wordSeparator = "X-EasyPdf-Separator";
+        // 创建区域提取器
+        RegionExtractor regionExtractor = new RegionExtractor();
+        // 添加区域
+        regionExtractor.addRegion(key, rectangle);
+        // 提取文本
+        String text = regionExtractor.extract(this.document.getPage(pageIndex), wordSeparator).get(key);
+        // 如果文本有内容，则进行文本拆分
+        if (text!=null&&text.length()>0) {
+            // 定义源文本列表
+            List<String> sourceList = new ArrayList<>(1024);
+            // 获取正则匹配器
+            Matcher matcher = TABLE_PATTERN.matcher(text);
+            // 循环匹配
+            while (matcher.find()) {
+                // 添加文本列表
+                sourceList.add(matcher.group());
+            }
+            // 遍历源文本列表
+            for (String rowText : sourceList) {
+                // 添加到待接收文本列表
+                textList.add(Arrays.asList(rowText.split(wordSeparator)));
+            }
         }
         return this;
     }
@@ -182,7 +229,7 @@ public class XEasyPdfDocumentExtractor {
 
         /**
          * 提取文本
-         * @param textList 文本列表
+         * @param textList 待接收文本列表
          * @param regex 正则表达式
          * @param pageIndex 页面索引
          * @throws IOException IO异常
@@ -209,7 +256,7 @@ public class XEasyPdfDocumentExtractor {
 
         /**
          * 提取文本
-         * @param textList 文本列表
+         * @param textList 待接收文本列表
          * @param regex 正则表达式
          * @throws IOException IO异常
          */
@@ -276,6 +323,17 @@ public class XEasyPdfDocumentExtractor {
          * @throws IOException IO异常
          */
         Map<String, String> extract(PDPage page) throws IOException {
+            return this.extract(page, " ");
+        }
+
+        /**
+         * 提取文本
+         * @param page pdfbox页面
+         * @param wordSeparator 单词分隔符
+         * @return 返回文本字典(key=区域名称，value=提取文本)
+         * @throws IOException IO异常
+         */
+        Map<String, String> extract(PDPage page, String wordSeparator) throws IOException {
             // 定义文本字典
             Map<String, String> data;
             // 如果区域为空，则初始化文本字典为空字典
@@ -294,6 +352,8 @@ public class XEasyPdfDocumentExtractor {
                     this.setStartPage(this.getCurrentPageNo());
                     // 设置结束页面
                     this.setEndPage(this.getCurrentPageNo());
+                    // 设置单词分隔符
+                    this.setWordSeparator(wordSeparator);
                     // 定义区域字符列表
                     ArrayList<List<TextPosition>> regionCharactersByArticle = new ArrayList<>(256);
                     // 添加空列表

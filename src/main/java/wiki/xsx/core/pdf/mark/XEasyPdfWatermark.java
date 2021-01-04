@@ -1,5 +1,13 @@
+package wiki.xsx.core.pdf.mark;
+
+
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
+
+import java.io.IOException;
+
 /**
- * pdf页脚
+ * pdf水印组件接口
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -15,4 +23,13 @@
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-package wiki.xsx.core.pdf.component.footer;
+public interface XEasyPdfWatermark {
+
+    /**
+     * 绘制
+     * @param document pdf文档
+     * @param page     pdf页面
+     * @throws IOException IO异常
+     */
+    void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
+}

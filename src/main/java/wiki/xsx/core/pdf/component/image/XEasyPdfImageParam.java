@@ -39,6 +39,10 @@ class XEasyPdfImageParam {
      */
     private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
     /**
+     * pdfbox图片对象
+     */
+    private PDImageXObject imageXObject;
+    /**
      * 待添加图片
      */
     private BufferedImage image;
@@ -71,6 +75,14 @@ class XEasyPdfImageParam {
      */
     private Integer height;
     /**
+     * 最大宽度
+     */
+    private Float maxWidth;
+    /**
+     * 是否使用自身样式
+     */
+    private boolean useSelfStyle = false;
+    /**
      * 自适应图片大小
      */
     private boolean enableSelfAdaption = true;
@@ -85,7 +97,7 @@ class XEasyPdfImageParam {
     /**
      * 页面X轴起始坐标
      */
-    private Float beginX;
+    private Float beginX = 0F;
     /**
      * 页面Y轴起始坐标
      */
@@ -103,6 +115,11 @@ class XEasyPdfImageParam {
      * @throws IOException IO异常
      */
     PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        // 如果pdfbox图片对象不为空，则返回该对象
+        if (this.imageXObject!=null) {
+            // 返回该对象
+            return this.imageXObject;
+        }
         // 如果图片为空，则抛出异常信息
         if (this.image==null) {
             throw new FileNotFoundException("the image can not be found");
@@ -153,7 +170,8 @@ class XEasyPdfImageParam {
                     )
             );
         }
-        return pdImage;
+        this.imageXObject = pdImage;
+        return this.imageXObject;
     }
 
     /**
@@ -169,6 +187,11 @@ class XEasyPdfImageParam {
         float pageWidth = rectangle.getWidth();
         // 获取页面高度
         float pageHeight = rectangle.getHeight();
+        // 如果最大宽度未初始化，则进行初始化为页面宽度
+        if (this.maxWidth==null) {
+            // 初始化最大宽度 = 页面宽度
+            this.maxWidth = pageWidth;
+        }
         // 如果页面Y轴起始坐标为空，则初始化
         if (this.beginY==null) {
             // 定义页脚高度
@@ -197,21 +220,18 @@ class XEasyPdfImageParam {
                 this.beginY = pageHeight - this.marginTop - this.height;
             }
         }
-        // 如果页面X轴起始坐标为空，则初始化
-        if (this.beginX==null) {
-            // 如果图片样式为空，或图片样式为居中，则初始化页面X轴起始坐标为居中
-            if (this.style==null || this.style == XEasyPdfImageStyle.CENTER) {
-                // 页面X轴起始坐标 = （页面宽度 - 自定义宽度）/ 2
-                this.beginX = (pageWidth - this.width) / 2;
-                // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
-            }else if (this.style == XEasyPdfImageStyle.LEFT) {
-                // 页面X轴起始坐标 = 左边距
-                this.beginX = this.marginLeft;
-                // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
-            }else {
-                // 页面X轴起始坐标 = 页面宽度 - 自定义宽度 - 右边距
-                this.beginX = pageWidth - this.width - this.marginRight;
-            }
+        // 如果图片样式为空，或图片样式为居中，则初始化页面X轴起始坐标为居中
+        if (this.style==null || this.style == XEasyPdfImageStyle.CENTER) {
+            // 页面X轴起始坐标 = （最大宽度 - 自定义宽度）/ 2
+            this.beginX += (this.maxWidth - this.width) / 2;
+            // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
+        }else if (this.style == XEasyPdfImageStyle.LEFT) {
+            // 页面X轴起始坐标 = 左边距
+            this.beginX += this.marginLeft;
+            // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
+        }else {
+            // 页面X轴起始坐标 = 最大宽度 - 自定义宽度 - 右边距
+            this.beginX += this.maxWidth - this.width - this.marginRight;
         }
     }
 }

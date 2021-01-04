@@ -93,6 +93,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @SneakyThrows
     public XEasyPdfImage setImage(File imageFile) {
         this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile)).setImage(XEasyPdfImageUtil.read(imageFile));
+        this.param.setImageXObject(null);
         return this;
     }
 
@@ -105,6 +106,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @SneakyThrows
     public XEasyPdfImage setImage(InputStream imageStream, String imageType) {
         this.param.setImageType(imageType).setImage(XEasyPdfImageUtil.read(imageStream));
+        this.param.setImageXObject(null);
         return this;
     }
 
@@ -114,6 +116,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     public XEasyPdfImage enableSelfAdaption() {
         this.param.setEnableSelfAdaption(true);
+        this.param.setImageXObject(null);
         return this;
     }
 
@@ -123,6 +126,35 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     public XEasyPdfImage disableSelfAdaption() {
         this.param.setEnableSelfAdaption(false);
+        this.param.setImageXObject(null);
+        return this;
+    }
+
+    /**
+     * 开启自身样式
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage enableSelfStyle() {
+        this.param.setUseSelfStyle(true);
+        return this;
+    }
+
+    /**
+     * 关闭自身样式
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage disableSelfStyle() {
+        this.param.setUseSelfStyle(false);
+        return this;
+    }
+
+    /**
+     * 设置最大宽度
+     * @param maxWidth 最大宽度
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage setMaxWidth(float maxWidth) {
+        this.param.setMaxWidth(maxWidth);
         return this;
     }
 
@@ -183,6 +215,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     public XEasyPdfImage setScaleMode(ScaleMode scaleMode) {
         this.param.setScaleMode(scaleMode);
+        this.param.setImageXObject(null);
         return this;
     }
 
@@ -216,6 +249,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @Override
     public XEasyPdfImage setWidth(float width) {
         this.param.setWidth((int) width);
+        this.param.setImageXObject(null);
         return this;
     }
 
@@ -227,6 +261,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @Override
     public XEasyPdfImage setHeight(float height) {
         this.param.setHeight((int) height);
+        this.param.setImageXObject(null);
         return this;
     }
 
@@ -303,6 +338,53 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         return this.param.init(document, page).getHeight();
     }
 
+    /**
+     * 获取上边距
+     * @return 返回上边距
+     */
+    public float getMarginTop() {
+        return this.param.getMarginTop();
+    }
+
+    /**
+     * 获取下边距
+     * @return 返回下边距
+     */
+    public float getMarginBottom() {
+        return this.param.getMarginBottom();
+    }
+
+    /**
+     * 获取左边距
+     * @return 返回左边距
+     */
+    public float getMarginLeft() {
+        return this.param.getMarginLeft();
+    }
+
+    /**
+     * 获取右边距
+     * @return 返回右边距
+     */
+    public float getMarginRight() {
+        return this.param.getMarginRight();
+    }
+
+    /**
+     * 获取图片样式
+     * @return 返回图片样式
+     */
+    public XEasyPdfImageStyle getStyle() {
+        return this.param.getStyle();
+    }
+
+    /**
+     * 是否使用自身样式
+     * @return 返回布尔值，是为true，否为false
+     */
+    public boolean isUseSelfStyle() {
+        return this.param.isUseSelfStyle();
+    }
 
     /**
      * 图片缩放模式枚举

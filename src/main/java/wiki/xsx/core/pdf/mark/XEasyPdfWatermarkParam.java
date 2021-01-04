@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.component.mark;
+package wiki.xsx.core.pdf.mark;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

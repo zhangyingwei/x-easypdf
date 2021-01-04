@@ -2,7 +2,6 @@ package wiki.xsx.core.pdf.component.table;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -48,26 +47,6 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      */
     public XEasyPdfTable(List<XEasyPdfRow> rowList) {
         this.param.getRows().addAll(rowList);
-    }
-
-    /**
-     * 添加表格行
-     * @param rows pdf表格行
-     * @return 返回表格组件
-     */
-    public XEasyPdfTable addRow(XEasyPdfRow...rows) {
-        Collections.addAll(this.param.getRows(), rows);
-        return this;
-    }
-
-    /**
-     * 添加表格行
-     * @param rowList pdf表格行列表
-     * @return 返回表格组件
-     */
-    public XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
-        this.param.getRows().addAll(rowList);
-        return this;
     }
 
     /**
@@ -132,11 +111,11 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
-     * 设置文本样式（居左、居中、居右）
+     * 设置表格样式（居左、居中、居右）
      * @param style 样式
      * @return 返回表格组件
      */
-    public XEasyPdfTable setStyle(XEasyPdfTextStyle style) {
+    public XEasyPdfTable setStyle(XEasyPdfTableStyle style) {
         this.param.setStyle(style);
         return this;
     }
@@ -187,6 +166,26 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
+     * 添加表格行
+     * @param rows pdf表格行
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable addRow(XEasyPdfRow...rows) {
+        Collections.addAll(this.param.getRows(), rows);
+        return this;
+    }
+
+    /**
+     * 添加表格行
+     * @param rowList pdf表格行列表
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
+        this.param.getRows().addAll(rowList);
+        return this;
+    }
+
+    /**
      * 获取pdf表格参数
      * @return 返回表格参数
      */
@@ -230,7 +229,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         // 完成标记
         this.param.setDraw(true);
         // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
-        if (this.param.getFontPath()!=null) {
+        if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
             // 关联字体
             this.param.getFont().subset();
             // 重置字体为null

@@ -5,10 +5,10 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
-import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
@@ -53,6 +53,10 @@ class XEasyPdfDocumentParam {
      * pdfBox文档（目标文档）
      */
     private PDDocument target;
+    /**
+     * 合并pdf源文档
+     */
+    private List<XEasyPdfDocument> mergeSourceList = new ArrayList<>(10);
     /**
      * pdf页面列表
      */

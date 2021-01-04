@@ -5,7 +5,6 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -53,7 +52,7 @@ class XEasyPdfRowParam {
     /**
      * 行高
      */
-    private Float height = 0F;
+    private Float height;
     /**
      * X轴起始坐标
      */
@@ -75,10 +74,10 @@ class XEasyPdfRowParam {
      */
     private Float fontSize;
     /**
-     * 文本样式（居左、居中、居右）
+     * 表格样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTextStyle style;
+    private XEasyPdfTableStyle style;
 
     /**
      * 初始化
@@ -89,45 +88,38 @@ class XEasyPdfRowParam {
      * @throws IOException IO异常
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table, XEasyPdfRow row) throws IOException {
-        // 获取表格参数
-        XEasyPdfTableParam tableParam = table.getParam();
-        // 如果内容模式未初始化，则进行初始化
-        if (this.contentMode==null) {
-            // 初始化内容模式
-            this.contentMode = tableParam.getContentMode();
-        }
-        // 如果文本样式未初始化，则进行初始化
-        if (this.style==null) {
-            // 初始化文本样式
-            this.style = tableParam.getStyle();
-        }
-        // 如果字体未初始化，则进行初始化
-        if (this.font==null) {
-            // 初始化字体
-            this.font = XEasyPdfFontUtil.getFont(document, this.fontPath, tableParam.getFont());
-        }
-        // 如果字体大小未初始化，则进行初始化
-        if (this.fontSize==null) {
-            // 初始化字体大小
-            this.fontSize = tableParam.getFontSize();
-        }
-        // 遍历单元格列表
-        for (XEasyPdfCell cell : this.cells) {
-            // 如果单元格不为空，则进行初始化
-            if (cell!=null) {
-                // 初始化单元格
-                cell.init(document, row);
+        if (!this.cells.isEmpty()) {
+            // 获取表格参数
+            XEasyPdfTableParam tableParam = table.getParam();
+            // 如果内容模式未初始化，则进行初始化
+            if (this.contentMode==null) {
+                // 初始化内容模式
+                this.contentMode = tableParam.getContentMode();
             }
-        }
-        // 获取页面尺寸
-        PDRectangle rectangle = page.getLastPage().getMediaBox();
-        // 获取当前页面Y轴起始坐标
-        Float pageY = page.getParam().getPageY();
-        // 如果当前页面Y轴起始坐标未初始化，则说明是新页面
-        if (pageY==null) {
-            // 初始化Y轴起始坐标 = 页面高度 - 表格上边距 - 行高 - 上边距
-            this.beginY = rectangle.getHeight() - tableParam.getMarginTop() - this.height - this.marginTop;
-        }else {
+            // 如果文本样式未初始化，则进行初始化
+            if (this.style==null) {
+                // 初始化文本样式
+                this.style = tableParam.getStyle();
+            }
+            // 如果字体未初始化，则进行初始化
+            if (this.font==null) {
+                // 初始化字体
+                this.font = XEasyPdfFontUtil.getFont(document, this.fontPath, tableParam.getFont());
+            }
+            // 如果字体大小未初始化，则进行初始化
+            if (this.fontSize==null) {
+                // 初始化字体大小
+                this.fontSize = tableParam.getFontSize();
+            }
+            // 如果行高未初始化，则进行初始化
+            if (this.height==null) {
+                // 初始化行高(第一列高度)
+                this.height = cells.get(0).getParam().getHeight();
+            }
+            // 获取页面尺寸
+            PDRectangle rectangle = page.getLastPage().getMediaBox();
+            // 获取当前页面Y轴起始坐标
+            Float pageY = page.getParam().getPageY();
             // 定义页脚高度
             float footerHeight = 0F;
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
@@ -139,32 +131,37 @@ class XEasyPdfRowParam {
             float currentY = pageY - this.height - this.marginTop + 1;
             // 如果当前Y轴起始坐标-页脚高度小于等于表格下边距，则进行分页
             if (currentY - footerHeight <= tableParam.getMarginBottom()) {
-                // 开启页面自动重置定位
+                // 开启页面自动定位
                 page.enablePosition();
                 // 添加新页面
                 page.addNewPage(document, rectangle);
-                // 关闭页面自动重置定位
+                // 关闭页面自动定位
                 page.disablePosition();
-                // 初始化Y轴起始坐标 = 页面高度 - 表格上边距 - 行高 - 上边距
-                this.beginY = page.getParam().getPageY()==null?
-                        rectangle.getHeight() - tableParam.getMarginTop() - this.height - this.marginTop:
-                        page.getParam().getPageY() - tableParam.getMarginTop() - this.height - this.marginTop;
-                // 初始化X轴起始坐标 = null
-                this.beginX = null;
-            }else {
-                // 初始化Y轴起始坐标 = 当前Y轴起始坐标
-                this.beginY = currentY;
+                // 如果当前页面Y轴起始坐标未初始化，则进行初始化
+                if (page.getParam().getPageY()==null) {
+                    // 重置当前页面Y轴起始坐标 = 页面高度 - 表格上边距
+                    page.getParam().setPageY(rectangle.getHeight() - tableParam.getMarginTop());
+                }else {
+                    // 重置当前页面Y轴起始坐标 = 当前页面Y轴起始坐标 - 表格上边距
+                    page.getParam().setPageY(page.getParam().getPageY() - tableParam.getMarginTop());
+                }
+                // 获取当前页面Y轴起始坐标
+                pageY = page.getParam().getPageY();
+                // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距 + 1，自动补偿1
+                currentY = pageY - this.height - this.marginTop + 1;
             }
-        }
-        // 如果X轴起始坐标为初始化，则进行初始化
-        if (this.beginX==null) {
-            // 如果左边距不为空，则X轴起始坐标 = 左边距
-            if (this.marginLeft!=null) {
-                // 初始化X轴起始坐标 = 左边距
-                this.beginX = this.marginLeft;
-            }else {
-                // 初始化X轴起始坐标 = 表格左边距
-                this.beginX = tableParam.getMarginLeft();
+            // 初始化Y轴起始坐标 = 当前Y轴起始坐标
+            this.beginY = currentY;
+            // 如果X轴起始坐标为初始化，则进行初始化
+            if (this.beginX==null) {
+                // 如果左边距不为空，则X轴起始坐标 = 左边距
+                if (this.marginLeft!=null) {
+                    // 初始化X轴起始坐标 = 左边距
+                    this.beginX = this.marginLeft;
+                }else {
+                    // 初始化X轴起始坐标 = 表格左边距
+                    this.beginX = tableParam.getMarginLeft();
+                }
             }
         }
     }

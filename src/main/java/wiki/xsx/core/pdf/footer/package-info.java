@@ -1,5 +1,5 @@
 /**
- * pdf页眉
+ * pdf页脚
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -15,4 +15,4 @@
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-package wiki.xsx.core.pdf.component.header;
+package wiki.xsx.core.pdf.footer;

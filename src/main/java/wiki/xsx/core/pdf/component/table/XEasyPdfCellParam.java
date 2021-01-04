@@ -4,10 +4,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
-import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
 import java.io.IOException;
@@ -39,6 +38,10 @@ class XEasyPdfCellParam {
      */
     private XEasyPdfComponent.ContentMode contentMode;
     /**
+     * 是否组件换行
+     */
+    private boolean isNewLine = true;
+    /**
      * 是否带有边框
      */
     private boolean hasBorder = true;
@@ -59,13 +62,9 @@ class XEasyPdfCellParam {
      */
     private Float height;
     /**
-     * 文本
+     * pdf组件列表
      */
-    private String text;
-    /**
-     * 拆分后的待添加文本列表
-     */
-    private List<String> splitTextList;
+    private List<XEasyPdfComponent> componentList = new ArrayList<>(10);
     /**
      * 字体路径
      */
@@ -95,34 +94,19 @@ class XEasyPdfCellParam {
      */
     private Float marginTop = 0F;
     /**
-     * 文本左边距
-     */
-    private Float textMarginLeft;
-    /**
-     * 文本右边距
-     */
-    private Float textMarginRight;
-    /**
-     * 文本上边距
-     */
-    private Float textMarginTop = 0F;
-    /**
-     * 文本下边距
-     */
-    private Float textMarginBottom = 0F;
-    /**
-     * 文本样式（居左、居中、居右）
+     * 表格样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTextStyle style;
+    private XEasyPdfTableStyle style;
 
     /**
      * 初始化
      * @param document pdf文档
+     * @param page pdf页面
      * @param row pdf表格行
      * @throws IOException IO异常
      */
-    void init(XEasyPdfDocument document, XEasyPdfRow row) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) throws IOException {
         // 获取pdf表格行参数
         XEasyPdfRowParam rowParam = row.getParam();
         // 如果内容模式未初始化，则进行初始化
@@ -144,50 +128,6 @@ class XEasyPdfCellParam {
         if (this.style==null) {
             // 初始化文本样式
             this.style = rowParam.getStyle();
-        }
-        // 如果文本左边距未初始化，则进行初始化
-        if (this.textMarginLeft==null) {
-            // 初始化文本左边距 = 2F
-            this.textMarginLeft = 2F;
-        }
-        // 如果文本右边距未初始化，则进行初始化
-        if (this.textMarginRight==null) {
-            // 初始化文本右边距 = 2F
-            this.textMarginRight = 2F;
-        }
-        // 如果待添加文本不为空，则进行待添加文本列表初始化
-        if (this.text!=null&&this.text.trim().length()>0) {
-            // 如果宽度未初始化，则进行初始化
-            if (this.width==null) {
-                // 文本左边距默认设置为2F
-                this.textMarginLeft = 2F;
-                // 文本右边距默认设置为2F
-                this.textMarginRight = 2F;
-                // 初始化宽度 = 文本的真实宽度
-                this.width = this.fontSize * this.font.getStringWidth(this.text) / 1000 + this.textMarginLeft + this.textMarginRight;
-                // 初始化待添加文本列表
-                this.splitTextList = new ArrayList<>(1);
-                // 添加文本
-                splitTextList.add(this.text);
-            }else{
-                // 初始化待添加文本列表
-                this.splitTextList = XEasyPdfTextUtil.splitLines(this.text, (this.width - this.textMarginLeft - this.textMarginRight), this.font, this.fontSize);
-            }
-        }else {
-            // 初始化待添加文本列表
-            this.splitTextList = new ArrayList<>(0);
-            // 如果宽度为空，则初始化宽度与高度为0F
-            if (this.width==null) {
-                this.width = 0F;
-                this.height = 0F;
-            }
-        }
-        // 如果高度未初始化，则进行初始化
-        if (this.height==null) {
-            // 文本上边距默认设置为5F
-            this.textMarginTop = 5F;
-            // 初始化高度 = 字体大小 * 待添加文本列表行数 + 文本上边距 + 文本下边距
-            this.height = this.fontSize * this.splitTextList.size() + this.textMarginTop + this.textMarginBottom;
         }
     }
 }

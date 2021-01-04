@@ -6,29 +6,26 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.printing.PDFPrintable;
 import org.apache.pdfbox.printing.Scaling;
-import org.apache.pdfbox.rendering.PDFRenderer;
-import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
-import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
-import javax.imageio.ImageIO;
 import javax.print.PrintServiceLookup;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -294,25 +291,54 @@ public class XEasyPdfDocument {
 
     /**
      * 插入pdf页面
-     * @param index 页面索引
+     * @param pageIndex 页面索引
      * @param pages pdf页面
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument insertPage(int index, XEasyPdfPage...pages) {
+    public XEasyPdfDocument insertPage(int pageIndex, XEasyPdfPage...pages) {
         // 设置重置
         this.param.setReset(true);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果pdf页面列表数量大于索引，则插入页面，否则添加页面
-        if (pageList.size()>=index) {
+        if (pageList.size()>=pageIndex) {
             // 遍历pdf页面
             for (XEasyPdfPage page : pages) {
                 // 插入页面
-                pageList.add(Math.max(index, 0), page);
+                pageList.add(Math.max(pageIndex, 0), page);
             }
         }else {
             // 添加页面
             this.addPage(pages);
+        }
+        return this;
+    }
+
+    /**
+     * 修改页面尺寸
+     * @param rectangle pdfbox页面尺寸
+     * @param pageIndex 页面索引
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument modifyPageSize(PDRectangle rectangle, int ...pageIndex) {
+        // 设置重置
+        this.param.setReset(true);
+        // 获取pdf页面列表
+        List<XEasyPdfPage> pageList = this.param.getPageList();
+        // 如果页面索引不为空，则根据给定索引设置，否则全部页面进行设置
+        if (pageIndex!=null&&pageIndex.length>0) {
+            // 遍历页面索引
+            for (int index : pageIndex) {
+                // 修改页面尺寸
+                pageList.get(index).modifyPageSize(rectangle);
+            }
+        // 如果页面索引为空，则全部页面进行设置
+        }else {
+            // 遍历pdf页面
+            for (XEasyPdfPage xEasyPdfPage : pageList) {
+                // 修改页面尺寸
+                xEasyPdfPage.modifyPageSize(rectangle);
+            }
         }
         return this;
     }
@@ -358,6 +384,8 @@ public class XEasyPdfDocument {
         this.param.setReset(true);
         // 遍历待合并文档
         for (XEasyPdfDocument document : documents) {
+            // 添加合并源pdf文档
+            this.param.getMergeSourceList().add(document);
             // 添加pdf页面
             this.param.getPageList().addAll(document.getPageList());
         }
@@ -365,75 +393,11 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 转为图片（整个文档）
-     * @param outputPath 输出路径（目录）
-     * @param imageType 图片类型
-     * @return 返回pdf文档
-     * @throws IOException IO异常
+     * 文档图像器
+     * @return 返回pdf文档图像器
      */
-    public XEasyPdfDocument image(String outputPath, String imageType) throws IOException {
-        return this.image(outputPath, imageType, null);
-    }
-
-    /**
-     * 转为图片（整个文档）
-     * @param outputPath 输出路径（目录）
-     * @param imageType 图片类型
-     * @param prefix 图片名称前缀
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument image(String outputPath, String imageType, String prefix) throws IOException {
-        // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
-        if (prefix==null) {
-            // 初始化文档名称前缀
-            prefix = "x-easypdf";
-        }
-        // 获取任务文档
-        PDDocument target = this.createTarget();
-        // 文件名称构造器
-        StringBuilder fileNameBuilder;
-        // 任务文档页面总数
-        int pageCount = target.getNumberOfPages();
-        // 遍历文档页面
-        for (int i = 0; i < pageCount; i++) {
-            // 新建文件名称构造器
-            fileNameBuilder = new StringBuilder();
-            // 构建文件名称
-            fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append('.').append(imageType);
-            // 获取输出流
-            try (OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
-                // 初始化pdfBox文档渲染器
-                PDFRenderer renderer = new PDFRenderer(target);
-                // 渲染图片
-                BufferedImage bufferedImage = renderer.renderImage(i);
-                // 写出图片
-                ImageIO.write(bufferedImage, imageType, outputStream);
-            }
-        }
-        return this;
-    }
-
-    /**
-     * 转为图片（根据页面索引）
-     * @param outputStream 输出流
-     * @param imageType 图片类型
-     * @param pageIndex 页面索引
-     * @return 返回pdf文档
-     * @throws IOException IO异常
-     */
-    public XEasyPdfDocument image(OutputStream outputStream, String imageType, int pageIndex) throws IOException {
-        // 获取任务文档
-        PDDocument target = this.createTarget();
-        // 重置页面索引（0至文档总页面索引）
-        pageIndex = Math.min(Math.max(pageIndex, 0), target.getNumberOfPages()-1);
-        // 初始化pdfBox文档渲染器
-        PDFRenderer renderer = new PDFRenderer(target);
-        // 渲染图片
-        BufferedImage bufferedImage = renderer.renderImage(pageIndex);
-        // 写出图片
-        ImageIO.write(bufferedImage, imageType, outputStream);
-        return this;
+    public XEasyPdfDocumentImager imager() {
+        return new XEasyPdfDocumentImager(this);
     }
 
     /**
@@ -445,7 +409,7 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 提取文本器
+     * 文档提取器
      * @return 返回pdf文档提取器
      */
     public XEasyPdfDocumentExtractor extractor() {
@@ -455,31 +419,31 @@ public class XEasyPdfDocument {
     /**
      * 保存（页面构建）
      * @param outputPath 文件输出路径
+     * @return 返回pdf文档
      * @throws IOException IO异常
      */
-    public void save(String outputPath) throws IOException {
+    public XEasyPdfDocument save(String outputPath) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
-            this.save(outputStream);
+            return this.save(outputStream);
         }
     }
 
     /**
      * 保存（页面构建）
      * @param outputStream 文件输出流
+     * @return 返回pdf文档
      * @throws IOException IO异常
      */
-    public void save(OutputStream outputStream) throws IOException {
+    public XEasyPdfDocument save(OutputStream outputStream) throws IOException {
         try(COSWriter writer = new COSWriter(outputStream))  {
             // 创建任务文档
-            PDDocument target = this.createTarget();
+            PDDocument target = this.getTarget();
             // 设置文档信息及保护策略
             this.setInfoAndPolicy(target);
             // 写入文档
             writer.write(target);
-        } finally {
-            // 关闭pdfBox文档
-            this.close();
         }
+        return this;
     }
 
     /**
@@ -501,29 +465,24 @@ public class XEasyPdfDocument {
      * @throws PrinterException 打印异常
      */
     public void print(int count, XEasyPdfPrintStyle style, Scaling scaling) throws IOException, PrinterException {
-        try {
-            // 获取打印任务
-            PrinterJob job = PrinterJob.getPrinterJob();
-            // 设置打印服务（默认）
-            job.setPrintService(PrintServiceLookup.lookupDefaultPrintService());
-            // 创建打印任务
-            Book book = new Book();
-            // 创建页面格式对象
-            PageFormat pageFormat = new PageFormat();
-            // 设置打印方向
-            pageFormat.setOrientation(style.getOrientation());
-            // 设置打印纸张
-            book.append(new PDFPrintable(this.createTarget(), scaling), pageFormat);
-            // 设置打印任务
-            job.setPageable(book);
-            // 设置打印数量
-            job.setCopies(count);
-            // 执行打印
-            job.print();
-        }finally {
-            // 关闭pdfBox文档
-            this.close();
-        }
+        // 获取打印任务
+        PrinterJob job = PrinterJob.getPrinterJob();
+        // 设置打印服务（默认）
+        job.setPrintService(PrintServiceLookup.lookupDefaultPrintService());
+        // 创建打印任务
+        Book book = new Book();
+        // 创建页面格式对象
+        PageFormat pageFormat = new PageFormat();
+        // 设置打印方向
+        pageFormat.setOrientation(style.getOrientation());
+        // 设置打印纸张
+        book.append(new PDFPrintable(this.getTarget(), scaling), pageFormat);
+        // 设置打印任务
+        job.setPageable(book);
+        // 设置打印数量
+        job.setCopies(count);
+        // 执行打印
+        job.print();
     }
 
     /**
@@ -531,6 +490,12 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public void close() throws IOException {
+        if (!this.param.getMergeSourceList().isEmpty()) {
+            List<XEasyPdfDocument> mergeSourceList = this.param.getMergeSourceList();
+            for (XEasyPdfDocument mergeSource : mergeSourceList) {
+                mergeSource.close();
+            }
+        }
         // 如果任务文档不为空，则关闭
         if (this.param.getTarget()!=null) {
             // 关闭任务文档
@@ -549,7 +514,12 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public PDDocument getTarget() throws IOException {
-        return this.createTarget();
+        // 如果任务文档未初始化或文档被重置，则进行新任务创建
+        if (this.param.getTarget()==null||this.param.isReset()) {
+            // 初始化任务文档
+            this.initTarget();
+        }
+        return this.param.getTarget();
     }
 
     /**
@@ -603,20 +573,6 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 创建任务
-     * @return 返回pdfBox文档
-     * @throws IOException IO异常
-     */
-    private PDDocument createTarget() throws IOException {
-        // 如果任务文档未初始化或文档被重置，则进行新任务创建
-        if (this.param.getTarget()==null||this.param.isReset()) {
-            // 初始化任务文档
-            this.initTarget();
-        }
-        return this.param.getTarget();
-    }
-
-    /**
      * 初始化任务文档
      * @throws IOException IO异常
      */
@@ -662,7 +618,7 @@ public class XEasyPdfDocument {
         // 填充表单
         this.fillForm();
         // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
-        if (this.param.getFontPath()!=null) {
+        if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
             // 关联字体
             this.param.getFont().subset();
             // 重置字体为null
@@ -705,6 +661,7 @@ public class XEasyPdfDocument {
                     field = acroForm.getField(entry.getKey());
                     // 如果pdfBox表单字段不为空，则填充值
                     if (field!=null) {
+                        // 添加文本关联
                         XEasyPdfFontUtil.addToSubset(this.getFont(), entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());

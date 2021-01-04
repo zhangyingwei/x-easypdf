@@ -3,15 +3,15 @@ package wiki.xsx.core.pdf.handler;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.footer.XEasyPdfDefaultFooter;
-import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
-import wiki.xsx.core.pdf.component.header.XEasyPdfDefaultHeader;
-import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.footer.XEasyPdfDefaultFooter;
+import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.header.XEasyPdfDefaultHeader;
+import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfBaseLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfDefaultWatermark;
+import wiki.xsx.core.pdf.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
 import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
 import wiki.xsx.core.pdf.component.table.XEasyPdfRow;
@@ -316,25 +316,6 @@ public class XEasyPdfHandler {
              * pdf单元格
              */
             public static class Cell {
-                /**
-                 * 构建单元格
-                 * @param text 待写入文本
-                 * @return 返回pdf单元格组件
-                 */
-                public static XEasyPdfCell build(String text) {
-                    return new XEasyPdfCell(text);
-                }
-
-                /**
-                 * 构建单元格
-                 * @param text 待写入文本
-                 * @param hasBorder 是否有边框
-                 * @return 返回pdf单元格组件
-                 */
-                public static XEasyPdfCell build(String text, boolean hasBorder) {
-                    return new XEasyPdfCell(text, hasBorder);
-                }
-
                 /**
                  * 构建单元格
                  * @param width 宽度

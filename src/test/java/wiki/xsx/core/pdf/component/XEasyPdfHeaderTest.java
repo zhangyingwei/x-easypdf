@@ -46,7 +46,7 @@ public class XEasyPdfHeaderTest {
                 XEasyPdfHandler.Page.build()
         ).setFontPath(FONT_PATH).setGlobalHeader(
                 XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("Hello World"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -59,7 +59,7 @@ public class XEasyPdfHeaderTest {
                 )
         ).setFontPath(FONT_PATH).setGlobalHeader(
                 XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("Hello World"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -93,7 +93,7 @@ public class XEasyPdfHeaderTest {
                 )
         ).setFontPath(FONT_PATH).setGlobalHeader(
                 XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("Hello World"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 }

@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.component.header;
+package wiki.xsx.core.pdf.header;
 
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;

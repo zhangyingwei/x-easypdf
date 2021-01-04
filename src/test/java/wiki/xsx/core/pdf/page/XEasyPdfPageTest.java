@@ -49,7 +49,7 @@ public class XEasyPdfPageTest {
                         XEasyPdfHandler.Text.build("你好，世界！"),
                         XEasyPdfHandler.Text.build("我是第一页")
                 )
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -65,7 +65,7 @@ public class XEasyPdfPageTest {
                 XEasyPdfHandler.Image.build(new File(imagePath)).setContentMode(XEasyPdfComponent.ContentMode.PREPEND),
                 XEasyPdfHandler.Text.build("xxxx")
         ).setFontPath(FONT_PATH);
-        document.save(filePath);
+        document.save(filePath).close();
         System.out.println("finish");
     }
 }

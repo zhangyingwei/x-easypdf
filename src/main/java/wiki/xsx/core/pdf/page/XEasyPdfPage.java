@@ -7,9 +7,9 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.footer.XEasyPdfFooter;
-import wiki.xsx.core.pdf.component.header.XEasyPdfHeader;
-import wiki.xsx.core.pdf.component.mark.XEasyPdfWatermark;
+import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 
 import java.awt.*;
@@ -299,12 +299,25 @@ public class XEasyPdfPage {
      * @param components pdf组件
      * @return 返回pdf页面
      */
-    public XEasyPdfPage addComponent(XEasyPdfComponent...components) {
+    public XEasyPdfPage addComponent(XEasyPdfComponent ...components) {
         // 如果组件不为空，则添加组件
         if (components!=null) {
             // 添加组件
             this.param.getComponentList().addAll(Arrays.asList(components));
         }
+        return this;
+    }
+
+    /**
+     * 修改页面尺寸
+     * @param rectangle pdfbox页面尺寸
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage modifyPageSize(PDRectangle rectangle) {
+        // 设置新增页面尺寸
+        this.param.setPageSize(rectangle);
+        // 设置原有页面尺寸
+        this.param.setModifyPageSize(rectangle);
         return this;
     }
 
@@ -328,10 +341,32 @@ public class XEasyPdfPage {
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
         // 初始化参数
         this.param.init(document, this);
-        // 如果原有pdfbox页面列表为空，则添加新页面
+        // 如果原有pdfbox页面列表为空，则添加新页面，否则设置页面尺寸
         if (this.param.getPageList().isEmpty()) {
             // 添加新页面
             this.addNewPage(document, pageSize);
+        // 如果原有pdfbox页面列表不为空，则设置页面尺寸
+        }else {
+            // 如果页面尺寸不为空，则进行设置
+            if (this.param.getModifyPageSize()!=null) {
+                // 获取页面尺寸
+                PDRectangle modifyPageSize = this.param.getModifyPageSize();
+                // 获取原有pdfbox页面列表
+                List<PDPage> pageList = this.param.getPageList();
+                // 遍历pdfbox页面列表
+                for (PDPage pdPage : pageList) {
+                    // 设置页面尺寸
+                    pdPage.setArtBox(modifyPageSize);
+                    // 设置页面尺寸
+                    pdPage.setBleedBox(modifyPageSize);
+                    // 设置页面尺寸
+                    pdPage.setCropBox(modifyPageSize);
+                    // 设置页面尺寸
+                    pdPage.setMediaBox(modifyPageSize);
+                    // 设置页面尺寸
+                    pdPage.setTrimBox(modifyPageSize);
+                }
+            }
         }
         // 获取pdf组件列表
         List<XEasyPdfComponent> componentList = this.param.getComponentList();
@@ -346,7 +381,7 @@ public class XEasyPdfPage {
         // 绘制水印
         this.drawWatermark(document);
         // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
-        if (this.param.getFontPath()!=null) {
+        if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
             // 关联字体
             this.param.getFont().subset();
             // 重置字体为null

@@ -50,7 +50,7 @@ public class XEasyPdfBaseLineTest {
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -67,7 +67,7 @@ public class XEasyPdfBaseLineTest {
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -84,7 +84,7 @@ public class XEasyPdfBaseLineTest {
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer"))
-        ).save(filePath);
+        ).save(filePath).close();
         System.out.println("finish");
     }
 }
