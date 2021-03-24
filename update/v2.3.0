@@ -1,0 +1,11 @@
+本次更新内容如下：
+新特性：
+1. 新增XEasyPdfTable组件表格边框宽度设置(issue#I39497)
+2. 新增简单表格(单行单列)组件XEasyPdfSimpleTable(issue#I2C4RD)
+3. 新增设置水印组件字体颜色方法
+
+原有变更：
+1. 移除XEasyPdfImage组件设置图片缩放模式方法
+
+问题修复：
+1. 修复透明底层图片缩放问题(issue#I2BGJ1，issue#I2BGM3)

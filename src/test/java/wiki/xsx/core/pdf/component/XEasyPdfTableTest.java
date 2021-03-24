@@ -53,11 +53,11 @@ public class XEasyPdfTableTest {
             for (int j = 0; j < 5; j++) {
                 cellList.add(
                         i%2==0?
-                        XEasyPdfHandler.Table.Row.Cell.build(100F, 15F).addContent(
-                                XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文")
+                        XEasyPdfHandler.Table.Row.Cell.build(100F, 30F).addContent(
+                                XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
                         ):
-                        XEasyPdfHandler.Table.Row.Cell.build(100F, 15F).addContent(
-                                XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文")
+                        XEasyPdfHandler.Table.Row.Cell.build(100F, 30F).addContent(
+                                XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
                         ).setBackgroundColor(new Color(0,191,255))
                 );
             }
@@ -71,7 +71,7 @@ public class XEasyPdfTableTest {
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Table.build(rowList).setStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
                 )
-        ).setFontPath(FONT_PATH).save(filePath);
+        ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
     }
 
@@ -121,7 +121,7 @@ public class XEasyPdfTableTest {
                                         ),
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,15F).addContent(
                                                 XEasyPdfHandler.Text.build("3-4")
-                                        )
+                                        ).setBorderWidth(2F)
                                 ).setStyle(XEasyPdfTableStyle.RIGHT)
                         ).setMarginLeft(100F)
                 )

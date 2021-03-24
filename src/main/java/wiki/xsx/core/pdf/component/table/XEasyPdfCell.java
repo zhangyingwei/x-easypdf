@@ -125,6 +125,16 @@ public class XEasyPdfCell {
     }
 
     /**
+     * 边框宽度
+     * @param lineWidth 宽度
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setBorderWidth(float lineWidth) {
+        this.param.setBorderWidth(lineWidth);
+        return this;
+    }
+
+    /**
      * 设置字体路径
      * @param fontPath 字体路径
      * @return 返回单元格组件
@@ -287,6 +297,7 @@ public class XEasyPdfCell {
                 .setContentMode(this.param.getContentMode())
                 .setBackgroundColor(this.param.getBackgroundColor())
                 .setBorderColor(this.param.getBorderColor())
+                .setBorderWidth(this.param.getBorderWidth())
                 .setNewLine(false)
                 .setHasBorder(true)
                 .disableCheckPage()
@@ -302,8 +313,8 @@ public class XEasyPdfCell {
      * @throws IOException IO异常
      */
     private void writeText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfText text) throws IOException {
-        float width = this.param.getWidth()-2;
-        float height = this.param.getHeight();
+        float width = this.param.getWidth() - this.param.getBorderWidth() * 2;
+        float height = this.param.getHeight() - this.param.getBorderWidth() * 2;
         text.setContentMode(this.param.getContentMode())
             .setWidth(width)
             .setHeight(height)
@@ -312,8 +323,8 @@ public class XEasyPdfCell {
             .setFontColor(this.param.getFontColor())
             .setStyle(text.isUseSelfStyle()?text.getStyle():this.param.getStyle().getTextStyle())
             .setPosition(
-                        row.getParam().getBeginX() + 1,
-                        page.getParam().getPageY() - row.getParam().getMarginTop() - text.getMarginTop() - this.param.getFontSize() + 1
+                        row.getParam().getBeginX() + this.param.getBorderWidth(),
+                        page.getParam().getPageY() - row.getParam().getMarginTop() - text.getMarginTop() - this.param.getFontSize() + this.param.getBorderWidth()
             ).draw(document, page);
     }
 
@@ -326,16 +337,16 @@ public class XEasyPdfCell {
      * @throws IOException IO异常
      */
     private void writeImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfImage image) throws IOException {
-        float width = Math.min(image.getWidth(document, page), this.param.getWidth());
-        float height = Math.min(image.getHeight(document, page), this.param.getHeight());
+        float width = Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth();
+        float height = Math.min(image.getHeight(document, page), this.param.getHeight()) - this.param.getBorderWidth();
         image.setContentMode(this.param.getContentMode())
-             .setWidth(width - 2)
-             .setMaxWidth(this.param.getWidth() - 2)
-             .setHeight(height - 2)
+             .setWidth(width - this.param.getBorderWidth() * 2)
+             .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
+             .setHeight(height - this.param.getBorderWidth() * 2)
              .setStyle(image.isUseSelfStyle()?image.getStyle():this.param.getStyle().getImageStyle())
              .setPosition(
-                    row.getParam().getBeginX() + 1,
-                    page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - image.getHeight(document, page) - 1
+                    row.getParam().getBeginX() + this.param.getBorderWidth() / 2,
+                    page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - image.getHeight(document, page) - this.param.getBorderWidth() / 2
              ).draw(document, page);
     }
 }

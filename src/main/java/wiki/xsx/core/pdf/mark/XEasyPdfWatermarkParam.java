@@ -8,6 +8,8 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
+
 /**
  * pdf页面水印参数
  * @author xsx
@@ -40,6 +42,10 @@ class XEasyPdfWatermarkParam {
      * 字体大小
      */
     private Float fontSize = 50F;
+    /**
+     * 字体颜色
+     */
+    private Color fontColor = Color.BLACK;
     /**
      * 透明度（值越小越透明，0.0-1.0）
      */

@@ -89,7 +89,7 @@ class XEasyPdfImageParam {
     /**
      * 图片缩放模式（默认）
      */
-    private XEasyPdfImage.ScaleMode scaleMode = XEasyPdfImage.ScaleMode.DEFAULT;
+//    private XEasyPdfImage.ScaleMode scaleMode = XEasyPdfImage.ScaleMode.DEFAULT;
     /**
      * 图片样式（居左、居中、居右）
      */
@@ -165,8 +165,7 @@ class XEasyPdfImageParam {
                     XEasyPdfImageUtil.scale(
                             this.image,
                             this.width,
-                            this.height,
-                            this.scaleMode.getMode()
+                            this.height
                     )
             );
         }

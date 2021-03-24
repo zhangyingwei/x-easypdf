@@ -8,6 +8,7 @@ import org.apache.pdfbox.util.Matrix;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -80,6 +81,16 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      */
     public XEasyPdfDefaultWatermark setFontSize(float fontSize) {
         this.param.setFontSize(fontSize);
+        return this;
+    }
+
+    /**
+     * 设置字体颜色
+     * @param fontColor 字体颜色
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark setFontColor(Color fontColor) {
+        this.param.setFontColor(fontColor);
         return this;
     }
 
@@ -179,7 +190,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 设置图形参数
         cs.setGraphicsStateParameters(state);
         // 设置字体颜色
-        cs.setNonStrokingColor(0.3F);
+        cs.setNonStrokingColor(this.param.getFontColor());
         // 设置行间距
         cs.setLeading(this.param.getLeading());
         // 开启文本输入

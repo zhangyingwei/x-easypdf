@@ -131,6 +131,16 @@ public class XEasyPdfRect implements XEasyPdfComponent {
     }
 
     /**
+     * 设置边框宽度
+     * @param borderWidth 边框宽度
+     * @return 返回矩形组件
+     */
+    public XEasyPdfRect setBorderWidth(float borderWidth) {
+        this.param.setBorderWidth(borderWidth);
+        return this;
+    }
+
+    /**
      * 设置背景颜色
      * @param backgroundColor 背景颜色
      * @return 返回矩形组件
@@ -237,10 +247,10 @@ public class XEasyPdfRect implements XEasyPdfComponent {
             contentStream.fill();
             // 绘制矩形（背景矩形）
             contentStream.addRect(
-                    this.param.getBeginX() + 1,
-                    this.param.getBeginY() + 1,
-                    this.param.getWidth() - 2,
-                    this.param.getHeight() - 2
+                    this.param.getBeginX() + this.param.getBorderWidth(),
+                    this.param.getBeginY() + this.param.getBorderWidth(),
+                    this.param.getWidth() - this.param.getBorderWidth()*2,
+                    this.param.getHeight() - this.param.getBorderWidth()*2
             );
             // 设置矩形颜色（背景颜色）
             contentStream.setNonStrokingColor(this.param.getBackgroundColor());

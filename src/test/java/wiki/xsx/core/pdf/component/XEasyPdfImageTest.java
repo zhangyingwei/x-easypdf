@@ -2,7 +2,6 @@ package wiki.xsx.core.pdf.component;
 
 import org.junit.Before;
 import org.junit.Test;
-import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
@@ -65,22 +64,18 @@ public class XEasyPdfImageTest {
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Image.build(new File(imagePath)).setMarginLeft(150F),
                         XEasyPdfHandler.Image.build(new File(imagePath))
-                                .setScaleMode(XEasyPdfImage.ScaleMode.FAST)
                                 .setWidth(100F)
                                 .setHeight(100F)
                                 .setStyle(XEasyPdfImageStyle.LEFT),
                         XEasyPdfHandler.Image.build(new File(imagePath))
-                                .setScaleMode(XEasyPdfImage.ScaleMode.SMOOTH)
                                 .setWidth(100F)
                                 .setHeight(100F)
                                 .setStyle(XEasyPdfImageStyle.CENTER),
                         XEasyPdfHandler.Image.build(new File(imagePath))
-                                .setScaleMode(XEasyPdfImage.ScaleMode.FAST)
                                 .setWidth(100F)
                                 .setHeight(100F)
                                 .setStyle(XEasyPdfImageStyle.RIGHT),
                         XEasyPdfHandler.Image.build(new File(imagePath))
-                                .setScaleMode(XEasyPdfImage.ScaleMode.DEFAULT)
                                 .setWidth(300F)
                                 .setHeight(300F)
                 ).setHeader(
@@ -96,7 +91,7 @@ public class XEasyPdfImageTest {
     public void testImage3() throws IOException {
         String sourcePath = OUTPUT_PATH + "testImage2.pdf";
         String filePath = OUTPUT_PATH + "testImage3.pdf";
-        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        String imagePath = "D:\\temp\\透明背景.png";
         XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);

@@ -8,7 +8,6 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -209,17 +208,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 设置图片缩放模式（默认、快速、质量）
-     * @param scaleMode 缩放模式
-     * @return 返回图片组件
-     */
-    public XEasyPdfImage setScaleMode(ScaleMode scaleMode) {
-        this.param.setScaleMode(scaleMode);
-        this.param.setImageXObject(null);
-        return this;
-    }
-
-    /**
      * 设置图片样式（居左、居中、居右）
      * @param style 样式
      * @return 返回图片组件
@@ -386,42 +374,4 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         return this.param.isUseSelfStyle();
     }
 
-    /**
-     * 图片缩放模式枚举
-     */
-    public enum ScaleMode {
-        /**
-         * 默认
-         */
-        DEFAULT(Image.SCALE_DEFAULT),
-        /**
-         * 快速
-         */
-        FAST(Image.SCALE_FAST),
-        /**
-         * 质量
-         */
-        SMOOTH(Image.SCALE_SMOOTH);
-
-        /**
-         * 缩放模式
-         */
-        private final int mode;
-
-        /**
-         * 有参构造
-         * @param mode 缩放模式
-         */
-        ScaleMode(int mode) {
-            this.mode = mode;
-        }
-
-        /**
-         * 获取缩放模式
-         * @return 返回缩放模式
-         */
-        public int getMode() {
-            return mode;
-        }
-    }
 }

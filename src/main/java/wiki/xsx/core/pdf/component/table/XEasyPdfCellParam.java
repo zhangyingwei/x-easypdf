@@ -84,7 +84,7 @@ class XEasyPdfCellParam {
     /**
      * 边框宽度
      */
-    private float lineWidth = 1F;
+    private float borderWidth = 1F;
     /**
      * 左边距
      */

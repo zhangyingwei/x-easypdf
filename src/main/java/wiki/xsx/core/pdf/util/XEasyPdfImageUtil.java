@@ -2,6 +2,8 @@ package wiki.xsx.core.pdf.util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -68,6 +70,30 @@ public class XEasyPdfImageUtil {
             throw new IllegalArgumentException("Image type not supported: " + name);
         }
         return name.substring(dot + 1).toLowerCase();
+    }
+
+    /**
+     * 缩放图片
+     * @param sourceImage 源图片
+     * @param width 缩放宽度
+     * @param height 缩放高度
+     * @return 返回缩放后的图片对象
+     */
+    public static BufferedImage scale(
+            BufferedImage sourceImage,
+            int width,
+            int height
+    ) {
+        if (sourceImage==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
+        return new AffineTransformOp(
+                AffineTransform.getScaleInstance(
+                        (double) width/sourceImage.getWidth(),
+                        (double) height/sourceImage.getHeight()
+                ),
+                null
+        ).filter(sourceImage, null);
     }
 
     /**

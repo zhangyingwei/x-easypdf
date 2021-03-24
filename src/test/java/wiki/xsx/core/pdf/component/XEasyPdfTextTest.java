@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
@@ -99,6 +100,27 @@ public class XEasyPdfTextTest {
         ).setGlobalWatermark(
                 XEasyPdfHandler.Watermark.build("贵阳")
         ).save(filePath).close();
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testText3() throws IOException {
+        String filePath = OUTPUT_PATH + "testText3.pdf";
+        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        StringBuilder textBuild = new StringBuilder();
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build(
+                                20F,
+                                "贵阳"
+                        ).setNewLine(false),
+                        XEasyPdfHandler.Image.build(new File(imagePath))
+                                .setWidth(20F)
+                                .setHeight(20F)
+                                .setStyle(XEasyPdfImageStyle.LEFT)
+                                .setMarginLeft(40F)
+                )
+        ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
     }
 }

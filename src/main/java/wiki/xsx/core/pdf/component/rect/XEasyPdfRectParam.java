@@ -71,6 +71,10 @@ class XEasyPdfRectParam {
      */
     private boolean hasBorder = false;
     /**
+     * 边框宽度
+     */
+    private Float borderWidth = 1F;
+    /**
      * 背景颜色
      */
     private Color backgroundColor = Color.WHITE;
