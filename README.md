@@ -2,7 +2,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v2.2.0-brightgreen" />
+    <img src="https://img.shields.io/badge/Current%20Version-v2.3.0-brightgreen" />
     <img src="https://img.shields.io/:License-MulanPSL2-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
         <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
@@ -10,7 +10,7 @@
 </p>
 
 #### 更新说明
-master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.2.0
+master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.3.0
 
 #### 介绍
 x-easypdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单易用，仅需一行代码，便可完成pdf的操作
@@ -59,7 +59,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 <dependency>
     <groupId>wiki.xsx</groupId>
     <artifactId>x-easypdf</artifactId>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
 </dependency>
 ```
 
@@ -128,7 +128,7 @@ public class XpdfTest {
                         ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
                 )
                 // 设置字体路径，并保存
-        ).setFontPath(fontPath).save(outputPath);
+        ).setFontPath(fontPath).save(outputPath).close();
     }
 }
 ```
