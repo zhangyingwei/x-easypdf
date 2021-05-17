@@ -3,21 +3,24 @@ package wiki.xsx.core.pdf.handler;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.footer.XEasyPdfDefaultFooter;
-import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
-import wiki.xsx.core.pdf.header.XEasyPdfDefaultHeader;
-import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfBaseLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
-import wiki.xsx.core.pdf.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
 import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
 import wiki.xsx.core.pdf.component.table.XEasyPdfRow;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
+import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleCell;
+import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleRow;
+import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleTable;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.footer.XEasyPdfDefaultFooter;
+import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.header.XEasyPdfDefaultHeader;
+import wiki.xsx.core.pdf.header.XEasyPdfHeader;
+import wiki.xsx.core.pdf.mark.XEasyPdfDefaultWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.File;
@@ -301,6 +304,75 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfRect build(float width, float height, float beginX, float beginY) {
             return new XEasyPdfRect(width, height, beginX, beginY);
+        }
+    }
+
+    /**
+     * pdf简单表格组件
+     */
+    public static class SimpleTable {
+        /**
+         * pdf表格行
+         */
+        public static class Row {
+            /**
+             * pdf单元格
+             */
+            public static class Cell {
+                /**
+                 * 构建单元格
+                 * @param width 宽度
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfSimpleCell build(float width) {
+                    return new XEasyPdfSimpleCell(width);
+                }
+                /**
+                 * 构建单元格
+                 * @param width 宽度
+                 * @param height 高度
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfSimpleCell build(float width, float height) {
+                    return new XEasyPdfSimpleCell(width, height);
+                }
+            }
+
+            /**
+             * 构建表格行
+             * @param cells 单元格
+             * @return 返回pdf表格行组件
+             */
+            public static XEasyPdfSimpleRow build(XEasyPdfSimpleCell...cells) {
+                return new XEasyPdfSimpleRow(cells);
+            }
+
+            /**
+             * 构建表格行
+             * @param cellList 单元格列表
+             * @return 返回pdf表格行组件
+             */
+            public static XEasyPdfSimpleRow build(List<XEasyPdfSimpleCell> cellList) {
+                return new XEasyPdfSimpleRow(cellList);
+            }
+        }
+
+        /**
+         * 构建表格
+         * @param rows 表格行
+         * @return 返回pdf表格组件
+         */
+        public static XEasyPdfSimpleTable build(XEasyPdfSimpleRow ...rows) {
+            return new XEasyPdfSimpleTable(rows);
+        }
+
+        /**
+         * 构建表格
+         * @param rowList 表格行列表
+         * @return 返回pdf表格组件
+         */
+        public static XEasyPdfSimpleTable build(List<XEasyPdfSimpleRow> rowList) {
+            return new XEasyPdfSimpleTable(rowList);
         }
     }
 

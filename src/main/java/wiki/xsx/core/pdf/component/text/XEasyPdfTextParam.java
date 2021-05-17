@@ -12,6 +12,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,7 +98,7 @@ class XEasyPdfTextParam {
     /**
      * 页面X轴起始坐标
      */
-    private Float beginX = 0F;
+    private Float beginX;
     /**
      * 页面Y轴起始坐标
      */
@@ -118,6 +119,14 @@ class XEasyPdfTextParam {
      * 是否分页检查
      */
     private boolean checkPage = true;
+    /**
+     * 是否文本追加
+     */
+    private boolean isTextAppend = false;
+    /**
+     * 是否子组件
+     */
+    private boolean isChildComponent = false;
     /**
      * 是否完成绘制
      */
@@ -148,31 +157,88 @@ class XEasyPdfTextParam {
             this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
         // 初始化字体高度
-        this.fontHeight = XEasyPdfFontUtil.getFontHeight(this.font, this.fontSize);
-        // 如果拆分后的待添加文本列表未初始化，则进行初始化
-        if (this.splitTextList==null) {
-            // 初始化待添加文本列表
-            this.splitTextList =  XEasyPdfTextUtil.splitLines(
-                    // 待输入文本
-                    this.text,
-                    // 行宽度 = 页面宽度 - 左边距 - 右边距
-                    this.maxWidth - this.marginLeft - this.marginRight,
-                    // 字体
-                    this.font,
-                    // 字体大小
-                    this.fontSize
-            );
+        this.fontHeight = this.fontSize;
+        // 如果页面X轴起始坐标未初始化，则进行初始化
+        if (this.beginX==null) {
+            // 初始化页面X轴起始坐标
+            this.beginX = this.isTextAppend?
+                    // 左边距 + 当前页面X轴起始坐标
+                    this.marginLeft + (page.getParam().getPageX()==null?0F:page.getParam().getPageX()) :
+                    // 左边距
+                    this.marginLeft;
         }
-        // 初始化页面X轴起始坐标，起始坐标 = 左边距
-        this.beginX += this.marginLeft;
         // 如果页面Y轴起始坐标未初始化，则进行初始化
         if (this.beginY==null) {
-            // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体大小 - 行距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体大小 - 行距
-            this.beginY = page.getParam().getPageY() == null?
+            // 初始化页面Y轴起始坐标
+            this.beginY = this.isTextAppend?
+                    // 当前页面Y轴起始坐标是否为空
+                    (page.getParam().getPageY() == null?
+                    // 最大高度 - 上边距 - 字体高度 - 行距
+                    this.maxHeight - this.marginTop - this.fontHeight - this.leading :
+                    // 当前页面Y轴起始坐标
+                    page.getParam().getPageY()) :
+                    // 当前页面Y轴起始坐标是否为空
+                    (page.getParam().getPageY() == null?
                     // 最大高度 - 上边距 - 字体高度 - 行距
                     this.maxHeight - this.marginTop - this.fontHeight - this.leading :
                     // 当前页面Y轴起始坐标 - 上边距 - 字体高度 - 行距
-                    page.getParam().getPageY() - this.marginTop - this.fontHeight - this.leading;
+                    page.getParam().getPageY() - this.marginTop - this.fontHeight - this.leading);
+        }
+        // 如果拆分后的待添加文本列表未初始化，则进行初始化
+        if (this.splitTextList==null) {
+            // 开启文本追加
+            if (this.isTextAppend) {
+                // 首次拆分文本列表
+                List<String> splitLines = XEasyPdfTextUtil.splitLines(
+                        // 待输入文本
+                        this.text,
+                        // 行宽度 = 页面宽度 - X轴开始坐标 - 右边距
+                        this.maxWidth - this.beginX - this.marginRight,
+                        // 字体
+                        this.font,
+                        // 字体大小
+                        this.fontSize
+                );
+                // 如果拆分文本列表不为空，则初始化待添加文本列表
+                if (!splitLines.isEmpty()) {
+                    // 初始化待添加文本列表
+                    this.splitTextList = new ArrayList<>(splitLines.size());
+                    // 获取第一行文本
+                    String firstLineText = splitLines.get(0);
+                    // 添加第一行文本
+                    this.splitTextList.add(firstLineText);
+                    // 添加剩余文本
+                    this.splitTextList.addAll(
+                            XEasyPdfTextUtil.splitLines(
+                                    // 待输入文本
+                                    this.text.substring(firstLineText.length()),
+                                    // 行宽度 = 页面宽度 - 左边距 - 右边距
+                                    this.maxWidth - this.marginLeft - this.marginRight,
+                                    // 字体
+                                    this.font,
+                                    // 字体大小
+                                    this.fontSize
+                            )
+                    );
+                }else {
+                    // 初始化待添加文本列表
+                    this.splitTextList = splitLines;
+                }
+            }
+            // 未开启文本追加
+            else {
+                // 初始化待添加文本列表
+                this.splitTextList =  XEasyPdfTextUtil.splitLines(
+                        // 待输入文本
+                        this.text,
+                        // 行宽度 = 页面宽度 - X轴开始坐标 - 右边距
+                        this.maxWidth - this.beginX - this.marginRight,
+                        // 字体
+                        this.font,
+                        // 字体大小
+                        this.fontSize
+                );
+            }
         }
     }
 

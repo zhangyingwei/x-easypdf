@@ -87,10 +87,6 @@ class XEasyPdfImageParam {
      */
     private boolean enableSelfAdaption = true;
     /**
-     * 图片缩放模式（默认）
-     */
-//    private XEasyPdfImage.ScaleMode scaleMode = XEasyPdfImage.ScaleMode.DEFAULT;
-    /**
      * 图片样式（居左、居中、居右）
      */
     private XEasyPdfImageStyle style = XEasyPdfImageStyle.CENTER;

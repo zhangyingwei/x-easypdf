@@ -12,9 +12,9 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.printing.PDFPrintable;
 import org.apache.pdfbox.printing.Scaling;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
-import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
@@ -115,6 +115,7 @@ public class XEasyPdfDocument {
     public XEasyPdfDocumentInfo information() {
         // 设置重置
         this.param.setReset(true);
+        // 返回文档信息
         return this.param.getDocumentInfo()!=null?this.param.getDocumentInfo():new XEasyPdfDocumentInfo(this);
     }
 
@@ -435,14 +436,14 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument save(OutputStream outputStream) throws IOException {
-        try(COSWriter writer = new COSWriter(outputStream))  {
-            // 创建任务文档
-            PDDocument target = this.getTarget();
-            // 设置文档信息及保护策略
-            this.setInfoAndPolicy(target);
-            // 写入文档
-            writer.write(target);
-        }
+        // 创建写入器
+        COSWriter writer = new COSWriter(outputStream);
+        // 创建任务文档
+        PDDocument target = this.getTarget();
+        // 设置文档信息及保护策略
+        this.setInfoAndPolicy(target);
+        // 写入文档
+        writer.write(target);
         return this;
     }
 
@@ -490,9 +491,13 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public void close() throws IOException {
+        // 如果合并pdf源文档列表不为空，则进行关闭
         if (!this.param.getMergeSourceList().isEmpty()) {
+            // 获取合并pdf源文档列表
             List<XEasyPdfDocument> mergeSourceList = this.param.getMergeSourceList();
+            // 遍历合并pdf源文档列表
             for (XEasyPdfDocument mergeSource : mergeSourceList) {
+                // 关闭源文档
                 mergeSource.close();
             }
         }

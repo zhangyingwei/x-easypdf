@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.util.Matrix;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -135,6 +136,24 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
     }
 
     /**
+     * 开启外水印模式
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark enableOuterMode() {
+        this.param.setContentMode(XEasyPdfComponent.ContentMode.APPEND);
+        return this;
+    }
+
+    /**
+     * 开启内水印模式
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark enableInnerMode() {
+        this.param.setContentMode(XEasyPdfComponent.ContentMode.PREPEND);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
@@ -183,10 +202,11 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         PDPageContentStream cs = new PDPageContentStream(
                 document.getTarget(),
                 pdPage,
-                PDPageContentStream.AppendMode.APPEND,
+                this.param.getContentMode().getMode(),
                 true,
                 true
         );
+
         // 设置图形参数
         cs.setGraphicsStateParameters(state);
         // 设置字体颜色
@@ -214,25 +234,5 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         cs.endText();
         // 关闭内容流
         cs.close();
-    }
-
-    /**
-     * 写入水印文本
-     * @param cs 内容流
-     * @param beginX X轴起始坐标
-     * @param beginY Y轴起始坐标
-     * @throws IOException IO异常
-     */
-    private void writeText(PDPageContentStream cs, float beginX, float beginY) throws IOException {
-        // 开启文本输入
-        cs.beginText();
-        // 设置字体
-        cs.setFont(this.param.getFont(), this.param.getFontSize());
-        // 设置文本弧度
-        cs.setTextMatrix(Matrix.getRotateInstance(this.param.getRadians(), beginX, beginY));
-        // 文本输入
-        cs.showText(this.param.getText());
-        // 结束文本写入
-        cs.endText();
     }
 }

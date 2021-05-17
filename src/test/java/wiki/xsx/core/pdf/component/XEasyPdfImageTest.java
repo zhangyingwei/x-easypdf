@@ -97,9 +97,9 @@ public class XEasyPdfImageTest {
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(
                 XEasyPdfHandler.Image.build(new File(imagePath))
-                        .setHeight(50)
-                        .setWidth(50)
-                        .setPosition(20F, 50F)
+                        .setHeight(150)
+                        .setWidth(150)
+                        .setPosition(20F, 200F)
         );
         document.save(filePath).close();
         System.out.println("finish");

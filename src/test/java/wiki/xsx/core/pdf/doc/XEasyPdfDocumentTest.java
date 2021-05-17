@@ -330,9 +330,12 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testFillForm() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = OUTPUT_PATH + "test_fill.pdf";
-        String filePath = OUTPUT_PATH + "fillForm.pdf";
-        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).fillForm(Collections.singletonMap("test", "爽爽的贵阳")).save(filePath).close();
+        final String sourcePath = OUTPUT_PATH + "fillForm.pdf";
+        final String outputPath = OUTPUT_PATH + "test_fill2.pdf";
+        Map<String, String> form = new HashMap<>(2);
+        form.put("test", "爽爽的贵阳");
+        form.put("test2", "堵车的天堂");
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath("C:\\Users\\xsx\\Desktop\\pdf\\test\\simhei.ttf").fillForm(form).save(outputPath).close();
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }

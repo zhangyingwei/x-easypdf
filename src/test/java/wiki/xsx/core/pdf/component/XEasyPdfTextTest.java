@@ -7,6 +7,7 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -71,7 +72,7 @@ public class XEasyPdfTextTest {
                 ).setHeader(
                         XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉"))
                 ).setWatermark(
-                        XEasyPdfHandler.Watermark.build("贵阳").setFontSize(150F)
+                        XEasyPdfHandler.Watermark.build("贵阳").setFontSize(150F).setFontColor(new Color(51,153,255))
                 )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("页脚"))
@@ -119,6 +120,40 @@ public class XEasyPdfTextTest {
                                 .setHeight(20F)
                                 .setStyle(XEasyPdfImageStyle.LEFT)
                                 .setMarginLeft(40F)
+                )
+        ).setFontPath(FONT_PATH).save(filePath).close();
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testText4() throws IOException {
+        String filePath = OUTPUT_PATH + "testText4.pdf";
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build(
+                                20F,
+                                "爽爽的贵阳"
+                        ).enableTextAppend().setFontColor(Color.GREEN),
+                        XEasyPdfHandler.Text.build(
+                                20F,
+                                "，"
+                        ).enableTextAppend(),
+                        XEasyPdfHandler.Text.build(
+                                20F,
+                                "避暑的天堂"
+                        ).enableTextAppend().setFontColor(Color.cyan),
+                        XEasyPdfHandler.Text.build(
+                                20F,
+                                "。"
+                        ).enableTextAppend(),
+                        XEasyPdfHandler.Text.build(
+                                20F,
+                                "贵阳，简称“筑”，别称林城、筑城，是贵州省省会，国务院批复确定的中国西南地区重要的区域创新中心、中国重要的生态休闲度假旅游城市 [1]  ；截至2020年11月，贵阳全市下辖6个区、3个县、代管1个县级市，总面积8034平方公里，建成区面积360平方公里，常住人口497.14万人，城镇人口378.47万人，城镇化率76.13%。"
+                        ).enableTextAppend().setFontColor(Color.MAGENTA),
+                        XEasyPdfHandler.Text.build(
+                                30F,
+                                "新的段落"
+                        )
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
