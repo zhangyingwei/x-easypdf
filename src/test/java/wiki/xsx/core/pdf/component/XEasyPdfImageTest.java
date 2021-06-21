@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.component;
 
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
@@ -102,6 +103,19 @@ public class XEasyPdfImageTest {
                         .setPosition(20F, 200F)
         );
         document.save(filePath).close();
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testImage4() throws IOException {
+        String filePath = OUTPUT_PATH + "testImage4.pdf";
+        String imagePath = "D:\\temp\\失真图像.png";
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build(
+                        PDRectangle.A0,
+                        XEasyPdfHandler.Image.build(new File(imagePath))
+                )
+        ).save(filePath).close();
         System.out.println("finish");
     }
 }

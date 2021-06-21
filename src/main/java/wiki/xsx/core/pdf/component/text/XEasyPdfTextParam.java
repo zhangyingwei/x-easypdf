@@ -231,8 +231,8 @@ class XEasyPdfTextParam {
                 this.splitTextList =  XEasyPdfTextUtil.splitLines(
                         // 待输入文本
                         this.text,
-                        // 行宽度 = 页面宽度 - X轴开始坐标 - 右边距
-                        this.maxWidth - this.beginX - this.marginRight,
+                        // 行宽度 = 页面宽度 - 左边距 - 右边距
+                        this.maxWidth - this.marginLeft - this.marginRight,
                         // 字体
                         this.font,
                         // 字体大小

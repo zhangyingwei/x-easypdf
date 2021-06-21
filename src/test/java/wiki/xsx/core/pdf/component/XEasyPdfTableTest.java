@@ -45,18 +45,19 @@ public class XEasyPdfTableTest {
 
     @Test
     public void testTable1() throws IOException {
+        long begin = System.currentTimeMillis();
         String filePath = OUTPUT_PATH + "testTable1.pdf";
         List<XEasyPdfRow> rowList = new ArrayList<>(50);
         List<XEasyPdfCell> cellList;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 3000; i++) {
             cellList = new ArrayList<>(5);
             for (int j = 0; j < 5; j++) {
                 cellList.add(
                         i%2==0?
-                        XEasyPdfHandler.Table.Row.Cell.build(100F, 30F).addContent(
+                        XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
                         ):
-                        XEasyPdfHandler.Table.Row.Cell.build(100F, 30F).addContent(
+                        XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
                         ).setBackgroundColor(new Color(0,191,255))
                 );
@@ -72,7 +73,8 @@ public class XEasyPdfTableTest {
                         XEasyPdfHandler.Table.build(rowList).setStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
-        System.out.println("finish");
+        long end = System.currentTimeMillis();
+        System.out.println("finish，耗时：" + (end-begin) + " ms");
     }
 
     @Test

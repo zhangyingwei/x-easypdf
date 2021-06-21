@@ -52,7 +52,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setWidth(float width) {
-        this.param.setWidth(width+1F);
+        this.param.setWidth(width);
         return this;
     }
 
@@ -316,6 +316,7 @@ public class XEasyPdfCell {
         float width = this.param.getWidth() - this.param.getBorderWidth() * 2;
         float height = this.param.getHeight() - this.param.getBorderWidth() * 2;
         text.setContentMode(this.param.getContentMode())
+            .enableChildComponent()
             .setWidth(width)
             .setHeight(height)
             .setFont(this.param.getFont())
