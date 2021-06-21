@@ -11,6 +11,9 @@
     <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
         <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
     </a>
+    <a href="https://qm.qq.com/cgi-bin/qm/qr?k=9zYBYsyoJ-p92S5E8UC8PX--rpfxTpGL&jump_from=webapi">
+        <img src="https://img.shields.io/badge/QQ%E4%BA%A4%E6%B5%81%E7%BE%A4-15018726-blue"/>
+    </a>
 </p>
 
 #### 更新说明
