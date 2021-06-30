@@ -122,6 +122,14 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
     }
 
     /**
+     * 获取文档字体
+     * @return 返回pdfBox字体
+     */
+    public PDFont getFont() {
+        return this.param.getFont();
+    }
+
+    /**
      * 开启边框
      * @return 返回表格组件
      */

@@ -310,14 +310,14 @@ public class XEasyPdfPage {
 
     /**
      * 修改页面尺寸
-     * @param rectangle pdfbox页面尺寸
+     * @param pageSize pdfbox页面尺寸
      * @return 返回pdf页面
      */
-    public XEasyPdfPage modifyPageSize(PDRectangle rectangle) {
+    public XEasyPdfPage modifyPageSize(PDRectangle pageSize) {
         // 设置新增页面尺寸
-        this.param.setPageSize(rectangle);
+        this.param.setPageSize(pageSize);
         // 设置原有页面尺寸
-        this.param.setModifyPageSize(rectangle);
+        this.param.setModifyPageSize(pageSize);
         return this;
     }
 

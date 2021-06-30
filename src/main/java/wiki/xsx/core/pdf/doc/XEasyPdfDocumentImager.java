@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.doc;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -57,7 +58,7 @@ public class XEasyPdfDocumentImager {
      * @return 返回pdf文档图像器
      * @throws IOException IO异常
      */
-    public XEasyPdfDocumentImager image(String outputPath, String imageType) throws IOException {
+    public XEasyPdfDocumentImager image(String outputPath, XEasyPdfImageType imageType) throws IOException {
         return this.image(outputPath, imageType, null);
     }
 
@@ -69,12 +70,14 @@ public class XEasyPdfDocumentImager {
      * @return 返回pdf文档图像器
      * @throws IOException IO异常
      */
-    public XEasyPdfDocumentImager image(String outputPath, String imageType, String prefix) throws IOException {
+    public XEasyPdfDocumentImager image(String outputPath, XEasyPdfImageType imageType, String prefix) throws IOException {
         // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
         if (prefix==null) {
             // 初始化文档名称前缀
             prefix = "x-easypdf";
         }
+        // 图片格式名称
+        String imageTypeName = imageType.name().toLowerCase();
         // 文件名称构造器
         StringBuilder fileNameBuilder;
         // 任务文档页面总数
@@ -84,7 +87,7 @@ public class XEasyPdfDocumentImager {
             // 新建文件名称构造器
             fileNameBuilder = new StringBuilder();
             // 构建文件名称
-            fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append('.').append(imageType);
+            fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append('.').append(imageTypeName);
             // 获取输出流
             try (OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
                 // 初始化pdfBox文档渲染器
@@ -92,7 +95,7 @@ public class XEasyPdfDocumentImager {
                 // 渲染图片
                 BufferedImage bufferedImage = renderer.renderImage(i);
                 // 写出图片
-                ImageIO.write(bufferedImage, imageType, outputStream);
+                ImageIO.write(bufferedImage, imageTypeName, outputStream);
             }
         }
         return this;
@@ -106,7 +109,7 @@ public class XEasyPdfDocumentImager {
      * @return 返回pdf文档图像器
      * @throws IOException IO异常
      */
-    public XEasyPdfDocumentImager image(OutputStream outputStream, String imageType, int pageIndex) throws IOException {
+    public XEasyPdfDocumentImager image(OutputStream outputStream, XEasyPdfImageType imageType, int pageIndex) throws IOException {
         // 重置页面索引（0至文档总页面索引）
         pageIndex = Math.min(Math.max(pageIndex, 0), this.document.getNumberOfPages()-1);
         // 初始化pdfBox文档渲染器
@@ -114,7 +117,7 @@ public class XEasyPdfDocumentImager {
         // 渲染图片
         BufferedImage bufferedImage = renderer.renderImage(pageIndex);
         // 写出图片
-        ImageIO.write(bufferedImage, imageType, outputStream);
+        ImageIO.write(bufferedImage, imageType.name().toLowerCase(), outputStream);
         return this;
     }
 

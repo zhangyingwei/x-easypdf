@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.component.line.XEasyPdfBaseLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
@@ -252,7 +253,7 @@ public class XEasyPdfHandler {
          * @param imageType 待添加图片类型（扩展名）
          * @return 返回pdf图片组件
          */
-        public static XEasyPdfImage build(InputStream imageInputStream, String imageType) {
+        public static XEasyPdfImage build(InputStream imageInputStream, XEasyPdfImageType imageType) {
             return new XEasyPdfImage(imageInputStream, imageType);
         }
 
@@ -275,7 +276,7 @@ public class XEasyPdfHandler {
          * @param height 图片高度
          * @return 返回pdf图片组件
          */
-        public static XEasyPdfImage build(InputStream imageInputStream, String imageType, int width, int height) {
+        public static XEasyPdfImage build(InputStream imageInputStream, XEasyPdfImageType imageType, int width, int height) {
             return new XEasyPdfImage(imageInputStream, imageType, width, height);
         }
     }

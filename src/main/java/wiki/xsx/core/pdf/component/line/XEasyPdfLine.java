@@ -72,4 +72,10 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
      * @return 返回线条组件
      */
     XEasyPdfLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle);
+
+    /**
+     * 获取文档字体
+     * @return 返回pdfBox字体
+     */
+    PDFont getFont();
 }

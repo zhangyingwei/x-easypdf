@@ -51,8 +51,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @param imageType 待添加图片类型（扩展名）
      */
     @SneakyThrows
-    public XEasyPdfImage(InputStream imageStream, String imageType) {
-        this.param.setImageType(imageType).setImage(XEasyPdfImageUtil.read(imageStream));
+    public XEasyPdfImage(InputStream imageStream, XEasyPdfImageType imageType) {
+        this.param.setImageType(imageType.name().toLowerCase()).setImage(XEasyPdfImageUtil.read(imageStream));
     }
 
     /**
@@ -77,8 +77,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @param height 图片高度
      */
     @SneakyThrows
-    public XEasyPdfImage(InputStream imageStream, String imageType, int width, int height) {
-        this.param.setImageType(imageType)
+    public XEasyPdfImage(InputStream imageStream, XEasyPdfImageType imageType, int width, int height) {
+        this.param.setImageType(imageType.name().toLowerCase())
                 .setImage(XEasyPdfImageUtil.read(imageStream))
                 .setWidth(width)
                 .setHeight(height);
@@ -103,8 +103,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     @SneakyThrows
-    public XEasyPdfImage setImage(InputStream imageStream, String imageType) {
-        this.param.setImageType(imageType).setImage(XEasyPdfImageUtil.read(imageStream));
+    public XEasyPdfImage setImage(InputStream imageStream, XEasyPdfImageType imageType) {
+        this.param.setImageType(imageType.name().toLowerCase()).setImage(XEasyPdfImageUtil.read(imageStream));
         this.param.setImageXObject(null);
         return this;
     }

@@ -249,6 +249,19 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 设置字体
+     * @param font pdfbox字体
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setFont(PDFont font) {
+        // 设置重置
+        this.param.setReset(true);
+        // 设置字体
+        this.param.setFont(font);
+        return this;
+    }
+
+    /**
      * 获取文档字体
      * @return 返回pdfBox字体
      */
@@ -317,11 +330,11 @@ public class XEasyPdfDocument {
 
     /**
      * 修改页面尺寸
-     * @param rectangle pdfbox页面尺寸
+     * @param pageSize pdfbox页面尺寸
      * @param pageIndex 页面索引
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument modifyPageSize(PDRectangle rectangle, int ...pageIndex) {
+    public XEasyPdfDocument modifyPageSize(PDRectangle pageSize, int ...pageIndex) {
         // 设置重置
         this.param.setReset(true);
         // 获取pdf页面列表
@@ -331,14 +344,15 @@ public class XEasyPdfDocument {
             // 遍历页面索引
             for (int index : pageIndex) {
                 // 修改页面尺寸
-                pageList.get(index).modifyPageSize(rectangle);
+                pageList.get(index).modifyPageSize(pageSize);
             }
+        }
         // 如果页面索引为空，则全部页面进行设置
-        }else {
+        else {
             // 遍历pdf页面
             for (XEasyPdfPage xEasyPdfPage : pageList) {
                 // 修改页面尺寸
-                xEasyPdfPage.modifyPageSize(rectangle);
+                xEasyPdfPage.modifyPageSize(pageSize);
             }
         }
         return this;
@@ -453,8 +467,8 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      * @throws PrinterException 打印异常
      */
-    public void print(int count) throws IOException, PrinterException {
-        this.print(count, XEasyPdfPrintStyle.PORTRAIT, Scaling.ACTUAL_SIZE);
+    public XEasyPdfDocument print(int count) throws IOException, PrinterException {
+        return this.print(count, XEasyPdfPrintStyle.PORTRAIT, Scaling.ACTUAL_SIZE);
     }
 
     /**
@@ -465,7 +479,7 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      * @throws PrinterException 打印异常
      */
-    public void print(int count, XEasyPdfPrintStyle style, Scaling scaling) throws IOException, PrinterException {
+    public XEasyPdfDocument print(int count, XEasyPdfPrintStyle style, Scaling scaling) throws IOException, PrinterException {
         // 获取打印任务
         PrinterJob job = PrinterJob.getPrinterJob();
         // 设置打印服务（默认）
@@ -484,6 +498,7 @@ public class XEasyPdfDocument {
         job.setCopies(count);
         // 执行打印
         job.print();
+        return this;
     }
 
     /**

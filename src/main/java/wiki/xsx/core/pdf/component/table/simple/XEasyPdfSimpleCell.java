@@ -167,6 +167,14 @@ public class XEasyPdfSimpleCell {
     }
 
     /**
+     * 获取文档字体
+     * @return 返回pdfBox字体
+     */
+    public PDFont getFont() {
+        return this.param.getFont();
+    }
+
+    /**
      * 开启组件自动换行
      * @return 返回单元格组件
      */

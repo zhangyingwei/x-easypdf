@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.doc;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
@@ -189,7 +190,7 @@ public class XEasyPdfDocumentTest {
     public void testImage1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, "png").finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, XEasyPdfImageType.PNG).finish().close();
         System.out.println("finish");
     }
 
@@ -198,7 +199,7 @@ public class XEasyPdfDocumentTest {
         String sourcePath = OUTPUT_PATH + "insertPage.pdf";
         String filePath = OUTPUT_PATH;
         String prefix = "x-easypdf";
-        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, "jpg", prefix).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, XEasyPdfImageType.JPEG, prefix).finish().close();
         System.out.println("finish");
     }
 
@@ -213,8 +214,8 @@ public class XEasyPdfDocumentTest {
         ) {
             XEasyPdfHandler.Document.load(sourcePath)
                     .imager()
-                    .image(outputStream1, "jpg", 0)
-                    .image(outputStream2, "jpg", 6)
+                    .image(outputStream1, XEasyPdfImageType.JPEG, 0)
+                    .image(outputStream2, XEasyPdfImageType.PNG, 6)
                     .finish()
                     .close();
         }

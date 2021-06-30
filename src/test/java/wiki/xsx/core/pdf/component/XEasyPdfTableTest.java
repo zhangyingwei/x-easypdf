@@ -49,7 +49,7 @@ public class XEasyPdfTableTest {
         String filePath = OUTPUT_PATH + "testTable1.pdf";
         List<XEasyPdfRow> rowList = new ArrayList<>(50);
         List<XEasyPdfCell> cellList;
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < 10000; i++) {
             cellList = new ArrayList<>(5);
             for (int j = 0; j < 5; j++) {
                 cellList.add(

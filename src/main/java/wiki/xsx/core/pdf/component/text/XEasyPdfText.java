@@ -299,6 +299,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 获取文档字体
+     * @return 返回pdfBox字体
+     */
+    public PDFont getFont() {
+        return this.param.getFont();
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
