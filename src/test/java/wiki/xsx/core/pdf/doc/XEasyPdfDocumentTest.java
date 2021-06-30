@@ -81,7 +81,7 @@ public class XEasyPdfDocumentTest {
         String filePath = OUTPUT_PATH + "info.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build()
-        ).setFontPath(FONT_PATH).information()
+        ).information()
             .setTitle("test info")
             .setAuthor("xsx")
             .setSubject("info")
@@ -100,7 +100,7 @@ public class XEasyPdfDocumentTest {
         String filePath = OUTPUT_PATH + "permission.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build()
-        ).setFontPath(FONT_PATH).permission()
+        ).permission()
                 .setCanPrintDegraded(false)
                 .setCanPrint(false)
                 .setCanAssembleDocument(false)
@@ -121,8 +121,7 @@ public class XEasyPdfDocumentTest {
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(),
                 XEasyPdfHandler.Page.build()
-        ).setFontPath(FONT_PATH)
-                .setGlobalBackgroundColor(Color.YELLOW)
+        ).setGlobalBackgroundColor(Color.YELLOW)
                 .save(filePath)
                 .close();
         System.out.println("finish");
@@ -182,24 +181,22 @@ public class XEasyPdfDocumentTest {
         XEasyPdfHandler.Document.load(sourcePath).merge(
                 XEasyPdfHandler.Document.load(mergePath1),
                 XEasyPdfHandler.Document.load(mergePath2)
-        ).setFontPath(FONT_PATH).save(filePath).close();
+        ).save(filePath).close();
         System.out.println("finish");
     }
 
     @Test
     public void testImage1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
-        String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, XEasyPdfImageType.PNG).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).imager().image(OUTPUT_PATH, XEasyPdfImageType.PNG).finish().close();
         System.out.println("finish");
     }
 
     @Test
     public void testImage2() throws IOException {
         String sourcePath = OUTPUT_PATH + "insertPage.pdf";
-        String filePath = OUTPUT_PATH;
         String prefix = "x-easypdf";
-        XEasyPdfHandler.Document.load(sourcePath).imager().image(filePath, XEasyPdfImageType.JPEG, prefix).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).imager().image(OUTPUT_PATH, XEasyPdfImageType.JPEG, prefix).finish().close();
         System.out.println("finish");
     }
 
@@ -225,20 +222,18 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testSplit1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
-        String filePath = OUTPUT_PATH;
-        XEasyPdfHandler.Document.load(sourcePath).splitter().split(filePath).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).splitter().split(OUTPUT_PATH).finish().close();
         System.out.println("finish");
     }
 
     @Test
     public void testSplit2() throws IOException {
         String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
-        String filePath = OUTPUT_PATH;
         XEasyPdfHandler.Document.load(sourcePath)
                 .splitter()
                 .addDocument(1)
                 .addDocument(1, 0)
-                .split(filePath, "mypdf")
+                .split(OUTPUT_PATH, "mypdf")
                 .finish()
                 .close();
         System.out.println("finish");

@@ -93,7 +93,7 @@ public class XEasyPdfImageTest {
         String sourcePath = OUTPUT_PATH + "testImage2.pdf";
         String filePath = OUTPUT_PATH + "testImage3.pdf";
         String imagePath = "D:\\temp\\透明背景.png";
-        XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH);
+        XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(

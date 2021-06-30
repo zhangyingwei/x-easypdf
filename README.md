@@ -6,7 +6,7 @@
 </p>
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v2.3.1-brightgreen" />
+    <img src="https://img.shields.io/badge/Current%20Version-v2.3.2-brightgreen" />
     <img src="https://img.shields.io/:License-MulanPSL2-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
         <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
@@ -17,7 +17,7 @@
 </p>
 
 #### 更新说明
-master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.3.1
+master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.3.2
 
 #### 介绍
 x-easypdf基于pdfbox构建而来，极大降低使用门槛，以组件化的形式进行pdf的构建。简单易用，仅需一行代码，便可完成pdf的操作
@@ -57,7 +57,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 
 > table(表格组件)：已提供，表格写入组件，cell(单元格)->row(行)->table(表格)
 
-> rect(方形组件)：已提供，方形写入组件
+> rect(矩形组件)：已提供，矩形写入组件
 
 > 后续将添加更多其他方便实用的组件。。。
 
@@ -66,7 +66,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 <dependency>
     <groupId>wiki.xsx</groupId>
     <artifactId>x-easypdf</artifactId>
-    <version>2.3.1</version>
+    <version>2.3.2</version>
 </dependency>
 ```
 
@@ -142,7 +142,7 @@ public class XpdfTest {
 
 > 效果如下：
 
-![示例效果](https://images.gitee.com/uploads/images/2020/1217/113846_115f5e8f_1494292.png "pdf.png")
+![示例效果](https://images.gitee.com/uploads/images/2020/1217/113846_115f5e8f_1494292.png "示例效果")
 
 2. 使用说明
 
