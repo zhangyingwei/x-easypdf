@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class XEasyPdfDocumentTest {
 
-    private static final String FONT_PATH = "C:\\Windows\\Fonts\\ARIALUNI.TTF";
+    private static final String FONT_PATH = "C:\\Windows\\Fonts\\msyh.ttf";
 //    private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
     private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\doc\\";
 
@@ -393,5 +393,18 @@ public class XEasyPdfDocumentTest {
                 )
             // 设置字体路径，并保存
         ).setFontPath(fontPath).save(outputPath).close();
+    }
+
+    @Test
+    public void test2() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = "C:\\Users\\Administrator\\Desktop\\zzz.pdf";
+        final String outputPath = "C:\\Users\\Administrator\\Desktop\\zzz2.pdf";
+        Map<String, String> form = new HashMap<>(2);
+        form.put("name", "静静");
+        form.put("className", "7");
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).fillForm(form).save(outputPath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
     }
 }

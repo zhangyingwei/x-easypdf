@@ -199,6 +199,15 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
     }
 
     /**
+     * 获取线条宽度
+     * @return 返回线条宽度
+     */
+    @Override
+    public float getLineWidth() {
+        return this.param.getLineWidth();
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page pdf页面

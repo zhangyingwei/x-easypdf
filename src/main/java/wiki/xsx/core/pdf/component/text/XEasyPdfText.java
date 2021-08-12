@@ -525,6 +525,11 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 page.getParam().setPageY(this.param.getBeginY());
             }
         }
+        // 如果不允许页面重置定位，则进行重置
+        if (!page.getParam().isAllowResetPosition()) {
+            // 开启页面自动重置定位
+            page.enablePosition();
+        }
         // 完成标记
         this.param.setDraw(true);
     }

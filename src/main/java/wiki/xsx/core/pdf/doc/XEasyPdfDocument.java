@@ -1,11 +1,9 @@
 package wiki.xsx.core.pdf.doc;
 
-import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
-import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -18,6 +16,7 @@ import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
+import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import javax.print.PrintServiceLookup;
@@ -64,6 +63,7 @@ public class XEasyPdfDocument {
      * 无参构造
      */
     public XEasyPdfDocument() {
+        // 设置模板文档
         this.param.setSource(new PDDocument());
     }
 
@@ -438,7 +438,7 @@ public class XEasyPdfDocument {
      * @throws IOException IO异常
      */
     public XEasyPdfDocument save(String outputPath) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(Paths.get(outputPath))) {
+        try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
             return this.save(outputStream);
         }
     }
@@ -665,14 +665,6 @@ public class XEasyPdfDocument {
             PDAcroForm acroForm = this.getTarget().getDocumentCatalog().getAcroForm();
             // 如果pdfBox表单不为空，则进行填充
             if (acroForm!=null) {
-                // 定义pdfBox数据源
-                PDResources resources = new PDResources();
-                // 内置默认字体名称
-                final String defaultCosName = "AdobeSongStd-Light";
-                // 设置字体
-                resources.put(COSName.getPDFName(defaultCosName), this.getFont());
-                // 设置pdfBox表单默认的数据源
-                acroForm.setDefaultResources(resources);
                 // 获取表单字典键值集合
                 Set<Map.Entry<String, String>> entrySet = formMap.entrySet();
                 // 遍历表单字典

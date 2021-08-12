@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.table;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
@@ -271,10 +272,16 @@ public class XEasyPdfCell {
             if (component instanceof XEasyPdfText) {
                 // 写入文本
                 this.writeText(document, page, row, (XEasyPdfText) component);
-                // 如果组件属于图片组件，则写入图片
-            }else if (component instanceof XEasyPdfImage) {
+            }
+            // 如果组件属于图片组件，则写入图片
+            else if (component instanceof XEasyPdfImage) {
                 // 写入图片
                 this.writeImage(document, page, row, (XEasyPdfImage) component);
+            }
+            // 如果组件属于线条组件，则写入线条
+            else if (component instanceof XEasyPdfLine) {
+                // 写入线条
+                this.writeLine(document, page, row, (XEasyPdfLine) component);
             }
             // TODO 后续有需要，再加入其他组件
         }
@@ -357,5 +364,22 @@ public class XEasyPdfCell {
                     row.getParam().getBeginX() + this.param.getBorderWidth() / 2,
                     page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - image.getHeight(document, page) - this.param.getBorderWidth() / 2
              ).draw(document, page);
+    }
+
+    /**
+     * 写入分割线
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param row pdf表格行
+     * @param line pdf线条
+     * @throws IOException IO异常
+     */
+    private void writeLine(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfLine line) throws IOException {
+        line.setContentMode(this.param.getContentMode())
+                .setWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
+                .setPosition(
+                        row.getParam().getBeginX() + this.param.getBorderWidth() / 2,
+                        page.getParam().getPageY() - row.getParam().getMarginTop() - line.getLineWidth() - this.param.getBorderWidth() / 2
+                ).draw(document, page);
     }
 }

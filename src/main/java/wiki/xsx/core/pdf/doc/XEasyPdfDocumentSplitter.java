@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,7 +102,7 @@ public class XEasyPdfDocumentSplitter {
                 // 构建文件名称
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append(".pdf");
                 // 获取输出流
-                try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
+                try(OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString())))) {
                     // 拆分文档
                     this.split(outputStream, XEasyPdfConvertUtil.toInt(this.documentList.get(i)));
                 }
@@ -119,7 +120,7 @@ public class XEasyPdfDocumentSplitter {
                 // 构建文件名称
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(index).append(".pdf");
                 // 获取输出流
-                try(OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
+                try(OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString())))) {
                     // 设置文档信息及保护策略
                     this.pdfDocument.setInfoAndPolicy(target);
                     // 保存文档

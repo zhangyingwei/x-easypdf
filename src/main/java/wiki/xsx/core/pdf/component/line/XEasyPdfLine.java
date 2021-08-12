@@ -78,4 +78,10 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
      * @return 返回pdfBox字体
      */
     PDFont getFont();
+
+    /**
+     * 获取线条宽度
+     * @return 返回线条宽度
+     */
+    float getLineWidth();
 }

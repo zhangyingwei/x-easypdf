@@ -46,25 +46,25 @@ public class XEasyPdfFontUtil {
     /**
      * 加载字体
      * @param document pdf文档
-     * @param inputStream 字体数据流
-     * @return 返回pdfBox字体
-     */
-    public static PDFont loadFont(XEasyPdfDocument document, InputStream inputStream) {
-        try {
-            return PDType0Font.load(document.getTarget(), inputStream);
-        }catch (Exception e) {
-            throw new RuntimeException("the font can not be loaded");
-        }
-    }
-
-    /**
-     * 加载字体
-     * @param document pdf文档
      * @param fontPath 字体路径
      * @return 返回pdfBox字体
      */
     public static PDFont loadFont(XEasyPdfDocument document, String fontPath) {
         try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
+            return PDType0Font.load(document.getTarget(), inputStream);
+        }catch (Exception e) {
+            return loadFontForResource(document, fontPath);
+        }
+    }
+
+    /**
+     * 加载字体(资源路径)
+     * @param document pdf文档
+     * @param fontResourcePath 字体路径(资源路径)
+     * @return 返回pdfBox字体
+     */
+    private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath) {
+        try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
             return PDType0Font.load(document.getTarget(), inputStream);
         }catch (Exception e) {
             throw new RuntimeException("the font can not be loaded");
@@ -81,6 +81,25 @@ public class XEasyPdfFontUtil {
     public static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page, String fontPath) {
         if (fontPath!=null) {
             try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
+                return loadFont(document, page, inputStream);
+            }catch (Exception e) {
+                return loadFontForResource(document, page, fontPath);
+            }
+        }else {
+            return loadFont(document, page, (InputStream) null);
+        }
+    }
+
+    /**
+     * 加载字体(资源路径)
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param fontResourcePath 字体路径(资源路径)
+     * @return 返回pdfBox字体
+     */
+    public static PDFont loadFontForResource(XEasyPdfDocument document, XEasyPdfPage page, String fontResourcePath) {
+        if (fontResourcePath!=null) {
+            try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
                 return loadFont(document, page, inputStream);
             }catch (Exception e) {
                 throw new RuntimeException("the font can not be loaded");
@@ -144,4 +163,5 @@ public class XEasyPdfFontUtil {
     public static float getFontHeight(PDFont font, float fontSize) {
         return font.getFontDescriptor().getCapHeight() / 1000F * fontSize;
     }
+
 }

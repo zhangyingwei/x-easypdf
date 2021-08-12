@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
+import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -89,7 +90,7 @@ public class XEasyPdfDocumentImager {
             // 构建文件名称
             fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append('.').append(imageTypeName);
             // 获取输出流
-            try (OutputStream outputStream = Files.newOutputStream(Paths.get(fileNameBuilder.toString()))) {
+            try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString())))) {
                 // 初始化pdfBox文档渲染器
                 PDFRenderer renderer = new PDFRenderer(this.document);
                 // 渲染图片

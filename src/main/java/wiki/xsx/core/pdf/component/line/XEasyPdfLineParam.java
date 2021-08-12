@@ -39,6 +39,10 @@ class XEasyPdfLineParam {
      */
     private String fontPath;
     /**
+     * 字体路径(资源路径)
+     */
+    private String fontPathForResource;
+    /**
      * 字体
      */
     private PDFont font;
