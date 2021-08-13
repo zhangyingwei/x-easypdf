@@ -61,6 +61,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      * @param font pdfBox字体
      * @return 返回虚线分割线组件
      */
+    @Deprecated
     @Override
     public XEasyPdfDottedSplitLine setFont(PDFont font) {
         this.param.setFont(font);
@@ -219,6 +220,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     @Override
     public PDFont getFont() {
         return this.param.getFont();

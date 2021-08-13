@@ -5,6 +5,7 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.IOException;
@@ -149,21 +150,27 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
                 // 开启页面自动重置定位
                 page.enablePosition();
             }
-            // 写入文本
-            this.param.getText()
-                    .setMarginTop(this.param.getMarginTop())
-                    .setMarginLeft(this.param.getMarginLeft())
-                    .setMarginRight(this.param.getMarginRight())
-                    .setCheckPage(false)
-                    .draw(document, page);
-            // 如果不为文本定位，则对图片进行页面坐标重置
-        } else {
+            // 如果文本不为空，则进行文本绘制
+            if (this.param.getText()!=null) {
+                // 写入文本
+                this.param.getText()
+                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getLastPageNum()+"")
+                        .setMarginTop(this.param.getMarginTop())
+                        .setMarginLeft(this.param.getMarginLeft())
+                        .setMarginRight(this.param.getMarginRight())
+                        .setCheckPage(false)
+                        .draw(document, page);
+            }
+        }
+        // 如果不为文本定位，则对图片进行页面坐标重置
+        else {
             // 如果文本不为空，则进行文本绘制
             if (this.param.getText()!=null) {
                 // 关闭页面自动重置定位
                 page.disablePosition();
                 // 写入文本
                 this.param.getText()
+                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getLastPageNum()+"")
                         .setMarginTop(this.param.getMarginTop())
                         .setMarginLeft(this.param.getMarginLeft())
                         .setMarginRight(this.param.getMarginRight())
@@ -172,12 +179,15 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
                 // 开启页面自动重置定位
                 page.enablePosition();
             }
-            // 绘制图片
-            this.param.getImage()
-                    .setMarginTop(this.param.getMarginTop())
-                    .setPosition(this.param.getBeginX(), this.param.getBeginY())
-                    .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
-                    .draw(document, page);
+            // 如果图片不为空，则进行图片绘制
+            if (this.param.getImage()!=null) {
+                // 绘制图片
+                this.param.getImage()
+                        .setMarginTop(this.param.getMarginTop())
+                        .setPosition(this.param.getBeginX(), this.param.getBeginY())
+                        .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                        .draw(document, page);
+            }
         }
         // 如果分割线列表不为空，则进行分割线绘制
         if (!this.param.getLineList().isEmpty()) {

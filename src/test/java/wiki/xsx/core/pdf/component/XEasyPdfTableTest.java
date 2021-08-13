@@ -64,9 +64,12 @@ public class XEasyPdfTableTest {
             }
             rowList.add(XEasyPdfHandler.Table.Row.build(cellList));
         }
+
         XEasyPdfHandler.Document.build().setGlobalHeader(
                 XEasyPdfHandler.Header.build(
-                        XEasyPdfHandler.Text.build("页眉页眉页眉页眉页眉页眉").setFontSize(20F).setStyle(XEasyPdfTextStyle.CENTER)
+                        XEasyPdfHandler.Text.build(
+                                "页眉第"+XEasyPdfHandler.Page.getCurrentPagePlaceholder()+"页，共13页"
+                        ).setFontSize(20F).setStyle(XEasyPdfTextStyle.CENTER)
                 )
         ).addPage(
                 XEasyPdfHandler.Page.build(
@@ -277,4 +280,6 @@ public class XEasyPdfTableTest {
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
     }
+
+
 }

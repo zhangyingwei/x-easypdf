@@ -130,6 +130,7 @@ public class XEasyPdfSimpleCell {
      * @param font pdfBox字体
      * @return 返回单元格组件
      */
+    @Deprecated
     public XEasyPdfSimpleCell setFont(PDFont font) {
         this.param.setFont(font);
         this.param.setFontPath("");
@@ -170,6 +171,7 @@ public class XEasyPdfSimpleCell {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     public PDFont getFont() {
         return this.param.getFont();
     }

@@ -5,7 +5,6 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -50,23 +49,19 @@ public class XEasyPdfFontUtil {
      * @return 返回pdfBox字体
      */
     public static PDFont loadFont(XEasyPdfDocument document, String fontPath) {
-        try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
-            return PDType0Font.load(document.getTarget(), inputStream);
-        }catch (Exception e) {
-            return loadFontForResource(document, fontPath);
-        }
-    }
-
-    /**
-     * 加载字体(资源路径)
-     * @param document pdf文档
-     * @param fontResourcePath 字体路径(资源路径)
-     * @return 返回pdfBox字体
-     */
-    private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath) {
-        try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
-            return PDType0Font.load(document.getTarget(), inputStream);
-        }catch (Exception e) {
+        if (fontPath!=null) {
+            PDFont font = document.getLoadedFontMap().get(fontPath);
+            if (font!=null) {
+                return font;
+            }
+            try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
+                font = PDType0Font.load(document.getTarget(), inputStream);
+                document.getLoadedFontMap().put(fontPath, font);
+                return font;
+            }catch (Exception e) {
+                return loadFontForResource(document, fontPath);
+            }
+        }else {
             throw new RuntimeException("the font can not be loaded");
         }
     }
@@ -80,61 +75,20 @@ public class XEasyPdfFontUtil {
      */
     public static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page, String fontPath) {
         if (fontPath!=null) {
+            PDFont font = document.getLoadedFontMap().get(fontPath);
+            if (font!=null) {
+                return font;
+            }
             try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
-                return loadFont(document, page, inputStream);
+                font = PDType0Font.load(document.getTarget(), inputStream);
+                document.getLoadedFontMap().put(fontPath, font);
+                return font;
             }catch (Exception e) {
                 return loadFontForResource(document, page, fontPath);
             }
         }else {
-            return loadFont(document, page, (InputStream) null);
+            return loadFont(document, page);
         }
-    }
-
-    /**
-     * 加载字体(资源路径)
-     * @param document pdf文档
-     * @param page pdf页面
-     * @param fontResourcePath 字体路径(资源路径)
-     * @return 返回pdfBox字体
-     */
-    public static PDFont loadFontForResource(XEasyPdfDocument document, XEasyPdfPage page, String fontResourcePath) {
-        if (fontResourcePath!=null) {
-            try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
-                return loadFont(document, page, inputStream);
-            }catch (Exception e) {
-                throw new RuntimeException("the font can not be loaded");
-            }
-        }else {
-            return loadFont(document, page, (InputStream) null);
-        }
-    }
-
-    /**
-     * 加载字体
-     * @param document pdf文档
-     * @param page pdf页面
-     * @param inputStream 字体数据流
-     * @return 返回pdfBox字体
-     */
-    public static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page, InputStream inputStream) {
-        PDFont font = null;
-        if (inputStream!=null) {
-            try  {
-                font = PDType0Font.load(document.getTarget(), inputStream);
-            }catch (IOException ex) {
-                throw new RuntimeException("the font can not be loaded");
-            }
-        }
-        if (font==null&&page!=null) {
-            font = page.getFont();
-        }
-        if (font==null&&document!=null) {
-            font = document.getFont();
-        }
-        if (font==null) {
-            throw new RuntimeException("the font can not be found");
-        }
-        return font;
     }
 
     /**
@@ -164,4 +118,60 @@ public class XEasyPdfFontUtil {
         return font.getFontDescriptor().getCapHeight() / 1000F * fontSize;
     }
 
+    /**
+     * 加载字体(资源路径)
+     * @param document pdf文档
+     * @param fontResourcePath 字体路径(资源路径)
+     * @return 返回pdfBox字体
+     */
+    private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath) {
+        try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
+            PDFont font = PDType0Font.load(document.getTarget(), inputStream);
+            document.getLoadedFontMap().put(fontResourcePath, font);
+            return font;
+        }catch (Exception e) {
+            throw new RuntimeException("the font can not be loaded");
+        }
+    }
+
+    /**
+     * 加载字体(资源路径)
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param fontResourcePath 字体路径(资源路径)
+     * @return 返回pdfBox字体
+     */
+    private static PDFont loadFontForResource(XEasyPdfDocument document, XEasyPdfPage page, String fontResourcePath) {
+        if (fontResourcePath!=null) {
+            try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
+                PDFont font = PDType0Font.load(document.getTarget(), inputStream);
+                document.getLoadedFontMap().put(fontResourcePath, font);
+                return font;
+            }catch (Exception e) {
+                throw new RuntimeException("the font can not be loaded");
+            }
+        }else {
+            return loadFont(document, page);
+        }
+    }
+
+    /**
+     * 加载字体
+     * @param document pdf文档
+     * @param page pdf页面
+     * @return 返回pdfBox字体
+     */
+    private static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page) {
+        PDFont font = null;
+        if (page!=null) {
+            font = page.getFont();
+        }
+        if (document!=null) {
+            font = document.getFont();
+        }
+        if (font==null) {
+            throw new RuntimeException("the font can not be found");
+        }
+        return font;
+    }
 }

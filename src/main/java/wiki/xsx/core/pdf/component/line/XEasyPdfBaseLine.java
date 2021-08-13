@@ -69,6 +69,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @param font pdfBox字体
      * @return 返回基础线条组件
      */
+    @Deprecated
     @Override
     public XEasyPdfBaseLine setFont(PDFont font) {
         this.param.setFont(font);
@@ -193,6 +194,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     @Override
     public PDFont getFont() {
         return this.param.getFont();

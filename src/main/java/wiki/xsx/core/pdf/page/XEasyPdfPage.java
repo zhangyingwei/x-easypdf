@@ -7,10 +7,11 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 
 import java.awt.*;
 import java.io.IOException;
@@ -113,6 +114,7 @@ public class XEasyPdfPage {
      * @param font 字体
      * @return 返回pdf页面
      */
+    @Deprecated
     public XEasyPdfPage setFont(PDFont font) {
         this.param.setFont(font);
         this.param.setFontPath("");
@@ -123,8 +125,28 @@ public class XEasyPdfPage {
      * 获取字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     public PDFont getFont() {
         return this.param.getFont();
+    }
+
+    /**
+     * 设置页面背景图片
+     * @param backgroundImage 背景图片
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage setBackgroundImage(XEasyPdfImage backgroundImage) {
+        // 设置背景图片
+        this.param.setBackgroundImage(backgroundImage);
+        return this;
+    }
+
+    /**
+     * 获取页面背景图片
+     * @return 返回pdf页面
+     */
+    public XEasyPdfImage getBackgroundImage() {
+        return this.param.getBackgroundImage();
     }
 
     /**
@@ -220,6 +242,14 @@ public class XEasyPdfPage {
             pdPage = pageList.get(pageList.size()-1);
         }
         return pdPage;
+    }
+
+    /**
+     * 获取pdfBox最新页码
+     * @return 返回pdfBox最新页码
+     */
+    public int getLastPageNum() {
+        return this.param.getPageList().size() + this.param.getNewPageList().size();
     }
 
     /**

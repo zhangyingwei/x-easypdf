@@ -54,6 +54,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfText(List<String> textList) {
         this.param.setSplitTextList(textList);
+        this.param.setSplitTemplateTextList(textList);
     }
 
     /**
@@ -187,6 +188,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param font 字体
      * @return 返回文本组件
      */
+    @Deprecated
     public XEasyPdfText setFont(PDFont font) {
         this.param.setFont(font);
         this.param.setFontPath("");
@@ -230,6 +232,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfText setSplitTextList(List<String> splitTextList) {
         this.param.setSplitTextList(splitTextList);
+        this.param.setSplitTemplateTextList(splitTextList);
         return this;
     }
 
@@ -299,9 +302,25 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 替换占位符
+     * @param placeholder 占位符
+     * @param value 新字符串
+     * @return 返回文本组件
+     */
+    public XEasyPdfText replaceAllPlaceholder(String placeholder, String value) {
+        List<String> textList = this.param.getSplitTextList();
+        List<String> templateTextList = this.param.getSplitTemplateTextList();
+        for (int i = 0, count = textList.size(); i < count; i++) {
+            textList.set(i, templateTextList.get(i).replace(placeholder, value));
+        }
+        return this;
+    }
+
+    /**
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     public PDFont getFont() {
         return this.param.getFont();
     }
@@ -397,6 +416,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public XEasyPdfTextStyle getStyle() {
         return this.param.getStyle();
+    }
+
+    /**
+     * 获取待添加文本列表
+     * @return 返回待添加文本列表
+     */
+    public List<String> getSplitTextList() {
+        return this.param.getSplitTextList();
     }
 
     /**

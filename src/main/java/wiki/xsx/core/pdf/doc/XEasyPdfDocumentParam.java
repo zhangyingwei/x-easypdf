@@ -14,6 +14,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,10 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 class XEasyPdfDocumentParam {
+    /**
+     * 字体缓存
+     */
+    private Map<String, PDFont> fontCache = new HashMap<>(16);
     /**
      * 字体路径
      */
@@ -103,6 +108,7 @@ class XEasyPdfDocumentParam {
      * @param document pdf文档
      */
     void initFont(XEasyPdfDocument document) {
+        this.fontCache.clear();
         if (this.fontPath!=null) {
             this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
         }

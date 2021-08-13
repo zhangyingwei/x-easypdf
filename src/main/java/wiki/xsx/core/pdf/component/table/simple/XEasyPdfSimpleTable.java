@@ -65,6 +65,7 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * @param font pdfBox字体
      * @return 返回表格组件
      */
+    @Deprecated
     public XEasyPdfSimpleTable setFont(PDFont font) {
         this.param.setFont(font);
         this.param.setFontPath("");
@@ -125,6 +126,7 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     public PDFont getFont() {
         return this.param.getFont();
     }

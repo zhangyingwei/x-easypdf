@@ -63,6 +63,7 @@ public class XEasyPdfRow {
      * @param font pdfBox字体
      * @return 返回表格行组件
      */
+    @Deprecated
     public XEasyPdfRow setFont(PDFont font) {
         this.param.setFont(font);
         this.param.setFontPath("");
@@ -123,6 +124,7 @@ public class XEasyPdfRow {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     public PDFont getFont() {
         return this.param.getFont();
     }

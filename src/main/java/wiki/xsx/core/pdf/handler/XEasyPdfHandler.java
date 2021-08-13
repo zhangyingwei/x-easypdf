@@ -81,6 +81,12 @@ public class XEasyPdfHandler {
      * pdf页面
      */
     public static class Page {
+
+        /**
+         * 当前页码占位符
+         */
+        private static final String CURRENT_PAGE_PLACEHOLDER = "${PAGE}";
+
         /**
          * 构建页面
          * @param components 组件
@@ -120,6 +126,15 @@ public class XEasyPdfHandler {
         public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
             return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
         }
+
+        /**
+         * 获取当前页码占位符
+         * @return 返回当前页码占位符
+         */
+        public static String getCurrentPagePlaceholder() {
+            return CURRENT_PAGE_PLACEHOLDER;
+        }
+
     }
 
     /**

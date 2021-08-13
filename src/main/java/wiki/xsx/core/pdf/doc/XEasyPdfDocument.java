@@ -253,6 +253,7 @@ public class XEasyPdfDocument {
      * @param font pdfbox字体
      * @return 返回pdf文档
      */
+    @Deprecated
     public XEasyPdfDocument setFont(PDFont font) {
         // 设置重置
         this.param.setReset(true);
@@ -265,8 +266,18 @@ public class XEasyPdfDocument {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     public PDFont getFont() {
         return this.param.getFont();
+    }
+
+    /**
+     * 获取文档加载字体字典
+     * @return 返回字体字典
+     */
+    @Deprecated
+    public Map<String, PDFont> getLoadedFontMap() {
+        return this.param.getFontCache();
     }
 
     /**
@@ -526,6 +537,8 @@ public class XEasyPdfDocument {
             // 关闭源文档
             this.param.getSource().close();
         }
+        // 清理字体缓存
+        this.param.getFontCache().clear();
     }
 
     /**
@@ -674,7 +687,7 @@ public class XEasyPdfDocument {
                     // 如果pdfBox表单字段不为空，则填充值
                     if (field!=null) {
                         // 添加文本关联
-                        XEasyPdfFontUtil.addToSubset(this.getFont(), entry.getValue());
+                        XEasyPdfFontUtil.addToSubset(this.param.getFont(), entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
                     }

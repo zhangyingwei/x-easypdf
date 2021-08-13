@@ -36,6 +36,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
      * @param font pdfBox字体
      * @return 返回线条组件
      */
+    @Deprecated
     XEasyPdfLine setFont(PDFont font);
 
     /**
@@ -77,6 +78,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
+    @Deprecated
     PDFont getFont();
 
     /**

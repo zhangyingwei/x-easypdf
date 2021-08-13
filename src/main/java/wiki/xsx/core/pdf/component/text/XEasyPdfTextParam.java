@@ -92,6 +92,10 @@ class XEasyPdfTextParam {
      */
     private List<String> splitTextList;
     /**
+     * 拆分后的待添加文本列表(模板)
+     */
+    private List<String> splitTemplateTextList;
+    /**
      * 文本样式（居左、居中、居右）
      */
     private XEasyPdfTextStyle style;
@@ -239,6 +243,8 @@ class XEasyPdfTextParam {
                         this.fontSize
                 );
             }
+            // 添加模板列表
+            this.splitTemplateTextList =  new ArrayList<>(splitTextList);
         }
     }
 

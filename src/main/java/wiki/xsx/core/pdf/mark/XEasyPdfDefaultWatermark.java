@@ -69,6 +69,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @param font pdfBox字体
      * @return 返回页面水印组件
      */
+    @Deprecated
     public XEasyPdfDefaultWatermark setFont(PDFont font) {
         this.param.setFont(font);
         this.param.setFontPath("");

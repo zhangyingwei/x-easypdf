@@ -4,6 +4,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.IOException;
@@ -137,6 +138,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
         if (this.param.getText()!=null) {
             // 写入文本
             this.param.getText()
+                    .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getLastPageNum()+"")
                     .setMarginLeft(this.param.getMarginLeft())
                     .setMarginRight(this.param.getMarginRight())
                     .setMarginBottom(this.param.getMarginBottom())
