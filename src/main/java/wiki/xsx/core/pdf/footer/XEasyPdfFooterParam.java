@@ -73,17 +73,18 @@ class XEasyPdfFooterParam {
         if (this.text==null&&this.image==null) {
             throw new IllegalArgumentException("text or image can not be found");
         }
-        // 初始化X轴起始坐标
-        this.beginX = this.marginLeft;
-        // 初始化Y轴起始坐标
-        this.beginY = this.text==null?0:this.text.getHeight(document, page, this.marginLeft, this.marginRight);
         // 如果高度未初始化，则进行初始化
         if (this.height==null) {
             // 初始化高度，文本高度与图片高度取最大值，加上下边距
             this.height = Math.max(
-                    this.beginY,
+                    this.text==null?0:this.text.getHeight(document, page, this.marginLeft, this.marginRight),
                     this.image==null?0:this.image.getHeight(document, page)
             ) + this.marginBottom;
         }
+        // 初始化X轴起始坐标
+        this.beginX = this.marginLeft;
+        // 初始化Y轴起始坐标
+        this.beginY = this.height;
+
     }
 }

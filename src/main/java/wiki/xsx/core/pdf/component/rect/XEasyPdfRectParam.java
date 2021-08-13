@@ -116,9 +116,9 @@ class XEasyPdfRectParam {
         // 如果页面Y轴起始坐标未初始化，则进行初始化
         if (this.beginY==null) {
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+            if (page.isAllowFooter()&&page.getFooter()!=null) {
                 // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight();
+                footerHeight = page.getParam().getFooter().getHeight(document, page);
             }
             // 获取当前页面Y轴起始坐标
             Float pageY = page.getParam().getPageY();

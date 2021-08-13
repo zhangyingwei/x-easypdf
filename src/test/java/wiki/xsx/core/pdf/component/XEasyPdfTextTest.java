@@ -3,7 +3,6 @@ package wiki.xsx.core.pdf.component;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
-import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
@@ -29,7 +28,7 @@ import java.io.IOException;
  */
 public class XEasyPdfTextTest {
 
-    private static final String FONT_PATH = "C:\\Windows\\Fonts\\ARIALUNI.TTF";
+    private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
     private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\text\\";
 
     @Before
@@ -93,9 +92,10 @@ public class XEasyPdfTextTest {
                                 20F,
                                 textBuild.toString()
                         ).setStyle(XEasyPdfTextStyle.CENTER)
-                ).setHeader(
-                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉"))
                 )
+//                        .setHeader(
+//                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉").setStyle(XEasyPdfTextStyle.RIGHT))
+//                )
         ).setFontPath(FONT_PATH).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("页脚"))
         ).setGlobalWatermark(
@@ -107,19 +107,13 @@ public class XEasyPdfTextTest {
     @Test
     public void testText3() throws IOException {
         String filePath = OUTPUT_PATH + "testText3.pdf";
-        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
         StringBuilder textBuild = new StringBuilder();
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build(
                                 20F,
                                 "贵阳"
-                        ).setNewLine(false),
-                        XEasyPdfHandler.Image.build(new File(imagePath))
-                                .setWidth(20F)
-                                .setHeight(20F)
-                                .setStyle(XEasyPdfImageStyle.LEFT)
-                                .setMarginLeft(40F)
+                        ).setMarginRight(50F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");

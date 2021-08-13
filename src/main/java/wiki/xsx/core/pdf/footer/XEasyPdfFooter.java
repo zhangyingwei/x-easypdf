@@ -55,9 +55,12 @@ public interface XEasyPdfFooter {
 
     /**
      * 获取页脚高度
+     * @param document pdf文档
+     * @param page     pdf页面
      * @return 返回页脚高度
+     * @throws IOException IO异常
      */
-    float getHeight();
+    float getHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
 
     /**
      * 绘制

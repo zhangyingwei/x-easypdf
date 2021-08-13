@@ -36,11 +36,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
     private final XEasyPdfTextParam param = new XEasyPdfTextParam();
 
     /**
-     * 当前页面文本最后一行索引
-     */
-    private int lastLineIndex = 0;
-
-    /**
      * 有参构造
      * @param text 待输入文本
      */
@@ -308,9 +303,13 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText replaceAllPlaceholder(String placeholder, String value) {
+        // 获取待添加文本列表
         List<String> textList = this.param.getSplitTextList();
+        // 获取待添加文本列表(模板)
         List<String> templateTextList = this.param.getSplitTemplateTextList();
+        // 遍历待添加文本列表
         for (int i = 0, count = textList.size(); i < count; i++) {
+            // 替换占位符
             textList.set(i, templateTextList.get(i).replace(placeholder, value));
         }
         return this;
@@ -573,12 +572,12 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 定义页脚高度
             float footerHeight = 0F;
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+            if (page.isAllowFooter()&&page.getFooter()!=null) {
                 // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight();
+                footerHeight = page.getFooter().getHeight(document, page);
             }
             // 分页检查
-            if (this.param.getBeginY() - (this.lastLineIndex * (this.param.getFontHeight() + this.param.getLeading()) - this.param.getLeading()) - footerHeight <= this.param.getMarginBottom()) {
+            if (this.param.getBeginY() - (this.param.getFontHeight() + footerHeight) <= this.param.getMarginBottom()) {
                 // 如果内容流不为空，则关闭并设置为空
                 if (stream!=null) {
                     // 关闭内容流
@@ -631,8 +630,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
     ) throws IOException {
         // 如果内容流为空，则初始化内容流
         if (stream==null) {
-            // 重置当前页面文本最后一行索引为0
-            this.lastLineIndex = 0;
             // 初始化内容流
             stream = this.initPageContentStream(document, page);
         }
@@ -650,7 +647,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             this.param.setBeginX(this.param.getMarginLeft());
         }
         // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
-        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
+        this.param.setBeginY(this.param.getBeginY() - (this.param.getFontHeight() + this.param.getLeading()));
         return stream;
     }
 

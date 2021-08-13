@@ -146,9 +146,9 @@ class XEasyPdfSimpleRowParam {
             // 定义页脚高度
             float footerHeight = 0F;
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+            if (page.isAllowFooter()&&page.getFooter()!=null) {
                 // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight();
+                footerHeight = page.getParam().getFooter().getHeight(document, page);
             }
             // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距 + 1，自动补偿1
             float currentY = pageY - this.height - this.marginTop + 1;

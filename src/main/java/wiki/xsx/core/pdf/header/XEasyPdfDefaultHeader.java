@@ -117,12 +117,19 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     }
 
     /**
-     * 获取页脚高度
-     * @return 返回页脚高度
+     * 获取页眉高度
+     * @param document pdf文档
+     * @param page     pdf页面
+     * @return 返回页眉高度
+     * @throws IOException IO异常
      */
     @Override
-    public float getHeight() {
-        return this.param.getHeight()==null?0F:this.param.getHeight();
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+        if (this.param.getHeight()==null) {
+            // 初始化参数
+            this.param.init(document, page);
+        }
+        return this.param.getHeight();
     }
 
     /**

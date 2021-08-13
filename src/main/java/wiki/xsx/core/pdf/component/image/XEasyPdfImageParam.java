@@ -192,9 +192,9 @@ class XEasyPdfImageParam {
             // 定义页脚高度
             float footerHeight = 0F;
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.getParam().isAllowFooter()&&page.getParam().getFooter()!=null) {
+            if (page.isAllowFooter()&&page.getFooter()!=null) {
                 // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight();
+                footerHeight = page.getParam().getFooter().getHeight(document, page);
             }
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
             if (page.getParam().getPageY()!=null) {

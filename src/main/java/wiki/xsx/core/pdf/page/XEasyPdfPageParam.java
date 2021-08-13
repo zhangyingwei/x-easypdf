@@ -78,10 +78,6 @@ public class XEasyPdfPageParam {
      */
     private XEasyPdfWatermark watermark;
     /**
-     * 页面背景图片
-     */
-    private XEasyPdfImage backgroundImage;
-    /**
      * 页眉
      */
     private XEasyPdfHeader header;
@@ -90,6 +86,14 @@ public class XEasyPdfPageParam {
      */
     private XEasyPdfFooter footer;
     /**
+     * 页面背景图片
+     */
+    private XEasyPdfImage backgroundImage;
+    /**
+     * 页面背景色
+     */
+    private Color backgroundColor;
+    /**
      * 是否允许添加水印
      */
     private boolean allowWatermark = true;
@@ -97,6 +101,10 @@ public class XEasyPdfPageParam {
      * 是否允许添加背景图片
      */
     private boolean allowBackgroundImage = true;
+    /**
+     * 是否允许添加背景色
+     */
+    private boolean allowBackgroundColor = true;
     /**
      * 是否允许添加页眉
      */
@@ -109,10 +117,6 @@ public class XEasyPdfPageParam {
      * 是否允许重置定位
      */
     private boolean allowResetPosition = true;
-    /**
-     * 页面背景色
-     */
-    private Color backgroundColor;
 
     /**
      * 初始化
@@ -123,8 +127,13 @@ public class XEasyPdfPageParam {
         if (this.fontPath!=null) {
             this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         }
-        if (this.backgroundColor==null) {
-            this.backgroundColor = document.getGlobalBackgroundColor();
+        if (this.allowBackgroundColor) {
+            if (this.backgroundColor==null) {
+                this.backgroundColor = document.getGlobalBackgroundColor();
+            }
+            if (this.backgroundColor==null) {
+                this.backgroundColor = Color.WHITE;
+            }
         }
     }
 }

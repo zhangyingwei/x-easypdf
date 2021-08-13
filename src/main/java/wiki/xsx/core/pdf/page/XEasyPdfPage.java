@@ -253,6 +253,42 @@ public class XEasyPdfPage {
     }
 
     /**
+     * 开启背景色
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage enableBackgroundColor() {
+        this.param.setAllowBackgroundColor(true);
+        return this;
+    }
+
+    /**
+     * 关闭背景色
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage disableBackgroundColor() {
+        this.param.setAllowBackgroundColor(false);
+        return this;
+    }
+
+    /**
+     * 开启背景图片
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage enableBackgroundImage() {
+        this.param.setAllowBackgroundImage(true);
+        return this;
+    }
+
+    /**
+     * 关闭背景图片
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage disableBackgroundImage() {
+        this.param.setAllowBackgroundImage(false);
+        return this;
+    }
+
+    /**
      * 开启水印
      * @return 返回pdf页面
      */
@@ -322,6 +358,46 @@ public class XEasyPdfPage {
     public XEasyPdfPage disablePosition() {
         this.param.setAllowResetPosition(false);
         return this;
+    }
+
+    /**
+     * 是否允许添加页眉
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isAllowHeader() {
+        return this.param.isAllowHeader();
+    }
+
+    /**
+     * 是否允许添加页脚
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isAllowFooter() {
+        return this.param.isAllowFooter();
+    }
+
+    /**
+     * 是否允许添加水印
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isAllowWatermark() {
+        return this.param.isAllowWatermark();
+    }
+
+    /**
+     * 是否允许添加背景图片
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isAllowBackgroundImage() {
+        return this.param.isAllowBackgroundImage();
+    }
+
+    /**
+     * 是否允许添加背景色
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isAllowBackgroundColor() {
+        return this.param.isAllowBackgroundColor();
     }
 
     /**
@@ -428,7 +504,7 @@ public class XEasyPdfPage {
      */
     private XEasyPdfPage setLastPageBackgroundColor(XEasyPdfDocument document) throws IOException {
         // 如果背景颜色不为空，且背景颜色不为白色，则进行背景颜色设置
-        if (this.param.getBackgroundColor()!=null&&!Color.WHITE.equals(this.param.getBackgroundColor())) {
+        if (!Color.WHITE.equals(this.param.getBackgroundColor())) {
             // 获取pdfBox最新页面
             PDPage lastPage = this.getLastPage();
             // 如果最新页面不为空，则进行背景颜色设置

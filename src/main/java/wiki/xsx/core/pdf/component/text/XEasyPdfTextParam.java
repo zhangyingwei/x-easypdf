@@ -152,7 +152,7 @@ class XEasyPdfTextParam {
         }
         // 如果最大高度未初始化，则进行初始化
         if (this.maxHeight==null) {
-            // 初始化最大高度，最大高度 = 页面高度
+            // 初始化最大高度(页面高度)
             this.maxHeight = rectangle.getHeight();
         }
         // 如果字体未初始化，则进行初始化
