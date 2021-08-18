@@ -56,7 +56,7 @@ public class XEasyPdfTableTest {
                         i%2==0?
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
-                        ):
+                        ).setFontPath(FONT_PATH):
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
                         ).setBackgroundColor(new Color(0,191,255))

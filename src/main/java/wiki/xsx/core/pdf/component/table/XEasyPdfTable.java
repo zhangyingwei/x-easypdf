@@ -240,8 +240,6 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         this.param.setDraw(true);
         // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
         if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
-            // 关联字体
-            this.param.getFont().subset();
             // 重置字体为null
             this.param.setFont(null);
         }

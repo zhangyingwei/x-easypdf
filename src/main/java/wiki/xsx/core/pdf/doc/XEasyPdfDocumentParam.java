@@ -13,10 +13,9 @@ import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * pdf文档参数
@@ -129,5 +128,17 @@ class XEasyPdfDocumentParam {
                     .setCreateTime(documentInformation.getCreationDate())
                     .setUpdateTime(documentInformation.getModificationDate());
         }
+    }
+
+    /**
+     * 关联字体
+     * @throws IOException IO异常
+     */
+    void subsetFonts() throws IOException {
+        Collection<PDFont> values = this.fontCache.values();
+        for (PDFont font : values) {
+            font.subset();
+        }
+        this.fontCache.clear();
     }
 }
