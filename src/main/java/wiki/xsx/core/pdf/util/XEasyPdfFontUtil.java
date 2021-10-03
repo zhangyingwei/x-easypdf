@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.util;
 
+import org.apache.fontbox.ttf.OTFParser;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
@@ -7,6 +8,7 @@ import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -54,8 +56,13 @@ public class XEasyPdfFontUtil {
             if (font!=null) {
                 return font;
             }
-            try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
-                font = PDType0Font.load(document.getTarget(), inputStream);
+            Path path = Paths.get(fontPath);
+            try (InputStream inputStream = Files.newInputStream(path)) {
+                if (path.getFileName().toString().endsWith(".otf")) {
+                    font = PDType0Font.load(document.getTarget(), new OTFParser(false, true).parse(inputStream), true);
+                }else {
+                    font = PDType0Font.load(document.getTarget(), inputStream);
+                }
                 document.getLoadedFontMap().put(fontPath, font);
                 return font;
             }catch (Exception e) {
@@ -79,13 +86,7 @@ public class XEasyPdfFontUtil {
             if (font!=null) {
                 return font;
             }
-            try (InputStream inputStream = Files.newInputStream(Paths.get(fontPath))) {
-                font = PDType0Font.load(document.getTarget(), inputStream);
-                document.getLoadedFontMap().put(fontPath, font);
-                return font;
-            }catch (Exception e) {
-                return loadFontForResource(document, page, fontPath);
-            }
+            return loadFont(document, fontPath);
         }else {
             return loadFont(document, page);
         }
@@ -97,7 +98,7 @@ public class XEasyPdfFontUtil {
      * @param text 文本
      */
     public static void addToSubset(PDFont font, String text) {
-        if (font.willBeSubset()) {
+        if (font!=null&&font.willBeSubset()) {
             int offset = 0;
             int length = text.length();
             while (offset < length) {
@@ -126,7 +127,12 @@ public class XEasyPdfFontUtil {
      */
     private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath) {
         try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
-            PDFont font = PDType0Font.load(document.getTarget(), inputStream);
+            PDFont font;
+            if (fontResourcePath.endsWith(".otf")) {
+                font = PDType0Font.load(document.getTarget(), new OTFParser(false, true).parse(inputStream), true);
+            }else {
+                font = PDType0Font.load(document.getTarget(), inputStream);
+            }
             document.getLoadedFontMap().put(fontResourcePath, font);
             return font;
         }catch (Exception e) {
@@ -143,13 +149,7 @@ public class XEasyPdfFontUtil {
      */
     private static PDFont loadFontForResource(XEasyPdfDocument document, XEasyPdfPage page, String fontResourcePath) {
         if (fontResourcePath!=null) {
-            try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
-                PDFont font = PDType0Font.load(document.getTarget(), inputStream);
-                document.getLoadedFontMap().put(fontResourcePath, font);
-                return font;
-            }catch (Exception e) {
-                throw new RuntimeException("the font can not be loaded");
-            }
+            return loadFontForResource(document, fontResourcePath);
         }else {
             return loadFont(document, page);
         }
@@ -164,7 +164,7 @@ public class XEasyPdfFontUtil {
     private static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page) {
         PDFont font = null;
         if (page!=null) {
-            font = page.getFont();
+            font = page.getParam().getFont();
         }
         if (document!=null) {
             font = document.getFont();

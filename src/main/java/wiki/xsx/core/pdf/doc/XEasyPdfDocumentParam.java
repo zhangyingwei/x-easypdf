@@ -14,8 +14,9 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * pdf文档参数
@@ -40,7 +41,11 @@ class XEasyPdfDocumentParam {
     /**
      * 字体缓存
      */
-    private Map<String, PDFont> fontCache = new HashMap<>(16);
+    private Map<String, PDFont> fontCache = new ConcurrentHashMap<>(16);
+    /**
+     * 默认字体样式
+     */
+    private XEasyPdfDefaultFontStyle defaultFontStyle = XEasyPdfDefaultFontStyle.NORMAL;
     /**
      * 字体路径
      */
@@ -108,9 +113,10 @@ class XEasyPdfDocumentParam {
      */
     void initFont(XEasyPdfDocument document) {
         this.fontCache.clear();
-        if (this.fontPath!=null) {
-            this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
+        if (this.fontPath==null) {
+            this.fontPath = this.defaultFontStyle.getPath();
         }
+        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
     }
 
     /**

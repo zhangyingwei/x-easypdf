@@ -5,9 +5,9 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
@@ -110,24 +110,13 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 设置字体
-     * @param font 字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回pdf页面
      */
-    @Deprecated
-    public XEasyPdfPage setFont(PDFont font) {
-        this.param.setFont(font);
-        this.param.setFontPath("");
+    public XEasyPdfPage setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
+        this.param.setDefaultFontStyle(style);
         return this;
-    }
-
-    /**
-     * 获取字体
-     * @return 返回pdfBox字体
-     */
-    @Deprecated
-    public PDFont getFont() {
-        return this.param.getFont();
     }
 
     /**

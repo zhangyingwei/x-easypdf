@@ -337,6 +337,22 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
+    public void testFillForm2() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = "E:\\pdf\\hi.pdf";
+        final String outputPath = "E:\\pdf\\test_fill4.pdf";
+        Map<String, String> form = new HashMap<>(5);
+        form.put("test1", "爽爽的贵阳");
+        form.put("test2", "堵车的天堂");
+        form.put("text1", "xxx");
+        form.put("text2", "sss");
+        form.put("hi", "我是xsx");
+        XEasyPdfHandler.Document.load(sourcePath).fillForm(form).setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD).save(outputPath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
     public void test() throws IOException {
         final String fontPath = "C:\\Windows\\Fonts\\STSONG.TTF";
         final String backgroundImagePath = "D:\\temp\\background.jpg";

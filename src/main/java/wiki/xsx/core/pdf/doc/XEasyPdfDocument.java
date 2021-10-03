@@ -1,9 +1,11 @@
 package wiki.xsx.core.pdf.doc;
 
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
+import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -249,16 +251,15 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 设置字体
-     * @param font pdfbox字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回pdf文档
      */
-    @Deprecated
-    public XEasyPdfDocument setFont(PDFont font) {
+    public XEasyPdfDocument setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
         // 设置重置
         this.param.setReset(true);
-        // 设置字体
-        this.param.setFont(font);
+        // 设置字体样式
+        this.param.setDefaultFontStyle(style);
         return this;
     }
 
@@ -648,8 +649,8 @@ public class XEasyPdfDocument {
                 target.addPage(page);
             }
         }
-        // 填充表单
-        this.fillForm();
+        // 设置表单
+        this.setForm(this.param.getFormMap());
         // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
         if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
             // 关联字体
@@ -660,24 +661,24 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 填充表单
+     * 设置表单
+     * @param  formMap 待填充表单
      * @throws IOException IO异常
      */
-    private void fillForm() throws IOException {
-        // 获取表单字典
-        Map<String, String> formMap = this.param.getFormMap();
+    private void setForm(Map<String, String> formMap) throws IOException {
         // 如果表单字典有内容，则进行填充
         if (formMap!=null&&formMap.size()>0) {
-            // 如果文档字体未初始化，则提示错误
-            if (this.param.getFontPath()==null) {
-                throw new RuntimeException("the document font must be set");
-            }
             // 定义pdfBox表单字段
             PDField field;
             // 获取pdfBox表单
             PDAcroForm acroForm = this.getTarget().getDocumentCatalog().getAcroForm();
             // 如果pdfBox表单不为空，则进行填充
             if (acroForm!=null) {
+                PDResources defaultResources = acroForm.getDefaultResources();
+                Iterable<COSName> fontNames = defaultResources.getFontNames();
+                for (COSName fontName : fontNames) {
+                    defaultResources.put(fontName, this.getFont());
+                }
                 // 获取表单字典键值集合
                 Set<Map.Entry<String, String>> entrySet = formMap.entrySet();
                 // 遍历表单字典
@@ -686,10 +687,10 @@ public class XEasyPdfDocument {
                     field = acroForm.getField(entry.getKey());
                     // 如果pdfBox表单字段不为空，则填充值
                     if (field!=null) {
-                        // 添加文本关联
-                        XEasyPdfFontUtil.addToSubset(this.param.getFont(), entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
+                        // 添加文本关联
+                        XEasyPdfFontUtil.addToSubset(this.param.getFont(), entry.getValue());
                     }
                 }
             }

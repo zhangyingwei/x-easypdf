@@ -1,6 +1,6 @@
 package wiki.xsx.core.pdf.component.line;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -57,15 +57,13 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
     }
 
     /**
-     * 设置字体
-     * @param font pdfBox字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回虚线分割线组件
      */
-    @Deprecated
     @Override
-    public XEasyPdfDottedSplitLine setFont(PDFont font) {
-        this.param.setFont(font);
-        this.param.setFontPath("");
+    public XEasyPdfDottedSplitLine setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
+        this.param.setDefaultFontStyle(style);
         return this;
     }
 
@@ -217,16 +215,6 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
     }
 
     /**
-     * 获取文档字体
-     * @return 返回pdfBox字体
-     */
-    @Deprecated
-    @Override
-    public PDFont getFont() {
-        return this.param.getFont();
-    }
-
-    /**
      * 获取线条宽度
      * @return 返回线条宽度
      */
@@ -322,10 +310,12 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
             // Y轴起始坐标
             this.param.getBeginY()
         );
-        // 如果字体为空，则加载全局字体
-        if (this.param.getFont()==null) {
-            // 设置全局字体
-            this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
+        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
+        if (this.param.getFontPath()==null&&this.param.getDefaultFontStyle()!=null) {
+            // 初始化字体路径
+            this.param.setFontPath(this.param.getDefaultFontStyle().getPath());
         }
+        // 初始化字体
+        this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
     }
 }

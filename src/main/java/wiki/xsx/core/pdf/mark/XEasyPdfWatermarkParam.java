@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -35,6 +36,10 @@ class XEasyPdfWatermarkParam {
      * 内容模式
      */
     private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    /**
+     * 默认字体样式
+     */
+    private XEasyPdfDefaultFontStyle defaultFontStyle;
     /**
      * 字体路径
      */
@@ -80,11 +85,13 @@ class XEasyPdfWatermarkParam {
      * @return 返回pdfBox扩展图形对象
      */
     PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) {
-        // 如果字体未初始化，则进行初始化
-        if (this.font==null) {
-            // 初始化字体
-            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
+        if (this.fontPath==null&&this.defaultFontStyle!=null) {
+            // 初始化字体路径
+            this.fontPath = this.defaultFontStyle.getPath();
         }
+        // 初始化字体
+        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         // 如果文本间隔未初始化，则进行初始化
         if (this.wordSpace==null) {
             // 初始化文本间隔为6倍字体大小

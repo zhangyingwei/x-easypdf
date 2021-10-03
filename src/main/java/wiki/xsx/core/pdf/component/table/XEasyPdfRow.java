@@ -1,6 +1,6 @@
 package wiki.xsx.core.pdf.component.table;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -59,14 +59,12 @@ public class XEasyPdfRow {
     }
 
     /**
-     * 设置字体
-     * @param font pdfBox字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回表格行组件
      */
-    @Deprecated
-    public XEasyPdfRow setFont(PDFont font) {
-        this.param.setFont(font);
-        this.param.setFontPath("");
+    public XEasyPdfRow setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
+        this.param.setDefaultFontStyle(style);
         return this;
     }
 
@@ -118,15 +116,6 @@ public class XEasyPdfRow {
     public XEasyPdfRow setHeight(float height) {
         this.param.setHeight(height);
         return this;
-    }
-
-    /**
-     * 获取文档字体
-     * @return 返回pdfBox字体
-     */
-    @Deprecated
-    public PDFont getFont() {
-        return this.param.getFont();
     }
 
     /**

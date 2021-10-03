@@ -1,10 +1,10 @@
 package wiki.xsx.core.pdf.component.table;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
@@ -146,14 +146,12 @@ public class XEasyPdfCell {
     }
 
     /**
-     * 设置字体
-     * @param font pdfBox字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回单元格组件
      */
-    @Deprecated
-    public XEasyPdfCell setFont(PDFont font) {
-        this.param.setFont(font);
-        this.param.setFontPath("");
+    public XEasyPdfCell setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
+        this.param.setDefaultFontStyle(style);
         return this;
     }
 
@@ -185,15 +183,6 @@ public class XEasyPdfCell {
     public XEasyPdfCell setStyle(XEasyPdfTableStyle style) {
         this.param.setStyle(style);
         return this;
-    }
-
-    /**
-     * 获取文档字体
-     * @return 返回pdfBox字体
-     */
-    @Deprecated
-    public PDFont getFont() {
-        return this.param.getFont();
     }
 
     /**
@@ -334,7 +323,8 @@ public class XEasyPdfCell {
             .enableChildComponent()
             .setWidth(width)
             .setHeight(height)
-            .setFont(this.param.getFont())
+            .setFontPath(this.param.getFontPath())
+            .setDefaultFontStyle(this.param.getDefaultFontStyle())
             .setFontSize(this.param.getFontSize())
             .setFontColor(this.param.getFontColor())
             .setStyle(text.isUseSelfStyle()?text.getStyle():this.param.getStyle().getTextStyle())

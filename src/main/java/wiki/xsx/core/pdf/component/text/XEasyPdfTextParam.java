@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -39,6 +40,10 @@ class XEasyPdfTextParam {
      * 内容模式
      */
     private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    /**
+     * 默认字体样式
+     */
+    private XEasyPdfDefaultFontStyle defaultFontStyle;
     /**
      * 字体路径
      */
@@ -155,11 +160,13 @@ class XEasyPdfTextParam {
             // 初始化最大高度(页面高度)
             this.maxHeight = rectangle.getHeight();
         }
-        // 如果字体未初始化，则进行初始化
-        if (this.font==null) {
-            // 初始化字体
-            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
+        if (this.fontPath==null&&this.defaultFontStyle!=null) {
+            // 初始化字体路径
+            this.fontPath = this.defaultFontStyle.getPath();
         }
+        // 初始化字体
+        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
         // 初始化字体高度
         this.fontHeight = this.fontSize;
         // 如果页面X轴起始坐标未初始化，则进行初始化

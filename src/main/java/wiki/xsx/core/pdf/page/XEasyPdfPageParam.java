@@ -6,11 +6,12 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
-import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
@@ -37,6 +38,10 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class XEasyPdfPageParam {
+    /**
+     * 默认字体样式
+     */
+    private XEasyPdfDefaultFontStyle defaultFontStyle = XEasyPdfDefaultFontStyle.NORMAL;
     /**
      * 字体路径
      */
@@ -124,9 +129,10 @@ public class XEasyPdfPageParam {
      * @param page pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (this.fontPath!=null) {
-            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        if (this.fontPath==null) {
+            this.fontPath = this.defaultFontStyle.getPath();
         }
+        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
         if (this.allowBackgroundColor) {
             if (this.backgroundColor==null) {
                 this.backgroundColor = document.getGlobalBackgroundColor();

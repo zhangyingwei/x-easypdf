@@ -1,8 +1,8 @@
 package wiki.xsx.core.pdf.component.table.simple;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -61,14 +61,12 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
     }
 
     /**
-     * 设置字体
-     * @param font pdfBox字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回表格组件
      */
-    @Deprecated
-    public XEasyPdfSimpleTable setFont(PDFont font) {
-        this.param.setFont(font);
-        this.param.setFontPath("");
+    public XEasyPdfSimpleTable setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
+        this.param.setDefaultFontStyle(style);
         return this;
     }
 
@@ -120,15 +118,6 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
     public XEasyPdfSimpleTable setStyle(XEasyPdfTableStyle style) {
         this.param.setStyle(style);
         return this;
-    }
-
-    /**
-     * 获取文档字体
-     * @return 返回pdfBox字体
-     */
-    @Deprecated
-    public PDFont getFont() {
-        return this.param.getFont();
     }
 
     /**

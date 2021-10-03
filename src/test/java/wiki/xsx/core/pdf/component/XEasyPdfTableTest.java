@@ -33,6 +33,7 @@ import java.util.List;
 public class XEasyPdfTableTest {
 
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
+    private static final String FONT_PATH2 = "C:\\Windows\\Fonts\\msyh.ttf";
     private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\table\\";
 
     @Before
@@ -56,7 +57,7 @@ public class XEasyPdfTableTest {
                         i%2==0?
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
-                        ).setFontPath(FONT_PATH):
+                        ).setFontPath(FONT_PATH2):
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
                         ).setBackgroundColor(new Color(0,191,255))
@@ -73,6 +74,7 @@ public class XEasyPdfTableTest {
                 )
         ).addPage(
                 XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build("title").setFontPath(FONT_PATH2),
                         XEasyPdfHandler.Table.build(rowList).setStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();

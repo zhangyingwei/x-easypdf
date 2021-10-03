@@ -1,7 +1,7 @@
 package wiki.xsx.core.pdf.component.line;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 
 import java.awt.*;
 
@@ -32,12 +32,11 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
     XEasyPdfLine setFontPath(String fontPath);
 
     /**
-     * 设置字体
-     * @param font pdfBox字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回线条组件
      */
-    @Deprecated
-    XEasyPdfLine setFont(PDFont font);
+    XEasyPdfLine setDefaultFontStyle(XEasyPdfDefaultFontStyle style);
 
     /**
      * 设置左边距
@@ -73,13 +72,6 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
      * @return 返回线条组件
      */
     XEasyPdfLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle);
-
-    /**
-     * 获取文档字体
-     * @return 返回pdfBox字体
-     */
-    @Deprecated
-    PDFont getFont();
 
     /**
      * 获取线条宽度

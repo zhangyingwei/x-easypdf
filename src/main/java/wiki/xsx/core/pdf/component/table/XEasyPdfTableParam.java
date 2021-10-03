@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -60,6 +61,10 @@ class XEasyPdfTableParam {
      */
     private Float beginY;
     /**
+     * 默认字体样式
+     */
+    private XEasyPdfDefaultFontStyle defaultFontStyle;
+    /**
      * 字体路径
      */
     private String fontPath;
@@ -87,10 +92,12 @@ class XEasyPdfTableParam {
      * @param page pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
-        // 如果字体未初始化，则进行初始化
-        if (this.font==null) {
-            // 初始化字体
-            this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
+        if (this.fontPath==null&&this.defaultFontStyle!=null) {
+            // 初始化字体路径
+            this.fontPath = this.defaultFontStyle.getPath();
         }
+        // 初始化字体
+        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
     }
 }

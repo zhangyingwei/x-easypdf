@@ -2,7 +2,6 @@ package wiki.xsx.core.pdf.mark;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.util.Matrix;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
@@ -61,18 +60,6 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      */
     public XEasyPdfDefaultWatermark setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
-        return this;
-    }
-
-    /**
-     * 设置字体
-     * @param font pdfBox字体
-     * @return 返回页面水印组件
-     */
-    @Deprecated
-    public XEasyPdfDefaultWatermark setFont(PDFont font) {
-        this.param.setFont(font);
-        this.param.setFontPath("");
         return this;
     }
 

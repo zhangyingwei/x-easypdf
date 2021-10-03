@@ -2,8 +2,8 @@ package wiki.xsx.core.pdf.component.text;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
@@ -179,14 +179,12 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 设置字体
-     * @param font 字体
+     * 设置默认字体样式
+     * @param style 默认字体样式
      * @return 返回文本组件
      */
-    @Deprecated
-    public XEasyPdfText setFont(PDFont font) {
-        this.param.setFont(font);
-        this.param.setFontPath("");
+    public XEasyPdfText setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
+        this.param.setDefaultFontStyle(style);
         return this;
     }
 
@@ -313,15 +311,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
             textList.set(i, templateTextList.get(i).replace(placeholder, value));
         }
         return this;
-    }
-
-    /**
-     * 获取文档字体
-     * @return 返回pdfBox字体
-     */
-    @Deprecated
-    public PDFont getFont() {
-        return this.param.getFont();
     }
 
     /**
@@ -648,132 +637,4 @@ public class XEasyPdfText implements XEasyPdfComponent {
         this.param.setBeginY(this.param.getBeginY() - (this.param.getFontHeight() + this.param.getLeading()));
         return stream;
     }
-
-    /**
-     * 居左写入文本
-     * @param document pdf文档
-     * @param page pdf页面
-     * @param stream 内容流
-     * @param text 待写入文本
-     * @return 返回内容流
-     * @throws IOException IO异常
-     */
-//    private PDPageContentStream writeTextWithLeft(
-//            XEasyPdfDocument document,
-//            XEasyPdfPage page,
-//            PDPageContentStream stream,
-//            String text
-//    ) throws IOException {
-//        // 如果内容流为空，则初始化内容流
-//        if (stream==null) {
-//            // 重置当前页面文本最后一行索引为0
-//            this.lastLineIndex = 0;
-//            // 初始化内容流
-//            stream = this.initPageContentStream(document, page);
-//        }
-//        // 开启文本输入
-//        stream.beginText();
-//        // 设置文本定位
-//        stream.newLineAtOffset(this.param.getBeginX(), this.param.getBeginY());
-//        // 文本输入
-//        stream.showText(text);
-//        // 结束文本写入
-//        stream.endText();
-//        // 非子组件，则重置X轴起始坐标
-//        if (!this.param.isChildComponent()) {
-//            // 重置X轴起始坐标，X轴起始坐标 = 左边距
-//            this.param.setBeginX(this.param.getMarginLeft());
-//        }
-//        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
-//        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
-//        return stream;
-//    }
-
-    /**
-     * 居中写入文本
-     * @param document pdf文档
-     * @param page pdf页面
-     * @param stream 内容流
-     * @param text 待写入文本
-     * @return 返回内容流
-     * @throws IOException IO异常
-     */
-//    private PDPageContentStream writeTextWithCenter(
-//            XEasyPdfDocument document,
-//            XEasyPdfPage page,
-//            PDPageContentStream stream,
-//            String text
-//    ) throws IOException {
-//        // 如果内容流为空，则初始化内容流
-//        if (stream==null) {
-//            // 重置当前页面文本最后一行索引为0
-//            this.lastLineIndex = 0;
-//            // 初始化内容流
-//            stream = this.initPageContentStream(document, page);
-//        }
-//        // 开启文本输入
-//        stream.beginText();
-//        // 设置文本定位
-//        stream.newLineAtOffset(
-//                this.param.getBeginX() + (this.param.getMaxWidth()  - this.param.getMarginLeft() - this.param.getMarginRight() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000)) / 2,
-//                this.param.getBeginY()
-//        );
-//        // 文本输入
-//        stream.showText(text);
-//        // 结束文本写入
-//        stream.endText();
-//        // 非子组件，则重置X轴起始坐标
-//        if (!this.param.isChildComponent()) {
-//            // 重置X轴起始坐标，X轴起始坐标 = 左边距
-//            this.param.setBeginX(this.param.getMarginLeft());
-//        }
-//        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
-//        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
-//        return stream;
-//    }
-
-    /**
-     * 居右写入文本
-     * @param document pdf文档
-     * @param page pdf页面
-     * @param stream 内容流
-     * @param text 待写入文本
-     * @return 返回内容流
-     * @throws IOException IO异常
-     */
-//    private PDPageContentStream writeTextWithRight(
-//            XEasyPdfDocument document,
-//            XEasyPdfPage page,
-//            PDPageContentStream stream,
-//            String text
-//    ) throws IOException {
-//        // 如果内容流为空，则初始化内容流
-//        if (stream==null) {
-//            // 重置当前页面文本最后一行索引为0
-//            this.lastLineIndex = 0;
-//            // 初始化内容流
-//            stream = this.initPageContentStream(document, page);
-//        }
-//        // 开启文本输入
-//        stream.beginText();
-//        // 设置文本定位
-//        stream.newLineAtOffset(
-//                // X轴坐标 = 页面宽度 - 文本真实宽度 - 右边距
-//                (this.param.getBeginX() + this.param.getMaxWidth() - (this.param.getFontSize() * this.param.getFont().getStringWidth(text) / 1000) - this.param.getMarginRight()),
-//                // Y轴坐标 = Y轴起始坐标
-//                this.param.getBeginY()
-//        );
-//        // 文本输入
-//        stream.showText(text);
-//        // 结束文本写入
-//        stream.endText();
-//        // 非子组件，则重置X轴起始坐标
-//        if (!this.param.isChildComponent()) {
-//            // 重置X轴起始坐标，X轴起始坐标 = 左边距
-//            this.param.setBeginX(this.param.getMarginLeft());
-//        }
-//        // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
-//        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
-//        return stream;
-//    }
 }

@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
@@ -71,6 +72,10 @@ class XEasyPdfSimpleRowParam {
      */
     private Float beginY;
     /**
+     * 默认字体样式
+     */
+    private XEasyPdfDefaultFontStyle defaultFontStyle;
+    /**
      * 字体路径
      */
     private String fontPath;
@@ -117,11 +122,13 @@ class XEasyPdfSimpleRowParam {
                 // 初始化文本样式
                 this.style = tableParam.getStyle();
             }
-            // 如果字体未初始化，则进行初始化
-            if (this.font==null) {
-                // 初始化字体
-                this.font = XEasyPdfFontUtil.getFont(document, this.fontPath, tableParam.getFont());
+            // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
+            if (this.fontPath==null&&this.defaultFontStyle!=null) {
+                // 初始化字体路径
+                this.fontPath = this.defaultFontStyle.getPath();
             }
+            // 初始化字体
+            this.font = XEasyPdfFontUtil.getFont(document, this.fontPath, tableParam.getFont());
             // 如果字体大小未初始化，则进行初始化
             if (this.fontSize==null) {
                 // 初始化字体大小
