@@ -14,9 +14,9 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 /**
  * pdf文档参数
@@ -38,10 +38,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 @Accessors(chain = true)
 class XEasyPdfDocumentParam {
-    /**
-     * 字体缓存
-     */
-    private Map<String, PDFont> fontCache = new ConcurrentHashMap<>(16);
     /**
      * 默认字体样式
      */
@@ -112,7 +108,6 @@ class XEasyPdfDocumentParam {
      * @param document pdf文档
      */
     void initFont(XEasyPdfDocument document) {
-        this.fontCache.clear();
         if (this.fontPath==null) {
             this.fontPath = this.defaultFontStyle.getPath();
         }
@@ -141,10 +136,6 @@ class XEasyPdfDocumentParam {
      * @throws IOException IO异常
      */
     void subsetFonts() throws IOException {
-        Collection<PDFont> values = this.fontCache.values();
-        for (PDFont font : values) {
-            font.subset();
-        }
-        this.fontCache.clear();
+        XEasyPdfFontUtil.subsetFonts();
     }
 }

@@ -267,18 +267,8 @@ public class XEasyPdfDocument {
      * 获取文档字体
      * @return 返回pdfBox字体
      */
-    @Deprecated
     public PDFont getFont() {
         return this.param.getFont();
-    }
-
-    /**
-     * 获取文档加载字体字典
-     * @return 返回字体字典
-     */
-    @Deprecated
-    public Map<String, PDFont> getLoadedFontMap() {
-        return this.param.getFontCache();
     }
 
     /**
@@ -539,7 +529,7 @@ public class XEasyPdfDocument {
             this.param.getSource().close();
         }
         // 清理字体缓存
-        this.param.getFontCache().clear();
+        XEasyPdfFontUtil.clearFonts();
     }
 
     /**
@@ -651,13 +641,10 @@ public class XEasyPdfDocument {
         }
         // 设置表单
         this.setForm(this.param.getFormMap());
-        // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
-        if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
-            // 关联字体
-            this.param.subsetFonts();
-            // 重置字体为null
-            this.param.setFont(null);
-        }
+        // 关联字体
+        this.param.subsetFonts();
+        // 重置字体为null
+        this.param.setFont(null);
     }
 
     /**

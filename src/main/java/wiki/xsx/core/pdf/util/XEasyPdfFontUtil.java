@@ -6,10 +6,14 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 字体工具
@@ -29,6 +33,15 @@ import java.nio.file.Paths;
  * </p>
  */
 public class XEasyPdfFontUtil {
+
+    /**
+     * 字体缓存
+     */
+    private static final Map<String, PDFont> FONTCACHE = new ConcurrentHashMap<>(32);
+    /**
+     * 开源字体
+     */
+    private static final String OTF = ".otf";
 
     /**
      * 获取字体
@@ -52,18 +65,18 @@ public class XEasyPdfFontUtil {
      */
     public static PDFont loadFont(XEasyPdfDocument document, String fontPath) {
         if (fontPath!=null) {
-            PDFont font = document.getLoadedFontMap().get(fontPath);
+            PDFont font = FONTCACHE.get(fontPath);
             if (font!=null) {
                 return font;
             }
             Path path = Paths.get(fontPath);
             try (InputStream inputStream = Files.newInputStream(path)) {
-                if (path.getFileName().toString().endsWith(".otf")) {
+                if (path.getFileName().toString().endsWith(OTF)) {
                     font = PDType0Font.load(document.getTarget(), new OTFParser(false, true).parse(inputStream), true);
                 }else {
                     font = PDType0Font.load(document.getTarget(), inputStream);
                 }
-                document.getLoadedFontMap().put(fontPath, font);
+                FONTCACHE.put(fontPath, font);
                 return font;
             }catch (Exception e) {
                 return loadFontForResource(document, fontPath);
@@ -82,7 +95,7 @@ public class XEasyPdfFontUtil {
      */
     public static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page, String fontPath) {
         if (fontPath!=null) {
-            PDFont font = document.getLoadedFontMap().get(fontPath);
+            PDFont font = FONTCACHE.get(fontPath);
             if (font!=null) {
                 return font;
             }
@@ -90,33 +103,6 @@ public class XEasyPdfFontUtil {
         }else {
             return loadFont(document, page);
         }
-    }
-
-    /**
-     * 添加文本关联
-     * @param font pdfbox字体
-     * @param text 文本
-     */
-    public static void addToSubset(PDFont font, String text) {
-        if (font!=null&&font.willBeSubset()) {
-            int offset = 0;
-            int length = text.length();
-            while (offset < length) {
-                int codePoint = text.codePointAt(offset);
-                font.addToSubset(codePoint);
-                offset += Character.charCount(codePoint);
-            }
-        }
-    }
-
-    /**
-     * 获取字体高度
-     * @param font pdfbox字体
-     * @param fontSize 字体大小
-     * @return 返回字体高度
-     */
-    public static float getFontHeight(PDFont font, float fontSize) {
-        return font.getFontDescriptor().getCapHeight() / 1000F * fontSize;
     }
 
     /**
@@ -128,12 +114,12 @@ public class XEasyPdfFontUtil {
     private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath) {
         try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
             PDFont font;
-            if (fontResourcePath.endsWith(".otf")) {
+            if (fontResourcePath.endsWith(OTF)) {
                 font = PDType0Font.load(document.getTarget(), new OTFParser(false, true).parse(inputStream), true);
             }else {
                 font = PDType0Font.load(document.getTarget(), inputStream);
             }
-            document.getLoadedFontMap().put(fontResourcePath, font);
+            FONTCACHE.put(fontResourcePath, font);
             return font;
         }catch (Exception e) {
             throw new RuntimeException("the font can not be loaded");
@@ -173,5 +159,51 @@ public class XEasyPdfFontUtil {
             throw new RuntimeException("the font can not be found");
         }
         return font;
+    }
+
+
+    /**
+     * 获取字体高度
+     * @param font pdfbox字体
+     * @param fontSize 字体大小
+     * @return 返回字体高度
+     */
+    public static float getFontHeight(PDFont font, float fontSize) {
+        return font.getFontDescriptor().getCapHeight() / 1000F * fontSize;
+    }
+
+    /**
+     * 添加文本关联
+     * @param font pdfbox字体
+     * @param text 文本
+     */
+    public static void addToSubset(PDFont font, String text) {
+        if (font!=null&&font.willBeSubset()) {
+            int offset = 0;
+            int length = text.length();
+            while (offset < length) {
+                int codePoint = text.codePointAt(offset);
+                font.addToSubset(codePoint);
+                offset += Character.charCount(codePoint);
+            }
+        }
+    }
+
+    /**
+     * 关联字体
+     * @throws IOException IO异常
+     */
+    public static void subsetFonts() throws IOException {
+        Collection<PDFont> values = FONTCACHE.values();
+        for (PDFont font : values) {
+            font.subset();
+        }
+    }
+
+    /**
+     * 清理字体缓存
+     */
+    public static void clearFonts() {
+        FONTCACHE.clear();
     }
 }
