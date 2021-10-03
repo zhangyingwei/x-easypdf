@@ -10,7 +10,7 @@
 原有变更：
 1. 移除所有setFont与getFont方法
 2. 文档XEasyPdfDocument#fillForm方法变更为formFiller，返回值变为XEasyPdfDocumentFormFiller(表单填充器)
-3. 将在下个版本调整包结构
+3. 将在3.X版本调整包结构
 
 问题修复：
 1. 修复资源路径下读取不到字体问题
