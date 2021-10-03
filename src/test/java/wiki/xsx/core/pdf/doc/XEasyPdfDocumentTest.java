@@ -331,7 +331,7 @@ public class XEasyPdfDocumentTest {
         Map<String, String> form = new HashMap<>(2);
         form.put("test", "爽爽的贵阳");
         form.put("test2", "堵车的天堂");
-        XEasyPdfHandler.Document.load(sourcePath).setFontPath("C:\\Users\\xsx\\Desktop\\pdf\\test\\simhei.ttf").fillForm(form).save(outputPath).close();
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath("C:\\Users\\xsx\\Desktop\\pdf\\test\\simhei.ttf").formFiller().fill(form).finish(outputPath);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }
@@ -347,7 +347,7 @@ public class XEasyPdfDocumentTest {
         form.put("text1", "xxx");
         form.put("text2", "sss");
         form.put("hi", "我是xsx");
-        XEasyPdfHandler.Document.load(sourcePath).fillForm(form).setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD).save(outputPath).close();
+        XEasyPdfHandler.Document.load(sourcePath).formFiller().fill(form).finish(outputPath);;
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }
@@ -419,7 +419,7 @@ public class XEasyPdfDocumentTest {
         Map<String, String> form = new HashMap<>(2);
         form.put("name", "静静");
         form.put("className", "7");
-        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).fillForm(form).save(outputPath).close();
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).formFiller().fill(form).finish(outputPath);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }

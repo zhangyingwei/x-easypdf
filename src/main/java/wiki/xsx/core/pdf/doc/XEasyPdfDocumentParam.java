@@ -16,7 +16,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * pdf文档参数
@@ -66,10 +65,6 @@ class XEasyPdfDocumentParam {
      * pdf页面列表
      */
     private List<XEasyPdfPage> pageList = new ArrayList<>(256);
-    /**
-     * pdf表单字典
-     */
-    private Map<String, String> formMap;
     /**
      * 全局页面背景图片
      */

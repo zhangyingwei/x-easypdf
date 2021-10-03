@@ -1,15 +1,11 @@
 package wiki.xsx.core.pdf.doc;
 
-import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
-import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.printing.PDFPrintable;
 import org.apache.pdfbox.printing.Scaling;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
@@ -34,8 +30,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * pdf文档
@@ -379,19 +373,6 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 填充表单
-     * @param formMap 表单字典
-     * @return 返回pdf文档
-     */
-    public XEasyPdfDocument fillForm(Map<String, String> formMap) {
-        // 设置重置
-        this.param.setReset(true);
-        // 设置表单字典
-        this.param.setFormMap(formMap);
-        return this;
-    }
-
-    /**
      * 合并文档
      * @param documents pdf文档
      * @return 返回pdf文档
@@ -407,6 +388,14 @@ public class XEasyPdfDocument {
             this.param.getPageList().addAll(document.getPageList());
         }
         return this;
+    }
+
+    /**
+     * 表单填充器
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocumentFormFiller formFiller() {
+        return new XEasyPdfDocumentFormFiller(this);
     }
 
     /**
@@ -456,6 +445,8 @@ public class XEasyPdfDocument {
         COSWriter writer = new COSWriter(outputStream);
         // 创建任务文档
         PDDocument target = this.getTarget();
+        // 关联字体
+        this.param.subsetFonts();
         // 设置文档信息及保护策略
         this.setInfoAndPolicy(target);
         // 写入文档
@@ -637,49 +628,6 @@ public class XEasyPdfDocument {
             for (PDPage page : pdfboxPageList) {
                 // 任务文档添加页面
                 target.addPage(page);
-            }
-        }
-        // 设置表单
-        this.setForm(this.param.getFormMap());
-        // 关联字体
-        this.param.subsetFonts();
-        // 重置字体为null
-        this.param.setFont(null);
-    }
-
-    /**
-     * 设置表单
-     * @param  formMap 待填充表单
-     * @throws IOException IO异常
-     */
-    private void setForm(Map<String, String> formMap) throws IOException {
-        // 如果表单字典有内容，则进行填充
-        if (formMap!=null&&formMap.size()>0) {
-            // 定义pdfBox表单字段
-            PDField field;
-            // 获取pdfBox表单
-            PDAcroForm acroForm = this.getTarget().getDocumentCatalog().getAcroForm();
-            // 如果pdfBox表单不为空，则进行填充
-            if (acroForm!=null) {
-                PDResources defaultResources = acroForm.getDefaultResources();
-                Iterable<COSName> fontNames = defaultResources.getFontNames();
-                for (COSName fontName : fontNames) {
-                    defaultResources.put(fontName, this.getFont());
-                }
-                // 获取表单字典键值集合
-                Set<Map.Entry<String, String>> entrySet = formMap.entrySet();
-                // 遍历表单字典
-                for (Map.Entry<String, String> entry : entrySet) {
-                    // 获取表单字典中对应的pdfBox表单字段
-                    field = acroForm.getField(entry.getKey());
-                    // 如果pdfBox表单字段不为空，则填充值
-                    if (field!=null) {
-                        // 设置值
-                        field.setValue(entry.getValue());
-                        // 添加文本关联
-                        XEasyPdfFontUtil.addToSubset(this.param.getFont(), entry.getValue());
-                    }
-                }
             }
         }
     }

@@ -21,7 +21,7 @@ public enum XEasyPdfDefaultFontStyle {
     /**
      * 细体
      */
-    LIGHT("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Bold.ttf"),
+    LIGHT("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Light.ttf"),
     /**
      * 正常
      */

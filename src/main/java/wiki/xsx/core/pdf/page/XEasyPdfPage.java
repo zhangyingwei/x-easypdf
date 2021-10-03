@@ -475,8 +475,6 @@ public class XEasyPdfPage {
         }
         // 绘制水印
         this.drawWatermark(document);
-        // 重置字体为null
-        this.param.setFont(null);
         return this;
     }
 
