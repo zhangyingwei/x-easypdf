@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.doc;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -12,8 +13,6 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
-import wiki.xsx.core.pdf.page.XEasyPdfPageParam;
 import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
@@ -66,31 +65,29 @@ public class XEasyPdfDocument {
     /**
      * 有参构造
      * @param filePath pdf文件路径
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocument(String filePath) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocument(String filePath) {
         // 读取文件流
         try (InputStream inputStream = Files.newInputStream(Paths.get(filePath))) {
-            // 读取pdfBox文档
-            this.param.setSource(PDDocument.load(inputStream));
-            // 获取pdfBox页面树
-            PDPageTree pages = this.param.getSource().getPages();
-            // 遍历pdfBox页面树
-            for (PDPage page : pages) {
-                // 添加pdfBox页面
-                this.param.getPageList().add(new XEasyPdfPage(page));
-            }
-            // 初始化文档信息
-            this.param.initInfo(this);
+            this.init(inputStream);
         }
     }
 
     /**
      * 有参构造
      * @param inputStream 数据流
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocument(InputStream inputStream) throws IOException {
+    public XEasyPdfDocument(InputStream inputStream) {
+        this.init(inputStream);
+    }
+
+    /**
+     * 初始化
+     * @param inputStream 数据流
+     */
+    @SneakyThrows
+    private void init(InputStream inputStream) {
         // 读取pdfBox文档
         this.param.setSource(PDDocument.load(inputStream));
         // 获取pdfBox页面树
@@ -102,6 +99,8 @@ public class XEasyPdfDocument {
         }
         // 初始化文档信息
         this.param.initInfo(this);
+        // 设置总页数
+        this.param.initTotalPage(pages.getCount());
     }
 
     /**
@@ -270,20 +269,7 @@ public class XEasyPdfDocument {
      * @return 返回文档总页数
      */
     public int getTotalPage() {
-        // 定义总页数
-        int total = 0;
-        // 定义页面参数
-        XEasyPdfPageParam pageParam;
-        // 获取pdf页面列表
-        List<XEasyPdfPage> pageList = this.getPageList();
-        // 遍历pdf页面列表
-        for (XEasyPdfPage xEasyPdfPage : pageList) {
-            // 获取页面参数
-            pageParam = xEasyPdfPage.getParam();
-            // 总页数 = 包含的pdfBox页面列表数量 + 新增的pdfBox页面列表数量
-            total += pageParam.getPageList().size() + pageParam.getNewPageList().size();
-        }
-        return total;
+        return this.param.getTotalPage();
     }
 
     /**
@@ -366,6 +352,8 @@ public class XEasyPdfDocument {
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 遍历页面索引
         for (int index : pageIndex) {
+            // 初始化总页数
+            this.param.initTotalPage(-pageList.get(index).getParam().getTotalPage());
             // 移除页面
             pageList.remove(index);
         }
@@ -526,9 +514,8 @@ public class XEasyPdfDocument {
     /**
      * 获取任务文档
      * @return 返回任务文档
-     * @throws IOException IO异常
      */
-    public PDDocument getTarget() throws IOException {
+    public PDDocument getTarget() {
         // 如果任务文档未初始化或文档被重置，则进行新任务创建
         if (this.param.getTarget()==null||this.param.isReset()) {
             // 初始化任务文档
@@ -589,9 +576,9 @@ public class XEasyPdfDocument {
 
     /**
      * 初始化任务文档
-     * @throws IOException IO异常
      */
-    private void initTarget() throws IOException {
+    @SneakyThrows
+    private void initTarget() {
         // 新建任务文档
         PDDocument target = new PDDocument();
         // 如果源文档不为空，则设置文档表单
@@ -630,5 +617,13 @@ public class XEasyPdfDocument {
                 target.addPage(page);
             }
         }
+    }
+
+    /**
+     * 获取pdf文档参数
+     * @return 返回pdf文档参数
+     */
+    XEasyPdfDocumentParam getParam() {
+        return this.param;
     }
 }

@@ -4,10 +4,8 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
-
-import java.io.IOException;
 
 /**
  * pdf页脚组件
@@ -107,10 +105,9 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回页脚高度
-     * @throws IOException IO异常
      */
     @Override
-    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
         if (this.param.getHeight()==null) {
             // 初始化参数
             this.param.init(document, page);
@@ -122,10 +119,9 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化参数
         this.param.init(document, page);
         // 关闭页面自动重置定位

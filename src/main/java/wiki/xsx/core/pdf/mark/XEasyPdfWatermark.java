@@ -2,9 +2,7 @@ package wiki.xsx.core.pdf.mark;
 
 
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
-
-import java.io.IOException;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 /**
  * pdf水印组件接口
@@ -29,7 +27,6 @@ public interface XEasyPdfWatermark {
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
-    void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
+    void draw(XEasyPdfDocument document, XEasyPdfPage page);
 }

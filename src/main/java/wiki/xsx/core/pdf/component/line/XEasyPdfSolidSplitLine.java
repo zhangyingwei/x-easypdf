@@ -3,11 +3,10 @@ package wiki.xsx.core.pdf.component.line;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * 实线分割线组件
@@ -200,10 +199,9 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化分割线参数
         this.init(document, page);
         // 执行画图
@@ -235,9 +233,8 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      * 初始化参数
      * @param document pdf文档
      * @param page pdf页面
-     * @throws IOException IO异常
      */
-    private void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    private void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 分页检查
         this.param.checkPage(document, page);
         // 定义线宽

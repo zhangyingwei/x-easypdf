@@ -4,9 +4,8 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -214,10 +213,10 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
     /**
      * 绘制
      * @param document pdf文档
-     * @throws IOException IO异常
+     * @param page pdf页面
      */
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 关闭页面自动重置定位
         page.disablePosition();
         // 初始化参数

@@ -5,11 +5,10 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -102,7 +101,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @param imageType 待添加图片类型
      * @return 返回图片组件
      */
-    @SneakyThrows
     public XEasyPdfImage setImage(InputStream imageStream, XEasyPdfImageType imageType) {
         this.param.setImageType(imageType.name().toLowerCase()).setImage(XEasyPdfImageUtil.read(imageStream));
         this.param.setImageXObject(null);
@@ -268,10 +266,10 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
+    @SneakyThrows
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化pdfBox图片
         PDImageXObject pdImage = this.param.init(document, page);
         // 初始化位置
@@ -312,7 +310,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @param page     pdf页面
      * @return 返回图片宽度
      */
-    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
         return this.param.init(document, page).getWidth();
     }
 
@@ -322,7 +320,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @param page     pdf页面
      * @return 返回图片高度
      */
-    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
         return this.param.init(document, page).getHeight();
     }
 

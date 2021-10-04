@@ -39,7 +39,7 @@ public class XEasyPdfFileUtil {
                 }
                 Files.createDirectories(directoryPath);
             } catch (IOException e) {
-                throw new RuntimeException("create directory fail");
+                throw new IllegalArgumentException("the path is illegal and create directory fail");
             }
         }
         return path;

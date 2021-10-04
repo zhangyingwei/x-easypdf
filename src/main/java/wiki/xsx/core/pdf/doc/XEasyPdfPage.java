@@ -1,20 +1,18 @@
-package wiki.xsx.core.pdf.page;
+package wiki.xsx.core.pdf.doc;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
-import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +53,10 @@ public class XEasyPdfPage {
      * @param page pdfBox页面
      */
     public XEasyPdfPage(PDPage page) {
+        // 添加pdfBox页面
         this.param.getPageList().add(page);
+        // 总页数自增
+        this.param.totalPageIncrement();
     }
 
     /**
@@ -63,18 +64,23 @@ public class XEasyPdfPage {
      * @param pageSize pdfBox页面尺寸
      */
     public XEasyPdfPage(PDRectangle pageSize) {
+        // 如果pdfBox页面尺寸不为空，则设置pdfBox页面尺寸
         if (pageSize!=null) {
+            // 设置pdfBox页面尺寸
             this.param.setPageSize(pageSize);
         }
     }
 
     /**
      * 添加pdfBox页面
-    *  @param page pdfBox页面
+     *  @param page pdfBox页面
      * @return 返回pdf页面
      */
     public XEasyPdfPage addPage(PDPage page) {
+        // 添加pdfBox页面
         this.param.getPageList().add(page);
+        // 总页数自增
+        this.param.totalPageIncrement();
         return this;
     }
 
@@ -83,11 +89,12 @@ public class XEasyPdfPage {
      * @param pageSize 页面尺寸
      * @param document pdf文档
      * @return 返回pdf页面
-     * @throws IOException IO异常
      */
-    public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
+    public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) {
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
         this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
+        // 总页数自增
+        this.param.totalPageIncrement();
         // 重置页面X轴Y轴起始坐标
         this.getParam().setPageX(null).setPageY(null);
         // 绘制页眉与页脚
@@ -96,6 +103,8 @@ public class XEasyPdfPage {
         this.drawBackgroundImage(document);
         // 设置背景颜色
         this.setLastPageBackgroundColor(document);
+        // 初始化总页数
+        document.getParam().initTotalPage(1);
         return this;
     }
 
@@ -125,7 +134,6 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage setBackgroundImage(XEasyPdfImage backgroundImage) {
-        // 设置背景图片
         this.param.setBackgroundImage(backgroundImage);
         return this;
     }
@@ -420,9 +428,8 @@ public class XEasyPdfPage {
      * 构建pdf页面
      * @param document pdf文档
      * @return 返回pdf页面
-     * @throws IOException IO异常
      */
-    public XEasyPdfPage build(XEasyPdfDocument document) throws IOException {
+    public XEasyPdfPage build(XEasyPdfDocument document) {
         return this.build(document, this.param.getPageSize());
     }
 
@@ -431,9 +438,8 @@ public class XEasyPdfPage {
      * @param document pdf文档
      * @param pageSize 页面尺寸
      * @return 返回pdf页面
-     * @throws IOException IO异常
      */
-    public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) throws IOException {
+    public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) {
         // 初始化参数
         this.param.init(document, this);
         // 如果原有pdfbox页面列表为空，则添加新页面，否则设置页面尺寸
@@ -481,10 +487,9 @@ public class XEasyPdfPage {
     /**
      * 设置最新页面背景颜色
      * @param document pdf文档
-     * @return 返回pdf页面
-     * @throws IOException IO异常
      */
-    private XEasyPdfPage setLastPageBackgroundColor(XEasyPdfDocument document) throws IOException {
+    @SneakyThrows
+    private void setLastPageBackgroundColor(XEasyPdfDocument document) {
         // 如果背景颜色不为空，且背景颜色不为白色，则进行背景颜色设置
         if (!Color.WHITE.equals(this.param.getBackgroundColor())) {
             // 获取pdfBox最新页面
@@ -518,15 +523,13 @@ public class XEasyPdfPage {
                 contentStream.close();
             }
         }
-        return this;
     }
 
     /**
      * 绘制背景图片
      * @param document pdf文档
-     * @throws IOException IO异常
      */
-    private void drawBackgroundImage(XEasyPdfDocument document) throws IOException {
+    private void drawBackgroundImage(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页面背景图片，则进行页面背景图片绘制
         if (this.param.isAllowBackgroundImage()) {
             // 如果页面背景图片未初始化，则设置全局页面背景图片
@@ -549,9 +552,8 @@ public class XEasyPdfPage {
     /**
      * 绘制页眉与页脚
      * @param document pdf文档
-     * @throws IOException IO异常
      */
-    private void drawHeaderAndFooter(XEasyPdfDocument document) throws IOException {
+    private void drawHeaderAndFooter(XEasyPdfDocument document) {
         // 绘制页眉
         this.drawHeader(document);
         // 绘制页脚
@@ -561,9 +563,8 @@ public class XEasyPdfPage {
     /**
      * 绘制页眉
      * @param document pdf文档
-     * @throws IOException IO异常
      */
-    private void drawHeader(XEasyPdfDocument document) throws IOException {
+    private void drawHeader(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页眉，则进行页眉绘制
         if (this.param.isAllowHeader()) {
             // 如果页眉未初始化，则设置全局页眉
@@ -582,9 +583,8 @@ public class XEasyPdfPage {
     /**
      * 绘制页脚
      * @param document pdf文档
-     * @throws IOException IO异常
      */
-    private void drawFooter(XEasyPdfDocument document) throws IOException {
+    private void drawFooter(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页脚，则进行页脚绘制
         if (this.param.isAllowFooter()) {
             // 如果页脚未初始化，则设置全局页脚
@@ -603,9 +603,8 @@ public class XEasyPdfPage {
     /**
      * 绘制水印
      * @param document pdf文档
-     * @throws IOException IO异常
      */
-    private void drawWatermark(XEasyPdfDocument document) throws IOException {
+    private void drawWatermark(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页面水印，则进行页面水印绘制
         if (this.param.isAllowWatermark()) {
             // 如果页面水印未初始化，则设置全局页面水印

@@ -7,10 +7,9 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,10 +98,10 @@ class XEasyPdfSimpleTableParam {
     /**
      * 初始化
      * @param document pdf文档
-     * @param table pdf表格
      * @param page pdf页面
+     * @param table pdf表格
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table) {
         // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
         if (this.fontPath==null&&this.defaultFontStyle!=null) {
             // 初始化字体路径

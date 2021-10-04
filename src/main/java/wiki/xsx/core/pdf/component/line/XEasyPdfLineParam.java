@@ -6,10 +6,9 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * pdf线条参数
@@ -108,9 +107,8 @@ class XEasyPdfLineParam {
      * 分页检查
      * @param document pdf文档
      * @param page pdf页面
-     * @throws IOException IO异常
      */
-    void checkPage(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    void checkPage(XEasyPdfDocument document, XEasyPdfPage page) {
         // 定义页脚高度
         float footerHeight = 0F;
         // 如果允许添加页脚，且页脚不为空则初始化页脚高度

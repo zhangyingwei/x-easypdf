@@ -7,10 +7,9 @@ import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -236,9 +235,8 @@ public class XEasyPdfCell {
      * @param document pdf文档
      * @param page pdf页面
      * @param row pdf表格行
-     * @throws IOException IO异常
      */
-    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) throws IOException {
+    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) {
         // 初始化参数
         this.param.init(document, page, row);
         // 如果带有边框，则进行写入边框
@@ -291,9 +289,8 @@ public class XEasyPdfCell {
      * @param document pdf文档
      * @param page pdf页面
      * @param row pdf表格行
-     * @throws IOException IO异常
      */
-    private void writeBorder(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) throws IOException {
+    private void writeBorder(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) {
         XEasyPdfHandler.Rect.build(this.param.getWidth(), this.param.getHeight(), row.getParam().getBeginX(), row.getParam().getBeginY())
                 .setContentMode(this.param.getContentMode())
                 .setBackgroundColor(this.param.getBackgroundColor())
@@ -311,9 +308,8 @@ public class XEasyPdfCell {
      * @param page pdf页面
      * @param row pdf表格行
      * @param text pdf文本
-     * @throws IOException IO异常
      */
-    private void writeText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfText text) throws IOException {
+    private void writeText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfText text) {
         float width = this.param.getWidth() - this.param.getBorderWidth() * 2;
         float height = this.param.getHeight() - this.param.getBorderWidth() * 2;
         text.setContentMode(this.param.getContentMode())
@@ -337,9 +333,8 @@ public class XEasyPdfCell {
      * @param page pdf页面
      * @param row pdf表格行
      * @param image pdf图片
-     * @throws IOException IO异常
      */
-    private void writeImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfImage image) throws IOException {
+    private void writeImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfImage image) {
         float width = Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth();
         float height = Math.min(image.getHeight(document, page), this.param.getHeight()) - this.param.getBorderWidth();
         image.setContentMode(this.param.getContentMode())
@@ -359,9 +354,8 @@ public class XEasyPdfCell {
      * @param page pdf页面
      * @param row pdf表格行
      * @param line pdf线条
-     * @throws IOException IO异常
      */
-    private void writeLine(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfLine line) throws IOException {
+    private void writeLine(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfLine line) {
         line.setContentMode(this.param.getContentMode())
                 .setWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
                 .setPosition(

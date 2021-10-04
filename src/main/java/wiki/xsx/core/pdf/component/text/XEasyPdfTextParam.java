@@ -7,12 +7,11 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,9 +144,8 @@ class XEasyPdfTextParam {
      * 初始化
      * @param document pdf文档
      * @param page pdf页面
-     * @throws IOException IO异常
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果最大宽度未初始化，则进行初始化
@@ -260,9 +258,8 @@ class XEasyPdfTextParam {
      * @param document pdf文档
      * @param page pdf页面
      * @return 返回文本宽度
-     * @throws IOException IO异常
      */
-    float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+    float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
         if (this.maxWidth!=null) {
             return this.maxWidth;
         }
@@ -277,9 +274,8 @@ class XEasyPdfTextParam {
      * @param document pdf文档
      * @param page pdf页面
      * @return 返回文本高度
-     * @throws IOException IO异常
      */
-    float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+    float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
         if (this.maxHeight!=null) {
             return this.maxHeight;
         }

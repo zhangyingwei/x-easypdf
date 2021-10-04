@@ -1,5 +1,7 @@
 package wiki.xsx.core.pdf.util;
 
+import lombok.SneakyThrows;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -7,7 +9,6 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -33,9 +34,9 @@ public class XEasyPdfImageUtil {
      * 读取文件
      * @param imageFile 图片文件
      * @return 返回图片对象
-     * @throws IOException IO异常
      */
-    public static BufferedImage read(File imageFile) throws IOException {
+    @SneakyThrows
+    public static BufferedImage read(File imageFile) {
         if (imageFile==null) {
             throw new IllegalArgumentException("Image can not be null");
         }
@@ -46,9 +47,9 @@ public class XEasyPdfImageUtil {
      * 读取文件
      * @param imageStream 图片数据流
      * @return 返回图片对象
-     * @throws IOException IO异常
      */
-    public static BufferedImage read(InputStream imageStream) throws IOException {
+    @SneakyThrows
+    public static BufferedImage read(InputStream imageStream) {
         if (imageStream==null) {
             throw new IllegalArgumentException("Image can not be null");
         }
@@ -69,7 +70,7 @@ public class XEasyPdfImageUtil {
         if (dot==-1) {
             throw new IllegalArgumentException("Image type not supported: " + name);
         }
-        return name.substring(dot + 1).toLowerCase();
+        return name.substring(dot+1).toLowerCase();
     }
 
     /**
@@ -121,9 +122,9 @@ public class XEasyPdfImageUtil {
      * @param sourceImage 源图片
      * @param imageType 图片类型
      * @return 返回字节数组
-     * @throws IOException IO异常
      */
-    public static byte[] toBytes(BufferedImage sourceImage, String imageType) throws IOException {
+    @SneakyThrows
+    public static byte[] toBytes(BufferedImage sourceImage, String imageType) {
         if (sourceImage==null) {
             throw new IllegalArgumentException("Image can not be null");
         }

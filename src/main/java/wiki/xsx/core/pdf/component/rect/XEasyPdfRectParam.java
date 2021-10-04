@@ -5,10 +5,9 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * pdf矩形参数
@@ -100,7 +99,7 @@ class XEasyPdfRectParam {
      * @param document pdf文档
      * @param page pdf页面
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果宽度未设置，则抛异常
         if (this.width==null) {
             throw new RuntimeException("the width can not null");

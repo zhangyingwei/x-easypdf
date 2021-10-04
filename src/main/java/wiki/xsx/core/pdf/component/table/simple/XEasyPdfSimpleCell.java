@@ -7,10 +7,9 @@ import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -216,9 +215,8 @@ public class XEasyPdfSimpleCell {
      * @param document pdf文档
      * @param page pdf页面
      * @param row pdf表格行
-     * @throws IOException IO异常
      */
-    float init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row) throws IOException {
+    float init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row) {
         // 初始化参数
         this.param.init(document, page, row);
         // 定义行高
@@ -254,9 +252,8 @@ public class XEasyPdfSimpleCell {
      * @param document pdf文档
      * @param page pdf页面
      * @param row pdf表格行
-     * @throws IOException IO异常
      */
-    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row) throws IOException {
+    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row) {
         // 如果列高未初始化，则进行初始化
         if (this.param.getHeight()==null) {
             // 初始化列高
@@ -310,9 +307,8 @@ public class XEasyPdfSimpleCell {
      * @param document pdf文档
      * @param page pdf页面
      * @param row pdf表格行
-     * @throws IOException IO异常
      */
-    private void writeBorder(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row) throws IOException {
+    private void writeBorder(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row) {
         XEasyPdfHandler.Rect.build(this.param.getWidth(), this.param.getHeight(), row.getParam().getBeginX(), row.getParam().getBeginY())
                 .setContentMode(this.param.getContentMode())
                 .setBackgroundColor(this.param.getBackgroundColor())
@@ -349,9 +345,8 @@ public class XEasyPdfSimpleCell {
      * @param page pdf页面
      * @param row pdf表格行
      * @param image pdf图片
-     * @throws IOException IO异常
      */
-    void initImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row, XEasyPdfImage image) throws IOException {
+    void initImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleRow row, XEasyPdfImage image) {
         float width = image.getWidth(document, page);
         float height = image.getHeight(document, page);
         image.setContentMode(this.param.getContentMode())

@@ -1,8 +1,8 @@
 package wiki.xsx.core.pdf.util;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +31,9 @@ public class XEasyPdfTextUtil {
      * @param font 字体
      * @param fontSize 字体大小
      * @return 返回文本列表
-     * @throws IOException IO异常
      */
-    public static List<String> splitLines(String text, float lineWidth, PDFont font, float fontSize) throws IOException {
+    @SneakyThrows
+    public static List<String> splitLines(String text, float lineWidth, PDFont font, float fontSize) {
         // 如果待输入文本为空，或文本长度为0，则直接返回空列表
         if (text==null||text.trim().length()==0) {
             // 返回空列表

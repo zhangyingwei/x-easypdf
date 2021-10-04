@@ -1,14 +1,14 @@
 package wiki.xsx.core.pdf.component.line;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * pdf基础线条组件
@@ -201,10 +201,10 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * 绘制
      * @param document pdf文档
      * @param page pdf页面
-     * @throws IOException IO异常
      */
+    @SneakyThrows
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化内容流
         PDPageContentStream contentStream = this.initStream(document, page);
         // 设置定位
@@ -239,9 +239,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @param document pdf文档
      * @param page pdf页面
      * @return 返回内容流
-     * @throws IOException IO异常
      */
-    private PDPageContentStream initStream(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    @SneakyThrows
+    private PDPageContentStream initStream(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化参数
         this.init(document, page);
         // 新建内容流

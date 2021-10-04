@@ -5,9 +5,7 @@ import lombok.experimental.Accessors;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
-
-import java.io.IOException;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 /**
  * pdf页脚组件参数
@@ -66,9 +64,8 @@ class XEasyPdfFooterParam {
      * 初始化
      * @param document pdf文档
      * @param page pdf页面
-     * @throws IOException IO异常
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果文本和图片都未初始化，则抛出异常信息
         if (this.text==null&&this.image==null) {
             throw new IllegalArgumentException("text or image can not be found");

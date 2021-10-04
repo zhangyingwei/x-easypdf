@@ -8,10 +8,9 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,9 +98,8 @@ class XEasyPdfSimpleRowParam {
      * @param page pdf页面
      * @param table pdf表格
      * @param row pdf表格行
-     * @throws IOException IO异常
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table, XEasyPdfSimpleRow row) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table, XEasyPdfSimpleRow row) {
         if (!this.cells.isEmpty()) {
             // 获取表格参数
             XEasyPdfSimpleTableParam tableParam = table.getParam();

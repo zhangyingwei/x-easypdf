@@ -1,12 +1,12 @@
 package wiki.xsx.core.pdf.component.rect;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * pdf矩形组件
@@ -220,8 +220,9 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @param document pdf文档
      * @param page     pdf页面
      */
+    @SneakyThrows
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 参数初始化
         this.param.init(document, page);
         // 新建内容流

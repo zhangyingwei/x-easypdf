@@ -1,14 +1,14 @@
 package wiki.xsx.core.pdf.component.text;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -317,10 +317,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         this.doDraw(document, page);
         // 重置字体为null
         this.param.setFont(null);
@@ -342,9 +341,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param marginLeft 左边距
      * @param marginRight 右边距
      * @return 返回文本高度
-     * @throws IOException IO异常
      */
-    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
         return this.param.getHeight(document, page, marginLeft, marginRight);
     }
 
@@ -355,9 +353,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param marginLeft 左边距
      * @param marginRight 右边距
      * @return 返回文本宽度
-     * @throws IOException
      */
-    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) throws IOException {
+    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
         return this.param.getWidth(document, page, marginLeft, marginRight);
     }
 
@@ -422,9 +419,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param document pdf文档
      * @param page pdf页面
      * @return 返回内容流
-     * @throws IOException IO异常
      */
-    private PDPageContentStream initPageContentStream(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    @SneakyThrows
+    private PDPageContentStream initPageContentStream(XEasyPdfDocument document, XEasyPdfPage page) {
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
                 document.getTarget(),
@@ -446,9 +443,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * 执行画页面
      * @param document pdf文档
      * @param page pdf页面
-     * @throws IOException IO异常
      */
-    private void doDraw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    @SneakyThrows
+    private void doDraw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果设置不自动换行，则关闭页面自动重置定位
         if (!this.param.isNewLine()) {
             // 关闭页面自动重置定位
@@ -549,9 +546,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param page pdf页面
      * @param stream 内容流
      * @return 返回内容流
-     * @throws IOException IO异常
      */
-    private PDPageContentStream checkPage(XEasyPdfDocument document, XEasyPdfPage page, PDPageContentStream stream) throws IOException {
+    @SneakyThrows
+    private PDPageContentStream checkPage(XEasyPdfDocument document, XEasyPdfPage page, PDPageContentStream stream) {
         if (this.param.isCheckPage()) {
             // 定义页脚高度
             float footerHeight = 0F;
@@ -602,8 +599,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param beginX X轴坐标
      * @param beginY Y轴坐标
      * @return 返回内容流
-     * @throws IOException IO异常
      */
+    @SneakyThrows
     private PDPageContentStream writeText(
             XEasyPdfDocument document,
             XEasyPdfPage page,
@@ -611,7 +608,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             String text,
             float beginX,
             float beginY
-    ) throws IOException {
+    ) {
         // 如果内容流为空，则初始化内容流
         if (stream==null) {
             // 初始化内容流

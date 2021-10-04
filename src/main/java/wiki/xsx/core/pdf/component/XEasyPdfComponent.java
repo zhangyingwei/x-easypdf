@@ -3,9 +3,7 @@ package wiki.xsx.core.pdf.component;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
-
-import java.io.IOException;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 /**
  * pdf组件接口
@@ -60,7 +58,7 @@ public interface XEasyPdfComponent {
      * @param document pdf文档
      * @param page pdf页面
      */
-    void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
+    void draw(XEasyPdfDocument document, XEasyPdfPage page);
 
     /**
      * 是否完成绘制

@@ -2,9 +2,7 @@ package wiki.xsx.core.pdf.footer;
 
 
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
-
-import java.io.IOException;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 /**
  * pdf页脚组件接口
@@ -58,15 +56,13 @@ public interface XEasyPdfFooter {
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回页脚高度
-     * @throws IOException IO异常
      */
-    float getHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
+    float getHeight(XEasyPdfDocument document, XEasyPdfPage page);
 
     /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
-    void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException;
+    void draw(XEasyPdfDocument document, XEasyPdfPage page);
 }

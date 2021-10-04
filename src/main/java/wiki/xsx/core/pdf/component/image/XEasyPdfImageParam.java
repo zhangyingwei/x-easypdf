@@ -1,13 +1,14 @@
 package wiki.xsx.core.pdf.component.image;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -108,9 +109,9 @@ class XEasyPdfImageParam {
      * @param document pdf文档
      * @param page pdf页面
      * @return 返回pdfBox图片对象
-     * @throws IOException IO异常
      */
-    PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    @SneakyThrows
+    PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果pdfbox图片对象不为空，则返回该对象
         if (this.imageXObject!=null) {
             // 返回该对象
@@ -175,7 +176,7 @@ class XEasyPdfImageParam {
      * @param page pdf页面
      * @throws IOException IO异常
      */
-    void initPosition(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    void initPosition(XEasyPdfDocument document, XEasyPdfPage page) {
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 获取页面宽度

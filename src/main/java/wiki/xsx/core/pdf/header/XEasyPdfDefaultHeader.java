@@ -5,10 +5,9 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -121,10 +120,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回页眉高度
-     * @throws IOException IO异常
      */
     @Override
-    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
         if (this.param.getHeight()==null) {
             // 初始化参数
             this.param.init(document, page);
@@ -136,10 +134,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化参数
         this.param.init(document, page);
         // 如果为文本定位，则对文本组件进行页面坐标重置

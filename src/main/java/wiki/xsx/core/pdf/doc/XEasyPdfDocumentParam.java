@@ -9,7 +9,6 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
@@ -57,6 +56,10 @@ class XEasyPdfDocumentParam {
      * pdfBox文档（目标文档）
      */
     private PDDocument target;
+    /**
+     * 总页数
+     */
+    private int totalPage = 0;
     /**
      * 合并pdf源文档
      */
@@ -132,5 +135,13 @@ class XEasyPdfDocumentParam {
      */
     void subsetFonts() throws IOException {
         XEasyPdfFontUtil.subsetFonts();
+    }
+
+    /**
+     * 初始化总页数
+     * @param count 加减数量
+     */
+    void initTotalPage(int count) {
+        this.totalPage+=count;
     }
 }

@@ -3,9 +3,8 @@ package wiki.xsx.core.pdf.component.table.simple;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -152,9 +151,8 @@ public class XEasyPdfSimpleRow {
      * @param document pdf文档
      * @param page pdf页面
      * @param table pdf表格
-     * @throws IOException IO异常
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table) {
         // 初始化参数
         this.param.init(document, page, table, this);
     }
@@ -164,9 +162,8 @@ public class XEasyPdfSimpleRow {
      * @param document pdf文档
      * @param page pdf页面
      * @param table pdf表格
-     * @throws IOException IO异常
      */
-    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table) throws IOException {
+    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfSimpleTable table) {
         // 初始化表格行
         this.init(document, page, table);
         // 获取单元格列表

@@ -4,7 +4,7 @@ import org.apache.fontbox.ttf.OTFParser;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,7 +82,7 @@ public class XEasyPdfFontUtil {
                 return loadFontForResource(document, fontPath);
             }
         }else {
-            throw new RuntimeException("the font can not be loaded");
+            throw new IllegalArgumentException("the font can not be loaded");
         }
     }
 
@@ -122,7 +122,7 @@ public class XEasyPdfFontUtil {
             FONTCACHE.put(fontResourcePath, font);
             return font;
         }catch (Exception e) {
-            throw new RuntimeException("the font can not be loaded");
+            throw new IllegalArgumentException("the font can not be loaded");
         }
     }
 
@@ -156,7 +156,7 @@ public class XEasyPdfFontUtil {
             font = document.getFont();
         }
         if (font==null) {
-            throw new RuntimeException("the font can not be found");
+            throw new IllegalArgumentException("the font can not be found");
         }
         return font;
     }

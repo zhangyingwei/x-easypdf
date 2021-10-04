@@ -6,11 +6,10 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,9 +108,8 @@ class XEasyPdfCellParam {
      * @param document pdf文档
      * @param page pdf页面
      * @param row pdf表格行
-     * @throws IOException IO异常
      */
-    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) throws IOException {
+    void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) {
         // 获取pdf表格行参数
         XEasyPdfRowParam rowParam = row.getParam();
         // 如果内容模式未初始化，则进行初始化

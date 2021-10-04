@@ -2,9 +2,8 @@ package wiki.xsx.core.pdf.component.table;
 
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -151,9 +150,8 @@ public class XEasyPdfRow {
      * @param document pdf文档
      * @param page pdf页面
      * @param table pdf表格
-     * @throws IOException IO异常
      */
-    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) throws IOException {
+    void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) {
         // 初始化参数
         this.param.init(document, page, table, this);
         // 获取单元格列表

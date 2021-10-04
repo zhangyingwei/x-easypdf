@@ -1,4 +1,4 @@
-package wiki.xsx.core.pdf.page;
+package wiki.xsx.core.pdf.doc;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -7,8 +7,6 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
-import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
@@ -74,6 +72,10 @@ public class XEasyPdfPageParam {
      * 新增的pdfBox页面列表
      */
     private List<PDPage> newPageList = new ArrayList<>(256);
+    /**
+     * pdfbox总页数
+     */
+    private int totalPage = 0;
     /**
      * pdf组件列表
      */
@@ -141,5 +143,12 @@ public class XEasyPdfPageParam {
                 this.backgroundColor = Color.WHITE;
             }
         }
+    }
+
+    /**
+     * 总页数自增
+     */
+    void totalPageIncrement() {
+        this.totalPage+=1;
     }
 }

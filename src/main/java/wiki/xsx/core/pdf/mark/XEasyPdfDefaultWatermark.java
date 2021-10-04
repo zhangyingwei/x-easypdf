@@ -1,15 +1,15 @@
 package wiki.xsx.core.pdf.mark;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.util.Matrix;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.page.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -145,10 +145,9 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
-     * @throws IOException IO异常
      */
     @Override
-    public void draw(XEasyPdfDocument document, XEasyPdfPage page) throws IOException {
+    public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化水印参数，获取pdfBox扩展图形对象
         PDExtendedGraphicsState state = this.param.init(document, page);
         // 获取pdfBox页面列表
@@ -174,9 +173,9 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @param document pdf文档
      * @param pdPage pdf页面
      * @param state pdfBox扩展图形对象
-     * @throws IOException IO异常
      */
-    private void doDraw(XEasyPdfDocument document, PDPage pdPage, PDExtendedGraphicsState state) throws IOException {
+    @SneakyThrows
+    private void doDraw(XEasyPdfDocument document, PDPage pdPage, PDExtendedGraphicsState state) {
         // 获取页面高度
         float height = pdPage.getMediaBox().getHeight();
         // 获取页面宽度
