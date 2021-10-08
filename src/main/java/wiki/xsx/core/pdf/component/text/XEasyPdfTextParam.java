@@ -164,7 +164,7 @@ class XEasyPdfTextParam {
             this.fontPath = this.defaultFontStyle.getPath();
         }
         // 初始化字体
-        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
         // 初始化字体高度
         this.fontHeight = this.fontSize;
         // 如果页面X轴起始坐标未初始化，则进行初始化
@@ -197,41 +197,59 @@ class XEasyPdfTextParam {
         if (this.splitTextList==null) {
             // 开启文本追加
             if (this.isTextAppend) {
-                // 首次拆分文本列表
-                List<String> splitLines = XEasyPdfTextUtil.splitLines(
+                // 获取第一行文本
+                String firstLineText = XEasyPdfTextUtil.splitText(
                         // 待输入文本
                         this.text,
-                        // 行宽度 = 页面宽度 - X轴开始坐标 - 右边距
+                        // 行宽度 = 最大宽度 - 左边距 - 右边距
                         this.maxWidth - this.beginX - this.marginRight,
                         // 字体
                         this.font,
                         // 字体大小
                         this.fontSize
                 );
-                // 如果拆分文本列表不为空，则初始化待添加文本列表
-                if (!splitLines.isEmpty()) {
+                // 如果第一行文本不为空，则添加文本列表
+                if (firstLineText!=null) {
                     // 初始化待添加文本列表
-                    this.splitTextList = new ArrayList<>(splitLines.size());
-                    // 获取第一行文本
-                    String firstLineText = splitLines.get(0);
+                    this.splitTextList = new ArrayList<>(1024);
                     // 添加第一行文本
                     this.splitTextList.add(firstLineText);
-                    // 添加剩余文本
-                    this.splitTextList.addAll(
-                            XEasyPdfTextUtil.splitLines(
-                                    // 待输入文本
-                                    this.text.substring(firstLineText.length()),
-                                    // 行宽度 = 页面宽度 - 左边距 - 右边距
-                                    this.maxWidth - this.marginLeft - this.marginRight,
-                                    // 字体
-                                    this.font,
-                                    // 字体大小
-                                    this.fontSize
-                            )
-                    );
-                }else {
+                    // 第一行文本长度小于待输入文本，则继续拆分剩余文本
+                    if (firstLineText.length()<this.text.length()) {
+                        // 添加剩余文本
+                        this.splitTextList.addAll(
+                                XEasyPdfTextUtil.splitLines(
+                                        // 截取剩余待输入文本
+                                        this.text.substring(firstLineText.length()),
+                                        // 行宽度 = 最大宽度 - 左边距 - 右边距
+                                        this.maxWidth - this.marginLeft - this.marginRight,
+                                        // 字体
+                                        this.font,
+                                        // 字体大小
+                                        this.fontSize
+                                )
+                        );
+                    }
+                }
+                // 否则进行文本全拆分（换行）
+                else {
                     // 初始化待添加文本列表
-                    this.splitTextList = splitLines;
+                    this.splitTextList = XEasyPdfTextUtil.splitLines(
+                        // 待输入文本
+                        this.text,
+                        // 行宽度 = 最大宽度 - 左边距 - 右边距
+                        this.maxWidth - this.marginLeft - this.marginRight,
+                        // 字体
+                        this.font,
+                        // 字体大小
+                        this.fontSize
+                    );
+                    // 重置页面Y轴起始坐标（换行）
+                    this.beginY -= (this.fontHeight + this.leading);
+                    // 重置页面X轴起始坐标（换行）
+                    this.beginX = this.marginLeft;
+                    // 重置页面X轴
+                    page.getParam().setPageX(null);
                 }
             }
             // 未开启文本追加
@@ -249,7 +267,7 @@ class XEasyPdfTextParam {
                 );
             }
             // 添加模板列表
-            this.splitTemplateTextList =  new ArrayList<>(splitTextList);
+            this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
         }
     }
 

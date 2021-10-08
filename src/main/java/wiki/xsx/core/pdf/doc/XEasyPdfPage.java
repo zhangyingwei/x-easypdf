@@ -475,8 +475,11 @@ public class XEasyPdfPage {
         if (!componentList.isEmpty()) {
             // 遍历组件列表
             for (XEasyPdfComponent component : componentList) {
-                // 组件绘制
-                component.draw(document, this);
+                // 组件不为空，则进行绘制
+                if (component!=null) {
+                    // 组件绘制
+                    component.draw(document, this);
+                }
             }
         }
         // 绘制水印

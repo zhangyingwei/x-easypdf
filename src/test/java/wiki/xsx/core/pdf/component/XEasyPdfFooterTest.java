@@ -73,8 +73,8 @@ public class XEasyPdfFooterTest {
     @Test
     public void testPageFooter2() throws IOException {
         String filePath = OUTPUT_PATH + "testPageFooter2.pdf";
-        String imagePath = "D:\\temp\\footer2.png";
-        String backgroundImagePath = "D:\\temp\\20120812103739.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
+        String backgroundImagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().setFooter(
                         XEasyPdfHandler.Footer.build(

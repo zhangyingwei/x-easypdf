@@ -66,7 +66,7 @@ public class XEasyPdfHeaderTest {
     @Test
     public void testPageHeader2() throws IOException {
         String filePath = OUTPUT_PATH + "testPageHeader2.pdf";
-        String imagePath = "D:\\temp\\header2.png";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         Color lineColor = new Color(0, 191, 255);
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().setHeader(

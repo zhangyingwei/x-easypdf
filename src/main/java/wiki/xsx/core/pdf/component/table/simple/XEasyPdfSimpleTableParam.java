@@ -108,6 +108,6 @@ class XEasyPdfSimpleTableParam {
             this.fontPath = this.defaultFontStyle.getPath();
         }
         // 初始化字体
-        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
     }
 }

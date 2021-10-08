@@ -19,7 +19,7 @@ package wiki.xsx.core.pdf.component.image;
  */
 public enum XEasyPdfImageStyle {
     /**
-     * 居中
+     * 水平居中
      */
     CENTER,
     /**

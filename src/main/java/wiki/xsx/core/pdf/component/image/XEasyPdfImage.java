@@ -108,16 +108,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 开启图片大小自适应
-     * @return 返回图片组件
-     */
-    public XEasyPdfImage enableSelfAdaption() {
-        this.param.setEnableSelfAdaption(true);
-        this.param.setImageXObject(null);
-        return this;
-    }
-
-    /**
      * 关闭图片大小自适应
      * @return 返回图片组件
      */
@@ -137,11 +127,11 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 关闭自身样式
+     * 开启垂直居中样式
      * @return 返回图片组件
      */
-    public XEasyPdfImage disableSelfStyle() {
-        this.param.setUseSelfStyle(false);
+    public XEasyPdfImage enableVerticalCenterStyle() {
+        this.param.setEnableVerticalCenterStyle(true);
         return this;
     }
 
@@ -212,6 +202,16 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     public XEasyPdfImage setStyle(XEasyPdfImageStyle style) {
         this.param.setStyle(style);
+        return this;
+    }
+
+    /**
+     * 设置图片压缩模式（质量、速度、平衡，默认为质量）
+     * @param scaleMode 压缩模式
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage setScaleMode(XEasyPdfImageScaleMode scaleMode) {
+        this.param.setScaleMode(scaleMode);
         return this;
     }
 

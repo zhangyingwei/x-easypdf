@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.doc;
 
 import org.junit.Before;
 import org.junit.Test;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
@@ -130,7 +131,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testSetBackgroundImage() throws IOException {
         String filePath = OUTPUT_PATH + "backgroundImage.pdf";
-        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().addComponent(
                         XEasyPdfHandler.Text.build(
@@ -241,10 +242,10 @@ public class XEasyPdfDocumentTest {
 
     @Test
     public void testSplit3() throws IOException {
-        String sourcePath = "C:\\Users\\xsx\\Desktop\\spring-boot-reference .pdf";
-        String filePath = OUTPUT_PATH + "test.pdf";
+        String sourcePath = OUTPUT_PATH + "doc1.pdf";
+        String filePath = OUTPUT_PATH + "testSplit3.pdf";
         try(OutputStream outputStream = Files.newOutputStream(Paths.get(filePath))) {
-            XEasyPdfHandler.Document.load(sourcePath).splitter().split(outputStream, 41).finish().close();
+            XEasyPdfHandler.Document.load(sourcePath).splitter().split(outputStream, 1).finish().close();
         }
         System.out.println("finish");
     }
@@ -252,7 +253,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripText() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = OUTPUT_PATH + "testText.pdf";
+        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
         List<String> list = new ArrayList<>(1024);
         XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list, "《.*》").finish().close();
         for (String s : list) {
@@ -265,7 +266,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripText1() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = OUTPUT_PATH + "testText.pdf";
+        final String sourcePath = OUTPUT_PATH + "doc1.pdf";
         List<String> list = new ArrayList<>(1024);
         XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list).finish().close();
         for (String s : list) {
@@ -278,7 +279,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripText2() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\table\\testTable.pdf";
+        final String sourcePath = OUTPUT_PATH + "doc1.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
         XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(600,2000)).extractByRegions(dataList, 0).finish().close();
         System.out.println("dataList = " + dataList);
@@ -289,7 +290,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripTable() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\RyxtaeBSbg3z6y9rK9BX0-ccgfdt-u4q3a4UL9y05FS51LrPcf6wJVdpHC5T4Z6iVCjkkZQym4pZ4Wn0AQ8ScQ.pdf";
+        final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<List<String>> list = new ArrayList<>(1024);
         XEasyPdfHandler.Document.load(sourcePath).extractor().extractForSimpleTable(list, 0).finish().close();
         for (List<String> s : list) {
@@ -302,9 +303,9 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripTable2() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\spring-boot-reference .pdf";
+        final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<List<String>> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.load(sourcePath).extractor().extractByRegionsForSimpleTable(list, new Rectangle(0,0, 800, 170),320).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractByRegionsForSimpleTable(list, new Rectangle(0,0, 800, 170),1).finish().close();
         for (List<String> s : list) {
             System.out.println("s = " + s);
         }
@@ -315,7 +316,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testStripTable3() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\spring-boot-reference .pdf";
+        final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
         XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(0,320,800,540)).extractByRegions(dataList, 0).finish().close();
         System.out.println("dataList = " + dataList);
@@ -326,12 +327,12 @@ public class XEasyPdfDocumentTest {
     @Test
     public void testFillForm() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = OUTPUT_PATH + "fillForm.pdf";
+        final String sourcePath = OUTPUT_PATH + "temp.pdf";
         final String outputPath = OUTPUT_PATH + "test_fill2.pdf";
         Map<String, String> form = new HashMap<>(2);
-        form.put("test", "爽爽的贵阳");
+        form.put("test1", "爽爽的贵阳");
         form.put("test2", "堵车的天堂");
-        XEasyPdfHandler.Document.load(sourcePath).setFontPath("C:\\Users\\xsx\\Desktop\\pdf\\test\\simhei.ttf").formFiller().fill(form).finish(outputPath);
+        XEasyPdfHandler.Document.load(sourcePath).formFiller().fill(form).finish(outputPath);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }
@@ -355,7 +356,7 @@ public class XEasyPdfDocumentTest {
     @Test
     public void test() throws IOException {
         final String fontPath = "C:\\Windows\\Fonts\\STSONG.TTF";
-        final String backgroundImagePath = "D:\\temp\\background.jpg";
+        final String backgroundImagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         final String outputPath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
 
         // 设置背景图片
@@ -408,13 +409,13 @@ public class XEasyPdfDocumentTest {
                         ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
                 )
             // 设置字体路径，并保存
-        ).setFontPath(fontPath).save(outputPath).close();
+        ).save(outputPath).close();
     }
 
     @Test
     public void test2() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\Administrator\\Desktop\\zzz.pdf";
+        final String sourcePath = "E:\\pdf\\hi.pdf";
         final String outputPath = "C:\\Users\\Administrator\\Desktop\\zzz2.pdf";
         Map<String, String> form = new HashMap<>(2);
         form.put("name", "静静");
@@ -422,5 +423,87 @@ public class XEasyPdfDocumentTest {
         XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).formFiller().fill(form).finish(outputPath);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+    @Test
+    public void test3() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String backgroundImagePath = OUTPUT_PATH + "黑暗法师贝丝.png";
+        final String outputPath = OUTPUT_PATH + "黑暗法师贝丝.pdf";
+        Color headerAndFooterColor = new Color(10, 195, 255);
+        Color lineColor = new Color(210, 0, 210);
+        // 设置背景图片
+        XEasyPdfHandler.Document.build().setGlobalBackgroundImage(
+                // 构建图片
+                XEasyPdfHandler.Image.build(new File(backgroundImagePath)).enableVerticalCenterStyle().disableSelfAdaption()
+                // 设置全局页眉
+        ).setGlobalHeader(
+                // 构建页眉
+                XEasyPdfHandler.Header.build(
+                        // 构建页眉文本，并居中显示
+                        XEasyPdfHandler.Text.build("这是粗体页眉")
+                                .setStyle(XEasyPdfTextStyle.CENTER)
+                                .setFontSize(20F)
+                                .setFontColor(headerAndFooterColor)
+                                .setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
+                )
+                // 设置全局页脚
+        ).setGlobalFooter(
+                // 构建页脚
+                XEasyPdfHandler.Footer.build(
+                        // 构建页脚文本
+                        XEasyPdfHandler.Text.build("这是粗体页脚")
+                                .setStyle(XEasyPdfTextStyle.CENTER)
+                                .setFontSize(20F)
+                                .setFontColor(headerAndFooterColor)
+                                .setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
+                )
+                // 添加页面
+        ).addPage(
+                // 构建页面
+                XEasyPdfHandler.Page.build(
+                        // 构建文本
+                        XEasyPdfHandler.Text.build(
+                                "x-easypdf简介（细体）"
+                        ).setStyle(XEasyPdfTextStyle.CENTER).setFontSize(30F).setMargin(10F).setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT)
+                        // 构建文本
+                        ,XEasyPdfHandler.Text.build(
+                                "    x-easypdf是一个基于PDFBOX的开源框架，"
+                        ).setFontSize(16F).setFontColor(new Color(51, 0, 153))
+                        // 构建文本
+                        ,XEasyPdfHandler.Text.build(
+                                "专注于PDF文件导出功能，"
+                        ).enableTextAppend().setFontSize(16F).setFontColor(new Color(102, 0, 153))
+                        // 构建文本
+                        ,XEasyPdfHandler.Text.build(
+                                "以组件形式进行拼接，"
+                        ).enableTextAppend().setFontSize(16F).setFontColor(new Color(153, 0, 153))
+                        // 构建文本
+                        ,XEasyPdfHandler.Text.build(
+                                "简单、方便，功能丰富，"
+                        ).enableTextAppend().setFontSize(16F).setFontColor(new Color(204, 0, 153))
+                        // 构建文本
+                        ,XEasyPdfHandler.Text.build(
+                                "欢迎大家试用并提出宝贵意见。"
+                        ).enableTextAppend().setFontSize(16F).setFontColor(new Color(255, 0, 153))
+                        // 构建文本
+                        ,XEasyPdfHandler.Text.build(
+                                "-- by xsx"
+                        ).setStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
+                        // 构建文本
+                        ,XEasyPdfHandler.Text.build(
+                                "2021.10.07"
+                        ).setStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
+                        // 构建实线分割线
+                        ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F).setColor(lineColor).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                        // 构建虚线分割线
+                        ,XEasyPdfHandler.SplitLine.DottedLine.build().setLineLength(10F).setMarginTop(10F).setLineWidth(10F).setColor(lineColor).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                        // 构建实线分割线
+                        ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F).setColor(lineColor).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                )
+                // 保存
+        ).save(outputPath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
     }
 }

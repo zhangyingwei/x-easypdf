@@ -24,6 +24,45 @@ import java.util.List;
  * </p>
  */
 public class XEasyPdfTextUtil {
+
+    /**
+     * 拆分文本（单行）
+     * @param text 待输入文本
+     * @param lineWidth 行宽度
+     * @param font 字体
+     * @param fontSize 字体大小
+     * @return 返回文本列表
+     */
+    @SneakyThrows
+    public static String splitText(String text, float lineWidth, PDFont font, float fontSize) {
+        // 如果待输入文本为空，或文本长度为0，或行宽减字体大小小于0，则直接返回空字符串
+        if (text==null||text.trim().length()==0||lineWidth-fontSize<0) {
+            // 返回空字符串
+            return null;
+        }
+        // 定义临时文本
+        String tempText;
+        // 定义当前行真实宽度
+        float lineRealWidth;
+        // 每行字数（估计）
+        int fontCount = Math.max(1, (int) (lineWidth/fontSize/2));
+        // 定义开始索引
+        int beginIndex = 0;
+        // 遍历文本
+        for (int i = fontCount, len = text.length(); i <= len; i++) {
+            // 截取临时文本
+            tempText = text.substring(beginIndex, i);
+            // 计算当前文本真实宽度
+            lineRealWidth = fontSize * font.getStringWidth(tempText) / 1000;
+            // 如果真实宽度大于行宽度，则减少一个字符
+            if (lineRealWidth>lineWidth) {
+                // 返回截取字符串
+                return text.substring(beginIndex, i - 1);
+            }
+        }
+        return text;
+    }
+
     /**
      * 拆分文本段落（换行）
      * @param text 待输入文本
@@ -34,8 +73,8 @@ public class XEasyPdfTextUtil {
      */
     @SneakyThrows
     public static List<String> splitLines(String text, float lineWidth, PDFont font, float fontSize) {
-        // 如果待输入文本为空，或文本长度为0，则直接返回空列表
-        if (text==null||text.trim().length()==0) {
+        // 如果待输入文本为空，或文本长度为0，或行宽减字体大小小于0，则直接返回空列表
+        if (text==null||text.trim().length()==0||lineWidth-fontSize<0) {
             // 返回空列表
             return new ArrayList<>(0);
         }
@@ -43,32 +82,37 @@ public class XEasyPdfTextUtil {
         List<String> lineList = new ArrayList<>(200);
         // 定义临时文本
         String tempText;
-        // 计算文本真实宽度
-        float realWidth = fontSize * font.getStringWidth(text) / 1000;
-        // 计算总行数（估计）
-        int count = (int) (lineWidth / realWidth);
-        // 计算的总行数与文本长度取最小值
-        count = Math.min(count, text.length());
+        // 定义当前行真实宽度
+        float lineRealWidth;
+        // 每行字数（估计）
+        int fontCount = (int) (lineWidth/fontSize/2);
         // 定义开始索引
         int beginIndex = 0;
         // 遍历文本
-        for (int i = count, len = text.length(); i <= len; i++) {
+        for (int i = fontCount, len = text.length(); i <= len; i++) {
             // 截取临时文本
             tempText = text.substring(beginIndex, i);
             // 计算当前文本真实宽度
-            realWidth = fontSize * font.getStringWidth(tempText) / 1000;
+            lineRealWidth = fontSize * font.getStringWidth(tempText) / 1000;
             // 如果真实宽度大于行宽度，则减少一个字符
-            if (realWidth>lineWidth) {
+            if (lineRealWidth>lineWidth) {
                 // 加入文本列表
                 lineList.add(text.substring(beginIndex, i - 1));
                 // 重置开始索引
                 beginIndex = i - 1;
+                // 重置文本索引
+                i = i + fontCount - 1;
+                // 如果文本索引大于或等于文本长度，则为最后一行，加入文本列表
+                if (i>=len) {
+                    // 加入文本列表
+                    lineList.add(text.substring(beginIndex));
+                }
             }
-            // 如果当前索引等于文本长度，则直接加入文本列表
-            if (i==len) {
-                // 加入文本列表
-                lineList.add(text.substring(beginIndex, i));
-            }
+        }
+        // 如果开始索引加每行字数小于文本长度，则为最后一行，加入文本列表
+        if (beginIndex+fontCount<text.length()||lineList.isEmpty()) {
+            // 加入文本列表
+            lineList.add(text.substring(beginIndex));
         }
         return lineList;
     }

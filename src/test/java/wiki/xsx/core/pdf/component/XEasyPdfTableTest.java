@@ -138,7 +138,7 @@ public class XEasyPdfTableTest {
 
     @Test
     public void testTable3() throws IOException {
-        String imagePath = "D:\\temp\\qrcode_for_gh_cefdd88ec44c_430.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage3.jpg";
         String filePath = OUTPUT_PATH + "testTable3.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(

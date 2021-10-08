@@ -57,7 +57,6 @@ public class XEasyPdfDocumentFormFiller {
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.getTarget();
-        this.font = this.pdfDocument.getFont();
     }
 
     /**
@@ -66,7 +65,7 @@ public class XEasyPdfDocumentFormFiller {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller setFontPath(String fontPath) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, fontPath);
+        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, fontPath, false);
         return this;
     }
 
@@ -76,7 +75,7 @@ public class XEasyPdfDocumentFormFiller {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, style.getPath());
+        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, style.getPath(), false);
         return this;
     }
 
@@ -89,6 +88,11 @@ public class XEasyPdfDocumentFormFiller {
     public XEasyPdfDocumentFormFiller fill(Map<String, String> formMap) throws IOException {
         // 如果表单字典有内容，则进行填充
         if (formMap!=null&&formMap.size()>0) {
+            // 如果字体为空，则初始化字体
+            if (this.font==null) {
+                // 初始化字体
+                this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, this.pdfDocument.getParam().getFontPath(), false);
+            }
             // 定义pdfBox表单字段
             PDField field;
             // 获取pdfBox表单
@@ -114,8 +118,6 @@ public class XEasyPdfDocumentFormFiller {
                     if (field!=null) {
                         // 设置值
                         field.setValue(entry.getValue());
-                        // 添加文本关联
-                        XEasyPdfFontUtil.addToSubset(this.font, entry.getValue());
                     }
                 }
             }
@@ -148,6 +150,8 @@ public class XEasyPdfDocumentFormFiller {
         XEasyPdfFontUtil.subsetFonts();
         // 写入文档
         writer.write(this.document);
+        // 重置字体为空
+        this.font = null;
         // 关闭文档
         this.pdfDocument.close();
     }

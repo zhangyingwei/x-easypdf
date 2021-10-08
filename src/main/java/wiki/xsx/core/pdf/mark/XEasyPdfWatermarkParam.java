@@ -91,7 +91,7 @@ class XEasyPdfWatermarkParam {
             this.fontPath = this.defaultFontStyle.getPath();
         }
         // 初始化字体
-        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath);
+        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
         // 如果文本间隔未初始化，则进行初始化
         if (this.wordSpace==null) {
             // 初始化文本间隔为6倍字体大小

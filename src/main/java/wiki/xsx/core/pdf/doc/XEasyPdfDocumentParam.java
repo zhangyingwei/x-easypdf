@@ -12,7 +12,6 @@ import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +108,7 @@ class XEasyPdfDocumentParam {
         if (this.fontPath==null) {
             this.fontPath = this.defaultFontStyle.getPath();
         }
-        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
+        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath, true);
     }
 
     /**
@@ -131,9 +130,8 @@ class XEasyPdfDocumentParam {
 
     /**
      * 关联字体
-     * @throws IOException IO异常
      */
-    void subsetFonts() throws IOException {
+    void subsetFonts() {
         XEasyPdfFontUtil.subsetFonts();
     }
 

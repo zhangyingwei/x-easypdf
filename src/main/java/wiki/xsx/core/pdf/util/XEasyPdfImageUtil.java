@@ -4,8 +4,6 @@ import lombok.SneakyThrows;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -78,39 +76,20 @@ public class XEasyPdfImageUtil {
      * @param sourceImage 源图片
      * @param width 缩放宽度
      * @param height 缩放高度
-     * @return 返回缩放后的图片对象
-     */
-    public static BufferedImage scale(
-            BufferedImage sourceImage,
-            int width,
-            int height
-    ) {
-        if (sourceImage==null) {
-            throw new IllegalArgumentException("Image can not be null");
-        }
-        return new AffineTransformOp(
-                AffineTransform.getScaleInstance(
-                        (double) width/sourceImage.getWidth(),
-                        (double) height/sourceImage.getHeight()
-                ),
-                null
-        ).filter(sourceImage, null);
-    }
-
-    /**
-     * 缩放图片
-     * @param sourceImage 源图片
-     * @param width 缩放宽度
-     * @param height 缩放高度
      * @param scaleMode 缩放模式
      * @return 返回缩放后的图片对象
      */
+    @SneakyThrows
     public static BufferedImage scale(BufferedImage sourceImage, int width, int height, int scaleMode) {
         if (sourceImage==null) {
             throw new IllegalArgumentException("Image can not be null");
         }
         Image temp = sourceImage.getScaledInstance(width, height, scaleMode);
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(
+                width,
+                height,
+                sourceImage.getColorModel().hasAlpha()?BufferedImage.TYPE_INT_ARGB:BufferedImage.TYPE_INT_RGB
+        );
         Graphics2D graphics = image.createGraphics();
         graphics.drawImage(temp, 0, 0, null);
         graphics.dispose();

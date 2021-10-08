@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
@@ -47,8 +48,8 @@ public class XEasyPdfPageTest {
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().setFontPath(FONT_PATH).addComponent(
                         XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
-                        XEasyPdfHandler.Text.build("你好，世界！"),
-                        XEasyPdfHandler.Text.build("我是第一页")
+                        XEasyPdfHandler.Text.build("你好，世界！").setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT),
+                        XEasyPdfHandler.Text.build("我是第一页").setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                 )
         ).save(filePath).close();
         System.out.println("finish");
@@ -58,14 +59,14 @@ public class XEasyPdfPageTest {
     public void testAddComponent2() throws IOException {
         String sourcePath = OUTPUT_PATH + "testAddComponent.pdf";
         String filePath = OUTPUT_PATH + "testAddComponent2.pdf";
-        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(
                 XEasyPdfHandler.Image.build(new File(imagePath)).setContentMode(XEasyPdfComponent.ContentMode.PREPEND),
                 XEasyPdfHandler.Text.build("xxxx")
-        ).setFontPath(FONT_PATH);
+        ).setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD);
         document.save(filePath).close();
         System.out.println("finish");
     }

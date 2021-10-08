@@ -4,12 +4,15 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -44,7 +47,7 @@ public class XEasyPdfImageTest {
     @Test
     public void testImage() throws IOException {
         String filePath = OUTPUT_PATH + "testImage.pdf";
-        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Image.build(new File(imagePath)).setMarginLeft(50F)
@@ -60,7 +63,7 @@ public class XEasyPdfImageTest {
     @Test
     public void testImage2() throws IOException {
         String filePath = OUTPUT_PATH + "testImage2.pdf";
-        String imagePath = "D:\\temp\\0020033143720852_b.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Image.build(new File(imagePath)).setMarginLeft(150F),
@@ -92,7 +95,7 @@ public class XEasyPdfImageTest {
     public void testImage3() throws IOException {
         String sourcePath = OUTPUT_PATH + "testImage2.pdf";
         String filePath = OUTPUT_PATH + "testImage3.pdf";
-        String imagePath = "D:\\temp\\透明背景.png";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
@@ -109,13 +112,14 @@ public class XEasyPdfImageTest {
     @Test
     public void testImage4() throws IOException {
         String filePath = OUTPUT_PATH + "testImage4.pdf";
-        String imagePath = "D:\\temp\\失真图像.png";
-        XEasyPdfHandler.Document.build().addPage(
-                XEasyPdfHandler.Page.build(
-                        PDRectangle.A0,
-                        XEasyPdfHandler.Image.build(new File(imagePath))
-                )
-        ).save(filePath).close();
+        try (InputStream inputStream = new URL("https://images.gitee.com/uploads/images/2021/0527/104627_bc14225e_668748.png").openStream()) {
+            XEasyPdfHandler.Document.build().addPage(
+                    XEasyPdfHandler.Page.build(
+                            PDRectangle.A0,
+                            XEasyPdfHandler.Image.build(inputStream, XEasyPdfImageType.PNG)
+                    )
+            ).save(filePath).close();
+        }
         System.out.println("finish");
     }
 }

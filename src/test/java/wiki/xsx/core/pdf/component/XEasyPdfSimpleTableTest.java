@@ -31,7 +31,7 @@ public class XEasyPdfSimpleTableTest {
 
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
     private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\table\\simple\\";
-    private static final String IMAGE_PATH = "D:\\temp\\订单.jpg";
+    private static final String IMAGE_PATH = "C:\\Users\\Administrator\\Desktop\\testImage3.jpg";
 
     @Before
     public void setup() {

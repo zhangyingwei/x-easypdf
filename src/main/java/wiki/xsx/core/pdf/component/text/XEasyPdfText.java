@@ -511,17 +511,16 @@ public class XEasyPdfText implements XEasyPdfComponent {
             if (totalLineIndex>-1) {
                 // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 + 字体高度 + 行间距，由于之前多减一行，所以现在加回来
                 this.param.setBeginY(this.param.getBeginY() + this.param.getFontHeight() + this.param.getLeading());
+                // 获取文本宽度
+                float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
+                if (this.param.isTextAppend()&&totalLineIndex==0) {
+                    // 设置页面X轴坐标
+                    page.getParam().setPageX(page.getParam().getPageX()==null?textWidth:textWidth+page.getParam().getPageX());
+                }else {
+                    // 设置页面X轴坐标
+                    page.getParam().setPageX(textWidth);
+                }
             }
-        }
-        // 如果文本列表不为空，则设置页面X轴坐标
-        if (splitTextList.size()>0) {
-            // 获取文本宽度
-            float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
-            // 设置页面X轴坐标
-            page.getParam().setPageX(page.getParam().getPageX()==null?textWidth:textWidth+page.getParam().getPageX());
-        }
-        // 如果内容流不为空，则关闭内容流，并重置文档页面Y轴坐标
-        if (stream!=null) {
             // 内容流重置颜色为黑色
             stream.setNonStrokingColor(Color.BLACK);
             // 关闭内容流

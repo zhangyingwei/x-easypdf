@@ -14,7 +14,6 @@ import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
-import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import javax.print.PrintServiceLookup;
 import java.awt.*;
@@ -414,9 +413,9 @@ public class XEasyPdfDocument {
      * 保存（页面构建）
      * @param outputPath 文件输出路径
      * @return 返回pdf文档
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocument save(String outputPath) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocument save(String outputPath) {
         try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
             return this.save(outputStream);
         }
@@ -426,9 +425,9 @@ public class XEasyPdfDocument {
      * 保存（页面构建）
      * @param outputStream 文件输出流
      * @return 返回pdf文档
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocument save(OutputStream outputStream) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocument save(OutputStream outputStream) {
         // 创建写入器
         COSWriter writer = new COSWriter(outputStream);
         // 创建任务文档
@@ -484,9 +483,9 @@ public class XEasyPdfDocument {
 
     /**
      * 关闭文档
-     * @throws IOException IO异常
      */
-    public void close() throws IOException {
+    @SneakyThrows
+    public void close() {
         // 如果合并pdf源文档列表不为空，则进行关闭
         if (!this.param.getMergeSourceList().isEmpty()) {
             // 获取合并pdf源文档列表
@@ -507,8 +506,6 @@ public class XEasyPdfDocument {
             // 关闭源文档
             this.param.getSource().close();
         }
-        // 清理字体缓存
-        XEasyPdfFontUtil.clearFonts();
     }
 
     /**
@@ -559,9 +556,9 @@ public class XEasyPdfDocument {
     /**
      * 设置文档信息及保护策略
      * @param target 任务文档
-     * @throws IOException IO异常
      */
-    void setInfoAndPolicy(PDDocument target) throws IOException {
+    @SneakyThrows
+    void setInfoAndPolicy(PDDocument target) {
         // 如果文档信息不为空，则进行设置
         if (this.param.getDocumentInfo()!=null) {
             // 设置文档信息

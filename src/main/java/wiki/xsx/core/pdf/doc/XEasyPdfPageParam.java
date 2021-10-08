@@ -134,7 +134,7 @@ public class XEasyPdfPageParam {
         if (this.fontPath==null) {
             this.fontPath = this.defaultFontStyle.getPath();
         }
-        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath);
+        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath, true);
         if (this.allowBackgroundColor) {
             if (this.backgroundColor==null) {
                 this.backgroundColor = document.getGlobalBackgroundColor();

@@ -1,12 +1,12 @@
 package wiki.xsx.core.pdf.util;
 
+import lombok.SneakyThrows;
 import org.apache.fontbox.ttf.OTFParser;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,7 +52,7 @@ public class XEasyPdfFontUtil {
      */
     public static PDFont getFont(XEasyPdfDocument document, String fontPath, PDFont defaultFont) {
         if (fontPath!=null) {
-            return loadFont(document, fontPath);
+            return loadFont(document, fontPath, false);
         }
         return defaultFont;
     }
@@ -61,25 +61,31 @@ public class XEasyPdfFontUtil {
      * 加载字体
      * @param document pdf文档
      * @param fontPath 字体路径
+     * @param isEmbedded 是否嵌入
      * @return 返回pdfBox字体
      */
-    public static PDFont loadFont(XEasyPdfDocument document, String fontPath) {
+    public static PDFont loadFont(XEasyPdfDocument document, String fontPath, boolean isEmbedded) {
         if (fontPath!=null) {
-            PDFont font = FONTCACHE.get(fontPath);
-            if (font!=null) {
-                return font;
+            PDFont font;
+            if (isEmbedded) {
+                font = FONTCACHE.get(fontPath);
+                if (font!=null) {
+                    return font;
+                }
             }
             Path path = Paths.get(fontPath);
             try (InputStream inputStream = Files.newInputStream(path)) {
                 if (path.getFileName().toString().endsWith(OTF)) {
-                    font = PDType0Font.load(document.getTarget(), new OTFParser(false, true).parse(inputStream), true);
+                    font = PDType0Font.load(document.getTarget(), new OTFParser(isEmbedded, true).parse(inputStream), isEmbedded);
                 }else {
-                    font = PDType0Font.load(document.getTarget(), inputStream);
+                    font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
                 }
-                FONTCACHE.put(fontPath, font);
+                if (isEmbedded) {
+                    FONTCACHE.put(fontPath, font);
+                }
                 return font;
             }catch (Exception e) {
-                return loadFontForResource(document, fontPath);
+                return loadFontForResource(document, fontPath, isEmbedded);
             }
         }else {
             throw new IllegalArgumentException("the font can not be loaded");
@@ -91,15 +97,18 @@ public class XEasyPdfFontUtil {
      * @param document pdf文档
      * @param page pdf页面
      * @param fontPath 字体路径
+     * @param isEmbedded 是否嵌入
      * @return 返回pdfBox字体
      */
-    public static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page, String fontPath) {
+    public static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page, String fontPath, boolean isEmbedded) {
         if (fontPath!=null) {
-            PDFont font = FONTCACHE.get(fontPath);
-            if (font!=null) {
-                return font;
+            if (isEmbedded) {
+                PDFont font = FONTCACHE.get(fontPath);
+                if (font!=null) {
+                    return font;
+                }
             }
-            return loadFont(document, fontPath);
+            return loadFont(document, fontPath, isEmbedded);
         }else {
             return loadFont(document, page);
         }
@@ -109,17 +118,20 @@ public class XEasyPdfFontUtil {
      * 加载字体(资源路径)
      * @param document pdf文档
      * @param fontResourcePath 字体路径(资源路径)
+     * @param isEmbedded 是否嵌入
      * @return 返回pdfBox字体
      */
-    private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath) {
+    private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath, boolean isEmbedded) {
         try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
             PDFont font;
             if (fontResourcePath.endsWith(OTF)) {
-                font = PDType0Font.load(document.getTarget(), new OTFParser(false, true).parse(inputStream), true);
+                font = PDType0Font.load(document.getTarget(), new OTFParser(isEmbedded, true).parse(inputStream), isEmbedded);
             }else {
-                font = PDType0Font.load(document.getTarget(), inputStream);
+                font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
             }
-            FONTCACHE.put(fontResourcePath, font);
+            if (isEmbedded) {
+                FONTCACHE.put(fontResourcePath, font);
+            }
             return font;
         }catch (Exception e) {
             throw new IllegalArgumentException("the font can not be loaded");
@@ -131,11 +143,12 @@ public class XEasyPdfFontUtil {
      * @param document pdf文档
      * @param page pdf页面
      * @param fontResourcePath 字体路径(资源路径)
+     * @param isEmbedded 是否嵌入
      * @return 返回pdfBox字体
      */
-    private static PDFont loadFontForResource(XEasyPdfDocument document, XEasyPdfPage page, String fontResourcePath) {
+    private static PDFont loadFontForResource(XEasyPdfDocument document, XEasyPdfPage page, String fontResourcePath, boolean isEmbedded) {
         if (fontResourcePath!=null) {
-            return loadFontForResource(document, fontResourcePath);
+            return loadFontForResource(document, fontResourcePath, isEmbedded);
         }else {
             return loadFont(document, page);
         }
@@ -191,19 +204,13 @@ public class XEasyPdfFontUtil {
 
     /**
      * 关联字体
-     * @throws IOException IO异常
      */
-    public static void subsetFonts() throws IOException {
+    @SneakyThrows
+    public static void subsetFonts() {
         Collection<PDFont> values = FONTCACHE.values();
         for (PDFont font : values) {
             font.subset();
         }
-    }
-
-    /**
-     * 清理字体缓存
-     */
-    public static void clearFonts() {
         FONTCACHE.clear();
     }
 }

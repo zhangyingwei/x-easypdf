@@ -58,6 +58,9 @@ public class FontMapperImpl implements FontMapper {
         substitutes.put("Times-BoldItalic", new ArrayList<>(Arrays.asList("TimesNewRomanPS-BoldItalicMT", "TimesNewRomanPS-BoldItalic", "TimesNewRoman-BoldItalic", "LiberationSerif-BoldItalic", "NimbusRomNo9L-MediItal")));
         substitutes.put("Symbol", new ArrayList<>(Arrays.asList("Symbol", "SymbolMT", "StandardSymL")));
         substitutes.put("ZapfDingbats", new ArrayList<>(Arrays.asList("ZapfDingbatsITCbyBT-Regular", "ZapfDingbatsITC", "Dingbats", "MS-Gothic")));
+        substitutes.put("SourceHanSansCN-Normal", new ArrayList<>(Collections.singletonList("SourceHanSansCN-Normal")));
+        substitutes.put("SourceHanSansCN-Bold", new ArrayList<>(Collections.singletonList("SourceHanSansCN-Bold")));
+        substitutes.put("SourceHanSansCN-Light", new ArrayList<>(Collections.singletonList("SourceHanSansCN-Light")));
 
         // Acrobat also uses alternative names for Standard 14 fonts, which we map to those above
         // these include names such as "Arial" and "TimesNewRoman"

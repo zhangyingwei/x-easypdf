@@ -295,6 +295,6 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
             this.param.setFontPath(this.param.getDefaultFontStyle().getPath());
         }
         // 初始化字体
-        this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath()));
+        this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true));
     }
 }
