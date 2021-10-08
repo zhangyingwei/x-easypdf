@@ -45,7 +45,7 @@ public class XEasyPdfTextUtil {
         // 定义当前行真实宽度
         float lineRealWidth;
         // 每行字数（估计）
-        int fontCount = Math.max(1, (int) (lineWidth/fontSize/2));
+        int fontCount = Math.max(1, (int) (lineWidth/fontSize));
         // 定义开始索引
         int beginIndex = 0;
         // 遍历文本
@@ -85,7 +85,7 @@ public class XEasyPdfTextUtil {
         // 定义当前行真实宽度
         float lineRealWidth;
         // 每行字数（估计）
-        int fontCount = (int) (lineWidth/fontSize/2);
+        int fontCount = Math.max(1, (int) (lineWidth/fontSize));
         // 定义开始索引
         int beginIndex = 0;
         // 遍历文本
