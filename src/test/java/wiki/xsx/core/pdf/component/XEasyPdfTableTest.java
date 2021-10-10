@@ -283,5 +283,67 @@ public class XEasyPdfTableTest {
         System.out.println("finish");
     }
 
-
+    @Test
+    public void testTable7(){
+        String filePath = OUTPUT_PATH + "testTable7.pdf";
+        List<XEasyPdfRow> rows = new ArrayList<>(10);
+        rows.add(
+                XEasyPdfHandler.Table.Row.build(
+                        XEasyPdfHandler.Table.Row.Cell.build(100F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("部门")
+                        ),
+                        XEasyPdfHandler.Table.Row.Cell.build(99F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("XXXXXX")
+                        ),XEasyPdfHandler.Table.Row.Cell.build(99F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("申请时间")
+                        ),XEasyPdfHandler.Table.Row.Cell.build(199F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("2020-01-01 00:00:00")
+                        )
+                ).setStyle(XEasyPdfTableStyle.CENTER)
+        );
+        rows.add(
+                XEasyPdfHandler.Table.Row.build(
+                        XEasyPdfHandler.Table.Row.Cell.build(100F, 32F).addContent(
+                                XEasyPdfHandler.Text.build("报修内容")
+                        ),XEasyPdfHandler.Table.Row.Cell.build(395F, 32F).addContent(
+                                XEasyPdfHandler.Text.build("XXXXXXXXXXXXXXXXXXXXXX")
+                        )
+                ).setStyle(XEasyPdfTableStyle.CENTER)
+        );
+        for (int i = 0; i < 3; i++) {
+            rows.add(
+                    XEasyPdfHandler.Table.Row.build(
+                            XEasyPdfHandler.Table.Row.Cell.build(100F, 16F).addContent(
+                                    XEasyPdfHandler.Text.build("派单人")
+                            ),
+                            XEasyPdfHandler.Table.Row.Cell.build(99F, 16F).addContent(
+                                    XEasyPdfHandler.Text.build("XXXXXX")
+                            ),XEasyPdfHandler.Table.Row.Cell.build(99F, 16F).addContent(
+                                    XEasyPdfHandler.Text.build("派单")
+                            ),XEasyPdfHandler.Table.Row.Cell.build(199F, 16F).addContent(
+                                    XEasyPdfHandler.Text.build("2020-01-01 00:00:00")
+                            )
+                    ).setStyle(XEasyPdfTableStyle.CENTER)
+            );
+        }
+        rows.add(
+                XEasyPdfHandler.Table.Row.build(
+                        XEasyPdfHandler.Table.Row.Cell.build(100F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("分管签字")
+                        ),
+                        XEasyPdfHandler.Table.Row.Cell.build(99F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("")
+                        ),XEasyPdfHandler.Table.Row.Cell.build(99F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("用户签字")
+                        ),XEasyPdfHandler.Table.Row.Cell.build(199F, 16F).addContent(
+                                XEasyPdfHandler.Text.build("")
+                        )
+                ).setStyle(XEasyPdfTableStyle.CENTER)
+        );
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Table.build(rows).setMarginLeft(50F)
+                )
+        ).save(filePath).close();
+    }
 }
