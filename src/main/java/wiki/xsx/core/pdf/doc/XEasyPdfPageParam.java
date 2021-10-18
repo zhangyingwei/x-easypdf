@@ -73,10 +73,6 @@ public class XEasyPdfPageParam {
      */
     private List<PDPage> newPageList = new ArrayList<>(256);
     /**
-     * pdfbox总页数
-     */
-    private int totalPage = 0;
-    /**
      * pdf组件列表
      */
     private List<XEasyPdfComponent> componentList = new ArrayList<>(128);
@@ -143,12 +139,5 @@ public class XEasyPdfPageParam {
                 this.backgroundColor = Color.WHITE;
             }
         }
-    }
-
-    /**
-     * 总页数自增
-     */
-    void totalPageIncrement() {
-        this.totalPage+=1;
     }
 }

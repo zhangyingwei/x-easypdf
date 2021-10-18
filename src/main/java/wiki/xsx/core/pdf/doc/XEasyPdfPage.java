@@ -55,8 +55,6 @@ public class XEasyPdfPage {
     public XEasyPdfPage(PDPage page) {
         // 添加pdfBox页面
         this.param.getPageList().add(page);
-        // 总页数自增
-        this.param.totalPageIncrement();
     }
 
     /**
@@ -79,8 +77,6 @@ public class XEasyPdfPage {
     public XEasyPdfPage addPage(PDPage page) {
         // 添加pdfBox页面
         this.param.getPageList().add(page);
-        // 总页数自增
-        this.param.totalPageIncrement();
         return this;
     }
 
@@ -93,8 +89,8 @@ public class XEasyPdfPage {
     public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) {
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
         this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
-        // 总页数自增
-        this.param.totalPageIncrement();
+        // 初始化总页数
+        document.getParam().initTotalPage(1);
         // 重置页面X轴Y轴起始坐标
         this.getParam().setPageX(null).setPageY(null);
         // 绘制页眉与页脚
@@ -103,8 +99,6 @@ public class XEasyPdfPage {
         this.drawBackgroundImage(document);
         // 设置背景颜色
         this.setLastPageBackgroundColor(document);
-        // 初始化总页数
-        document.getParam().initTotalPage(1);
         return this;
     }
 
@@ -242,11 +236,11 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 获取pdfBox最新页码
-     * @return 返回pdfBox最新页码
+     * 获取pdfBox当前索引
+     * @return 返回pdfBox当前索引
      */
-    public int getLastPageNum() {
-        return this.param.getPageList().size() + this.param.getNewPageList().size();
+    public int getCurrentIndex(XEasyPdfDocument document) {
+        return document.getParam().getTotalPage();
     }
 
     /**
@@ -440,6 +434,8 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) {
+        // 初始化总页数
+        document.getParam().initTotalPage(this.param.getPageList().size());
         // 初始化参数
         this.param.init(document, this);
         // 如果原有pdfbox页面列表为空，则添加新页面，否则设置页面尺寸

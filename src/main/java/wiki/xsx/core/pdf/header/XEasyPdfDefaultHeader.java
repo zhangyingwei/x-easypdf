@@ -158,7 +158,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
             if (this.param.getText()!=null) {
                 // 写入文本
                 this.param.getText()
-                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getLastPageNum()+"")
+                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+"")
                         .setMarginTop(this.param.getMarginTop())
                         .setMarginLeft(this.param.getMarginLeft())
                         .setMarginRight(this.param.getMarginRight())
@@ -174,7 +174,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
                 page.disablePosition();
                 // 写入文本
                 this.param.getText()
-                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getLastPageNum()+"")
+                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+"")
                         .setMarginTop(this.param.getMarginTop())
                         .setMarginLeft(this.param.getMarginLeft())
                         .setMarginRight(this.param.getMarginRight())

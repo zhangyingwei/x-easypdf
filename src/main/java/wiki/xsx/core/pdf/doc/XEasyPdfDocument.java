@@ -351,8 +351,10 @@ public class XEasyPdfDocument {
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 遍历页面索引
         for (int index : pageIndex) {
+            // 获取对应pdf页面
+            XEasyPdfPage page = pageList.get(index);
             // 初始化总页数
-            this.param.initTotalPage(-pageList.get(index).getParam().getTotalPage());
+            this.param.initTotalPage(-(page.getParam().getPageList().size()+page.getParam().getNewPageList().size()));
             // 移除页面
             pageList.remove(index);
         }

@@ -527,4 +527,55 @@ public class XEasyPdfDocumentTest {
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }
+
+    @Test
+    public void test4() throws IOException {
+        long begin = System.currentTimeMillis();
+        // 定义保存路径
+        final String outputPath = OUTPUT_PATH + "merge.pdf";
+        XEasyPdfDocument document = XEasyPdfHandler.Document.build();
+        document.merge(
+                XEasyPdfHandler.Document.build().addPage(
+                        XEasyPdfHandler.Page.build(
+                                XEasyPdfHandler.Text.build("第一个文件")
+                        )
+                ),
+                XEasyPdfHandler.Document.build().addPage(
+                        XEasyPdfHandler.Page.build(
+                                XEasyPdfHandler.Text.build("第二个文件")
+                        )
+                )
+        ).setGlobalFooter(
+                XEasyPdfHandler.Footer.build(
+                        XEasyPdfHandler.Text.build("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder())
+                )
+        ).save(outputPath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
+
+    @Test
+    public void test5() throws IOException {
+        long begin = System.currentTimeMillis();
+        // 定义保存路径
+        final String outputPath = OUTPUT_PATH + "mutilPage.pdf";
+        XEasyPdfDocument document = XEasyPdfHandler.Document.build();
+        document.addPage(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build("第一个页面文件")
+                ),
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build("第二个页面文件")
+                ),
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build("第三个页面文件")
+                )
+        ).setGlobalFooter(
+                XEasyPdfHandler.Footer.build(
+                        XEasyPdfHandler.Text.build("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder())
+                )
+        ).save(outputPath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
 }

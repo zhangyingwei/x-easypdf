@@ -57,7 +57,7 @@ public class XEasyPdfTableTest {
                         i%2==0?
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
-                        ).setFontPath(FONT_PATH2):
+                        ):
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
                                 XEasyPdfHandler.Text.build("row"+i+"-cell"+j+"中文中文中文中文中文中文中文中文中文中文中文中文")
                         ).setBackgroundColor(new Color(0,191,255))
@@ -74,10 +74,10 @@ public class XEasyPdfTableTest {
                 )
         ).addPage(
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.Text.build("title").setFontPath(FONT_PATH2),
+                        XEasyPdfHandler.Text.build("title"),
                         XEasyPdfHandler.Table.build(rowList).setStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
                 )
-        ).setFontPath(FONT_PATH).save(filePath).close();
+        ).save(filePath).close();
         long end = System.currentTimeMillis();
         System.out.println("finish，耗时：" + (end-begin) + " ms");
     }
@@ -304,9 +304,9 @@ public class XEasyPdfTableTest {
         rows.add(
                 XEasyPdfHandler.Table.Row.build(
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 32F).addContent(
-                                XEasyPdfHandler.Text.build("报修内容")
+                                XEasyPdfHandler.Text.build("报修内容").setMarginTop(10F)
                         ),XEasyPdfHandler.Table.Row.Cell.build(395F, 32F).addContent(
-                                XEasyPdfHandler.Text.build("XXXXXXXXXXXXXXXXXXXXXX")
+                                XEasyPdfHandler.Text.build("XXXXXXXXXXXXXXXXXXXXXX").setStyle(XEasyPdfTextStyle.LEFT).enableSelfStyle()
                         )
                 ).setStyle(XEasyPdfTableStyle.CENTER)
         );
