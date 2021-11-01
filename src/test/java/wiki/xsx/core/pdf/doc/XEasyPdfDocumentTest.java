@@ -545,11 +545,36 @@ public class XEasyPdfDocumentTest {
                                 XEasyPdfHandler.Text.build("第二个文件")
                         )
                 )
+        ).setGlobalHeader(
+                XEasyPdfHandler.Header.build(
+                        XEasyPdfHandler.Text.build("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder()+"" +
+                                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" +
+                                "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" +
+                                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                        )
+                )
         ).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(
                         XEasyPdfHandler.Text.build("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder())
                 )
-        ).save(outputPath).close();
+        ).bookmark()
+                .setBookMark(0, "第1个文件")
+                .setBookMark(
+                        XEasyPdfDocumentBookmark.BookmarkNode.build()
+                                .setTitle("第二个文件")
+                                .setPage(1)
+                                .setTextColor(new Color(255, 0, 153))
+                                .addChild(
+                                        XEasyPdfDocumentBookmark.BookmarkNode.build()
+                                                .setTitle("第二个文件子节点")
+                                                .setPage(1)
+                                                .setTop(300)
+                                                .setTextColor(new Color(255,50,100))
+                                )
+                )
+                .finish()
+                .save(outputPath)
+                .close();
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }

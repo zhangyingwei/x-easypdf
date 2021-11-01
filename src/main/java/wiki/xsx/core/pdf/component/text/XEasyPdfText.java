@@ -9,6 +9,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,8 +49,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param textList 待输入文本列表
      */
     public XEasyPdfText(List<String> textList) {
-        this.param.setSplitTextList(textList);
-        this.param.setSplitTemplateTextList(textList);
+        this.param.setSplitTextList(new ArrayList<>(textList)).setSplitTemplateTextList(new ArrayList<>(textList));
     }
 
     /**
@@ -67,7 +67,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param textList 待输入文本列表
      */
     public XEasyPdfText(float fontSize, List<String> textList) {
-        this.param.setFontSize(fontSize).setSplitTextList(textList);
+        this.param.setFontSize(fontSize).setSplitTextList(new ArrayList<>(textList)).setSplitTemplateTextList(new ArrayList<>(textList));
     }
 
     /**
@@ -224,8 +224,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText setSplitTextList(List<String> splitTextList) {
-        this.param.setSplitTextList(splitTextList);
-        this.param.setSplitTemplateTextList(splitTextList);
+        this.param.setSplitTextList(new ArrayList<>(splitTextList)).setSplitTemplateTextList(new ArrayList<>(splitTextList));
         return this;
     }
 
@@ -404,6 +403,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public List<String> getSplitTextList() {
         return this.param.getSplitTextList();
+    }
+
+    /**
+     * 获取字体大小
+     * @return 返回字体大小
+     */
+    public float getFontSize() {
+        return this.param.getFontSize();
     }
 
     /**

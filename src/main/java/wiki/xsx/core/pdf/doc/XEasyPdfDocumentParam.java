@@ -92,6 +92,10 @@ class XEasyPdfDocumentParam {
      */
     private XEasyPdfDocumentInfo documentInfo;
     /**
+     * pdf文档书签
+     */
+    private XEasyPdfDocumentBookmark bookmark;
+    /**
      * 是否重置
      */
     private boolean isReset;

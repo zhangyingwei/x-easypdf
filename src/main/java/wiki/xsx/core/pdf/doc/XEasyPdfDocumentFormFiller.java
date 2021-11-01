@@ -145,7 +145,7 @@ public class XEasyPdfDocumentFormFiller {
         // 创建写入器
         COSWriter writer = new COSWriter(outputStream);
         // 设置文档信息及保护策略
-        this.pdfDocument.setInfoAndPolicy(this.document);
+        this.pdfDocument.setInfoAndPolicyAndBookmark(this.document);
         // 关联字体
         XEasyPdfFontUtil.subsetFonts();
         // 写入文档

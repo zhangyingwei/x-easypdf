@@ -57,21 +57,25 @@ class XEasyPdfHeaderParam {
      */
     private Float marginTop = 5F;
     /**
-     * 页面X轴起始坐标
+     * 页面X轴起始坐标（图片）
      */
-    private Float beginX;
+    private Float imageBeginX;
     /**
-     * 页面Y轴起始坐标
+     * 页面Y轴起始坐标（图片）
      */
-    private Float beginY;
+    private Float imageBeginY;
+    /**
+     * 页面X轴起始坐标（文本）
+     */
+    private Float textBeginX;
+    /**
+     * 页面Y轴起始坐标（文本）
+     */
+    private Float textBeginY;
     /**
      * 高度
      */
     private Float height;
-    /**
-     * 文本定位（重置页面X轴Y轴坐标）
-     */
-    private boolean isTextPosition = true;
 
     /**
      * 初始化
@@ -83,25 +87,30 @@ class XEasyPdfHeaderParam {
         if (this.text==null&&this.image==null) {
             throw new IllegalArgumentException("text or image can not be found");
         }
-        // 计算图片高度
-        float imageHeight = this.image!=null?this.image.getHeight(document, page):0F;
-        // 计算文本高度
-        float textHeight = this.text!=null?this.text.getHeight(document, page, this.marginLeft, this.marginRight):0F;
-        // 获取pdfBox最新页面尺寸
-        PDRectangle rectangle = page.getLastPage().getMediaBox();
-        // 初始化X轴起始坐标
-        this.beginX = this.marginLeft;
-        // 初始化Y轴起始坐标
-        this.beginY = rectangle.getHeight() - imageHeight - this.marginTop;
-        // 如果图片高度大于文本高度，则重置文本定位为否
-        if (imageHeight>textHeight) {
-            // 设置文本定位为否
-            this.isTextPosition = false;
-        }
         // 如果高度未初始化，则进行初始化
         if (this.height==null) {
+            // 计算图片高度
+            float imageHeight = this.image!=null?this.image.getHeight(document, page):0F;
+            // 计算文本高度
+            float textHeight = this.text!=null?this.text.getHeight(document, page, this.marginLeft, this.marginRight):0F;
             // 初始化高度，文本高度与图片高度取最大值 + 上边距
             this.height = Math.max(imageHeight, textHeight) + this.marginTop;
+        }
+        // 获取pdfBox最新页面尺寸
+        PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 如果图片不为空，则初始化图片坐标
+        if (this.image!=null&&this.imageBeginX==null&&this.imageBeginY==null) {
+            // 初始化图片X轴起始坐标
+            this.imageBeginX = this.marginLeft;
+            // 初始化图片Y轴起始坐标
+            this.imageBeginY = rectangle.getHeight() - this.height;
+        }
+        // 如果文本不为空，则初始化文本坐标
+        if (this.text!=null&&this.textBeginX==null&&this.textBeginY==null) {
+            // 初始化文本X轴起始坐标
+            this.textBeginX = this.marginLeft;
+            // 初始化文本Y轴起始坐标
+            this.textBeginY = rectangle.getHeight() - this.text.getFontSize() - this.marginTop;
         }
     }
 }

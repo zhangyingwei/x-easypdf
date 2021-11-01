@@ -139,59 +139,24 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化参数
         this.param.init(document, page);
-        // 如果为文本定位，则对文本组件进行页面坐标重置
-        if (this.param.isTextPosition()) {
-            // 如果图片不为空，则进行图片绘制
-            if (this.param.getImage()!=null) {
-                // 关闭页面自动重置定位
-                page.disablePosition();
-                // 绘制图片
-                this.param.getImage()
-                        .setMarginTop(this.param.getMarginTop())
-                        .setPosition(this.param.getBeginX(), this.param.getBeginY())
-                        .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
-                        .draw(document, page);
-                // 开启页面自动重置定位
-                page.enablePosition();
-            }
-            // 如果文本不为空，则进行文本绘制
-            if (this.param.getText()!=null) {
-                // 写入文本
-                this.param.getText()
-                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+"")
-                        .setMarginTop(this.param.getMarginTop())
-                        .setMarginLeft(this.param.getMarginLeft())
-                        .setMarginRight(this.param.getMarginRight())
-                        .setCheckPage(false)
-                        .draw(document, page);
-            }
+        // 如果文本不为空，则进行文本绘制
+        if (this.param.getText()!=null) {
+            // 写入文本
+            this.param.getText()
+                    .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+"")
+                    .setPosition(this.param.getTextBeginX(), this.param.getTextBeginY())
+                    .setMarginLeft(this.param.getMarginLeft())
+                    .setMarginRight(this.param.getMarginRight())
+                    .setCheckPage(false)
+                    .draw(document, page);
         }
-        // 如果不为文本定位，则对图片进行页面坐标重置
-        else {
-            // 如果文本不为空，则进行文本绘制
-            if (this.param.getText()!=null) {
-                // 关闭页面自动重置定位
-                page.disablePosition();
-                // 写入文本
-                this.param.getText()
-                        .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+"")
-                        .setMarginTop(this.param.getMarginTop())
-                        .setMarginLeft(this.param.getMarginLeft())
-                        .setMarginRight(this.param.getMarginRight())
-                        .setCheckPage(false)
-                        .draw(document, page);
-                // 开启页面自动重置定位
-                page.enablePosition();
-            }
-            // 如果图片不为空，则进行图片绘制
-            if (this.param.getImage()!=null) {
-                // 绘制图片
-                this.param.getImage()
-                        .setMarginTop(this.param.getMarginTop())
-                        .setPosition(this.param.getBeginX(), this.param.getBeginY())
-                        .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
-                        .draw(document, page);
-            }
+        // 如果图片不为空，则进行图片绘制
+        if (this.param.getImage()!=null) {
+            // 绘制图片
+            this.param.getImage()
+                    .setPosition(this.param.getImageBeginX(), this.param.getImageBeginY())
+                    .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                    .draw(document, page);
         }
         // 如果分割线列表不为空，则进行分割线绘制
         if (!this.param.getLineList().isEmpty()) {

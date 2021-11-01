@@ -13,7 +13,7 @@ import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -400,7 +400,21 @@ public class XEasyPdfPage {
         // 如果组件不为空，则添加组件
         if (components!=null) {
             // 添加组件
-            this.param.getComponentList().addAll(Arrays.asList(components));
+            Collections.addAll(this.param.getComponentList(), components);
+        }
+        return this;
+    }
+
+    /**
+     * 添加pdf组件
+     * @param components pdf组件列表
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage addComponent(List<XEasyPdfComponent> components) {
+        // 如果组件不为空，则添加组件
+        if (components!=null&&!components.isEmpty()) {
+            // 添加组件
+            this.param.getComponentList().addAll(components);
         }
         return this;
     }

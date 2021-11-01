@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
 import wiki.xsx.core.pdf.component.table.XEasyPdfRow;
+import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
@@ -345,5 +346,45 @@ public class XEasyPdfTableTest {
                         XEasyPdfHandler.Table.build(rows).setMarginLeft(50F)
                 )
         ).save(filePath).close();
+    }
+
+    @Test
+    public void testTable8(){
+        String filePath = OUTPUT_PATH + "testTable8.pdf";
+        List<XEasyPdfComponent> tables = new ArrayList<>(5);
+        for (int x = 0; x < 5; x++) {
+            List<XEasyPdfRow> rows = new ArrayList<>(2);
+            List<XEasyPdfCell> cells;
+            for (int i = 0; i < 5; i++) {
+                cells = new ArrayList<>(5);
+                for (int j = 0; j < 5; j++) {
+                    cells.add(
+                            XEasyPdfHandler.Table.Row.Cell.build(100F, 100F).addContent(
+                                    XEasyPdfHandler.Text.build(i+""+j+"-"+x+"table")
+                            ).setBackgroundColor(new Color(0,200,200))
+                    );
+                }
+                rows.add(XEasyPdfHandler.Table.Row.build(cells));
+            }
+            XEasyPdfTable table = XEasyPdfHandler.Table.build(rows);
+            table.setMarginLeft(50F).setMarginTop(50F);
+            tables.add(table);
+        }
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build().addComponent(tables)
+        ).setGlobalHeader(
+                XEasyPdfHandler.Header.build(
+//                        XEasyPdfHandler.Image.build(new File("C:\\Users\\Administrator\\Desktop\\QQ截图20211010155457.png")).setWidth(700F).setHeight(40F).disableSelfAdaption()
+                        XEasyPdfHandler.Text.build(
+                                "第"+XEasyPdfHandler.Page.getCurrentPagePlaceholder()+"页, " +
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                        ).setStyle(XEasyPdfTextStyle.CENTER)
+                )
+        ).bookmark()
+                .setBookMark(0, "第1页")
+                .setBookMark(2, "第3页")
+                .finish().save(filePath).close();
     }
 }

@@ -66,12 +66,12 @@ public class XEasyPdfHeaderTest {
     @Test
     public void testPageHeader2() throws IOException {
         String filePath = OUTPUT_PATH + "testPageHeader2.pdf";
-        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\QQ截图20211010155457.png";
         Color lineColor = new Color(0, 191, 255);
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().setHeader(
                         XEasyPdfHandler.Header.build(
-                                XEasyPdfHandler.Image.build(new File(imagePath)).disableSelfAdaption().setHeight(100F),
+                                XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(100F).setWidth(100F),
                                 XEasyPdfHandler.Text.build(
                                         "Hello XSX!!!Hello XSX!!!Hello XSX!!!Hello XSX!!!"
                                 ).setStyle(XEasyPdfTextStyle.CENTER).setFontSize(30F)
@@ -83,6 +83,40 @@ public class XEasyPdfHeaderTest {
                 ).addComponent(
                         XEasyPdfHandler.Text.build(
                             Arrays.asList(
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
+                                "1.这是第一行。。。。",
                                 "1.这是第一行。。。。",
                                 "2.这是第二行。。。。",
                                 "3.这是第三行。。。。",

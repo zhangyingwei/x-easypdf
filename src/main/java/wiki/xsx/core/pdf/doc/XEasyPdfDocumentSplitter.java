@@ -122,7 +122,7 @@ public class XEasyPdfDocumentSplitter {
                 // 获取输出流
                 try(OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString())))) {
                     // 设置文档信息及保护策略
-                    this.pdfDocument.setInfoAndPolicy(target);
+                    this.pdfDocument.setInfoAndPolicyAndBookmark(target);
                     // 保存文档
                     target.save(outputStream);
                     // 关闭文档
@@ -157,7 +157,7 @@ public class XEasyPdfDocumentSplitter {
                 importPage.setResources(pdPage.getResources());
             }
             // 设置文档信息及保护策略
-            this.pdfDocument.setInfoAndPolicy(target);
+            this.pdfDocument.setInfoAndPolicyAndBookmark(target);
             // 保存任务文档
             target.save(outputStream);
             // 关闭文档

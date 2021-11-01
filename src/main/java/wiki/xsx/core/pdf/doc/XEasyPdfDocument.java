@@ -7,6 +7,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.printing.PDFPrintable;
 import org.apache.pdfbox.printing.Scaling;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
@@ -103,8 +105,8 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 设置文档信息
-     * @return 返回pdf文档
+     * 获取文档信息
+     * @return 返回pdf文档信息
      */
     public XEasyPdfDocumentInfo information() {
         // 设置重置
@@ -114,14 +116,25 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 设置文档权限
-     * @return 返回pdf文档
+     * 获取文档权限
+     * @return 返回pdf文档权限
      */
     public XEasyPdfDocumentPermission permission() {
         // 设置重置
         this.param.setReset(true);
         // 返回文档权限
         return this.param.getPermission()!=null?this.param.getPermission():new XEasyPdfDocumentPermission(this);
+    }
+
+    /**
+     * 获取文档书签
+     * @return 返回pdf文档书签
+     */
+    public XEasyPdfDocumentBookmark bookmark() {
+        // 设置重置
+        this.param.setReset(true);
+        // 返回文档书签
+        return this.param.getBookmark()!=null?this.param.getBookmark():new XEasyPdfDocumentBookmark(this);
     }
 
     /**
@@ -285,6 +298,19 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 添加pdf页面
+     * @param pages pdf页面
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument addPage(List<XEasyPdfPage> pages) {
+        // 设置重置
+        this.param.setReset(true);
+        // 添加页面
+        this.param.getPageList().addAll(pages);
+        return this;
+    }
+
+    /**
      * 插入pdf页面
      * @param pageIndex 页面索引
      * @param pages pdf页面
@@ -437,7 +463,7 @@ public class XEasyPdfDocument {
         // 关联字体
         this.param.subsetFonts();
         // 设置文档信息及保护策略
-        this.setInfoAndPolicy(target);
+        this.setInfoAndPolicyAndBookmark(target);
         // 写入文档
         writer.write(target);
         return this;
@@ -556,11 +582,19 @@ public class XEasyPdfDocument {
     }
 
     /**
-     * 设置文档信息及保护策略
+     * 设置文档书签
+     * @param bookmark pdf文档书签
+     */
+    void setBookmark(XEasyPdfDocumentBookmark bookmark) {
+        this.param.setBookmark(bookmark);
+    }
+
+    /**
+     * 设置文档信息、保护策略及书签
      * @param target 任务文档
      */
     @SneakyThrows
-    void setInfoAndPolicy(PDDocument target) {
+    void setInfoAndPolicyAndBookmark(PDDocument target) {
         // 如果文档信息不为空，则进行设置
         if (this.param.getDocumentInfo()!=null) {
             // 设置文档信息
@@ -571,7 +605,11 @@ public class XEasyPdfDocument {
             // 设置pdfBox保护策略
             target.protect(this.param.getPermission().getPolicy());
         }
+        // 初始化文档书签
+        this.initBookmark(target);
     }
+
+
 
     /**
      * 初始化任务文档
@@ -616,6 +654,25 @@ public class XEasyPdfDocument {
                 target.addPage(page);
             }
         }
+
+    }
+
+    /**
+     * 初始化文档书签
+     * @param target 任务文档
+     */
+    void initBookmark(PDDocument target) {
+        PDDocumentOutline outline = target.getDocumentCatalog().getDocumentOutline();
+        if (this.param.getBookmark()!=null) {
+            if (outline==null) {
+                outline = new PDDocumentOutline();
+            }
+            List<PDOutlineItem> items = this.param.getBookmark().getItemList();
+            for (PDOutlineItem item : items) {
+                outline.addLast(item);
+            }
+        }
+        target.getDocumentCatalog().setDocumentOutline(outline);
     }
 
     /**
