@@ -88,6 +88,10 @@ class XEasyPdfTextParam {
      */
     private Float maxHeight;
     /**
+     * 文本缩进值
+     */
+    private Integer indent;
+    /**
      * 待添加文本
      */
     private String text;
@@ -139,6 +143,38 @@ class XEasyPdfTextParam {
      * 是否完成绘制
      */
     private boolean isDraw = false;
+
+    /**
+     * 获取宽度
+     * @param document pdf文档
+     * @param page pdf页面
+     * @return 返回文本宽度
+     */
+    float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
+        if (this.maxWidth!=null) {
+            return this.maxWidth;
+        }
+        this.marginLeft = marginLeft;
+        this.marginRight = marginRight;
+        this.init(document, page);
+        return this.maxWidth;
+    }
+
+    /**
+     * 获取高度
+     * @param document pdf文档
+     * @param page pdf页面
+     * @return 返回文本高度
+     */
+    float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
+        if (this.maxHeight!=null) {
+            return this.maxHeight;
+        }
+        this.marginLeft = marginLeft;
+        this.marginRight = marginRight;
+        this.init(document, page);
+        return (this.fontHeight + this.leading) * this.splitTextList.size() - this.leading + this.marginTop + this.marginBottom;
+    }
 
     /**
      * 初始化
@@ -193,8 +229,33 @@ class XEasyPdfTextParam {
                     // 当前页面Y轴起始坐标 - 上边距 - 字体高度 - 行距
                     page.getParam().getPageY() - this.marginTop - this.fontHeight - this.leading);
         }
+        // 初始化待添加文本列表
+        this.initTextList(page);
+    }
+
+    /**
+     * 初始化待添加文本列表
+     * @param page pdf页面
+     */
+    private void initTextList(XEasyPdfPage page) {
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {
+            // 定义自动缩进
+            String autoIndent = "";
+            // 如果缩进值不为空，则重置自动缩进
+            if (this.indent!=null) {
+                // 定义字符串构建器
+                StringBuilder builder = new StringBuilder();
+                // 循环添加空格字符
+                for (int i = 0; i < this.indent; i++) {
+                    // 添加空格字符
+                    builder.append(" ");
+                }
+                // 重置自动缩进
+                autoIndent = builder.toString();
+            }
+            // 重置待添加文本
+            this.text = autoIndent + this.text;
             // 开启文本追加
             if (this.isTextAppend) {
                 // 获取第一行文本
@@ -235,14 +296,14 @@ class XEasyPdfTextParam {
                 else {
                     // 初始化待添加文本列表
                     this.splitTextList = XEasyPdfTextUtil.splitLines(
-                        // 待输入文本
-                        this.text,
-                        // 行宽度 = 最大宽度 - 左边距 - 右边距
-                        this.maxWidth - this.marginLeft - this.marginRight,
-                        // 字体
-                        this.font,
-                        // 字体大小
-                        this.fontSize
+                            // 待输入文本
+                            this.text,
+                            // 行宽度 = 最大宽度 - 左边距 - 右边距
+                            this.maxWidth - this.marginLeft - this.marginRight,
+                            // 字体
+                            this.font,
+                            // 字体大小
+                            this.fontSize
                     );
                     // 重置页面Y轴起始坐标（换行）
                     this.beginY -= (this.fontHeight + this.leading);
@@ -266,40 +327,8 @@ class XEasyPdfTextParam {
                         this.fontSize
                 );
             }
-            // 添加模板列表
-            this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
         }
-    }
-
-    /**
-     * 获取宽度
-     * @param document pdf文档
-     * @param page pdf页面
-     * @return 返回文本宽度
-     */
-    float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
-        if (this.maxWidth!=null) {
-            return this.maxWidth;
-        }
-        this.marginLeft = marginLeft;
-        this.marginRight = marginRight;
-        this.init(document, page);
-        return this.maxWidth;
-    }
-
-    /**
-     * 获取高度
-     * @param document pdf文档
-     * @param page pdf页面
-     * @return 返回文本高度
-     */
-    float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
-        if (this.maxHeight!=null) {
-            return this.maxHeight;
-        }
-        this.marginLeft = marginLeft;
-        this.marginRight = marginRight;
-        this.init(document, page);
-        return (this.fontHeight + this.leading) * this.splitTextList.size() - this.leading + this.marginTop + this.marginBottom;
+        // 添加模板列表
+        this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
     }
 }

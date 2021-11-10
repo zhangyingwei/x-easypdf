@@ -136,6 +136,22 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
+     * 设置旋转弧度
+     * @param radians 图片弧度
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage setRadians(double radians) {
+        radians = radians%360;
+        if (radians!=0) {
+            if (radians<0) {
+                radians += 360;
+            }
+            this.param.setRadians(radians);
+        }
+        return this;
+    }
+
+    /**
      * 设置最大宽度
      * @param maxWidth 最大宽度
      * @return 返回图片组件

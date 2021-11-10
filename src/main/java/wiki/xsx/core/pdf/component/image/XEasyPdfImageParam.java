@@ -79,6 +79,10 @@ class XEasyPdfImageParam {
      */
     private Float maxWidth;
     /**
+     * 旋转弧度
+     */
+    private Double radians;
+    /**
      * 是否使用自身样式
      */
     private boolean useSelfStyle = false;
@@ -127,6 +131,11 @@ class XEasyPdfImageParam {
         // 如果图片为空，则抛出异常信息
         if (this.image==null) {
             throw new FileNotFoundException("the image can not be found");
+        }
+        // 如果需要旋转，则重置图片为旋转后的图片
+        if (this.isRotate()) {
+            // 重置图片为旋转后的图片
+            this.image = XEasyPdfImageUtil.rotate(this.image, this.radians);
         }
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
@@ -178,12 +187,7 @@ class XEasyPdfImageParam {
                     // pdfBox文档
                     document.getTarget(),
                     // 图片缩放
-                    XEasyPdfImageUtil.scale(
-                            this.image,
-                            this.width,
-                            this.height,
-                            this.scaleMode.code
-                    )
+                    XEasyPdfImageUtil.scale(this.image, this.width, this.height, this.scaleMode.code)
             );
         }
         // 重置pdfbox图片对象
@@ -268,5 +272,13 @@ class XEasyPdfImageParam {
             // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
             this.beginY = initY - this.marginTop - this.height;
         }
+    }
+
+    /**
+     * 是否旋转
+     * @return 返回布尔值，是为true，否为false
+     */
+    private boolean isRotate() {
+        return this.radians!=null&&this.radians%360!=0;
     }
 }

@@ -31,7 +31,7 @@ public class XEasyPdfDocumentBookmark {
      */
     private final XEasyPdfDocument document;
     /**
-     * 书签节点列表
+     * pdfbox书签节点列表
      */
     private final List<PDOutlineItem> itemList = new ArrayList<>(256);
 
@@ -50,23 +50,35 @@ public class XEasyPdfDocumentBookmark {
      * @return 返回pdf文档书签
      */
     public XEasyPdfDocumentBookmark setBookMark(Integer pageIndex, String title) {
+        // 定义页面定位信息
         PDPageFitWidthDestination destination = new PDPageFitWidthDestination();
+        // 设置页面索引
         destination.setPageNumber(pageIndex);
+        // 设置顶点坐标
         destination.setTop(Integer.MAX_VALUE);
+        // 定义pdfbox书签节点
         PDOutlineItem item = new PDOutlineItem();
+        // 设置定位信息
         item.setDestination(destination);
+        // 设置标题
         item.setTitle(title);
+        // 添加pdfbox书签列表
         this.itemList.add(item);
         return this;
     }
 
+    /**
+     * 设置书签
+     * @param node 书签节点
+     * @return 返回pdf文档书签
+     */
     public XEasyPdfDocumentBookmark setBookMark(BookmarkNode node) {
         this.itemList.add(node.getItem());
         return this;
     }
 
     /**
-     * 完成信息设置
+     * 完成书签设置
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
@@ -82,11 +94,24 @@ public class XEasyPdfDocumentBookmark {
         return this.itemList;
     }
 
+    /**
+     * 书签节点
+     */
     public static class BookmarkNode {
 
+        /**
+         * pdf书签节点
+         */
         private final PDOutlineItem outlineItem;
+        /**
+         * pdfbox页面点位
+         */
         private final PDPageFitWidthDestination destination;
 
+        /**
+         * 有参构造
+         * @param outlineItem pdf书签节点
+         */
         public BookmarkNode(PDOutlineItem outlineItem) {
             this.outlineItem = outlineItem;
             this.destination = new PDPageFitWidthDestination();
@@ -94,45 +119,86 @@ public class XEasyPdfDocumentBookmark {
             this.outlineItem.setDestination(this.destination);
         }
 
+        /**
+         * 构建书签节点
+         * @return 返回书签节点
+         */
         public static BookmarkNode build() {
             return new BookmarkNode(new PDOutlineItem());
         }
 
+        /**
+         * 添加子节点
+         * @param childNode 子书签节点
+         * @return 返回书签节点
+         */
         public BookmarkNode addChild(BookmarkNode childNode) {
             this.outlineItem.addLast(childNode.getItem());
             return this;
         }
 
+        /**
+         * 设置pdfbox页面索引
+         * @param pageIndex pdfbox页面索引
+         * @return 返回书签节点
+         */
         public BookmarkNode setPage(int pageIndex) {
             this.destination.setPageNumber(pageIndex);
             return this;
         }
 
+        /**
+         * 设置定位顶点坐标
+         * @param pageY 页面y轴坐标
+         * @return 返回书签节点
+         */
         public BookmarkNode setTop(int pageY) {
             this.destination.setTop(pageY);
             return this;
         }
 
+        /**
+         * 设置标题
+         * @param title 标题
+         * @return 返回书签节点
+         */
         public BookmarkNode setTitle(String title) {
             this.outlineItem.setTitle(title);
             return this;
         }
 
-        public BookmarkNode setTextColor(Color textColor) {
+        /**
+         * 设置标题颜色
+         * @param textColor 文本颜色
+         * @return 返回书签节点
+         */
+        public BookmarkNode setTitleColor(Color textColor) {
             this.outlineItem.setTextColor(textColor);
             return this;
         }
 
-        public BookmarkNode enableBold() {
+        /**
+         * 开启标题粗体
+         * @return 返回书签节点
+         */
+        public BookmarkNode enableTitleBold() {
             this.outlineItem.setBold(true);
             return this;
         }
 
-        public BookmarkNode enableItalic() {
+        /**
+         * 开启标题斜体
+         * @return 返回书签节点
+         */
+        public BookmarkNode enableTitleItalic() {
             this.outlineItem.setItalic(true);
             return this;
         }
 
+        /**
+         * 获取pdfbox书签节点
+         * @return 返回pdfbox书签节点
+         */
         PDOutlineItem getItem() {
             return this.outlineItem;
         }

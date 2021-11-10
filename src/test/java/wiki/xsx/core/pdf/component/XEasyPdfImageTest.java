@@ -115,8 +115,8 @@ public class XEasyPdfImageTest {
         try (InputStream inputStream = new URL("https://images.gitee.com/uploads/images/2021/0527/104627_bc14225e_668748.png").openStream()) {
             XEasyPdfHandler.Document.build().addPage(
                     XEasyPdfHandler.Page.build(
-                            PDRectangle.A0,
-                            XEasyPdfHandler.Image.build(inputStream, XEasyPdfImageType.PNG)
+                            PDRectangle.A4,
+                            XEasyPdfHandler.Image.build(inputStream, XEasyPdfImageType.PNG).setRadians(-45D)
                     )
             ).save(filePath).close();
         }

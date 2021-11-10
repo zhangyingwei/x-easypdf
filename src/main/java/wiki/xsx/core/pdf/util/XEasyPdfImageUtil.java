@@ -88,9 +88,10 @@ public class XEasyPdfImageUtil {
         BufferedImage image = new BufferedImage(
                 width,
                 height,
-                sourceImage.getColorModel().hasAlpha()?BufferedImage.TYPE_INT_ARGB:BufferedImage.TYPE_INT_RGB
+                sourceImage.getColorModel().hasAlpha()?BufferedImage.TYPE_4BYTE_ABGR:BufferedImage.TYPE_3BYTE_BGR
         );
         Graphics2D graphics = image.createGraphics();
+        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         graphics.drawImage(temp, 0, 0, null);
         graphics.dispose();
         return image;
@@ -111,5 +112,56 @@ public class XEasyPdfImageUtil {
             ImageIO.write(sourceImage, imageType, outputStream);
             return outputStream.toByteArray();
         }
+    }
+
+    /**
+     * 旋转图片
+     * @param sourceImage 源图片
+     * @param radians 旋转弧度
+     * @return 返回旋转后的图片对象
+     */
+    public static BufferedImage rotate(BufferedImage sourceImage, double radians) {
+        if (sourceImage==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
+        int imageWidth = sourceImage.getWidth();
+        int imageHeight = sourceImage.getHeight();
+        Rectangle rectangle = getRotateRectangle(new Rectangle(new Dimension(imageWidth, imageHeight)), radians);
+        BufferedImage image = new BufferedImage(
+                rectangle.width,
+                rectangle.height,
+                sourceImage.getColorModel().hasAlpha()?BufferedImage.TYPE_4BYTE_ABGR:BufferedImage.TYPE_3BYTE_BGR
+        );
+        Graphics2D graphics = image.createGraphics();
+        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics.translate((rectangle.width-imageWidth)/2D, (rectangle.height-imageHeight)/2D);
+        graphics.rotate(Math.toRadians(radians), imageWidth/2D, imageHeight/2D);
+        graphics.drawImage(sourceImage, 0, 0, null);
+        graphics.dispose();
+        return image;
+    }
+
+    /**
+     * 获取旋转尺寸
+     * @param src 源尺寸
+     * @param radians 旋转弧度
+     * @return 返回旋转后的尺寸
+     */
+    private static Rectangle getRotateRectangle(Rectangle src, double radians) {
+        final int angle = 90;
+        if (radians>=angle) {
+            if(radians/angle%2==1){
+                return new Rectangle((int) src.getHeight(), (int) src.getWidth());
+            }
+            radians = radians%angle;
+        }
+        double radius = Math.sqrt(src.getHeight()*src.getHeight()+src.getWidth()*src.getWidth())/2;
+        double len = 2*Math.sin(Math.toRadians(radians)/2)*radius;
+        double radiansAlpha = (Math.PI-Math.toRadians(radians))/2;
+        double radiansWidth = Math.atan(src.getHeight()/src.getWidth());
+        double radiansHeight = Math.atan(src.getWidth()/src.getHeight());
+        int lenWidth = Math.abs((int) (len*Math.cos(Math.PI-radiansAlpha-radiansWidth)));
+        int lenHeight = Math.abs((int) (len*Math.cos(Math.PI-radiansAlpha-radiansHeight)));
+        return new Rectangle((src.width+lenWidth*2), (src.height+lenHeight*2));
     }
 }

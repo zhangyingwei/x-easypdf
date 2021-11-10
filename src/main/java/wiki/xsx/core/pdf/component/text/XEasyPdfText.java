@@ -107,6 +107,18 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 设置自动缩进
+     * @param indent 缩进值
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setAutoIndent(int indent) {
+        if (indent>0) {
+            this.param.setIndent(indent);
+        }
+        return this;
+    }
+
+    /**
      * 设置边距（上下左右）
      * @param margin 边距
      * @return 返回文本组件
