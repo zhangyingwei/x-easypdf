@@ -420,9 +420,12 @@ public class XEasyPdfDocumentTest {
         final String sourcePath = "E:\\pdf\\hi.pdf";
         final String outputPath = "C:\\Users\\Administrator\\Desktop\\zzz2.pdf";
         Map<String, String> form = new HashMap<>(2);
-        form.put("name", "静静");
-        form.put("className", "7");
-        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).formFiller().fill(form).finish(outputPath);
+        form.put("hi", "静静");
+        form.put("test1", "7");
+        form.put("test2", "xxx");
+        XEasyPdfHandler.Document.load(sourcePath).setFontPath(FONT_PATH).addPage(
+                XEasyPdfHandler.Page.build(XEasyPdfHandler.Text.build("哈哈"))
+        ).formFiller().fill(form).finish(outputPath);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
     }

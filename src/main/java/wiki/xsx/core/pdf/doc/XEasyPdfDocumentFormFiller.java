@@ -91,7 +91,7 @@ public class XEasyPdfDocumentFormFiller {
             // 如果字体为空，则初始化字体
             if (this.font==null) {
                 // 初始化字体
-                this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, this.pdfDocument.getParam().getFontPath(), false);
+                this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, this.pdfDocument.getParam().getFontPath(), true);
             }
             // 定义pdfBox表单字段
             PDField field;
@@ -116,6 +116,8 @@ public class XEasyPdfDocumentFormFiller {
                     field = acroForm.getField(entry.getKey());
                     // 如果pdfBox表单字段不为空，则填充值
                     if (field!=null) {
+                        // 添加文本关联
+                        XEasyPdfFontUtil.addToSubset(this.font, entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
                     }

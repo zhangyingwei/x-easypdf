@@ -95,15 +95,15 @@ public class XEasyPdfImageTest {
     public void testImage3() throws IOException {
         String sourcePath = OUTPUT_PATH + "testImage2.pdf";
         String filePath = OUTPUT_PATH + "testImage3.pdf";
-        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
+        String imagePath = "C:\\Users\\Administrator\\Desktop\\QQ截图20211010155457.png";
         XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(
                 XEasyPdfHandler.Image.build(new File(imagePath))
-                        .setHeight(150)
-                        .setWidth(150)
-                        .setPosition(20F, 200F)
+                        .setHeight(12)
+                        .setWidth(12)
+                        .setPosition(12F, 12F)
         );
         document.save(filePath).close();
         System.out.println("finish");
