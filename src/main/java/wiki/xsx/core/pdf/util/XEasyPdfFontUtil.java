@@ -52,7 +52,7 @@ public class XEasyPdfFontUtil {
      */
     public static PDFont getFont(XEasyPdfDocument document, String fontPath, PDFont defaultFont) {
         if (fontPath!=null) {
-            return loadFont(document, fontPath, false);
+            return loadFont(document, fontPath, true);
         }
         return defaultFont;
     }
