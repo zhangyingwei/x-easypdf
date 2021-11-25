@@ -65,6 +65,10 @@ public class XEasyPdfPageParam {
      */
     private PDRectangle modifyPageSize;
     /**
+     * 旋转角度
+     */
+    private Integer rotation;
+    /**
      * 包含的pdfBox页面列表
      */
     private List<PDPage> pageList = new ArrayList<>(256);
@@ -120,6 +124,10 @@ public class XEasyPdfPageParam {
      * 是否允许重置定位
      */
     private boolean allowResetPosition = true;
+    /**
+     * 是否允许旋转固有页面
+     */
+    private boolean allowRotateInherentPage = true;
 
     /**
      * 初始化

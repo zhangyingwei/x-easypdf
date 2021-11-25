@@ -1,7 +1,9 @@
 package wiki.xsx.core.pdf.doc;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
@@ -35,10 +37,11 @@ import java.util.*;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class XEasyPdfDocumentTest {
 
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\msyh.ttf";
-//    private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
+    private static final String imagePath = "C:\\Users\\Administrator\\Desktop\\坎公骑冠剑千里眼.png";
     private static final String OUTPUT_PATH = "E:\\pdf\\test\\doc\\";
 
     @Before
@@ -50,7 +53,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testAddPage() throws IOException {
+    public void test01AddPage() throws IOException {
         String filePath = OUTPUT_PATH + "testAddPage.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
@@ -67,7 +70,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testSave() throws IOException {
+    public void test02Save() throws IOException {
         String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
         String filePath = OUTPUT_PATH + "doc1.pdf";
         XEasyPdfHandler.Document.load(sourcePath).addPage(
@@ -80,7 +83,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testSetInfo() throws IOException {
+    public void test03SetInfo() throws IOException {
         String filePath = OUTPUT_PATH + "info.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build()
@@ -99,7 +102,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testSetPermission() throws IOException {
+    public void test04SetPermission() throws IOException {
         String filePath = OUTPUT_PATH + "permission.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build()
@@ -119,7 +122,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testSetBackgroundColor() throws IOException {
+    public void test05SetBackgroundColor() throws IOException {
         String filePath = OUTPUT_PATH + "backgroundColor.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(),
@@ -131,9 +134,8 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testSetBackgroundImage() throws IOException {
+    public void test06SetBackgroundImage() throws IOException {
         String filePath = OUTPUT_PATH + "backgroundImage.pdf";
-        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().addComponent(
                         XEasyPdfHandler.Text.build(
@@ -159,7 +161,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testInsertPage() throws IOException {
+    public void test07InsertPage() throws IOException {
         String sourcePath = OUTPUT_PATH + "backgroundColor.pdf";
         String filePath = OUTPUT_PATH + "insertPage.pdf";
         XEasyPdfHandler.Document.load(sourcePath).insertPage(
@@ -176,7 +178,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testMerge() throws IOException {
+    public void test08Merge() throws IOException {
         String sourcePath = OUTPUT_PATH + "backgroundColor.pdf";
         String mergePath1 = OUTPUT_PATH + "insertPage.pdf";
         String mergePath2 = OUTPUT_PATH + "doc1.pdf";
@@ -189,14 +191,14 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testImage1() throws IOException {
+    public void test09Image1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         XEasyPdfHandler.Document.load(sourcePath).imager().image(OUTPUT_PATH, XEasyPdfImageType.PNG).finish().close();
         System.out.println("finish");
     }
 
     @Test
-    public void testImage2() throws IOException {
+    public void test10Image2() throws IOException {
         String sourcePath = OUTPUT_PATH + "insertPage.pdf";
         String prefix = "x-easypdf";
         XEasyPdfHandler.Document.load(sourcePath).imager().image(OUTPUT_PATH, XEasyPdfImageType.JPEG, prefix).finish().close();
@@ -204,7 +206,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testImage3() throws IOException {
+    public void test11Image3() throws IOException {
         String sourcePath = OUTPUT_PATH + "merge.pdf";
         String filePath1 = OUTPUT_PATH + "merge0.jpg";
         String filePath2 = OUTPUT_PATH + "merge6.jpg";
@@ -223,14 +225,14 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testSplit1() throws IOException {
+    public void test12Split1() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         XEasyPdfHandler.Document.load(sourcePath).splitter().split(OUTPUT_PATH).finish().close();
         System.out.println("finish");
     }
 
     @Test
-    public void testSplit2() throws IOException {
+    public void test13Split2() throws IOException {
         String sourcePath = OUTPUT_PATH + "testAddPage.pdf";
         XEasyPdfHandler.Document.load(sourcePath)
                 .splitter()
@@ -243,7 +245,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testSplit3() throws IOException {
+    public void test14Split3() throws IOException {
         String sourcePath = OUTPUT_PATH + "doc1.pdf";
         String filePath = OUTPUT_PATH + "testSplit3.pdf";
         try(OutputStream outputStream = Files.newOutputStream(Paths.get(filePath))) {
@@ -253,9 +255,9 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testStripText() throws IOException {
+    public void test15StripText() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
+        final String sourcePath = OUTPUT_PATH + "doc1.pdf";
         List<String> list = new ArrayList<>(1024);
         XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list, "《.*》").finish().close();
         for (String s : list) {
@@ -266,7 +268,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testStripText1() throws IOException {
+    public void test16StripText1() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "doc1.pdf";
         List<String> list = new ArrayList<>(1024);
@@ -279,7 +281,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testStripText2() throws IOException {
+    public void test17StripText2() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "doc1.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
@@ -290,7 +292,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testStripTable() throws IOException {
+    public void test18StripTable() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<List<String>> list = new ArrayList<>(1024);
@@ -303,7 +305,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testStripTable2() throws IOException {
+    public void test19StripTable2() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<List<String>> list = new ArrayList<>(1024);
@@ -316,7 +318,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testStripTable3() throws IOException {
+    public void test20StripTable3() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
@@ -327,9 +329,9 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testFillForm() throws IOException {
+    public void test21FillForm() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = OUTPUT_PATH + "temp.pdf";
+        final String sourcePath = "E:\\pdf\\hi.pdf";
         final String outputPath = OUTPUT_PATH + "test_fill2.pdf";
         Map<String, String> form = new HashMap<>(2);
         form.put("test1", "爽爽的贵阳");
@@ -340,46 +342,28 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void testFillForm2() throws IOException {
-        long begin = System.currentTimeMillis();
-        final String sourcePath = "E:\\pdf\\hi.pdf";
-        final String outputPath = "E:\\pdf\\test_fill4.pdf";
-        Map<String, String> form = new HashMap<>(5);
-        form.put("test1", "爽爽的贵阳");
-        form.put("test2", "堵车的天堂");
-        form.put("text1", "xxx");
-        form.put("text2", "sss");
-        form.put("hi", "我是xsx");
-        XEasyPdfHandler.Document.load(sourcePath).formFiller().fill(form).finish(outputPath);;
-        long end = System.currentTimeMillis();
-        System.out.println("finish("+(end-begin)+"ms)");
-    }
-
-    @Test
-    public void test() throws IOException {
-        final String fontPath = "C:\\Windows\\Fonts\\STSONG.TTF";
-        final String backgroundImagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
+    public void test22() throws IOException {
         final String outputPath = "C:\\Users\\xsx\\Desktop\\pdf\\text.pdf";
 
         // 设置背景图片
         XEasyPdfHandler.Document.build().setGlobalBackgroundImage(
                 // 构建图片
-                XEasyPdfHandler.Image.build(new File(backgroundImagePath)).setHeight(800F)
-            // 设置全局页眉
+                XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(800F)
+                // 设置全局页眉
         ).setGlobalHeader(
                 // 构建页眉
                 XEasyPdfHandler.Header.build(
                         // 构建页眉文本，并居中显示
                         XEasyPdfHandler.Text.build("这是页眉").setStyle(XEasyPdfTextStyle.CENTER)
                 )
-            // 设置全局页脚
+                // 设置全局页脚
         ).setGlobalFooter(
                 // 构建页脚
                 XEasyPdfHandler.Footer.build(
                         // 构建页脚文本
                         XEasyPdfHandler.Text.build("这是页脚")
                 )
-            // 添加页面
+                // 添加页面
         ).addPage(
                 // 构建页面
                 XEasyPdfHandler.Page.build(
@@ -410,12 +394,29 @@ public class XEasyPdfDocumentTest {
                         // 构建文本
                         ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
                 )
-            // 设置字体路径，并保存
+                // 设置字体路径，并保存
         ).save(outputPath).close();
     }
 
     @Test
-    public void test2() throws IOException {
+    public void test23() throws IOException {
+        long begin = System.currentTimeMillis();
+        final String sourcePath = "E:\\pdf\\hi.pdf";
+        final String outputPath = "E:\\pdf\\test_fill4.pdf";
+        Map<String, String> form = new HashMap<>(5);
+        form.put("test1", "爽爽的贵阳");
+        form.put("test2", "堵车的天堂");
+        form.put("text1", "xxx");
+        form.put("text2", "sss");
+        form.put("hi", "我是xsx");
+        XEasyPdfHandler.Document.load(sourcePath).formFiller().fill(form).finish(outputPath);;
+        long end = System.currentTimeMillis();
+        System.out.println("finish("+(end-begin)+"ms)");
+    }
+
+
+    @Test
+    public void test24() throws IOException {
         long begin = System.currentTimeMillis();
         final String sourcePath = "E:\\pdf\\hi.pdf";
         final String outputPath = "C:\\Users\\Administrator\\Desktop\\zzz2.pdf";
@@ -431,7 +432,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void test3() throws IOException {
+    public void test25() throws IOException {
         long begin = System.currentTimeMillis();
         // 定义保存路径
         final String outputPath = OUTPUT_PATH + "黑暗法师贝丝.pdf";
@@ -532,7 +533,7 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void test4() throws IOException {
+    public void test26() throws IOException {
         long begin = System.currentTimeMillis();
         // 定义保存路径
         final String outputPath = OUTPUT_PATH + "merge.pdf";
@@ -583,20 +584,27 @@ public class XEasyPdfDocumentTest {
     }
 
     @Test
-    public void test5() throws IOException {
+    public void test27() throws IOException {
         long begin = System.currentTimeMillis();
         // 定义保存路径
         final String outputPath = OUTPUT_PATH + "mutilPage.pdf";
         XEasyPdfDocument document = XEasyPdfHandler.Document.build();
         document.addPage(
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.Text.build("第一个页面文件")
+                        XEasyPdfHandler.Text.build("第一个页面文件第一行"),
+                        XEasyPdfHandler.Text.build("第一个页面文件第二行"),
+                        XEasyPdfHandler.Text.build("第一个页面文件第三行")
                 ),
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build("第二个页面文件")
                 ),
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.Text.build("第三个页面文件")
+                        XEasyPdfHandler.Text.build("第三个页面文件第一行"),
+                        XEasyPdfHandler.Text.build("第三个页面文件第二行")
+                )
+        ).setGlobalHeader(
+                XEasyPdfHandler.Header.build(
+                        XEasyPdfHandler.Text.build(Arrays.asList("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder(), "页眉第二行", "页眉XXXXXX")).setStyle(XEasyPdfTextStyle.CENTER)
                 )
         ).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(

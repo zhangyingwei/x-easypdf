@@ -87,8 +87,15 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) {
+        // 定义pdfBox页面
+        PDPage page = pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize);
+        // 如果旋转角度不为空，则设置旋转角度
+        if (this.param.getRotation()!=null) {
+            // 设置旋转角度
+            page.setRotation(this.param.getRotation());
+        }
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
-        this.param.getNewPageList().add(pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize));
+        this.param.getNewPageList().add(page);
         // 初始化总页数
         document.getParam().initTotalPage(1);
         // 重置页面X轴Y轴起始坐标
@@ -99,6 +106,16 @@ public class XEasyPdfPage {
         this.drawBackgroundImage(document);
         // 设置背景颜色
         this.setLastPageBackgroundColor(document);
+        return this;
+    }
+
+    /**
+     * 设置旋转角度
+     * @param rotation 旋转角度
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage setRotation(Rotation rotation) {
+        this.param.setRotation(rotation.rotation);
         return this;
     }
 
@@ -244,29 +261,11 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 开启背景色
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage enableBackgroundColor() {
-        this.param.setAllowBackgroundColor(true);
-        return this;
-    }
-
-    /**
      * 关闭背景色
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableBackgroundColor() {
         this.param.setAllowBackgroundColor(false);
-        return this;
-    }
-
-    /**
-     * 开启背景图片
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage enableBackgroundImage() {
-        this.param.setAllowBackgroundImage(true);
         return this;
     }
 
@@ -280,29 +279,11 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 开启水印
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage enableWatermark() {
-        this.param.setAllowWatermark(true);
-        return this;
-    }
-
-    /**
      * 关闭水印
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableWatermark() {
         this.param.setAllowWatermark(false);
-        return this;
-    }
-
-    /**
-     * 开启页眉
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage enableHeader() {
-        this.param.setAllowHeader(true);
         return this;
     }
 
@@ -316,20 +297,20 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 开启页脚
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage enableFooter() {
-        this.param.setAllowFooter(true);
-        return this;
-    }
-
-    /**
      * 关闭页脚
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableFooter() {
         this.param.setAllowFooter(false);
+        return this;
+    }
+
+    /**
+     * 关闭旋转固有页面
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage disableRotateInherentPage() {
+        this.param.setAllowRotateInherentPage(false);
         return this;
     }
 
@@ -389,6 +370,14 @@ public class XEasyPdfPage {
      */
     public boolean isAllowBackgroundColor() {
         return this.param.isAllowBackgroundColor();
+    }
+
+    /**
+     * 是否允许旋转固有页面
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isAllowRotateInherentPage() {
+        return this.param.isAllowRotateInherentPage();
     }
 
     /**
@@ -476,6 +465,11 @@ public class XEasyPdfPage {
                     pdPage.setMediaBox(modifyPageSize);
                     // 设置页面尺寸
                     pdPage.setTrimBox(modifyPageSize);
+                    // 如果允许旋转固有页面且旋转角度不为空，则设置旋转角度
+                    if (this.param.isAllowRotateInherentPage()&&this.param.getRotation()!=null) {
+                        // 设置旋转角度
+                        pdPage.setRotation(this.param.getRotation());
+                    }
                 }
             }
         }
@@ -630,6 +624,41 @@ public class XEasyPdfPage {
                 // 绘制页面水印
                 this.param.getWatermark().draw(document, this);
             }
+        }
+    }
+
+    /**
+     * 旋转角度
+     */
+    public enum Rotation {
+        /**
+         * 正向0度
+         */
+        FORWARD_0(0),
+        /**
+         * 正向90度
+         */
+        FORWARD_90(90),
+        /**
+         * 正向180度
+         */
+        FORWARD_180(180),
+        /**
+         * 正向270度
+         */
+        FORWARD_270(270);
+
+        /**
+         * 旋转角度
+         */
+        private final int rotation;
+
+        /**
+         * 有参构造
+         * @param rotation 旋转角度
+         */
+        Rotation(int rotation) {
+            this.rotation = rotation;
         }
     }
 }

@@ -161,13 +161,13 @@ public class XEasyPdfTextTest {
     public void testText5() {
         long begin = System.currentTimeMillis();
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < 100000; i++) {
-            builder.append("爽爽的贵阳，避暑的天堂，我爱我的家乡，爽爽的贵阳，避暑的天堂，我爱我的家乡，爽爽的贵阳，避暑的天堂");
+        for (int i = 0; i < 100; i++) {
+            builder.append("爽爽的贵阳，避暑的天堂。");
         }
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         PDRectangle.A4,
-                        XEasyPdfHandler.Text.build(builder.toString()).setMargin(10f)
+                        XEasyPdfHandler.Text.build(builder.toString()).setMargin(10f).setAutoIndent(9)
                 )
         ).save("E:\\pdf\\my.pdf").close();
         long end = System.currentTimeMillis();

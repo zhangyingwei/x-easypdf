@@ -45,8 +45,8 @@ public class XEasyPdfPageTest {
     @Test
     public void testAddComponent() throws IOException {
         String filePath = OUTPUT_PATH + "testAddComponent.pdf";
-        XEasyPdfHandler.Document.build().addPage(
-                XEasyPdfHandler.Page.build().setFontPath(FONT_PATH).addComponent(
+        XEasyPdfHandler.Document.build(
+                XEasyPdfHandler.Page.build().setRotation(XEasyPdfPage.Rotation.FORWARD_0).setFontPath(FONT_PATH).addComponent(
                         XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("你好，世界！").setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT),
                         XEasyPdfHandler.Text.build("我是第一页").setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)

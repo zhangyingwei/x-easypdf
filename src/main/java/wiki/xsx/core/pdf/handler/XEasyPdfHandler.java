@@ -59,6 +59,22 @@ public class XEasyPdfHandler {
         }
 
         /**
+         * 构建pdf
+         * @param pages 页面
+         */
+        public static XEasyPdfDocument build(XEasyPdfPage...pages) {
+            return new XEasyPdfDocument().addPage(pages);
+        }
+
+        /**
+         * 构建pdf
+         * @param pages 页面列表
+         */
+        public static XEasyPdfDocument build(List<XEasyPdfPage> pages) {
+            return new XEasyPdfDocument().addPage(pages);
+        }
+
+        /**
          * 加载pdf
          * @param sourcePath 源文件路径
          */
@@ -89,6 +105,15 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面
+         * @param components 组件列表
+         * @return 返回pdf页面组件
+         */
+        public static XEasyPdfPage build(List<XEasyPdfComponent> components) {
+            return new XEasyPdfPage().addComponent(components);
+        }
+
+        /**
+         * 构建页面
          * @param components 组件
          * @return 返回pdf页面组件
          */
@@ -98,11 +123,21 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面
-         * @param components 组件
          * @param watermark 页面水印组件
+         * @param components 组件
          * @return 返回pdf页面组件
          */
         public static XEasyPdfPage build(XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
+            return new XEasyPdfPage().setWatermark(watermark).addComponent(components);
+        }
+
+        /**
+         * 构建页面
+         * @param watermark 页面水印组件
+         * @param components 组件列表
+         * @return 返回pdf页面组件
+         */
+        public static XEasyPdfPage build(XEasyPdfDefaultWatermark watermark, List<XEasyPdfComponent> components) {
             return new XEasyPdfPage().setWatermark(watermark).addComponent(components);
         }
 
@@ -119,11 +154,32 @@ public class XEasyPdfHandler {
         /**
          * 构建页面
          * @param pageSize pdfBox页面尺寸
+         * @param components 组件列表
+         * @return 返回pdf页面组件
+         */
+        public static XEasyPdfPage build(PDRectangle pageSize, List<XEasyPdfComponent> components) {
+            return new XEasyPdfPage(pageSize).addComponent(components);
+        }
+
+        /**
+         * 构建页面
+         * @param pageSize pdfBox页面尺寸
          * @param watermark 页面水印组件
          * @param components 组件
          * @return 返回pdf页面组件
          */
         public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
+            return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
+        }
+
+        /**
+         * 构建页面
+         * @param pageSize pdfBox页面尺寸
+         * @param watermark 页面水印组件
+         * @param components 组件列表
+         * @return 返回pdf页面组件
+         */
+        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfDefaultWatermark watermark, List<XEasyPdfComponent> components) {
             return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
         }
 

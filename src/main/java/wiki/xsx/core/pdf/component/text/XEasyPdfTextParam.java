@@ -328,7 +328,10 @@ class XEasyPdfTextParam {
                 );
             }
         }
-        // 添加模板列表
-        this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
+        // 如果模板列表未初始化，则进行初始化
+        if (this.splitTemplateTextList==null) {
+            // 模板列表重置为待添加文本列表
+            this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
+        }
     }
 }
