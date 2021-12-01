@@ -155,8 +155,8 @@ class XEasyPdfSimpleRowParam {
                 // 初始化页脚高度
                 footerHeight = page.getParam().getFooter().getHeight(document, page);
             }
-            // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距 + 1，自动补偿1
-            float currentY = pageY - this.height - this.marginTop + 1;
+            // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距
+            float currentY = pageY - this.height - this.marginTop;
             // 如果当前Y轴起始坐标-页脚高度小于等于表格下边距，则进行分页
             if (currentY - footerHeight <= tableParam.getMarginBottom()) {
                 // 开启页面自动定位
@@ -175,11 +175,11 @@ class XEasyPdfSimpleRowParam {
                 }
                 // 获取当前页面Y轴起始坐标
                 pageY = page.getParam().getPageY();
-                // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距 + 1，自动补偿1
-                currentY = pageY - this.height - this.marginTop + 1;
+                // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距
+                currentY = pageY - this.height - this.marginTop;
             }
-            // 初始化Y轴起始坐标 = 当前Y轴起始坐标
-            this.beginY = currentY;
+            // 初始化Y轴起始坐标 = 当前Y轴起始坐标 + 1，自动补偿1
+            this.beginY = currentY + 1;
             // 如果X轴起始坐标为初始化，则进行初始化
             if (this.beginX==null) {
                 // 如果左边距不为空，则X轴起始坐标 = 左边距
