@@ -42,7 +42,7 @@ public class XEasyPdfSimpleCell {
      * @param width 宽度
      */
     public XEasyPdfSimpleCell(float width) {
-        this.param.setWidth(width);
+        this.param.setWidth(Math.abs(width));
     }
 
     /**
@@ -51,7 +51,7 @@ public class XEasyPdfSimpleCell {
      * @param height 高度
      */
     public XEasyPdfSimpleCell(float width, float height) {
-        this.param.setWidth(width).setHeight(height);
+        this.param.setWidth(Math.abs(width)+1F).setHeight(Math.abs(height));
     }
 
     /**
@@ -60,7 +60,7 @@ public class XEasyPdfSimpleCell {
      * @return 返回单元格组件
      */
     public XEasyPdfSimpleCell setWidth(float width) {
-        this.param.setWidth(width+1F);
+        this.param.setWidth(Math.abs(width)+1F);
         return this;
     }
 
@@ -70,7 +70,7 @@ public class XEasyPdfSimpleCell {
      * @return 返回单元格组件
      */
     public XEasyPdfSimpleCell setHeight(float height) {
-        this.param.setHeight(height);
+        this.param.setHeight(Math.abs(height));
         return this;
     }
 
@@ -80,7 +80,9 @@ public class XEasyPdfSimpleCell {
      * @return 返回单元格组件
      */
     public XEasyPdfSimpleCell setBackgroundColor(Color backgroundColor) {
-        this.param.setBackgroundColor(backgroundColor);
+        if (backgroundColor!=null) {
+            this.param.setBackgroundColor(backgroundColor);
+        }
         return this;
     }
 
@@ -90,7 +92,9 @@ public class XEasyPdfSimpleCell {
      * @return 返回单元格组件
      */
     public XEasyPdfSimpleCell setBorderColor(Color borderColor) {
-        this.param.setBorderColor(borderColor);
+        if (borderColor!=null) {
+            this.param.setBorderColor(borderColor);
+        }
         return this;
     }
 
@@ -140,7 +144,7 @@ public class XEasyPdfSimpleCell {
      * @return 返回单元格组件
      */
     public XEasyPdfSimpleCell setFontSize(float fontSize) {
-        this.param.setFontSize(fontSize);
+        this.param.setFontSize(Math.abs(fontSize));
         return this;
     }
 
@@ -150,7 +154,9 @@ public class XEasyPdfSimpleCell {
      * @return 返回单元格组件
      */
     public XEasyPdfSimpleCell setFontColor(Color fontColor) {
-        this.param.setFontColor(fontColor);
+        if (fontColor!=null) {
+            this.param.setFontColor(fontColor);
+        }
         return this;
     }
 

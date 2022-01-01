@@ -40,7 +40,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param image pdf图片
      */
     public XEasyPdfDefaultHeader(XEasyPdfImage image) {
-        this.param.setImage(image);
+        this(image, null);
     }
 
     /**
@@ -48,7 +48,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param text pdf文本
      */
     public XEasyPdfDefaultHeader(XEasyPdfText text) {
-        this.param.setText(text);
+        this(null, text);
     }
 
     /**
@@ -67,7 +67,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      */
     @Override
     public XEasyPdfDefaultHeader addSplitLine(XEasyPdfLine ...splitLine) {
-        this.param.getLineList().addAll(Arrays.asList(splitLine));
+        if (splitLine!=null) {
+            this.param.getLineList().addAll(Arrays.asList(splitLine));
+        }
         return this;
     }
 

@@ -104,7 +104,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine setLineWidth(float lineWidth) {
-        this.param.setLineWidth(lineWidth);
+        this.param.setLineWidth(Math.abs(lineWidth));
         return this;
     }
 
@@ -115,7 +115,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine setColor(Color color) {
-        this.param.setColor(color);
+        if (color!=null) {
+            this.param.setColor(color);
+        }
         return this;
     }
 
@@ -126,7 +128,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle) {
-        this.param.setStyle(lineCapStyle);
+        if (lineCapStyle!=null) {
+            this.param.setStyle(lineCapStyle);
+        }
         return this;
     }
 
@@ -162,7 +166,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine setWidth(float width) {
-        this.param.setEndX(this.param.getBeginX()+width);
+        this.param.setEndX(this.param.getBeginX()+Math.abs(width));
         return this;
     }
 
@@ -173,7 +177,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine setHeight(float height) {
-        this.param.setEndY(this.param.getBeginY()-height);
+        this.param.setEndY(this.param.getBeginY()-Math.abs(height));
         return this;
     }
 
@@ -184,7 +188,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine setContentMode(ContentMode mode) {
-        this.param.setContentMode(mode);
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
         return this;
     }
 

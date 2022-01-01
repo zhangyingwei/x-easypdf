@@ -55,7 +55,7 @@ public class XEasyPdfDocumentBookmark {
         // 设置页面索引
         destination.setPageNumber(pageIndex);
         // 设置顶点坐标
-        destination.setTop(Integer.MAX_VALUE);
+        destination.setTop(9999);
         // 定义pdfbox书签节点
         PDOutlineItem item = new PDOutlineItem();
         // 设置定位信息

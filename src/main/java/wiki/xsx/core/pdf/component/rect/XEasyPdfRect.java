@@ -38,7 +38,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @param height 高度
      */
     public XEasyPdfRect(float width, float height) {
-        this.param.setWidth(width).setHeight(height);
+        this(width, height, null, null);
     }
 
     /**
@@ -49,7 +49,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @param beginY Y轴起始坐标
      */
     public XEasyPdfRect(float width, float height, Float beginX, Float beginY) {
-        this.param.setWidth(width).setHeight(height).setBeginX(beginX).setBeginY(beginY);
+        this.param.setWidth(Math.abs(width)).setHeight(Math.abs(height)).setBeginX(beginX).setBeginY(beginY);
     }
 
     /**
@@ -136,7 +136,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @return 返回矩形组件
      */
     public XEasyPdfRect setBorderWidth(float borderWidth) {
-        this.param.setBorderWidth(borderWidth);
+        this.param.setBorderWidth(Math.abs(borderWidth));
         return this;
     }
 
@@ -146,7 +146,9 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @return 返回矩形组件
      */
     public XEasyPdfRect setBackgroundColor(Color backgroundColor) {
-        this.param.setBackgroundColor(backgroundColor);
+        if (backgroundColor!=null) {
+            this.param.setBackgroundColor(backgroundColor);
+        }
         return this;
     }
 
@@ -156,7 +158,9 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @return 返回矩形组件
      */
     public XEasyPdfRect setBorderColor(Color borderColor) {
-        this.param.setBorderColor(borderColor);
+        if (borderColor!=null) {
+            this.param.setBorderColor(borderColor);
+        }
         return this;
     }
 
@@ -189,7 +193,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfRect setWidth(float width) {
-        this.param.setWidth(width);
+        this.param.setWidth(Math.abs(width));
         return this;
     }
 
@@ -200,7 +204,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfRect setHeight(float height) {
-        this.param.setHeight(height);
+        this.param.setHeight(Math.abs(height));
         return this;
     }
 
@@ -211,7 +215,9 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfRect setContentMode(ContentMode mode) {
-        this.param.setContentMode(mode);
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
         return this;
     }
 

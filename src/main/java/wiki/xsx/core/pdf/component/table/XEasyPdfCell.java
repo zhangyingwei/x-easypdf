@@ -43,7 +43,7 @@ public class XEasyPdfCell {
      * @param height 高度
      */
     public XEasyPdfCell(float width, float height) {
-        this.param.setWidth(width).setHeight(height);
+        this.param.setWidth(Math.abs(width)).setHeight(Math.abs(height));
     }
 
     /**
@@ -52,7 +52,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setWidth(float width) {
-        this.param.setWidth(width);
+        this.param.setWidth(Math.abs(width));
         return this;
     }
 
@@ -62,7 +62,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setHeight(float height) {
-        this.param.setHeight(height);
+        this.param.setHeight(Math.abs(height));
         return this;
     }
 
@@ -72,7 +72,9 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setBackgroundColor(Color backgroundColor) {
-        this.param.setBackgroundColor(backgroundColor);
+        if (backgroundColor!=null) {
+            this.param.setBackgroundColor(backgroundColor);
+        }
         return this;
     }
 
@@ -82,7 +84,9 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setBorderColor(Color borderColor) {
-        this.param.setBorderColor(borderColor);
+        if (borderColor!=null) {
+            this.param.setBorderColor(borderColor);
+        }
         return this;
     }
 
@@ -130,7 +134,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setBorderWidth(float lineWidth) {
-        this.param.setBorderWidth(lineWidth);
+        this.param.setBorderWidth(Math.abs(lineWidth));
         return this;
     }
 
@@ -160,7 +164,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setFontSize(float fontSize) {
-        this.param.setFontSize(fontSize);
+        this.param.setFontSize(Math.abs(fontSize));
         return this;
     }
 
@@ -170,7 +174,9 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setFontColor(Color fontColor) {
-        this.param.setFontColor(fontColor);
+        if (fontColor!=null) {
+            this.param.setFontColor(fontColor);
+        }
         return this;
     }
 
@@ -208,7 +214,9 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell addContent(XEasyPdfComponent ...components) {
-        Collections.addAll(this.param.getComponentList(), components);
+        if (components!=null) {
+            Collections.addAll(this.param.getComponentList(), components);
+        }
         return this;
     }
 
@@ -218,7 +226,9 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell addContent(List<XEasyPdfComponent> componentList) {
-        this.param.getComponentList().addAll(componentList);
+        if (componentList!=null) {
+            this.param.getComponentList().addAll(componentList);
+        }
         return this;
     }
 

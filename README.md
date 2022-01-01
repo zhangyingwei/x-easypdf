@@ -6,7 +6,7 @@
 </p>
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v2.5.0-brightgreen" />
+    <img src="https://img.shields.io/badge/Current%20Version-v2.6.0-brightgreen" />
     <img src="https://img.shields.io/:License-MulanPSL2-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
         <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
@@ -66,7 +66,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 <dependency>
     <groupId>wiki.xsx</groupId>
     <artifactId>x-easypdf</artifactId>
-    <version>2.5.0</version>
+    <version>2.6.0</version>
 </dependency>
 ```
 

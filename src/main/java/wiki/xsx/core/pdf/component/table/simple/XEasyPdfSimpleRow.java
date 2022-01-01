@@ -37,7 +37,9 @@ public class XEasyPdfSimpleRow {
      * @param cells pdf单元格
      */
     public XEasyPdfSimpleRow(XEasyPdfSimpleCell...cells) {
-        Collections.addAll(this.param.getCells(), cells);
+        if (cells!=null) {
+            Collections.addAll(this.param.getCells(), cells);
+        }
     }
 
     /**
@@ -45,7 +47,9 @@ public class XEasyPdfSimpleRow {
      * @param cellList pdf单元格列表
      */
     public XEasyPdfSimpleRow(List<XEasyPdfSimpleCell> cellList) {
-        this.param.getCells().addAll(cellList);
+        if (cellList!=null) {
+            this.param.getCells().addAll(cellList);
+        }
     }
 
     /**
@@ -74,7 +78,7 @@ public class XEasyPdfSimpleRow {
      * @return 返回表格行组件
      */
     public XEasyPdfSimpleRow setFontSize(float fontSize) {
-        this.param.setFontSize(fontSize);
+        this.param.setFontSize(Math.abs(fontSize));
         return this;
     }
 
@@ -114,7 +118,7 @@ public class XEasyPdfSimpleRow {
      * @return 返回表格行组件
      */
     public XEasyPdfSimpleRow setHeight(float height) {
-        this.param.setHeight(height);
+        this.param.setHeight(Math.abs(height));
         return this;
     }
 
@@ -124,7 +128,9 @@ public class XEasyPdfSimpleRow {
      * @return 返回表格行组件
      */
     public XEasyPdfSimpleRow addCell(XEasyPdfSimpleCell...cells) {
-        Collections.addAll(this.param.getCells(), cells);
+        if (cells!=null) {
+            Collections.addAll(this.param.getCells(), cells);
+        }
         return this;
     }
 
@@ -134,7 +140,9 @@ public class XEasyPdfSimpleRow {
      * @return 返回表格行组件
      */
     public XEasyPdfSimpleRow addCell(List<XEasyPdfSimpleCell> cellList) {
-        this.param.getCells().addAll(cellList);
+        if (cellList!=null) {
+            this.param.getCells().addAll(cellList);
+        }
         return this;
     }
 

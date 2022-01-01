@@ -1,6 +1,5 @@
 package wiki.xsx.core.pdf.doc;
 
-import lombok.SneakyThrows;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -19,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * pdf表单填写器
+ * pdf文档表单填写器
  * @author xsx
  * @date 2021/10/3
  * @since 1.8
@@ -53,7 +52,6 @@ public class XEasyPdfDocumentFormFiller {
      * 构造方法
      * @param pdfDocument pdf文档
      */
-    @SneakyThrows
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.getTarget();
@@ -125,6 +123,14 @@ public class XEasyPdfDocumentFormFiller {
             }
         }
         return this;
+    }
+
+    /**
+     * 文档签名器
+     * @return 返回pdf文档签名器
+     */
+    public XEasyPdfDocumentSigner signer() {
+        return new XEasyPdfDocumentSigner(this.pdfDocument);
     }
 
     /**

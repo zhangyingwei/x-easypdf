@@ -120,6 +120,14 @@ class XEasyPdfTextParam {
      */
     private Color fontColor = Color.BLACK;
     /**
+     * 透明度（值越小越透明，0.0-1.0）
+     */
+    private Float alpha = 1.0F;
+    /**
+     * 文本弧度
+     */
+    private Double radians = 0D;
+    /**
      * 是否使用自身样式
      */
     private boolean useSelfStyle = false;

@@ -37,7 +37,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param rows pdf表格行
      */
     public XEasyPdfTable(XEasyPdfRow...rows) {
-        Collections.addAll(this.param.getRows(), rows);
+        if (rows!=null) {
+            Collections.addAll(this.param.getRows(), rows);
+        }
     }
 
     /**
@@ -45,7 +47,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param rowList pdf表格行列表
      */
     public XEasyPdfTable(List<XEasyPdfRow> rowList) {
-        this.param.getRows().addAll(rowList);
+        if (rowList!=null) {
+            this.param.getRows().addAll(rowList);
+        }
     }
 
     /**
@@ -74,7 +78,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable setFontSize(float fontSize) {
-        this.param.setFontSize(fontSize);
+        this.param.setFontSize(Math.abs(fontSize));
         return this;
     }
 
@@ -114,7 +118,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable setStyle(XEasyPdfTableStyle style) {
-        this.param.setStyle(style);
+        if (style!=null) {
+            this.param.setStyle(style);
+        }
         return this;
     }
 
@@ -159,7 +165,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfTable setContentMode(ContentMode mode) {
-        this.param.setContentMode(mode);
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
         return this;
     }
 
@@ -169,7 +177,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable addRow(XEasyPdfRow...rows) {
-        Collections.addAll(this.param.getRows(), rows);
+        if (rows!=null) {
+            Collections.addAll(this.param.getRows(), rows);
+        }
         return this;
     }
 
@@ -179,7 +189,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
-        this.param.getRows().addAll(rowList);
+        if (rowList!=null) {
+            this.param.getRows().addAll(rowList);
+        }
         return this;
     }
 

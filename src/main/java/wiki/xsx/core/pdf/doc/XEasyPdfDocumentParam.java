@@ -56,6 +56,10 @@ class XEasyPdfDocumentParam {
      */
     private PDDocument target;
     /**
+     * 版本
+     */
+    private Float version;
+    /**
      * 总页数
      */
     private int totalPage = 0;
@@ -119,17 +123,15 @@ class XEasyPdfDocumentParam {
      * 初始化文档信息
      */
     void initInfo(XEasyPdfDocument document) {
-        if (this.source!=null) {
-            PDDocumentInformation documentInformation = this.source.getDocumentInformation();
-            this.documentInfo = new XEasyPdfDocumentInfo(document)
-                    .setTitle(documentInformation.getTitle())
-                    .setAuthor(documentInformation.getAuthor())
-                    .setSubject(documentInformation.getSubject())
-                    .setKeywords(documentInformation.getKeywords())
-                    .setCreator(documentInformation.getCreator())
-                    .setCreateTime(documentInformation.getCreationDate())
-                    .setUpdateTime(documentInformation.getModificationDate());
-        }
+        PDDocumentInformation documentInformation = this.source.getDocumentInformation();
+        this.documentInfo = new XEasyPdfDocumentInfo(document)
+                .setTitle(documentInformation.getTitle())
+                .setAuthor(documentInformation.getAuthor())
+                .setSubject(documentInformation.getSubject())
+                .setKeywords(documentInformation.getKeywords())
+                .setCreator(documentInformation.getCreator())
+                .setCreateTime(documentInformation.getCreationDate())
+                .setUpdateTime(documentInformation.getModificationDate());
     }
 
     /**

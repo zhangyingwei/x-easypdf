@@ -64,8 +64,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     public XEasyPdfImage(File imageFile, int width, int height) {
         this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile))
                 .setImage(XEasyPdfImageUtil.read(imageFile))
-                .setWidth(width)
-                .setHeight(height);
+                .setWidth(Math.abs(width))
+                .setHeight(Math.abs(height));
     }
 
     /**
@@ -79,8 +79,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     public XEasyPdfImage(InputStream imageStream, XEasyPdfImageType imageType, int width, int height) {
         this.param.setImageType(imageType.name().toLowerCase())
                 .setImage(XEasyPdfImageUtil.read(imageStream))
-                .setWidth(width)
-                .setHeight(height);
+                .setWidth(Math.abs(width))
+                .setHeight(Math.abs(height));
     }
 
     /**
@@ -157,7 +157,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage setMaxWidth(float maxWidth) {
-        this.param.setMaxWidth(maxWidth);
+        this.param.setMaxWidth(Math.abs(maxWidth));
         return this;
     }
 
@@ -217,7 +217,9 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage setStyle(XEasyPdfImageStyle style) {
-        this.param.setStyle(style);
+        if (style!=null) {
+            this.param.setStyle(style);
+        }
         return this;
     }
 
@@ -227,7 +229,9 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage setScaleMode(XEasyPdfImageScaleMode scaleMode) {
-        this.param.setScaleMode(scaleMode);
+        if (scaleMode!=null) {
+            this.param.setScaleMode(scaleMode);
+        }
         return this;
     }
 
@@ -250,7 +254,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfImage setWidth(float width) {
-        this.param.setWidth((int) width);
+        this.param.setWidth((int) Math.abs(width));
         this.param.setImageXObject(null);
         return this;
     }
@@ -262,7 +266,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfImage setHeight(float height) {
-        this.param.setHeight((int) height);
+        this.param.setHeight((int) Math.abs(height));
         this.param.setImageXObject(null);
         return this;
     }
@@ -274,7 +278,9 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfImage setContentMode(ContentMode mode) {
-        this.param.setContentMode(mode);
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
         return this;
     }
 

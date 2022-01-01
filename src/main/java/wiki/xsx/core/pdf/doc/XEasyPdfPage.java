@@ -53,8 +53,10 @@ public class XEasyPdfPage {
      * @param page pdfBox页面
      */
     public XEasyPdfPage(PDPage page) {
-        // 添加pdfBox页面
-        this.param.getPageList().add(page);
+        if (page!=null) {
+            // 添加pdfBox页面
+            this.param.getPageList().add(page);
+        }
     }
 
     /**
@@ -75,8 +77,10 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage addPage(PDPage page) {
-        // 添加pdfBox页面
-        this.param.getPageList().add(page);
+        if (page!=null) {
+            // 添加pdfBox页面
+            this.param.getPageList().add(page);
+        }
         return this;
     }
 
@@ -135,7 +139,9 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.param.setDefaultFontStyle(style);
+        if (style!=null) {
+            this.param.setDefaultFontStyle(style);
+        }
         return this;
     }
 
@@ -414,29 +420,29 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage modifyPageSize(PDRectangle pageSize) {
-        // 设置新增页面尺寸
-        this.param.setPageSize(pageSize);
-        // 设置原有页面尺寸
-        this.param.setModifyPageSize(pageSize);
+        if (pageSize!=null) {
+            // 设置新增页面尺寸
+            this.param.setPageSize(pageSize);
+            // 设置原有页面尺寸
+            this.param.setModifyPageSize(pageSize);
+        }
         return this;
     }
 
     /**
      * 构建pdf页面
      * @param document pdf文档
-     * @return 返回pdf页面
      */
-    public XEasyPdfPage build(XEasyPdfDocument document) {
-        return this.build(document, this.param.getPageSize());
+    void build(XEasyPdfDocument document) {
+        this.build(document, this.param.getPageSize());
     }
 
     /**
      * 构建pdf页面
      * @param document pdf文档
      * @param pageSize 页面尺寸
-     * @return 返回pdf页面
      */
-    public XEasyPdfPage build(XEasyPdfDocument document, PDRectangle pageSize) {
+    void build(XEasyPdfDocument document, PDRectangle pageSize) {
         // 初始化总页数
         document.getParam().initTotalPage(this.param.getPageList().size());
         // 初始化参数
@@ -488,7 +494,6 @@ public class XEasyPdfPage {
         }
         // 绘制水印
         this.drawWatermark(document);
-        return this;
     }
 
     /**

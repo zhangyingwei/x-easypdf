@@ -50,7 +50,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @param text 水印文本
      */
     public XEasyPdfDefaultWatermark(float fontSize, String text) {
-        this.param.setFontSize(fontSize).setText(text);
+        this.param.setFontSize(Math.abs(fontSize)).setText(text);
     }
 
     /**
@@ -69,7 +69,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setFontSize(float fontSize) {
-        this.param.setFontSize(fontSize);
+        this.param.setFontSize(Math.abs(fontSize));
         return this;
     }
 
@@ -79,7 +79,9 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setFontColor(Color fontColor) {
-        this.param.setFontColor(fontColor);
+        if (fontColor!=null) {
+            this.param.setFontColor(fontColor);
+        }
         return this;
     }
 
@@ -89,7 +91,9 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setAlpha(float alpha) {
-        this.param.setAlpha(alpha);
+        if (0<=alpha&&alpha<=1) {
+            this.param.setAlpha(alpha);
+        }
         return this;
     }
 
@@ -119,7 +123,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setWordSpace(float wordSpace) {
-        this.param.setWordSpace(wordSpace);
+        this.param.setWordSpace(Math.abs(wordSpace));
         return this;
     }
 

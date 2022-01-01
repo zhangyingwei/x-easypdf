@@ -38,7 +38,9 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * @param rows pdf表格行
      */
     public XEasyPdfSimpleTable(XEasyPdfSimpleRow...rows) {
-        Collections.addAll(this.param.getRows(), rows);
+        if (rows!=null) {
+            Collections.addAll(this.param.getRows(), rows);
+        }
     }
 
     /**
@@ -46,7 +48,9 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * @param rowList pdf表格行列表
      */
     public XEasyPdfSimpleTable(List<XEasyPdfSimpleRow> rowList) {
-        this.param.getRows().addAll(rowList);
+        if (rowList!=null) {
+            this.param.getRows().addAll(rowList);
+        }
     }
 
     /**
@@ -75,7 +79,7 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfSimpleTable setFontSize(float fontSize) {
-        this.param.setFontSize(fontSize);
+        this.param.setFontSize(Math.abs(fontSize));
         return this;
     }
 
@@ -115,7 +119,9 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfSimpleTable setStyle(XEasyPdfTableStyle style) {
-        this.param.setStyle(style);
+        if (style!=null) {
+            this.param.setStyle(style);
+        }
         return this;
     }
 
@@ -178,7 +184,9 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfSimpleTable setContentMode(ContentMode mode) {
-        this.param.setContentMode(mode);
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
         return this;
     }
 
@@ -188,7 +196,9 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfSimpleTable addRow(XEasyPdfSimpleRow...rows) {
-        Collections.addAll(this.param.getRows(), rows);
+        if (rows!=null) {
+            Collections.addAll(this.param.getRows(), rows);
+        }
         return this;
     }
 
@@ -198,7 +208,9 @@ public class XEasyPdfSimpleTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfSimpleTable addRow(List<XEasyPdfSimpleRow> rowList) {
-        this.param.getRows().addAll(rowList);
+        if (rowList!=null) {
+            this.param.getRows().addAll(rowList);
+        }
         return this;
     }
 

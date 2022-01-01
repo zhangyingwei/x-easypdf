@@ -1,14 +1,21 @@
 package wiki.xsx.core.pdf.doc;
 
 import lombok.SneakyThrows;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageTree;
+import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.PDXObject;
+import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
@@ -84,22 +91,21 @@ public class XEasyPdfDocumentExtractor {
      * @param dataList 待接收文本字典列表(key=区域名称，value=提取文本)
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentExtractor extractByRegions(List<Map<String, String>> dataList, int ...pageIndex) throws IOException {
+    public XEasyPdfDocumentExtractor extractByRegions(List<Map<String, String>> dataList, int ...pageIndex) {
         // 如果页面索引有内容，则根据页面索引进行区域文本提取
         if (pageIndex!=null&&pageIndex.length>0) {
             // 遍历页面索引
             for (int index : pageIndex) {
                 // 添加数据
-                this.addData(dataList, index);
+                this.addText(dataList, index);
             }
             // 如果页面索引没有内容，则提取全部页面中的区域文本
         }else {
             // 遍历文档页面
             for (int index = 0, count = this.document.getNumberOfPages() - 1; index < count; index++) {
                 // 添加数据
-                this.addData(dataList, index);
+                this.addText(dataList, index);
             }
         }
         return this;
@@ -110,9 +116,8 @@ public class XEasyPdfDocumentExtractor {
      * @param textList 待接收文本列表
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentExtractor extract(List<String> textList, int ...pageIndex) throws IOException {
+    public XEasyPdfDocumentExtractor extract(List<String> textList, int ...pageIndex) {
         this.extract(textList, null, pageIndex);
         return this;
     }
@@ -123,9 +128,8 @@ public class XEasyPdfDocumentExtractor {
      * @param regex 正则表达式
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentExtractor extract(List<String> textList, String regex, int ...pageIndex) throws IOException {
+    public XEasyPdfDocumentExtractor extract(List<String> textList, String regex, int ...pageIndex) {
         this.simpleExtractor.extract(textList, regex, pageIndex);
         return this;
     }
@@ -135,9 +139,8 @@ public class XEasyPdfDocumentExtractor {
      * @param textList 待接收文本列表（第一层为行，第二层为列）
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentExtractor extractForSimpleTable(List<List<String>> textList, int pageIndex) throws IOException {
+    public XEasyPdfDocumentExtractor extractForSimpleTable(List<List<String>> textList, int pageIndex) {
         // 获取给定页面索引的页面尺寸
         PDRectangle mediaBox = this.document.getPage(pageIndex).getMediaBox();
         // 提取区域表格文本(单行单列)
@@ -151,9 +154,9 @@ public class XEasyPdfDocumentExtractor {
      * @param rectangle 区域图形
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentExtractor extractByRegionsForSimpleTable(List<List<String>> textList, Rectangle rectangle, int pageIndex) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocumentExtractor extractByRegionsForSimpleTable(List<List<String>> textList, Rectangle rectangle, int pageIndex) {
         // 定义区域key
         final String key = "table";
         // 定义分词
@@ -185,6 +188,48 @@ public class XEasyPdfDocumentExtractor {
     }
 
     /**
+     * 提取图片(全部)
+     * @param imageList 待接收图片列表
+     * @return 返回pdf文档提取器
+     */
+    @SneakyThrows
+    public XEasyPdfDocumentExtractor extractImage(List<BufferedImage> imageList) {
+        // 获取pdfbox文档页面树
+        PDPageTree pages = this.document.getPages();
+        // 遍历页面树
+        for (PDPage page : pages) {
+            // 添加图片
+            this.addImage(imageList, page.getResources());
+        }
+        return this;
+    }
+
+    /**
+     * 提取图片
+     * @param imageList 待接收图片列表
+     * @param pageIndex 页面索引
+     * @return 返回pdf文档提取器
+     */
+    public XEasyPdfDocumentExtractor extractImage(List<BufferedImage> imageList, int ...pageIndex) {
+        // 如果页面索引不为空，则添加图片
+        if (pageIndex!=null&&pageIndex.length>0) {
+            // 获取pdfbox文档页面树
+            PDPageTree pages = this.document.getPages();
+            // 遍历页面索引
+            for (int index : pageIndex) {
+                // 如果页面索引小于0，则跳过
+                if (index<0) {
+                    // 跳过该页面索引
+                    continue;
+                }
+                // 添加图片
+                this.addImage(imageList, pages.get(index).getResources());
+            }
+        }
+        return this;
+    }
+
+    /**
      * 完成操作
      * @return 返回pdf文档
      */
@@ -193,18 +238,41 @@ public class XEasyPdfDocumentExtractor {
     }
 
     /**
-     * 添加数据
+     * 添加文本
      * @param dataList 待接收文本字典列表(key=区域名称，value=提取文本)
      * @param pageIndex 页面索引
-     * @throws IOException IO异常
      */
-    private void addData(List<Map<String, String>> dataList, int pageIndex) throws IOException {
+    private void addText(List<Map<String, String>> dataList, int pageIndex) {
         // 提取文本
         Map<String, String> data = this.regionExtractor.extract(this.document.getPage(pageIndex));
         // 如果文本字典不为空，则添加数据
         if (!data.isEmpty()) {
             // 添加数据
             dataList.add(data);
+        }
+    }
+
+    /**
+     * 添加图片
+     * @param imageList 待接收图片列表
+     * @param resources pdfbox页面资源
+     */
+    @SneakyThrows
+    private void addImage(List<BufferedImage> imageList, PDResources resources) {
+        // 获取页面资源内容名称
+        Iterable<COSName> objectNames = resources.getXObjectNames();
+        // 遍历资源内容名称
+        for (COSName objectName : objectNames) {
+            // 获取资源内容
+            PDXObject xObject = resources.getXObject(objectName);
+            // 如果资源内容为图片，则添加到待接收图片列表
+            if (xObject instanceof PDImageXObject) {
+                // 添加到待接收图片列表
+                imageList.add(((PDImageXObject) xObject).getImage());
+            }
+            else if (xObject instanceof PDFormXObject) {
+                this.addImage(imageList, ((PDFormXObject) xObject).getResources());
+            }
         }
     }
 
@@ -232,9 +300,8 @@ public class XEasyPdfDocumentExtractor {
          * @param textList 待接收文本列表
          * @param regex 正则表达式
          * @param pageIndex 页面索引
-         * @throws IOException IO异常
          */
-        void extract(List<String> textList, String regex, int ...pageIndex) throws IOException {
+        void extract(List<String> textList, String regex, int ...pageIndex) {
             // 如果页面索引有内容，则根据页面索引提取文本
             if (pageIndex!=null&&pageIndex.length>0) {
                 // 遍历页面索引
@@ -258,9 +325,9 @@ public class XEasyPdfDocumentExtractor {
          * 提取文本
          * @param textList 待接收文本列表
          * @param regex 正则表达式
-         * @throws IOException IO异常
          */
-        private void extract(List<String> textList, String regex) throws IOException {
+        @SneakyThrows
+        private void extract(List<String> textList, String regex) {
             // 获取文本
             String text = this.getText(this.document);
             // 如果正则表达式有内容，则进行匹配
@@ -320,9 +387,8 @@ public class XEasyPdfDocumentExtractor {
          * 提取文本
          * @param page pdfbox页面
          * @return 返回文本字典(key=区域名称，value=提取文本)
-         * @throws IOException IO异常
          */
-        Map<String, String> extract(PDPage page) throws IOException {
+        Map<String, String> extract(PDPage page) {
             return this.extract(page, " ");
         }
 
@@ -331,9 +397,9 @@ public class XEasyPdfDocumentExtractor {
          * @param page pdfbox页面
          * @param wordSeparator 单词分隔符
          * @return 返回文本字典(key=区域名称，value=提取文本)
-         * @throws IOException IO异常
          */
-        Map<String, String> extract(PDPage page, String wordSeparator) throws IOException {
+        @SneakyThrows
+        Map<String, String> extract(PDPage page, String wordSeparator) {
             // 定义文本字典
             Map<String, String> data;
             // 如果区域为空，则初始化文本字典为空字典

@@ -36,7 +36,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * @param image pdf图片
      */
     public XEasyPdfDefaultFooter(XEasyPdfImage image) {
-        this.param.setImage(image);
+        this(image, null);
     }
 
     /**
@@ -44,7 +44,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      * @param text pdf文本
      */
     public XEasyPdfDefaultFooter(XEasyPdfText text) {
-        this.param.setText(text);
+        this(null, text);
     }
 
     /**

@@ -243,12 +243,14 @@ class XEasyPdfImageParam {
         if (this.style==null || this.style == XEasyPdfImageStyle.CENTER) {
             // 页面X轴起始坐标 = （最大宽度 - 自定义宽度）/ 2
             this.beginX += (this.maxWidth - this.width) / 2;
-            // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
-        }else if (this.style == XEasyPdfImageStyle.LEFT) {
+        }
+        // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
+        else if (this.style == XEasyPdfImageStyle.LEFT) {
             // 页面X轴起始坐标 = 左边距
             this.beginX += this.marginLeft;
-            // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
-        }else {
+        }
+        // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
+        else {
             // 页面X轴起始坐标 = 最大宽度 - 自定义宽度 - 右边距
             this.beginX += this.maxWidth - this.width - this.marginRight;
         }
@@ -268,7 +270,8 @@ class XEasyPdfImageParam {
             this.beginY = initY - this.height;
             // 重新计算Y轴起始坐标 = Y轴起始坐标 - Y轴起始坐标 / 2
             this.beginY -= this.beginY / 2;
-        }else {
+        }
+        else {
             // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
             this.beginY = initY - this.marginTop - this.height;
         }

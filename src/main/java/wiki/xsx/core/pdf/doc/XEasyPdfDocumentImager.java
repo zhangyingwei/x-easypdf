@@ -1,6 +1,5 @@
 package wiki.xsx.core.pdf.doc;
 
-import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
@@ -46,7 +45,6 @@ public class XEasyPdfDocumentImager {
      * 构造方法
      * @param pdfDocument pdf文档
      */
-    @SneakyThrows
     XEasyPdfDocumentImager(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.getTarget();

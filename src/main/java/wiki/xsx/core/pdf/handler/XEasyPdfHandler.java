@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.handler;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.barcode.XEasyPdfBarCode;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.component.line.XEasyPdfBaseLine;
@@ -17,12 +18,12 @@ import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleRow;
 import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleTable;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
+import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.footer.XEasyPdfDefaultFooter;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfDefaultHeader;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfDefaultWatermark;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.io.File;
 import java.io.InputStream;
@@ -349,6 +350,57 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfImage build(InputStream imageInputStream, XEasyPdfImageType imageType, int width, int height) {
             return new XEasyPdfImage(imageInputStream, imageType, width, height);
+        }
+    }
+
+    /**
+     * pdf条形码(一维码/二维码)组件
+     */
+    public static class BarCode {
+        /**
+         * 构建条形码
+         * @param codeType 条形码类型
+         * @param content 条形码内容
+         * @return 返回pdf条形码组件
+         */
+        public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content) {
+            return new XEasyPdfBarCode(codeType, content);
+        }
+
+        /**
+         * 构建条形码
+         * @param codeType 条形码类型
+         * @param content 条形码内容
+         * @param words 条形码文字
+         * @return 返回pdf条形码组件
+         */
+        public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content, String words) {
+            return new XEasyPdfBarCode(codeType, content, words);
+        }
+
+        /**
+         * 构建条形码
+         * @param codeType 条形码类型
+         * @param content 条形码内容
+         * @param beginX X轴起始坐标
+         * @param beginY Y轴起始坐标
+         * @return 返回pdf条形码组件
+         */
+        public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content, float beginX, float beginY) {
+            return new XEasyPdfBarCode(codeType, content, beginX, beginY);
+        }
+
+        /**
+         * 构建条形码
+         * @param codeType 条形码类型
+         * @param content 条形码内容
+         * @param words 条形码文字
+         * @param beginX X轴起始坐标
+         * @param beginY Y轴起始坐标
+         * @return 返回pdf条形码组件
+         */
+        public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content, String words, float beginX, float beginY) {
+            return new XEasyPdfBarCode(codeType, content, words, beginX, beginY);
         }
     }
 

@@ -125,7 +125,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfDottedSplitLine setLineWidth(float lineWidth) {
-        this.param.setLineWidth(lineWidth);
+        this.param.setLineWidth(Math.abs(lineWidth));
         return this;
     }
 
@@ -136,7 +136,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfDottedSplitLine setColor(Color color) {
-        this.param.setColor(color);
+        if (color!=null) {
+            this.param.setColor(color);
+        }
         return this;
     }
 
@@ -147,7 +149,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfDottedSplitLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle) {
-        this.param.setStyle(lineCapStyle);
+        if (lineCapStyle!=null) {
+            this.param.setStyle(lineCapStyle);
+        }
         return this;
     }
 
@@ -157,7 +161,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      * @return 返回虚线分割线组件
      */
     public XEasyPdfDottedSplitLine setLineLength(float lineLength) {
-        this.lineLength = lineLength;
+        this.lineLength = Math.abs(lineLength);
         return this;
     }
 
@@ -167,7 +171,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      * @return 返回虚线分割线组件
      */
     public XEasyPdfDottedSplitLine setLineSpace(float lineSpace) {
-        this.lineSpace = lineSpace;
+        this.lineSpace = Math.abs(lineSpace);
         return this;
     }
 
@@ -209,7 +213,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfDottedSplitLine setContentMode(ContentMode mode) {
-        this.param.setContentMode(mode);
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
         return this;
     }
 

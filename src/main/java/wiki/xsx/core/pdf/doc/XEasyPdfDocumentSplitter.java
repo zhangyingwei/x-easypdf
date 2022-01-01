@@ -1,6 +1,5 @@
 package wiki.xsx.core.pdf.doc;
 
-import lombok.SneakyThrows;
 import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -51,7 +50,6 @@ public class XEasyPdfDocumentSplitter {
     /**
      * 构造方法私有化
      */
-    @SneakyThrows
     XEasyPdfDocumentSplitter(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.getTarget();

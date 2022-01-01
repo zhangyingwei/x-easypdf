@@ -9,6 +9,8 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
+import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.*;
 import java.io.File;
@@ -611,6 +613,30 @@ public class XEasyPdfDocumentTest {
                         XEasyPdfHandler.Text.build("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder())
                 )
         ).save(outputPath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
+
+    @Test
+    public void test28() throws IOException {
+        long begin = System.currentTimeMillis();
+        // 定义保存路径
+        final String outputPath = OUTPUT_PATH + "sign.pdf";
+        final String imagePath = "C:\\Users\\Administrator\\Desktop\\2022010115431859.gif";
+        final String certPath = "E:\\pdf\\file.p12";
+        try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
+            XEasyPdfHandler.Document.build(
+                    XEasyPdfHandler.Page.build(
+                            XEasyPdfHandler.Text.build("爽爽的贵阳，避暑的天堂").setFontSize(16).setStyle(XEasyPdfTextStyle.CENTER)
+                    )
+            ).signer().setSignerInfo(
+                    "xsx", "贵阳市", "测试", "qq: 344646090"
+            ).setCertificate(
+                    XEasyPdfDocumentSigner.SignAlgorithm.MD5withRSA, XEasyPdfDocumentSigner.KeyStoreType.PKCS12, new File(certPath), "123456"
+            ).setSignImage(
+                    XEasyPdfImageUtil.read(new File(imagePath)), 240F, 30F, 50F
+            ).sign(0, outputStream);
+        }
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }

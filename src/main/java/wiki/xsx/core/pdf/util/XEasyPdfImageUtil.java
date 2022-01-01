@@ -1,6 +1,7 @@
 package wiki.xsx.core.pdf.util;
 
 import lombok.SneakyThrows;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * 图片工具
@@ -52,6 +54,11 @@ public class XEasyPdfImageUtil {
             throw new IllegalArgumentException("Image can not be null");
         }
         return ImageIO.read(imageStream);
+    }
+
+    @SneakyThrows
+    public static void write(BufferedImage image, XEasyPdfImageType imageType, OutputStream outputStream) {
+        ImageIO.write(image, imageType.name(), outputStream);
     }
 
     /**

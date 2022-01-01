@@ -21,9 +21,8 @@ import javax.print.PrintServiceLookup;
 import java.awt.*;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
-import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.IOException;
+import java.io.Closeable;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -48,7 +47,7 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocument {
+public class XEasyPdfDocument implements Closeable {
 
     /**
      * pdf文档参数
@@ -277,10 +276,27 @@ public class XEasyPdfDocument {
     }
 
     /**
+     * 设置版本
+     * @param version 版本
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setVersion(float version) {
+        if (version<1.0F&&version>1.7) {
+            throw new IllegalArgumentException("the version must be between 1.0 and 1.7");
+        }
+        // 设置重置
+        this.param.setReset(true);
+        // 设置版本
+        this.param.setVersion(version);
+        return this;
+    }
+
+    /**
      * 获取文档总页数
      * @return 返回文档总页数
      */
     public int getTotalPage() {
+        this.getTarget();
         return this.param.getTotalPage();
     }
 
@@ -303,10 +319,9 @@ public class XEasyPdfDocument {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument addPage(List<XEasyPdfPage> pages) {
-        // 设置重置
-        this.param.setReset(true);
-        // 添加页面
-        this.param.getPageList().addAll(pages);
+        if (pages!=null) {
+            return this.addPage(pages.toArray(new XEasyPdfPage[0]));
+        }
         return this;
     }
 
@@ -331,6 +346,19 @@ public class XEasyPdfDocument {
         }else {
             // 添加页面
             this.addPage(pages);
+        }
+        return this;
+    }
+
+    /**
+     * 插入pdf页面
+     * @param pageIndex 页面索引
+     * @param pages pdf页面列表
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument insertPage(int pageIndex, List<XEasyPdfPage> pages) {
+        if (pages!=null) {
+            return this.insertPage(pageIndex, pages.toArray(new XEasyPdfPage[0]));
         }
         return this;
     }
@@ -407,7 +435,7 @@ public class XEasyPdfDocument {
 
     /**
      * 表单填充器
-     * @return 返回pdf文档
+     * @return 返回pdf文档表单填写器
      */
     public XEasyPdfDocumentFormFiller formFiller() {
         return new XEasyPdfDocumentFormFiller(this);
@@ -423,7 +451,7 @@ public class XEasyPdfDocument {
 
     /**
      * 文档拆分器
-     * @return 返回pdf文档
+     * @return 返回pdf文档拆分器
      */
     public XEasyPdfDocumentSplitter splitter() {
         return new XEasyPdfDocumentSplitter(this);
@@ -435,6 +463,14 @@ public class XEasyPdfDocument {
      */
     public XEasyPdfDocumentExtractor extractor() {
         return new XEasyPdfDocumentExtractor(this);
+    }
+
+    /**
+     * 文档签名器
+     * @return 返回pdf文档签名器
+     */
+    public XEasyPdfDocumentSigner signer() {
+        return new XEasyPdfDocumentSigner(this);
     }
 
     /**
@@ -457,25 +493,24 @@ public class XEasyPdfDocument {
     @SneakyThrows
     public XEasyPdfDocument save(OutputStream outputStream) {
         // 创建写入器
-        COSWriter writer = new COSWriter(outputStream);
-        // 创建任务文档
-        PDDocument target = this.getTarget();
-        // 关联字体
-        this.param.subsetFonts();
-        // 设置文档信息及保护策略
-        this.setInfoAndPolicyAndBookmark(target);
-        // 写入文档
-        writer.write(target);
+        try (COSWriter writer = new COSWriter(outputStream)) {
+            // 创建任务文档
+            PDDocument target = this.getTarget();
+            // 关联字体
+            this.param.subsetFonts();
+            // 设置文档信息及保护策略
+            this.setInfoAndPolicyAndBookmark(target);
+            // 写入文档
+            writer.write(target);
+        }
         return this;
     }
 
     /**
      * 打印文档（默认打印机）
      * @param count 打印数量
-     * @throws IOException IO异常
-     * @throws PrinterException 打印异常
      */
-    public XEasyPdfDocument print(int count) throws IOException, PrinterException {
+    public XEasyPdfDocument print(int count) {
         return this.print(count, XEasyPdfPrintStyle.PORTRAIT, Scaling.ACTUAL_SIZE);
     }
 
@@ -484,10 +519,9 @@ public class XEasyPdfDocument {
      * @param count 打印数量
      * @param style 打印形式（横向、纵向、反向横向）
      * @param scaling 缩放比例
-     * @throws IOException IO异常
-     * @throws PrinterException 打印异常
      */
-    public XEasyPdfDocument print(int count, XEasyPdfPrintStyle style, Scaling scaling) throws IOException, PrinterException {
+    @SneakyThrows
+    public XEasyPdfDocument print(int count, XEasyPdfPrintStyle style, Scaling scaling) {
         // 获取打印任务
         PrinterJob job = PrinterJob.getPrinterJob();
         // 设置打印服务（默认）
@@ -513,6 +547,7 @@ public class XEasyPdfDocument {
      * 关闭文档
      */
     @SneakyThrows
+    @Override
     public void close() {
         // 如果合并pdf源文档列表不为空，则进行关闭
         if (!this.param.getMergeSourceList().isEmpty()) {
@@ -609,7 +644,39 @@ public class XEasyPdfDocument {
         this.initBookmark(target);
     }
 
+    /**
+     * 初始化文档书签
+     * @param target 任务文档
+     */
+    void initBookmark(PDDocument target) {
+        // 获取pdfbox书签
+        PDDocumentOutline outline = target.getDocumentCatalog().getDocumentOutline();
+        // 如果书签不为空，则设置书签信息
+        if (this.param.getBookmark()!=null) {
+            // 如果书签为空，则创建书签
+            if (outline==null) {
+                // 创建书签
+                outline = new PDDocumentOutline();
+            }
+            // 获取书签项
+            List<PDOutlineItem> items = this.param.getBookmark().getItemList();
+            // 遍历书签项
+            for (PDOutlineItem item : items) {
+                // 添加书签项
+                outline.addLast(item);
+            }
+        }
+        // 设置书签
+        target.getDocumentCatalog().setDocumentOutline(outline);
+    }
 
+    /**
+     * 获取pdf文档参数
+     * @return 返回pdf文档参数
+     */
+    XEasyPdfDocumentParam getParam() {
+        return this.param;
+    }
 
     /**
      * 初始化任务文档
@@ -618,11 +685,8 @@ public class XEasyPdfDocument {
     private void initTarget() {
         // 新建任务文档
         PDDocument target = new PDDocument();
-        // 如果源文档不为空，则设置文档表单
-        if (this.getSource()!=null) {
-            // 设置文档表单
-            target.getDocumentCatalog().setAcroForm(this.getSource().getDocumentCatalog().getAcroForm());
-        }
+        // 设置文档表单
+        target.getDocumentCatalog().setAcroForm(this.param.getSource().getDocumentCatalog().getAcroForm());
         // 初始化新任务文档
         this.param.setTarget(target);
         // 关闭文档重置
@@ -654,32 +718,5 @@ public class XEasyPdfDocument {
                 target.addPage(page);
             }
         }
-
-    }
-
-    /**
-     * 初始化文档书签
-     * @param target 任务文档
-     */
-    void initBookmark(PDDocument target) {
-        PDDocumentOutline outline = target.getDocumentCatalog().getDocumentOutline();
-        if (this.param.getBookmark()!=null) {
-            if (outline==null) {
-                outline = new PDDocumentOutline();
-            }
-            List<PDOutlineItem> items = this.param.getBookmark().getItemList();
-            for (PDOutlineItem item : items) {
-                outline.addLast(item);
-            }
-        }
-        target.getDocumentCatalog().setDocumentOutline(outline);
-    }
-
-    /**
-     * 获取pdf文档参数
-     * @return 返回pdf文档参数
-     */
-    XEasyPdfDocumentParam getParam() {
-        return this.param;
     }
 }

@@ -118,7 +118,7 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfSolidSplitLine setLineWidth(float lineWidth) {
-        this.param.setLineWidth(lineWidth);
+        this.param.setLineWidth(Math.abs(lineWidth));
         return this;
     }
 
@@ -129,7 +129,9 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfSolidSplitLine setColor(Color color) {
-        this.param.setColor(color);
+        if (color!=null) {
+            this.param.setColor(color);
+        }
         return this;
     }
 
@@ -140,7 +142,9 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfSolidSplitLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle) {
-        this.param.setStyle(lineCapStyle);
+        if (lineCapStyle!=null) {
+            this.param.setStyle(lineCapStyle);
+        }
         return this;
     }
 
@@ -182,7 +186,9 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfSolidSplitLine setContentMode(ContentMode mode) {
-        this.param.setContentMode(mode);
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
         return this;
     }
 
