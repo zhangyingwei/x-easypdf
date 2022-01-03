@@ -1,6 +1,7 @@
 package wiki.xsx.core.pdf.component.text;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -106,7 +107,7 @@ class XEasyPdfTextParam {
     /**
      * 文本样式（居左、居中、居右）
      */
-    private XEasyPdfTextStyle style;
+    private XEasyPdfTextStyle style = XEasyPdfTextStyle.LEFT;
     /**
      * 页面X轴起始坐标
      */
@@ -119,6 +120,26 @@ class XEasyPdfTextParam {
      * 字体颜色
      */
     private Color fontColor = Color.BLACK;
+    /**
+     * 下划线颜色
+     */
+    private Color underlineColor;
+    /**
+     * 删除线颜色
+     */
+    private Color deleteLineColor;
+    /**
+     * 高亮颜色
+     */
+    private Color highlightColor = Color.ORANGE;
+    /**
+     * 下划线宽度
+     */
+    private Float underlineWidth = 1F;
+    /**
+     * 删除线宽度
+     */
+    private Float deleteLineWidth = 1F;
     /**
      * 透明度（值越小越透明，0.0-1.0）
      */
@@ -147,6 +168,18 @@ class XEasyPdfTextParam {
      * 是否子组件
      */
     private boolean isChildComponent = false;
+    /**
+     * 是否添加下划线
+     */
+    private boolean isUnderline = false;
+    /**
+     * 是否添加删除线
+     */
+    private boolean isDeleteLine = false;
+    /**
+     * 是否高亮显示
+     */
+    private boolean isHighlight = false;
     /**
      * 是否完成绘制
      */
@@ -211,34 +244,81 @@ class XEasyPdfTextParam {
         this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
         // 初始化字体高度
         this.fontHeight = this.fontSize;
-        // 如果页面X轴起始坐标未初始化，则进行初始化
-        if (this.beginX==null) {
-            // 初始化页面X轴起始坐标
-            this.beginX = this.isTextAppend?
-                    // 左边距 + 当前页面X轴起始坐标
-                    this.marginLeft + (page.getParam().getPageX()==null?0F:page.getParam().getPageX()) :
-                    // 左边距
-                    this.marginLeft;
+        // 如果下划线颜色为空，则重置为字体颜色
+        if (this.underlineColor==null) {
+            // 重置下划线颜色为字体颜色
+            this.underlineColor = this.fontColor;
         }
-        // 如果页面Y轴起始坐标未初始化，则进行初始化
-        if (this.beginY==null) {
-            // 初始化页面Y轴起始坐标
-            this.beginY = this.isTextAppend?
-                    // 当前页面Y轴起始坐标是否为空
-                    (page.getParam().getPageY() == null?
-                    // 最大高度 - 上边距 - 字体高度 - 行距
-                    this.maxHeight - this.marginTop - this.fontHeight - this.leading :
-                    // 当前页面Y轴起始坐标
-                    page.getParam().getPageY()) :
-                    // 当前页面Y轴起始坐标是否为空
-                    (page.getParam().getPageY() == null?
-                    // 最大高度 - 上边距 - 字体高度 - 行距
-                    this.maxHeight - this.marginTop - this.fontHeight - this.leading :
-                    // 当前页面Y轴起始坐标 - 上边距 - 字体高度 - 行距
-                    page.getParam().getPageY() - this.marginTop - this.fontHeight - this.leading);
+        // 如果删除线颜色为空，则重置为字体颜色
+        if (this.deleteLineColor==null) {
+            // 重置下划线颜色为字体颜色
+            this.deleteLineColor = this.fontColor;
         }
+        // 初始化X轴起始坐标
+        this.initBeginX(page);
+        // 初始化Y轴起始坐标
+        this.initBeginY(page);
         // 初始化待添加文本列表
         this.initTextList(page);
+    }
+
+    /**
+     * 初始化X轴起始坐标
+     * @param page pdf页面
+     */
+    @SneakyThrows
+    private void initBeginX(XEasyPdfPage page) {
+        // 如果页面X轴起始坐标未初始化，则进行初始化
+        if (this.beginX==null) {
+            // 如果为文本追加，则初始化为左边距+页面X轴起始坐标
+            if (this.isTextAppend) {
+                // 初始化为左边距+页面X轴起始坐标
+                this.beginX = this.marginLeft + (page.getParam().getPageX()==null?0F:page.getParam().getPageX());
+            }
+            // 否则判断文本样式
+            else {
+                // 如果为居左，则初始化为左边距
+                if (this.style==XEasyPdfTextStyle.LEFT) {
+                    // 初始化为左边距
+                    this.beginX = this.marginLeft;
+                }
+                // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
+                else if (this.style==XEasyPdfTextStyle.CENTER) {
+                    // 初始化为(最大宽度-左边距-右边距-文本宽度)/2
+                    this.beginX = (this.maxWidth  - this.marginLeft - this.marginRight - (this.fontSize * this.font.getStringWidth(this.text) / 1000)) / 2;
+                }
+                // 否则为居右，初始化为最大宽度-右边距-文本宽度
+                else {
+                    // 初始化为最大宽度-右边距-文本宽度
+                    this.beginX = this.maxWidth - (this.fontSize * this.font.getStringWidth(text) / 1000) - this.marginRight;
+                }
+            }
+        }
+    }
+
+    /**
+     * 初始化Y轴起始坐标
+     * @param page pdf页面
+     */
+    private void initBeginY(XEasyPdfPage page) {
+        // 如果页面Y轴起始坐标未初始化，则进行初始化
+        if (this.beginY==null) {
+            // 如果页面Y轴当前坐标为空，则初始化为最大高度-上边距-字体高度-行间距
+            if (page.getParam().getPageY()==null) {
+                // 初始化为最大高度-上边距-字体高度-行间距
+                this.beginY = this.maxHeight - this.marginTop - this.fontHeight - this.leading;
+            }
+            // 页面Y轴当前坐标不为空
+            else {
+                // 初始化为页面Y轴当前坐标
+                this.beginY = page.getParam().getPageY();
+                // 如果不为文本追加，则还需换行
+                if (!this.isTextAppend) {
+                    // 初始化为页面Y轴当前坐标-上边距-字体高度-行间距
+                    this.beginY = this.beginY - this.marginTop - this.fontHeight - this.leading;
+                }
+            }
+        }
     }
 
     /**

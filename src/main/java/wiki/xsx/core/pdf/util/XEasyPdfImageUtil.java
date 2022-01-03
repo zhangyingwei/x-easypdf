@@ -133,7 +133,7 @@ public class XEasyPdfImageUtil {
         }
         int imageWidth = sourceImage.getWidth();
         int imageHeight = sourceImage.getHeight();
-        Rectangle rectangle = getRotateRectangle(new Rectangle(new Dimension(imageWidth, imageHeight)), radians);
+        Rectangle rectangle = getRotateRectangle(imageWidth, imageHeight, radians);
         BufferedImage image = new BufferedImage(
                 rectangle.width,
                 rectangle.height,
@@ -150,11 +150,13 @@ public class XEasyPdfImageUtil {
 
     /**
      * 获取旋转尺寸
-     * @param src 源尺寸
+     * @param width 宽度
+     * @param height 高度
      * @param radians 旋转弧度
      * @return 返回旋转后的尺寸
      */
-    private static Rectangle getRotateRectangle(Rectangle src, double radians) {
+    private static Rectangle getRotateRectangle(int width, int height, double radians) {
+        Rectangle src = new Rectangle(new Dimension(width, height));
         final int angle = 90;
         if (radians>=angle) {
             if(radians/angle%2==1){

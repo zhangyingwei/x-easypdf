@@ -116,4 +116,9 @@ public class XEasyPdfTextUtil {
         }
         return lineList;
     }
+
+    @SneakyThrows
+    public static float getTextRealWidth(String text, PDFont font, float fontSize) {
+        return fontSize * font.getStringWidth(text) / 1000;
+    }
 }
