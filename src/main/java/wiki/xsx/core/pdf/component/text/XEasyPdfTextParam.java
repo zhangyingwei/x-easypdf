@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2020/3/9
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -81,11 +81,11 @@ class XEasyPdfTextParam {
      */
     private Float marginBottom = 0F;
     /**
-     * 页面宽度
+     * 最大宽度
      */
     private Float maxWidth;
     /**
-     * 页面高度
+     * 最大高度
      */
     private Float maxHeight;
     /**
@@ -105,9 +105,13 @@ class XEasyPdfTextParam {
      */
     private List<String> splitTemplateTextList;
     /**
-     * 文本样式（居左、居中、居右）
+     * 水平样式（居左、居中、居右）
      */
-    private XEasyPdfTextStyle style = XEasyPdfTextStyle.LEFT;
+    private XEasyPdfTextStyle horizontalStyle = XEasyPdfTextStyle.LEFT;
+    /**
+     * 垂直样式（居上、居中、居下）
+     */
+    private XEasyPdfTextStyle verticalStyle = XEasyPdfTextStyle.TOP;
     /**
      * 页面X轴起始坐标
      */
@@ -214,7 +218,7 @@ class XEasyPdfTextParam {
         this.marginLeft = marginLeft;
         this.marginRight = marginRight;
         this.init(document, page);
-        return (this.fontHeight + this.leading) * this.splitTextList.size() - this.leading + this.marginTop + this.marginBottom;
+        return (this.fontHeight + this.leading) * this.splitTextList.size() + this.marginTop + this.marginBottom;
     }
 
     /**
@@ -229,11 +233,6 @@ class XEasyPdfTextParam {
         if (this.maxWidth==null) {
             // 初始化最大宽度，最大宽度 = 页面宽度
             this.maxWidth = rectangle.getWidth();
-        }
-        // 如果最大高度未初始化，则进行初始化
-        if (this.maxHeight==null) {
-            // 初始化最大高度(页面高度)
-            this.maxHeight = rectangle.getHeight();
         }
         // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
         if (this.fontPath==null&&this.defaultFontStyle!=null) {
@@ -254,69 +253,99 @@ class XEasyPdfTextParam {
             // 重置下划线颜色为字体颜色
             this.deleteLineColor = this.fontColor;
         }
-        // 初始化X轴起始坐标
-        this.initBeginX(page);
-        // 初始化Y轴起始坐标
-        this.initBeginY(page);
         // 初始化待添加文本列表
         this.initTextList(page);
+        // 如果最大高度未初始化，则进行初始化
+        if (this.maxHeight==null) {
+            // 初始化最大高度 = (字体高度+行间距) * 文本行数 + 上边距 + 下边距
+            this.maxHeight = (this.fontHeight + this.leading) * this.splitTextList.size() + this.marginTop + this.marginBottom;
+        }
+        // 初始化Y轴起始坐标
+        this.initBeginY(page);
     }
 
     /**
      * 初始化X轴起始坐标
-     * @param page pdf页面
+     * @param pageX 页面Y轴坐标
+     * @param text 待添加文本
      */
     @SneakyThrows
-    private void initBeginX(XEasyPdfPage page) {
+    float initBeginX(Float pageX, String text) {
+        // 定义X轴坐标
+        Float x = this.beginX;
         // 如果页面X轴起始坐标未初始化，则进行初始化
-        if (this.beginX==null) {
+        if (x==null) {
             // 如果为文本追加，则初始化为左边距+页面X轴起始坐标
             if (this.isTextAppend) {
                 // 初始化为左边距+页面X轴起始坐标
-                this.beginX = this.marginLeft + (page.getParam().getPageX()==null?0F:page.getParam().getPageX());
+                x = this.marginLeft + (pageX==null?0F:pageX);
             }
             // 否则判断文本样式
             else {
-                // 如果为居左，则初始化为左边距
-                if (this.style==XEasyPdfTextStyle.LEFT) {
-                    // 初始化为左边距
-                    this.beginX = this.marginLeft;
-                }
-                // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
-                else if (this.style==XEasyPdfTextStyle.CENTER) {
-                    // 初始化为(最大宽度-左边距-右边距-文本宽度)/2
-                    this.beginX = (this.maxWidth  - this.marginLeft - this.marginRight - (this.fontSize * this.font.getStringWidth(this.text) / 1000)) / 2;
-                }
-                // 否则为居右，初始化为最大宽度-右边距-文本宽度
-                else {
-                    // 初始化为最大宽度-右边距-文本宽度
-                    this.beginX = this.maxWidth - (this.fontSize * this.font.getStringWidth(text) / 1000) - this.marginRight;
-                }
+                // 初始化样式
+                x = this.initStyleBeginX(text);
             }
         }
+        // 否则判断是否子组件
+        else {
+            // 如果为子组件，则加上样式坐标
+            if (this.isChildComponent) {
+                // 重置X轴坐标=当前坐标+样式坐标
+                x = x + this.initStyleBeginX(text);
+            }
+        }
+        return x;
     }
 
-    /**
-     * 初始化Y轴起始坐标
-     * @param page pdf页面
-     */
+    @SneakyThrows
+    float initStyleBeginX(String text) {
+        // 如果为居左，则初始化为左边距
+        if (this.horizontalStyle ==XEasyPdfTextStyle.LEFT) {
+            // 初始化为左边距
+            return this.marginLeft;
+        }
+        // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
+        if (this.horizontalStyle ==XEasyPdfTextStyle.CENTER) {
+            // 初始化为(最大宽度-左边距-右边距-文本宽度)/2
+            return (this.maxWidth  - this.marginLeft - this.marginRight - (this.fontSize * this.font.getStringWidth(text) / 1000)) / 2;
+        }
+        // 否则为居右，初始化为最大宽度-右边距-文本宽度
+        return this.maxWidth - (this.fontSize * this.font.getStringWidth(text) / 1000) - this.marginRight;
+    }
+
     private void initBeginY(XEasyPdfPage page) {
-        // 如果页面Y轴起始坐标未初始化，则进行初始化
-        if (this.beginY==null) {
-            // 如果页面Y轴当前坐标为空，则初始化为最大高度-上边距-字体高度-行间距
-            if (page.getParam().getPageY()==null) {
-                // 初始化为最大高度-上边距-字体高度-行间距
-                this.beginY = this.maxHeight - this.marginTop - this.fontHeight - this.leading;
+        // 获取页面Y轴坐标
+        Float pageY = page.getParam().getPageY();
+        if (pageY==null) {
+            pageY = page.getLastPage().getMediaBox().getHeight();
+        }
+        if (this.isTextAppend) {
+            this.beginY = pageY - this.marginTop + this.marginBottom;
+            return;
+        }
+        if (this.verticalStyle==XEasyPdfTextStyle.TOP) {
+            if (this.isChildComponent) {
+                this.beginY = this.beginY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
             }
-            // 页面Y轴当前坐标不为空
             else {
-                // 初始化为页面Y轴当前坐标
-                this.beginY = page.getParam().getPageY();
-                // 如果不为文本追加，则还需换行
-                if (!this.isTextAppend) {
-                    // 初始化为页面Y轴当前坐标-上边距-字体高度-行间距
-                    this.beginY = this.beginY - this.marginTop - this.fontHeight - this.leading;
-                }
+                this.beginY = pageY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
+            }
+            return;
+        }
+        if (this.verticalStyle==XEasyPdfTextStyle.CENTER) {
+            if (this.isChildComponent) {
+                this.beginY = this.beginY - this.maxHeight / 2 - this.leading - this.marginTop + this.marginBottom;
+            }
+            else {
+                this.beginY = pageY - this.maxHeight / 2 - this.leading - this.marginTop + this.marginBottom;
+            }
+            return;
+        }
+        if (this.verticalStyle==XEasyPdfTextStyle.BOTTOM) {
+            if (this.isChildComponent) {
+                this.beginY = this.beginY - this.marginTop + this.marginBottom;
+            }else {
+                this.beginY = pageY - this.marginTop + this.marginBottom;
             }
         }
     }
@@ -328,30 +357,28 @@ class XEasyPdfTextParam {
     private void initTextList(XEasyPdfPage page) {
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {
-            // 定义自动缩进
-            String autoIndent = "";
-            // 如果缩进值不为空，则重置自动缩进
-            if (this.indent!=null) {
-                // 定义字符串构建器
-                StringBuilder builder = new StringBuilder();
-                // 循环添加空格字符
-                for (int i = 0; i < this.indent; i++) {
-                    // 添加空格字符
-                    builder.append(" ");
-                }
-                // 重置自动缩进
-                autoIndent = builder.toString();
-            }
-            // 重置待添加文本
-            this.text = autoIndent + this.text;
+            // 初始化缩进
+            this.initIndent();
             // 开启文本追加
             if (this.isTextAppend) {
+                // 定义X轴坐标
+                float x;
+                // 如果X轴起始坐标为空，则初始化X轴坐标为页面X轴坐标
+                if (this.beginX==null) {
+                    // 初始化X轴坐标为页面X轴坐标
+                    x = page.getParam().getPageX()==null?0F:page.getParam().getPageX();
+                }
+                // 否则初始化为X轴起始坐标
+                else {
+                    // 初始化为X轴起始坐标
+                    x = this.beginX;
+                }
                 // 获取第一行文本
                 String firstLineText = XEasyPdfTextUtil.splitText(
                         // 待输入文本
                         this.text,
                         // 行宽度 = 最大宽度 - 左边距 - 右边距
-                        this.maxWidth - this.beginX - this.marginRight,
+                        this.maxWidth - x - this.marginRight,
                         // 字体
                         this.font,
                         // 字体大小
@@ -393,8 +420,6 @@ class XEasyPdfTextParam {
                             // 字体大小
                             this.fontSize
                     );
-                    // 重置页面Y轴起始坐标（换行）
-                    this.beginY -= (this.fontHeight + this.leading);
                     // 重置页面X轴起始坐标（换行）
                     this.beginX = this.marginLeft;
                     // 重置页面X轴
@@ -421,5 +446,27 @@ class XEasyPdfTextParam {
             // 模板列表重置为待添加文本列表
             this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
         }
+    }
+
+    /**
+     * 初始化缩进
+     */
+    private void initIndent() {
+        // 定义自动缩进
+        String autoIndent = "";
+        // 如果缩进值不为空，则重置自动缩进
+        if (this.indent!=null) {
+            // 定义字符串构建器
+            StringBuilder builder = new StringBuilder();
+            // 循环添加空格字符
+            for (int i = 0; i < this.indent; i++) {
+                // 添加空格字符
+                builder.append(" ");
+            }
+            // 重置自动缩进
+            autoIndent = builder.toString();
+        }
+        // 重置待添加文本
+        this.text = autoIndent + this.text;
     }
 }

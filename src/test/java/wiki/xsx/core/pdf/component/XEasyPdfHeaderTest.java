@@ -15,7 +15,7 @@ import java.util.Arrays;
  * @date 2020/6/12
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -74,7 +74,7 @@ public class XEasyPdfHeaderTest {
                                 XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(100F).setWidth(100F),
                                 XEasyPdfHandler.Text.build(
                                         "Hello XSX!!!Hello XSX!!!Hello XSX!!!Hello XSX!!!"
-                                ).setStyle(XEasyPdfTextStyle.CENTER).setFontSize(30F)
+                                ).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setFontSize(30F)
                         ).addSplitLine(
                                 XEasyPdfHandler.SplitLine.SolidLine.build().setColor(lineColor).setMarginTop(5F),
                                 XEasyPdfHandler.SplitLine.DottedLine.build().setMarginTop(5F),
@@ -123,7 +123,7 @@ public class XEasyPdfHeaderTest {
                                 "4.这是第四行。。。。",
                                 "5.这是第五行。。。。"
                             )
-                        ).setStyle(XEasyPdfTextStyle.CENTER).setFontSize(16F)
+                        ).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setFontSize(16F)
                 )
         ).setFontPath(FONT_PATH).setGlobalHeader(
                 XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("Hello World"))

@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2020/3/9
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -443,8 +443,6 @@ public class XEasyPdfPage {
      * @param pageSize 页面尺寸
      */
     void build(XEasyPdfDocument document, PDRectangle pageSize) {
-        // 初始化总页数
-        document.getParam().initTotalPage(this.param.getPageList().size());
         // 初始化参数
         this.param.init(document, this);
         // 如果原有pdfbox页面列表为空，则添加新页面，否则设置页面尺寸
@@ -453,12 +451,12 @@ public class XEasyPdfPage {
             this.addNewPage(document, pageSize);
         // 如果原有pdfbox页面列表不为空，则设置页面尺寸
         }else {
+            // 获取原有pdfbox页面列表
+            List<PDPage> pageList = this.param.getPageList();
             // 如果页面尺寸不为空，则进行设置
             if (this.param.getModifyPageSize()!=null) {
                 // 获取页面尺寸
                 PDRectangle modifyPageSize = this.param.getModifyPageSize();
-                // 获取原有pdfbox页面列表
-                List<PDPage> pageList = this.param.getPageList();
                 // 遍历pdfbox页面列表
                 for (PDPage pdPage : pageList) {
                     // 设置页面尺寸
@@ -619,15 +617,17 @@ public class XEasyPdfPage {
     private void drawWatermark(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页面水印，则进行页面水印绘制
         if (this.param.isAllowWatermark()) {
-            // 如果页面水印未初始化，则设置全局页面水印
-            if (this.param.getWatermark()==null) {
-                // 设置全局页面水印
-                this.param.setWatermark(document.getGlobalWatermark());
+            // 获取页面水印
+            XEasyPdfWatermark watermark = this.param.getWatermark();
+            // 如果页面水印未初始化，则重置为全局页面水印
+            if (watermark==null) {
+                // 重置为全局页面水印
+                watermark = document.getGlobalWatermark();
             }
             // 如果页面水印不为空，则进行绘制
-            if (this.param.getWatermark()!=null) {
-                // 绘制页面水印
-                this.param.getWatermark().draw(document, this);
+            if (watermark!=null) {
+                // 绘制水印
+                watermark.draw(document, this);
             }
         }
     }

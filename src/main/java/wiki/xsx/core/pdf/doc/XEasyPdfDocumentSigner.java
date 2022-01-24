@@ -6,7 +6,6 @@ import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.io.IOUtils;
-import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface;
@@ -21,7 +20,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
-import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -39,7 +37,7 @@ import java.util.List;
  * @date 2021/12/7
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -62,7 +60,7 @@ public class XEasyPdfDocumentSigner {
      */
     XEasyPdfDocumentSigner(XEasyPdfDocument pdfDocument) {
         this.param.setPdfDocument(pdfDocument);
-        this.param.setDocument(this.param.getPdfDocument().getTarget());
+        this.param.setDocument(this.param.getPdfDocument().build());
     }
 
     /**
@@ -188,20 +186,16 @@ public class XEasyPdfDocumentSigner {
         this.param.init(pageIndex);
         try (
                 // 创建字节数组输出流
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
-                // 创建写入器
-                COSWriter writer = new COSWriter(byteArrayOutputStream)
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024)
         ) {
             // 创建任务文档
             PDDocument target = this.param.getDocument();
-            // 关联字体
-            XEasyPdfFontUtil.subsetFonts();
             // 设置文档信息及保护策略
             this.param.getPdfDocument().setInfoAndPolicyAndBookmark(target);
-            // 写入文档
-            writer.write(target);
+            // 保存文档
+            target.save(byteArrayOutputStream);
             // 添加签名
-            this.addSignature(PDDocument.load(byteArrayOutputStream.toByteArray()), outputStream);
+            this.addSignature(target, outputStream);
         }
         // 关闭文档
         this.param.getPdfDocument().close();

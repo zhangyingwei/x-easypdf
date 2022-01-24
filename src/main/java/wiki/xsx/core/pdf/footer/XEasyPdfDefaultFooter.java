@@ -13,7 +13,7 @@ import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
  * @date 2020/6/7
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -115,6 +115,19 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
         return this.param.getHeight();
     }
 
+    @Override
+    public boolean check(XEasyPdfComponent component) {
+        if (component!=null) {
+            if (component instanceof XEasyPdfImage) {
+                return this.param.getImage()!=null&&this.param.getImage().equals(component);
+            }
+            if (component instanceof XEasyPdfText) {
+                return this.param.getText()!=null&&this.param.getText().equals(component);
+            }
+        }
+        return false;
+    }
+
     /**
      * 绘制
      * @param document pdf文档
@@ -133,7 +146,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
                     .setMarginLeft(this.param.getMarginLeft())
                     .setMarginRight(this.param.getMarginRight())
                     .setMarginBottom(this.param.getMarginBottom())
-                    .setPosition(this.param.getBeginX(), 0)
+                    .setPosition(this.param.getBeginX(), this.param.getBeginY())
                     .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
                     .draw(document, page);
         }
@@ -145,7 +158,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
                     .setMarginLeft(this.param.getMarginLeft())
                     .setMarginRight(this.param.getMarginRight())
                     .setMarginBottom(this.param.getMarginBottom())
-                    .setPosition(this.param.getBeginX(), this.param.getBeginY())
+                    .setPosition(this.param.getBeginX(), this.param.getBeginY() + this.param.getText().getHeight(document, page, this.param.getMarginLeft(), this.param.getMarginRight()))
                     .setCheckPage(false)
                     .draw(document, page);
         }

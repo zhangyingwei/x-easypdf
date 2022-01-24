@@ -28,7 +28,7 @@ import java.util.*;
  * @date 2020/6/8
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -59,13 +59,13 @@ public class XEasyPdfDocumentTest {
         String filePath = OUTPUT_PATH + "testAddPage.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
+                        XEasyPdfHandler.Text.build("Hello World").setHorizontalStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("可以，世界！"),
                         XEasyPdfHandler.Text.build("我是第一页")
                 ),
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.Text.build("你好，世界！").setStyle(XEasyPdfTextStyle.CENTER),
-                        XEasyPdfHandler.Text.build("我是第二页").setStyle(XEasyPdfTextStyle.RIGHT)
+                        XEasyPdfHandler.Text.build("你好，世界！").setHorizontalStyle(XEasyPdfTextStyle.CENTER),
+                        XEasyPdfHandler.Text.build("我是第二页").setHorizontalStyle(XEasyPdfTextStyle.RIGHT)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
@@ -77,7 +77,7 @@ public class XEasyPdfDocumentTest {
         String filePath = OUTPUT_PATH + "doc1.pdf";
         XEasyPdfHandler.Document.load(sourcePath).addPage(
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
+                        XEasyPdfHandler.Text.build("Hello World").setHorizontalStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("你好，世界！")
                 ).setFontPath(FONT_PATH)
         ).save(filePath).close();
@@ -156,7 +156,7 @@ public class XEasyPdfDocumentTest {
                 XEasyPdfHandler.Page.build()
         ).setFontPath(FONT_PATH)
                 .setGlobalBackgroundColor(new Color(0,191,255))
-                .setGlobalBackgroundImage(XEasyPdfHandler.Image.build(new File(imagePath)).setStyle(XEasyPdfImageStyle.CENTER).setMarginTop(300))
+                .setGlobalBackgroundImage(XEasyPdfHandler.Image.build(new File(imagePath)).setHorizontalStyle(XEasyPdfImageStyle.CENTER).setMarginTop(300))
                 .save(filePath)
                 .close();
         System.out.println("finish");
@@ -356,7 +356,7 @@ public class XEasyPdfDocumentTest {
                 // 构建页眉
                 XEasyPdfHandler.Header.build(
                         // 构建页眉文本，并居中显示
-                        XEasyPdfHandler.Text.build("这是页眉").setStyle(XEasyPdfTextStyle.CENTER)
+                        XEasyPdfHandler.Text.build("这是页眉").setHorizontalStyle(XEasyPdfTextStyle.CENTER)
                 )
                 // 设置全局页脚
         ).setGlobalFooter(
@@ -372,21 +372,21 @@ public class XEasyPdfDocumentTest {
                         // 构建文本
                         XEasyPdfHandler.Text.build(
                                 "Hello World(这是一个DEMO)"
-                        ).setStyle(XEasyPdfTextStyle.CENTER).setFontSize(20F).setMargin(10F)
+                        ).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setFontSize(20F).setMargin(10F)
                         // 构建文本
                         ,XEasyPdfHandler.Text.build(
                                 "        这里是正文（这是一个基于PDFBOX开源工具，专注于PDF文件导出功能，" +
                                         "以组件形式进行拼接，简单、方便，上手及其容易，" +
                                         "目前有TEXT(文本)、LINE(分割线)等组件，后续还会补充更多组件，满足各种需求）。"
-                        ).setStyle(XEasyPdfTextStyle.LEFT).setFontSize(14F).setMargin(10F)
+                        ).setHorizontalStyle(XEasyPdfTextStyle.LEFT).setFontSize(14F).setMargin(10F)
                         // 构建文本
                         ,XEasyPdfHandler.Text.build(
                                 "-- by xsx"
-                        ).setStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
+                        ).setHorizontalStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
                         // 构建文本
                         ,XEasyPdfHandler.Text.build(
                                 "2020.03.12"
-                        ).setStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
+                        ).setHorizontalStyle(XEasyPdfTextStyle.RIGHT).setFontSize(12F).setMarginTop(10F).setMarginRight(10F)
                         // 构建实线分割线
                         ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F)
                         // 构建虚线分割线
@@ -394,7 +394,7 @@ public class XEasyPdfDocumentTest {
                         // 构建实线分割线
                         ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F)
                         // 构建文本
-                        ,XEasyPdfHandler.Text.build( "完结").setStyle(XEasyPdfTextStyle.CENTER)
+                        ,XEasyPdfHandler.Text.build( "完结").setHorizontalStyle(XEasyPdfTextStyle.CENTER)
                 )
                 // 设置字体路径，并保存
         ).save(outputPath).close();
@@ -445,17 +445,19 @@ public class XEasyPdfDocumentTest {
         // 获取背景图片
         try (InputStream backgroundImageInputStream = new URL("https://i0.hdslb.com/bfs/article/1e60a08c2dfdcfcd5bab0cae4538a1a7fe8fc0f3.png").openStream()) {
             // 设置背景图片
-            XEasyPdfHandler.Document.build().setGlobalBackgroundImage(
+            XEasyPdfHandler.Document.build()
+                    .setGlobalBackgroundImage(
                     // 构建图片并垂直居中
-                    XEasyPdfHandler.Image.build(backgroundImageInputStream, XEasyPdfImageType.PNG).enableVerticalCenterStyle()
+                    XEasyPdfHandler.Image.build(backgroundImageInputStream, XEasyPdfImageType.PNG).setVerticalStyle(XEasyPdfImageStyle.CENTER)
                     // 设置全局页眉
-            ).setGlobalHeader(
+            )
+                    .setGlobalHeader(
                     // 构建页眉
                     XEasyPdfHandler.Header.build(
                             // 构建页眉文本，并居中显示
                             XEasyPdfHandler.Text.build("这是粗体页眉")
                                     // 设置水平居中
-                                    .setStyle(XEasyPdfTextStyle.CENTER)
+                                    .setHorizontalStyle(XEasyPdfTextStyle.CENTER)
                                     // 设置字体大小
                                     .setFontSize(20F)
                                     // 设置字体颜色
@@ -464,13 +466,14 @@ public class XEasyPdfDocumentTest {
                                     .setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                     )
                     // 设置全局页脚
-            ).setGlobalFooter(
+            )
+                    .setGlobalFooter(
                     // 构建页脚
                     XEasyPdfHandler.Footer.build(
                             // 构建页脚文本，并居中显示
                             XEasyPdfHandler.Text.build("这是粗体页脚")
                                     // 设置水平居中
-                                    .setStyle(XEasyPdfTextStyle.CENTER)
+                                    .setHorizontalStyle(XEasyPdfTextStyle.CENTER)
                                     // 设置字体大小
                                     .setFontSize(20F)
                                     // 设置字体颜色
@@ -479,13 +482,14 @@ public class XEasyPdfDocumentTest {
                                     .setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                     )
                     // 添加页面
-            ).addPage(
+            )
+                    .addPage(
                     // 构建页面
                     XEasyPdfHandler.Page.build(
                             // 构建文本
                             XEasyPdfHandler.Text.build(
                                     "x-easypdf简介（细体）"
-                            ).setStyle(XEasyPdfTextStyle.CENTER)
+                            ).setHorizontalStyle(XEasyPdfTextStyle.CENTER)
                                     // 设置字体大小
                                     .setFontSize(30F)
                                     // 设置上边距
@@ -515,11 +519,11 @@ public class XEasyPdfDocumentTest {
                             // 构建文本
                             ,XEasyPdfHandler.Text.build(
                                     "-- by xsx"
-                            ).setStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
+                            ).setHorizontalStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
                             // 构建文本
                             ,XEasyPdfHandler.Text.build(
                                     "2021.10.10"
-                            ).setStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
+                            ).setHorizontalStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
                             // 构建实线分割线
                             ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F).setColor(lineColor).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
                             // 构建虚线分割线
@@ -606,7 +610,7 @@ public class XEasyPdfDocumentTest {
                 )
         ).setGlobalHeader(
                 XEasyPdfHandler.Header.build(
-                        XEasyPdfHandler.Text.build(Arrays.asList("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder(), "页眉第二行", "页眉XXXXXX")).setStyle(XEasyPdfTextStyle.CENTER)
+                        XEasyPdfHandler.Text.build(Arrays.asList("当前页码："+XEasyPdfHandler.Page.getCurrentPagePlaceholder(), "页眉第二行", "页眉XXXXXX")).setHorizontalStyle(XEasyPdfTextStyle.CENTER)
                 )
         ).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(
@@ -627,7 +631,7 @@ public class XEasyPdfDocumentTest {
         try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
             XEasyPdfHandler.Document.build(
                     XEasyPdfHandler.Page.build(
-                            XEasyPdfHandler.Text.build("爽爽的贵阳，避暑的天堂").setFontSize(16).setStyle(XEasyPdfTextStyle.CENTER)
+                            XEasyPdfHandler.Text.build("爽爽的贵阳，避暑的天堂").setFontSize(16).setHorizontalStyle(XEasyPdfTextStyle.CENTER)
                     )
             ).signer().setSignerInfo(
                     "xsx", "贵阳市", "测试", "qq: 344646090"
@@ -637,6 +641,40 @@ public class XEasyPdfDocumentTest {
                     XEasyPdfImageUtil.read(new File(imagePath)), 240F, 30F, 50F
             ).sign(0, outputStream);
         }
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
+
+    @Test
+    public void test29() throws IOException {
+        long begin = System.currentTimeMillis();
+        // 定义源路径
+        final String sourcePath = OUTPUT_PATH + "merge.pdf";
+        // 定义保存路径
+        final String outputPath = OUTPUT_PATH + "replaceText.pdf";
+        Map<String, String> replaceMap = new HashMap<>(1);
+        replaceMap.put("\\d", "数字");
+        try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
+            XEasyPdfHandler.Document.load(sourcePath).replacer().replaceText(replaceMap).finish(outputStream);
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
+
+    @Test
+    public void test30() throws IOException {
+        long begin = System.currentTimeMillis();
+        // 定义保存路径
+        final String outputPath = OUTPUT_PATH + "flush.pdf";
+        XEasyPdfHandler.Document.build(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build("你好")
+                )
+        ).flush().addPage(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build("贵阳")
+                )
+        ).save(outputPath);
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }

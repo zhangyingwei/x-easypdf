@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2020/6/12
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -47,7 +47,7 @@ public class XEasyPdfPageTest {
         String filePath = OUTPUT_PATH + "testAddComponent.pdf";
         XEasyPdfHandler.Document.build(
                 XEasyPdfHandler.Page.build().setRotation(XEasyPdfPage.Rotation.FORWARD_0).setFontPath(FONT_PATH).addComponent(
-                        XEasyPdfHandler.Text.build("Hello World").setStyle(XEasyPdfTextStyle.CENTER),
+                        XEasyPdfHandler.Text.build("Hello World").setHorizontalStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build("你好，世界！").setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT),
                         XEasyPdfHandler.Text.build("我是第一页").setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                 )

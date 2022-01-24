@@ -1,6 +1,7 @@
 package wiki.xsx.core.pdf.footer;
 
 
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
@@ -10,7 +11,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
  * @date 2020/6/7
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -58,6 +59,13 @@ public interface XEasyPdfFooter {
      * @return 返回页脚高度
      */
     float getHeight(XEasyPdfDocument document, XEasyPdfPage page);
+
+    /**
+     * 检查组件
+     * @param component 组件
+     * @return 返回布尔值，true为是，false为否
+     */
+    boolean check(XEasyPdfComponent component);
 
     /**
      * 绘制

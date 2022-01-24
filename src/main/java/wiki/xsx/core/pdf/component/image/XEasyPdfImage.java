@@ -17,7 +17,7 @@ import java.io.InputStream;
  * @date 2020/3/30
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -127,11 +127,20 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 开启垂直居中样式
+     * 开启居中样式（水平居中，垂直居中）
      * @return 返回图片组件
      */
-    public XEasyPdfImage enableVerticalCenterStyle() {
-        this.param.setEnableVerticalCenterStyle(true);
+    public XEasyPdfImage enableCenterStyle() {
+        this.param.setHorizontalStyle(XEasyPdfImageStyle.CENTER).setVerticalStyle(XEasyPdfImageStyle.CENTER);
+        return this;
+    }
+
+    /**
+     * 开启子组件
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage enableChildComponent() {
+        this.param.setChildComponent(true);
         return this;
     }
 
@@ -162,6 +171,16 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
+     * 设置最大高度
+     * @param maxHeight 最大高度
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage setMaxHeight(float maxHeight) {
+        this.param.setMaxHeight(Math.abs(maxHeight));
+        return this;
+    }
+
+    /**
      * 设置边距（上下左右）
      * @param margin 边距
      * @return 返回图片组件
@@ -177,7 +196,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage setMarginLeft(float margin) {
-        this.param.setMarginLeft(margin);
+        this.param.setMarginLeft(margin).setHorizontalStyle(XEasyPdfImageStyle.LEFT);
         return this;
     }
 
@@ -212,13 +231,33 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 设置图片样式（居左、居中、居右）
+     * 设置水平样式（居左、居中、居右）
      * @param style 样式
      * @return 返回图片组件
      */
-    public XEasyPdfImage setStyle(XEasyPdfImageStyle style) {
+    public XEasyPdfImage setHorizontalStyle(XEasyPdfImageStyle style) {
         if (style!=null) {
-            this.param.setStyle(style);
+            if (style==XEasyPdfImageStyle.LEFT||style==XEasyPdfImageStyle.CENTER||style==XEasyPdfImageStyle.RIGHT) {
+                this.param.setHorizontalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 设置垂直样式（居上、居中、居下）
+     * @param style 样式
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage setVerticalStyle(XEasyPdfImageStyle style) {
+        if (style!=null) {
+            if (style==XEasyPdfImageStyle.TOP||style==XEasyPdfImageStyle.CENTER||style==XEasyPdfImageStyle.BOTTOM) {
+                this.param.setVerticalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
+            }
         }
         return this;
     }
@@ -293,7 +332,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 初始化pdfBox图片
-        PDImageXObject pdImage = this.param.init(document, page);
+        PDImageXObject pdImage = this.param.init(document, page, this);
         // 初始化位置
         this.param.initPosition(document, page);
         // 新建内容流
@@ -302,7 +341,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                false
+                true
         );
         // 添加图片
         contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY());
@@ -315,6 +354,14 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         }
         // 完成标记
         this.param.setDraw(true);
+        // 释放待添加图片资源
+        this.param.getImage().getGraphics().dispose();
+        // 释放pdfbox图片资源
+        this.param.getImageXObject().getImage().getGraphics().dispose();
+        // 设置待添加图片为空
+        this.param.setImage(null);
+        // 设置pdfbox图片为空
+        this.param.setImageXObject(null);
     }
 
     /**
@@ -333,7 +380,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片宽度
      */
     public float getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
-        return this.param.init(document, page).getWidth();
+        return this.param.init(document, page, this).getWidth();
     }
 
     /**
@@ -343,7 +390,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片高度
      */
     public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
-        return this.param.init(document, page).getHeight();
+        return this.param.init(document, page, this).getHeight();
     }
 
     /**
@@ -379,11 +426,19 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 获取图片样式
+     * 获取水平样式
      * @return 返回图片样式
      */
-    public XEasyPdfImageStyle getStyle() {
-        return this.param.getStyle();
+    public XEasyPdfImageStyle getHorizontalStyle() {
+        return this.param.getHorizontalStyle();
+    }
+
+    /**
+     * 获取垂直样式
+     * @return 返回图片样式
+     */
+    public XEasyPdfImageStyle getVerticalStyle() {
+        return this.param.getVerticalStyle();
     }
 
     /**

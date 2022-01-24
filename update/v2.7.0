@@ -2,12 +2,28 @@
 
 新特性：
 1. XEasyPdfText文本组件新增设置下划线的方法
-2. XEasyPdfText文本组件新增设置删除线的方法
-3. XEasyPdfText文本组件新增设置高亮显示的方法
-4. XEasyPdfText文本组件新增设置垂直居中的方法
+2. XEasyPdfText文本组件新增设置下划线颜色的方法
+3. XEasyPdfText文本组件新增设置下划线宽度的方法
+4. XEasyPdfText文本组件新增设置删除线的方法
+5. XEasyPdfText文本组件新增设置删除线颜色的方法
+6. XEasyPdfText文本组件新增设置高亮显示的方法
+7. XEasyPdfText文本组件新增设置垂直居中的方法
+8. XEasyPdfText文本组件新增开启水平垂直居中的方法
+9. XEasyPdfImage图片组件新增设置垂直居中的方法
+10. XEasyPdfImage图片组件新增开启水平垂直居中的方法
+11. XEasyPdfDocument文档新增刷新方法（临时保存文件，用于创建较大文档）
+12. XEasyPdfDocument文档新增设置临时目录方法（临时文件保存路径，用于创建较大文档）
+13. XEasyPdfDocument文档新增获取文档替换器的方法
+14. 新增XEasyPdfDocumentReplacer文档替换器
+15. XEasyPdfDocumentReplacer文档替换器新增文本替换方法（支持正则替换）
+16. XEasyPdfDocumentReplacer文档替换器新增图片替换方法
 
 原有变更：
-无
+1. XEasyPdfText文本组件#setStyle方法变更为#setHorizontalStyle方法
+2. XEasyPdfText文本组件#setStyle方法变更为#setHorizontalStyle方法
+3. XEasyPdfImage图片组件#enableVerticalCenterStyle方法变更为#setVerticalStyle方法
 
 问题修复：
-无
+1. XEasyPdfText文本组件手动分行失效问题
+2. 加载源文档添加水印内存溢出问题（issue#I4RGGV，issue#I4MNGP）
+3. 创建大文档内存溢出问题，可调用flush暂存解决（issue#I4NZXJ，issue#I3TASO）

@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2020/4/7
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -71,15 +71,15 @@ public class XEasyPdfPageParam {
     /**
      * 包含的pdfBox页面列表
      */
-    private List<PDPage> pageList = new ArrayList<>(256);
+    private List<PDPage> pageList = new ArrayList<>(64);
     /**
      * 新增的pdfBox页面列表
      */
-    private List<PDPage> newPageList = new ArrayList<>(256);
+    private List<PDPage> newPageList = new ArrayList<>(64);
     /**
      * pdf组件列表
      */
-    private List<XEasyPdfComponent> componentList = new ArrayList<>(128);
+    private List<XEasyPdfComponent> componentList = new ArrayList<>(64);
     /**
      * 页面水印
      */
@@ -136,7 +136,7 @@ public class XEasyPdfPageParam {
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         if (this.fontPath==null) {
-            this.fontPath = this.defaultFontStyle.getPath();
+            this.fontPath = document.getParam().getFontPath();
         }
         this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath, true);
         if (this.allowBackgroundColor) {
@@ -147,5 +147,14 @@ public class XEasyPdfPageParam {
                 this.backgroundColor = Color.WHITE;
             }
         }
+    }
+
+    /**
+     * 重置包含的pdfBox页面列表
+     * @param newPageList 新pdfBox页面列表
+     */
+    void resetPageList(List<PDPage> newPageList) {
+        this.pageList.clear();
+        this.pageList = newPageList;
     }
 }

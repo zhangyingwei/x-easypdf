@@ -1,14 +1,14 @@
 package wiki.xsx.core.pdf.doc;
 
-import org.apache.pdfbox.multipdf.Splitter;
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import wiki.xsx.core.pdf.util.XEasyPdfConvertUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2020/5/24
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -52,7 +52,7 @@ public class XEasyPdfDocumentSplitter {
      */
     XEasyPdfDocumentSplitter(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.getTarget();
+        this.document = this.pdfDocument.build();
     }
 
     /**
@@ -69,9 +69,8 @@ public class XEasyPdfDocumentSplitter {
      * 拆分文档
      * @param outputPath 输出路径（目录）
      * @return 返回pdf文档
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentSplitter split(String outputPath) throws IOException {
+    public XEasyPdfDocumentSplitter split(String outputPath) {
         return this.split(outputPath, null);
     }
 
@@ -81,9 +80,9 @@ public class XEasyPdfDocumentSplitter {
      * @param outputPath 输出路径（目录）
      * @param prefix 文档名称前缀
      * @return 返回pdf文档
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentSplitter split(String outputPath, String prefix) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocumentSplitter split(String outputPath, String prefix) {
         // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
         if (prefix==null) {
             // 初始化文档名称前缀
@@ -100,25 +99,31 @@ public class XEasyPdfDocumentSplitter {
                 // 构建文件名称
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append(".pdf");
                 // 获取输出流
-                try(OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString())))) {
+                try(OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
                     // 拆分文档
                     this.split(outputStream, XEasyPdfConvertUtil.toInt(this.documentList.get(i)));
                 }
             }
             //  按单页面拆分
         }else {
-            // 拆分文档
-            List<PDDocument> documents = new Splitter().split(this.document);
             // 定义拆分文档列表索引
             int index = 1;
-            // 遍历拆分文档列表
-            for (PDDocument target : documents) {
+            // 获取pdfbox页面树
+            PDPageTree pageTree = this.document.getPages();
+            // 遍历页面树
+            for (PDPage sourcePage : pageTree) {
+                // 创建任务
+                PDDocument target = new PDDocument();
+                // 添加页面
+                PDPage importPage = target.importPage(sourcePage);
+                // 添加页面资源
+                importPage.setResources(sourcePage.getResources());
                 // 新建文件名称构造器
                 fileNameBuilder = new StringBuilder();
                 // 构建文件名称
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(index).append(".pdf");
                 // 获取输出流
-                try(OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString())))) {
+                try(OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
                     // 设置文档信息及保护策略
                     this.pdfDocument.setInfoAndPolicyAndBookmark(target);
                     // 保存文档
@@ -138,9 +143,9 @@ public class XEasyPdfDocumentSplitter {
      * @param outputStream 输出流
      * @param pageIndex 页面索引
      * @return 返回pdf文档
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentSplitter split(OutputStream outputStream, int ...pageIndex) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocumentSplitter split(OutputStream outputStream, int ...pageIndex) {
         // 新建任务文档
         try(PDDocument target = new PDDocument()) {
             // 获取源文档页面树

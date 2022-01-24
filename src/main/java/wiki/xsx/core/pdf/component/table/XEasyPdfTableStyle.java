@@ -9,7 +9,7 @@ import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
  * @date 2020/12/29
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -22,6 +22,10 @@ import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
  */
 public enum XEasyPdfTableStyle {
     /**
+     * 居上
+     */
+    TOP(XEasyPdfTextStyle.TOP, XEasyPdfImageStyle.TOP),
+    /**
      * 居中
      */
     CENTER(XEasyPdfTextStyle.CENTER, XEasyPdfImageStyle.CENTER),
@@ -32,7 +36,11 @@ public enum XEasyPdfTableStyle {
     /**
      * 居右
      */
-    RIGHT(XEasyPdfTextStyle.RIGHT, XEasyPdfImageStyle.RIGHT);
+    RIGHT(XEasyPdfTextStyle.RIGHT, XEasyPdfImageStyle.RIGHT),
+    /**
+     * 居下
+     */
+    BOTTOM(XEasyPdfTextStyle.BOTTOM, XEasyPdfImageStyle.BOTTOM);
 
     /**
      * 文本样式

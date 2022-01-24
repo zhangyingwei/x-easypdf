@@ -1,19 +1,16 @@
 package wiki.xsx.core.pdf.util;
 
-import lombok.SneakyThrows;
 import org.apache.fontbox.ttf.OTFParser;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 字体工具
@@ -21,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2020/4/7
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -34,10 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class XEasyPdfFontUtil {
 
-    /**
-     * 字体缓存
-     */
-    private static final Map<String, PDFont> FONTCACHE = new ConcurrentHashMap<>(32);
     /**
      * 开源字体
      */
@@ -68,20 +61,20 @@ public class XEasyPdfFontUtil {
         if (fontPath!=null) {
             PDFont font;
             if (isEmbedded) {
-                font = FONTCACHE.get(fontPath);
+                font = document.getFont(fontPath);
                 if (font!=null) {
                     return font;
                 }
             }
             Path path = Paths.get(fontPath);
-            try (InputStream inputStream = Files.newInputStream(path)) {
+            try (InputStream inputStream = new BufferedInputStream(Files.newInputStream(path))) {
                 if (path.getFileName().toString().endsWith(OTF)) {
                     font = PDType0Font.load(document.getTarget(), new OTFParser(isEmbedded, true).parse(inputStream), isEmbedded);
                 }else {
                     font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
                 }
                 if (isEmbedded) {
-                    FONTCACHE.put(fontPath, font);
+                    document.addFont(fontPath, font);
                 }
                 return font;
             }catch (Exception e) {
@@ -103,7 +96,7 @@ public class XEasyPdfFontUtil {
     public static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page, String fontPath, boolean isEmbedded) {
         if (fontPath!=null) {
             if (isEmbedded) {
-                PDFont font = FONTCACHE.get(fontPath);
+                PDFont font = document.getFont(fontPath);
                 if (font!=null) {
                     return font;
                 }
@@ -122,7 +115,7 @@ public class XEasyPdfFontUtil {
      * @return 返回pdfBox字体
      */
     private static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath, boolean isEmbedded) {
-        try (InputStream inputStream = XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)) {
+        try (InputStream inputStream = new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath))) {
             PDFont font;
             if (fontResourcePath.endsWith(OTF)) {
                 font = PDType0Font.load(document.getTarget(), new OTFParser(isEmbedded, true).parse(inputStream), isEmbedded);
@@ -130,7 +123,7 @@ public class XEasyPdfFontUtil {
                 font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
             }
             if (isEmbedded) {
-                FONTCACHE.put(fontResourcePath, font);
+                document.addFont(fontResourcePath, font);
             }
             return font;
         }catch (Exception e) {
@@ -200,17 +193,5 @@ public class XEasyPdfFontUtil {
                 offset += Character.charCount(codePoint);
             }
         }
-    }
-
-    /**
-     * 关联字体
-     */
-    @SneakyThrows
-    public static void subsetFonts() {
-        Collection<PDFont> values = FONTCACHE.values();
-        for (PDFont font : values) {
-            font.subset();
-        }
-        FONTCACHE.clear();
     }
 }

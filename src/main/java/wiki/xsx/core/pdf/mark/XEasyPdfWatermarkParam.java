@@ -3,7 +3,6 @@ package wiki.xsx.core.pdf.mark;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
@@ -18,7 +17,7 @@ import java.awt.*;
  * @date 2020/3/25
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -39,7 +38,7 @@ class XEasyPdfWatermarkParam {
     /**
      * 默认字体样式
      */
-    private XEasyPdfDefaultFontStyle defaultFontStyle;
+    private XEasyPdfDefaultFontStyle defaultFontStyle = XEasyPdfDefaultFontStyle.NORMAL;
     /**
      * 字体路径
      */
@@ -59,7 +58,7 @@ class XEasyPdfWatermarkParam {
     /**
      * 透明度（值越小越透明，0.0-1.0）
      */
-    private Float alpha = 0.1F;
+    private Float alpha = 0.2F;
     /**
      * 文本弧度
      */
@@ -73,20 +72,26 @@ class XEasyPdfWatermarkParam {
      */
     private Float wordSpace;
     /**
+     * 文本行数
+     */
+    private Integer wordLine = 9;
+    /**
      * 文本行间距
      */
     private Float leading;
-
+    /**
+     * 是否需要初始化
+     */
+    private boolean isNeedInit = true;
 
     /**
      * 初始化
      * @param document pdf文档
      * @param page pdf页面
-     * @return 返回pdfBox扩展图形对象
      */
-    PDExtendedGraphicsState init(XEasyPdfDocument document, XEasyPdfPage page) {
-        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
-        if (this.fontPath==null&&this.defaultFontStyle!=null) {
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 如果字体路径为空，则进行初始化字体路径
+        if (this.fontPath==null) {
             // 初始化字体路径
             this.fontPath = this.defaultFontStyle.getPath();
         }
@@ -103,42 +108,30 @@ class XEasyPdfWatermarkParam {
             this.leading = this.fontSize * 2;
         }
         // 初始化水印文本
-        this.initText(
-                this.text==null?"XEasyPdf":this.text,
-                page.getLastPage().getMediaBox().getWidth()
-        );
-        // 初始化pdfBox扩展图形对象
-        PDExtendedGraphicsState state = new PDExtendedGraphicsState();
-        // 设置文本透明度
-        state.setNonStrokingAlphaConstant(this.alpha);
-        // 设置透明度标记
-        state.setAlphaSourceFlag(true);
-        return state;
+        this.text = this.initText();
+        // 是否需要初始化为false
+        this.isNeedInit = false;
     }
 
     /**
      * 初始化水印文本
-     * @param text 水印文本
-     * @param pageWidth 页面宽度
+     * @return 返回文本
      */
-    private void initText(String text, float pageWidth) {
-        // 获取文本循环数量
-        int wordCount = (int) (pageWidth / (this.fontSize)) + 1;
+    private String initText() {
         // 获取空格循环数量
         int blankCount = (int) (this.wordSpace / this.fontSize);
         // 创建字符串构建器
         StringBuilder builder = new StringBuilder();
         // 循环构建文本
-        for (int i = 0; i < wordCount; i++) {
+        for (int i = 0; i < this.wordLine; i++) {
             // 添加文本
-            builder.append(text);
+            builder.append(this.text);
             // 循环添加空格
             for (int j = 0; j < blankCount; j++) {
                 // 添加空格
                 builder.append(' ');
             }
         }
-        // 初始化水印文本
-        this.text = builder.toString();
+        return builder.toString();
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2020/6/6
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -181,12 +181,34 @@ public class XEasyPdfCell {
     }
 
     /**
-     * 设置表格样式（居左、居中、居右）
+     * 设置水平样式（居左、居中、居右）
      * @param style 样式
      * @return 返回单元格组件
      */
-    public XEasyPdfCell setStyle(XEasyPdfTableStyle style) {
-        this.param.setStyle(style);
+    public XEasyPdfCell setHorizontalStyle(XEasyPdfTableStyle style) {
+        if (style!=null) {
+            if (style==XEasyPdfTableStyle.LEFT||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.RIGHT) {
+                this.param.setHorizontalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 设置垂直样式（居上、居中、居下）
+     * @param style 样式
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setVerticalStyle(XEasyPdfTableStyle style) {
+        if (style!=null) {
+            if (style==XEasyPdfTableStyle.TOP||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.BOTTOM) {
+                this.param.setVerticalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
+            }
+        }
         return this;
     }
 
@@ -330,10 +352,11 @@ public class XEasyPdfCell {
             .setDefaultFontStyle(this.param.getDefaultFontStyle())
             .setFontSize(this.param.getFontSize())
             .setFontColor(this.param.getFontColor())
-            .setStyle(text.isUseSelfStyle()?text.getStyle():this.param.getStyle().getTextStyle())
+            .setHorizontalStyle(text.isUseSelfStyle()?text.getHorizontalStyle():this.param.getHorizontalStyle().getTextStyle())
+            .setVerticalStyle(text.isUseSelfStyle()?text.getVerticalStyle():this.param.getVerticalStyle().getTextStyle())
             .setPosition(
-                        row.getParam().getBeginX() + this.param.getBorderWidth(),
-                        page.getParam().getPageY() - row.getParam().getMarginTop() - text.getMarginTop() - this.param.getFontSize() + this.param.getBorderWidth()
+                        row.getParam().getBeginX(),
+                        page.getParam().getPageY() - row.getParam().getMarginTop()
             ).draw(document, page);
     }
 
@@ -345,16 +368,19 @@ public class XEasyPdfCell {
      * @param image pdf图片
      */
     private void writeImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfImage image) {
-        float width = Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth();
-        float height = Math.min(image.getHeight(document, page), this.param.getHeight()) - this.param.getBorderWidth();
+        float width = Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth() * 2;
+        float height = Math.min(image.getHeight(document, page), this.param.getHeight()) - this.param.getBorderWidth() * 2;
         image.setContentMode(this.param.getContentMode())
-             .setWidth(width - this.param.getBorderWidth() * 2)
+             .enableChildComponent()
+             .setWidth(width)
+             .setHeight(height)
              .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
-             .setHeight(height - this.param.getBorderWidth() * 2)
-             .setStyle(image.isUseSelfStyle()?image.getStyle():this.param.getStyle().getImageStyle())
+             .setMaxHeight(this.param.getHeight() - this.param.getBorderWidth() * 2)
+             .setHorizontalStyle(image.isUseSelfStyle()?image.getHorizontalStyle():this.param.getHorizontalStyle().getImageStyle())
+             .setVerticalStyle(image.isUseSelfStyle()?image.getVerticalStyle():this.param.getHorizontalStyle().getImageStyle())
              .setPosition(
-                    row.getParam().getBeginX() + this.param.getBorderWidth() / 2,
-                    page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - image.getHeight(document, page) - this.param.getBorderWidth() / 2
+                    row.getParam().getBeginX(),
+                    page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - height - this.param.getBorderWidth()
              ).draw(document, page);
     }
 

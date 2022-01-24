@@ -1,7 +1,7 @@
 package wiki.xsx.core.pdf.doc;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.cos.COSName;
-import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -10,6 +10,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -23,15 +24,15 @@ import java.util.Set;
  * @date 2021/10/3
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
- * x-easypdf is licensed under the Mulan PSL v1.
- * You can use this software according to the terms and conditions of the Mulan PSL v1.
- * You may obtain a copy of Mulan PSL v1 at:
- * http://license.coscl.org.cn/MulanPSL
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v1 for more details.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
+ * x-easypdf is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
  * </p>
  */
 public class XEasyPdfDocumentFormFiller {
@@ -54,7 +55,7 @@ public class XEasyPdfDocumentFormFiller {
      */
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.getTarget();
+        this.document = this.pdfDocument.build();
     }
 
     /**
@@ -63,7 +64,7 @@ public class XEasyPdfDocumentFormFiller {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller setFontPath(String fontPath) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, fontPath, false);
+        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, fontPath, true);
         return this;
     }
 
@@ -73,7 +74,7 @@ public class XEasyPdfDocumentFormFiller {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, style.getPath(), false);
+        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, style.getPath(), true);
         return this;
     }
 
@@ -85,12 +86,9 @@ public class XEasyPdfDocumentFormFiller {
      */
     public XEasyPdfDocumentFormFiller fill(Map<String, String> formMap) throws IOException {
         // 如果表单字典有内容，则进行填充
-        if (formMap!=null&&formMap.size()>0) {
-            // 如果字体为空，则初始化字体
-            if (this.font==null) {
-                // 初始化字体
-                this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, this.pdfDocument.getParam().getFontPath(), true);
-            }
+        if (formMap!=null&&!formMap.isEmpty()) {
+            // 初始化字体
+            this.initFont();
             // 定义pdfBox表单字段
             PDField field;
             // 获取pdfBox表单
@@ -136,10 +134,10 @@ public class XEasyPdfDocumentFormFiller {
     /**
      * 完成操作
      * @param outputPath 文件输出路径
-     * @throws IOException IO异常
      */
-    public void finish(String outputPath) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
+    @SneakyThrows
+    public void finish(String outputPath) {
+        try (OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath))))) {
             this.finish(outputStream);
         }
     }
@@ -147,20 +145,27 @@ public class XEasyPdfDocumentFormFiller {
     /**
      * 完成操作
      * @param outputStream 文件输出流
-     * @throws IOException IO异常
      */
-    public void finish(OutputStream outputStream) throws IOException {
-        // 创建写入器
-        COSWriter writer = new COSWriter(outputStream);
+    @SneakyThrows
+    public void finish(OutputStream outputStream) {
         // 设置文档信息及保护策略
         this.pdfDocument.setInfoAndPolicyAndBookmark(this.document);
-        // 关联字体
-        XEasyPdfFontUtil.subsetFonts();
-        // 写入文档
-        writer.write(this.document);
+        // 保存文档
+        this.document.save(outputStream);
         // 重置字体为空
         this.font = null;
         // 关闭文档
         this.pdfDocument.close();
+    }
+
+    /**
+     * 初始化字体
+     */
+    private void initFont() {
+        // 如果字体为空，则初始化字体
+        if (this.font==null) {
+            // 初始化字体
+            this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, this.pdfDocument.getParam().getFontPath(), true);
+        }
     }
 }

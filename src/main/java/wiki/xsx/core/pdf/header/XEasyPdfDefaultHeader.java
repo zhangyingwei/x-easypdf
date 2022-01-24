@@ -4,6 +4,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
+import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
@@ -17,7 +18,7 @@ import java.util.List;
  * @date 2020/6/7
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -132,6 +133,19 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
         return this.param.getHeight();
     }
 
+    @Override
+    public boolean check(XEasyPdfComponent component) {
+        if (component!=null) {
+            if (component instanceof XEasyPdfImage) {
+                return this.param.getImage()!=null&&this.param.getImage().equals(component);
+            }
+            if (component instanceof XEasyPdfText) {
+                return this.param.getText()!=null&&this.param.getText().equals(component);
+            }
+        }
+        return false;
+    }
+
     /**
      * 绘制
      * @param document pdf文档
@@ -147,6 +161,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
             this.param.getText()
                     .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+"")
                     .setPosition(this.param.getTextBeginX(), this.param.getTextBeginY())
+                    .setVerticalStyle(XEasyPdfTextStyle.TOP)
                     .setMarginLeft(this.param.getMarginLeft())
                     .setMarginRight(this.param.getMarginRight())
                     .setCheckPage(false)

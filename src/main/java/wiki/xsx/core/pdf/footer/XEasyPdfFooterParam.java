@@ -13,7 +13,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
  * @date 2020/6/7
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -81,7 +81,6 @@ class XEasyPdfFooterParam {
         // 初始化X轴起始坐标
         this.beginX = this.marginLeft;
         // 初始化Y轴起始坐标
-        this.beginY = this.height;
-
+        this.beginY = this.marginBottom;
     }
 }

@@ -1,7 +1,9 @@
 package wiki.xsx.core.pdf.doc;
 
 import lombok.SneakyThrows;
-import org.apache.pdfbox.pdfwriter.COSWriter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
@@ -22,11 +24,10 @@ import java.awt.*;
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterJob;
-import java.io.Closeable;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +37,7 @@ import java.util.List;
  * @date 2020/3/3
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -48,6 +49,8 @@ import java.util.List;
  * </p>
  */
 public class XEasyPdfDocument implements Closeable {
+
+    private final Log log = LogFactory.getLog(XEasyPdfDocument.class);
 
     /**
      * pdf文档参数
@@ -69,7 +72,7 @@ public class XEasyPdfDocument implements Closeable {
     @SneakyThrows
     public XEasyPdfDocument(String filePath) {
         // 读取文件流
-        try (InputStream inputStream = Files.newInputStream(Paths.get(filePath))) {
+        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(filePath))) {
             this.init(inputStream);
         }
     }
@@ -89,7 +92,7 @@ public class XEasyPdfDocument implements Closeable {
     @SneakyThrows
     private void init(InputStream inputStream) {
         // 读取pdfBox文档
-        this.param.setSource(PDDocument.load(inputStream));
+        this.param.setSource(PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()));
         // 获取pdfBox页面树
         PDPageTree pages = this.param.getSource().getPages();
         // 遍历pdfBox页面树
@@ -97,10 +100,10 @@ public class XEasyPdfDocument implements Closeable {
             // 添加pdfBox页面
             this.param.getPageList().add(new XEasyPdfPage(page));
         }
-        // 初始化文档信息
-        this.param.initInfo(this);
         // 设置总页数
         this.param.initTotalPage(pages.getCount());
+        // 初始化文档信息
+        this.param.initInfo(this);
     }
 
     /**
@@ -268,20 +271,14 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
-     * 获取文档字体
-     * @return 返回pdfBox字体
-     */
-    public PDFont getFont() {
-        return this.param.getFont();
-    }
-
-    /**
      * 设置版本
      * @param version 版本
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setVersion(float version) {
-        if (version<1.0F&&version>1.7) {
+        // 如果版本小于1.0且大于1.7，则提示错误
+        if (version<1.0F&&version>1.7F) {
+            // 提示错误
             throw new IllegalArgumentException("the version must be between 1.0 and 1.7");
         }
         // 设置重置
@@ -292,11 +289,73 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
+     * 设置临时目录（用于flush操作），需读写权限
+     * <p>默认在项目路径的根目录</p>
+     * <p>eg：当前项目在“D:\test\pdf”目录下，临时文件存放目录则为“D:\”</p>
+     * @param tempDir 临时目录
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setTempDir(String tempDir) {
+        if (!Files.isDirectory(Paths.get(tempDir))) {
+            throw new IllegalArgumentException("the url must be directory");
+        }
+        this.param.setTempDir(tempDir);
+        return this;
+    }
+
+    /**
+     * 添加文档字体
+     * @param fontPath 字体路径
+     * @param font pdfbox字体
+     */
+    public void addFont(String fontPath, PDFont font) {
+        // 添加字体缓存
+        this.param.getFontCache().put(fontPath, font);
+    }
+
+    /**
+     * 获取文档字体
+     * @return 返回pdfBox字体
+     */
+    public PDFont getFont() {
+        return this.param.getFont();
+    }
+
+    /**
+     * 获取文档字体
+     * @param fontPath 字体路径
+     * @return 返回pdfbox字体
+     */
+    public PDFont getFont(String fontPath) {
+        return this.param.getFontCache().get(fontPath);
+    }
+
+    /**
+     * 获取任务文档
+     * @return 返回任务文档
+     */
+    public PDDocument getTarget() {
+        // 如果任务文档未初始化或文档被重置，则进行新任务创建
+        if (this.param.getTarget()==null||this.param.isReset()) {
+            // 初始化
+            this.param.init(this);
+        }
+        return this.param.getTarget();
+    }
+
+    /**
+     * 获取pdf页面列表
+     * @return 返回pdf页面列表
+     */
+    public List<XEasyPdfPage> getPageList() {
+        return this.param.getPageList();
+    }
+
+    /**
      * 获取文档总页数
      * @return 返回文档总页数
      */
     public int getTotalPage() {
-        this.getTarget();
         return this.param.getTotalPage();
     }
 
@@ -434,6 +493,14 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
+     * 文档替换器
+     * @return 返回pdf文档替换器
+     */
+    public XEasyPdfDocumentReplacer replacer() {
+        return new XEasyPdfDocumentReplacer(this);
+    }
+
+    /**
      * 表单填充器
      * @return 返回pdf文档表单填写器
      */
@@ -474,13 +541,51 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
+     * 构建文档
+     * @return 返回pdfbox文档
+     */
+    public PDDocument build() {
+        // 获取任务文档
+        PDDocument target = this.getTarget();
+        // 初始化页面
+        this.param.initPage(this);
+        // 设置文档信息、保护策略及书签
+        this.setInfoAndPolicyAndBookmark(target);
+        return target;
+    }
+
+    /**
+     * 刷新（临时保存）
+     * @return 返回pdf文档
+     */
+    @SneakyThrows
+    public XEasyPdfDocument flush() {
+        // 构建文档
+        PDDocument target = this.build();
+        // 获取临时路径
+        String tempPath = this.param.getTempUrl();
+        // 临时保存文档
+        target.save(new File(tempPath));
+        // 添加临时任务列表
+        this.param.getTempTargetList().add(tempPath);
+        // 关闭文档
+        this.close();
+        // 打印日志
+        if (log.isInfoEnabled()) {
+            // 打印当前刷新次数
+            log.info("current count of flush：" + this.param.getTempTargetList().size());
+        }
+        return this;
+    }
+
+    /**
      * 保存（页面构建）
      * @param outputPath 文件输出路径
      * @return 返回pdf文档
      */
     @SneakyThrows
     public XEasyPdfDocument save(String outputPath) {
-        try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
+        try (OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath))))) {
             return this.save(outputStream);
         }
     }
@@ -492,16 +597,18 @@ public class XEasyPdfDocument implements Closeable {
      */
     @SneakyThrows
     public XEasyPdfDocument save(OutputStream outputStream) {
-        // 创建写入器
-        try (COSWriter writer = new COSWriter(outputStream)) {
-            // 创建任务文档
-            PDDocument target = this.getTarget();
-            // 关联字体
-            this.param.subsetFonts();
-            // 设置文档信息及保护策略
-            this.setInfoAndPolicyAndBookmark(target);
-            // 写入文档
-            writer.write(target);
+        // 如果临时任务列表为空，则保存当前文档
+        if (this.param.getTempTargetList().isEmpty()) {
+            // 构建文档
+            PDDocument target = this.build();
+            // 保存文档
+            target.save(outputStream);
+            return this;
+        }
+        // 否则保存临时任务列表中的文档
+        else {
+            // 保存临时任务
+            this.saveTemp(outputStream);
         }
         return this;
     }
@@ -558,46 +665,27 @@ public class XEasyPdfDocument implements Closeable {
                 // 关闭源文档
                 mergeSource.close();
             }
-        }
-        // 如果任务文档不为空，则关闭
-        if (this.param.getTarget()!=null) {
-            // 关闭任务文档
-            this.param.getTarget().close();
+            // 清空合并pdf源文档列表
+            mergeSourceList.clear();
         }
         // 如果源文档不为空，则关闭
         if (this.param.getSource()!=null) {
             // 关闭源文档
             this.param.getSource().close();
         }
-    }
-
-    /**
-     * 获取任务文档
-     * @return 返回任务文档
-     */
-    public PDDocument getTarget() {
-        // 如果任务文档未初始化或文档被重置，则进行新任务创建
-        if (this.param.getTarget()==null||this.param.isReset()) {
-            // 初始化任务文档
-            this.initTarget();
+        // 如果任务文档不为空且非刷新，则关闭
+        if (this.param.getTarget()!=null) {
+            // 关闭任务文档
+            this.param.getTarget().close();
+            // 清空字体
+            this.param.getFontCache().clear();
         }
-        return this.param.getTarget();
-    }
-
-    /**
-     * 获取源文档
-     * @return 返回源文档
-     */
-    public PDDocument getSource() {
-        return this.param.getSource();
-    }
-
-    /**
-     * 获取pdf页面列表
-     * @return 返回pdf页面列表
-     */
-    public List<XEasyPdfPage> getPageList() {
-        return this.param.getPageList();
+        // 重置字体为空
+        this.param.setFont(null);
+        // 重置任务文档为空
+        this.param.setTarget(null);
+        // 清空页面列表
+        this.param.getPageList().clear();
     }
 
     /**
@@ -679,44 +767,47 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
-     * 初始化任务文档
+     * 保存临时任务
+     * @param outputStream 文件输出流
      */
     @SneakyThrows
-    private void initTarget() {
-        // 新建任务文档
+    private void saveTemp(OutputStream outputStream) {
+        // 刷新
+        this.flush();
+        // 创建任务
         PDDocument target = new PDDocument();
-        // 设置文档表单
-        target.getDocumentCatalog().setAcroForm(this.param.getSource().getDocumentCatalog().getAcroForm());
-        // 初始化新任务文档
-        this.param.setTarget(target);
-        // 关闭文档重置
-        this.param.setReset(false);
-        // 初始化字体
-        this.param.initFont(this);
-        // 获取pdf页面列表
-        List<XEasyPdfPage> pageList = this.param.getPageList();
-        // 定义pdfBox页面列表
-        List<PDPage> pdfboxPageList;
-        // 遍历pdf页面列表
-        for (XEasyPdfPage pdfPage : pageList) {
-            // pdf页面构建
-            pdfPage.build(this);
-            // 初始化pdfBox页面列表
-            pdfboxPageList = pdfPage.getParam().getPageList();
-            // 遍历pdfBox页面列表
-            for (PDPage page : pdfboxPageList) {
-                // 任务文档添加页面
+        // 获取临时任务列表
+        List<String> tempTargetList = this.param.getTempTargetList();
+        // 创建临时pdfbox文档列表
+        List<PDDocument> tempList = new ArrayList<>(tempTargetList.size());
+        // 遍历临时任务
+        for (String tempPath : tempTargetList) {
+            // 读取临时文件
+            File file = new File(tempPath);
+            // 加载临时pdfbox文档
+            PDDocument temp = PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly());
+            // 获取临时pdfbox页面树
+            PDPageTree tempPageTree = temp.getPages();
+            // 遍历临时页面树
+            for (PDPage page : tempPageTree) {
+                // 添加页面至任务文档
                 PDPage importPage = target.importPage(page);
-                // 设置页面资源缓存
+                // 添加页面资源
                 importPage.setResources(page.getResources());
             }
-            // 初始化pdfBox新增页面列表
-            pdfboxPageList = pdfPage.getParam().getNewPageList();
-            // 遍历pdfBox页面列表
-            for (PDPage page : pdfboxPageList) {
-                // 任务文档添加页面
-                target.addPage(page);
-            }
+            // 添加临时文档列表
+            tempList.add(temp);
+            // 删除临时文件
+            file.deleteOnExit();
+        }
+        // 保存任务文档
+        target.save(outputStream);
+        // 设置任务文档
+        this.param.setTarget(target);
+        // 遍历临时文档列表
+        for (PDDocument temp : tempList) {
+            // 关闭临时文档
+            temp.close();
         }
     }
 }

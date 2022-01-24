@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2020/6/6
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -113,13 +113,33 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
-     * 设置表格样式（居左、居中、居右）
+     * 设置水平样式（居左、居中、居右）
      * @param style 样式
      * @return 返回表格组件
      */
-    public XEasyPdfTable setStyle(XEasyPdfTableStyle style) {
+    public XEasyPdfTable setHorizontalStyle(XEasyPdfTableStyle style) {
         if (style!=null) {
-            this.param.setStyle(style);
+            if (style==XEasyPdfTableStyle.LEFT||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.RIGHT) {
+                this.param.setHorizontalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 设置垂直样式（居上、居中、居下）
+     * @param style 样式
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable setVerticalStyle(XEasyPdfTableStyle style) {
+        if (style!=null) {
+            if (style==XEasyPdfTableStyle.TOP||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.BOTTOM) {
+                this.param.setVerticalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
+            }
         }
         return this;
     }

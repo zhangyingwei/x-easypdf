@@ -9,7 +9,7 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * @date 2020/11/15
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -70,7 +70,7 @@ public class XEasyPdfDocumentExtractor {
     @SneakyThrows
     XEasyPdfDocumentExtractor(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.getTarget();
+        this.document = this.pdfDocument.build();
         this.simpleExtractor = new SimpleExtractor(this.document);
         this.regionExtractor = new RegionExtractor();
     }
@@ -266,9 +266,9 @@ public class XEasyPdfDocumentExtractor {
             // 获取资源内容
             PDXObject xObject = resources.getXObject(objectName);
             // 如果资源内容为图片，则添加到待接收图片列表
-            if (xObject instanceof PDImageXObject) {
+            if (xObject instanceof PDImage) {
                 // 添加到待接收图片列表
-                imageList.add(((PDImageXObject) xObject).getImage());
+                imageList.add(((PDImage) xObject).getImage());
             }
             else if (xObject instanceof PDFormXObject) {
                 this.addImage(imageList, ((PDFormXObject) xObject).getResources());

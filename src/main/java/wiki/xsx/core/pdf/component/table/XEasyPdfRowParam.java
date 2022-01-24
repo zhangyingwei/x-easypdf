@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2020/6/6
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -81,7 +81,12 @@ class XEasyPdfRowParam {
      * 表格样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTableStyle style;
+    private XEasyPdfTableStyle horizontalStyle;
+    /**
+     * 表格样式（居上、居中、居下）
+     * 默认居上
+     */
+    private XEasyPdfTableStyle verticalStyle;
 
     /**
      * 初始化
@@ -99,10 +104,15 @@ class XEasyPdfRowParam {
                 // 初始化内容模式
                 this.contentMode = tableParam.getContentMode();
             }
-            // 如果文本样式未初始化，则进行初始化
-            if (this.style==null) {
-                // 初始化文本样式
-                this.style = tableParam.getStyle();
+            // 如果水平样式未初始化，则进行初始化
+            if (this.horizontalStyle==null) {
+                // 初始化水平样式
+                this.horizontalStyle = tableParam.getHorizontalStyle();
+            }
+            // 如果垂直样式未初始化，则进行初始化
+            if (this.verticalStyle==null) {
+                // 初始化垂直样式
+                this.verticalStyle = tableParam.getVerticalStyle();
             }
             // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
             if (this.fontPath==null&&this.defaultFontStyle!=null) {
@@ -155,8 +165,8 @@ class XEasyPdfRowParam {
                 // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距
                 currentY = pageY - this.height - this.marginTop;
             }
-            // 初始化Y轴起始坐标 = 当前Y轴起始坐标 + 1，自动补偿1
-            this.beginY = currentY + 1;
+            // 初始化Y轴起始坐标 = 当前Y轴起始坐标
+            this.beginY = currentY;
             // 如果X轴起始坐标为初始化，则进行初始化
             if (this.beginX==null) {
                 // 如果左边距不为空，则X轴起始坐标 = 左边距

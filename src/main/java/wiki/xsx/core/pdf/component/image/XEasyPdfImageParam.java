@@ -9,6 +9,8 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -20,7 +22,7 @@ import java.io.FileNotFoundException;
  * @date 2020/3/30
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -79,6 +81,10 @@ class XEasyPdfImageParam {
      */
     private Float maxWidth;
     /**
+     * 最大高度
+     */
+    private Float maxHeight;
+    /**
      * 旋转弧度
      */
     private Double radians;
@@ -99,9 +105,13 @@ class XEasyPdfImageParam {
      */
     private XEasyPdfImageScaleMode scaleMode = XEasyPdfImageScaleMode.QUALITY;
     /**
-     * 图片样式（居左、居中、居右）
+     * 水平样式（居左、居中、居右）
      */
-    private XEasyPdfImageStyle style = XEasyPdfImageStyle.CENTER;
+    private XEasyPdfImageStyle horizontalStyle = XEasyPdfImageStyle.LEFT;
+    /**
+     * 垂直样式（居上、居中、居下）
+     */
+    private XEasyPdfImageStyle verticalStyle = XEasyPdfImageStyle.TOP;
     /**
      * 页面X轴起始坐标
      */
@@ -110,6 +120,10 @@ class XEasyPdfImageParam {
      * 页面Y轴起始坐标
      */
     private Float beginY;
+    /**
+     * 是否子组件
+     */
+    private boolean isChildComponent = false;
     /**
      * 是否完成绘制
      */
@@ -122,7 +136,7 @@ class XEasyPdfImageParam {
      * @return 返回pdfBox图片对象
      */
     @SneakyThrows
-    PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page) {
+    PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfImage image) {
         // 如果pdfbox图片对象不为空，则返回该对象
         if (this.imageXObject!=null) {
             // 返回该对象
@@ -163,21 +177,45 @@ class XEasyPdfImageParam {
             // 自定义高度设置为图片高度
             this.height = imageHeight;
         }
+        // 如果最大宽度未初始化，则进行初始化为页面宽度
+        if (this.maxWidth==null) {
+            // 初始化最大宽度 = 页面宽度
+            this.maxWidth = pageWidth;
+        }
+        // 如果最大高度未初始化，则进行初始化为页面高度
+        if (this.maxHeight==null) {
+            // 初始化最大宽度 = 页面高度
+            this.maxHeight = pageHeight;
+        }
         // 如果开启自适应图片大小，则自动调整自定义宽度与高度
         if (this.enableSelfAdaption) {
-            // 宽度超过页面宽度，则进行调整
-            if ((this.width + this.marginLeft + this.marginRight)>pageWidth) {
-                // 自定义宽度 = 页面宽度 - 左边距 - 右边距
-                this.width = (int) (pageWidth - this.marginLeft - this.marginRight);
-                // 自定义高度 = 自定义宽度 * 图片高度 / 图片宽度
-                this.height = (int) (this.width * imageHeight / (double) imageWidth );
+            // 获取页眉
+            XEasyPdfHeader header = page.getHeader();
+            // 获取页脚
+            XEasyPdfFooter footer = page.getFooter();
+            float headerFooterHeight = 0F;
+            if (header!=null&&!header.check(image)) {
+                headerFooterHeight += header.getHeight(document, page);
+            }
+            if (footer!=null&&!footer.check(image)) {
+                headerFooterHeight += footer.getHeight(document, page);
             }
             // 高度超过页面高度，则进行调整
-            else if ((this.height + this.marginTop + this.marginBottom)>pageHeight) {
+            if ((this.height + this.marginTop + this.marginBottom + headerFooterHeight)>pageHeight) {
                 // 自定义高度 = 页面高度 - 上边距 - 下边距
-                this.height = (int) (pageHeight - this.marginTop - this.marginBottom);
+                this.height = (int) (page.getParam().getPageY() - this.marginTop - this.marginBottom - headerFooterHeight);
                 // 自定义宽度 = 自定义高度 * 图片宽度 / 图片高度
                 this.width = (int) (this.height * imageWidth / (double) imageHeight );
+            }
+            float maxWidth = this.width + this.marginLeft + this.marginRight;
+            // 宽度超过页面宽度，则进行调整
+            if (maxWidth>pageWidth) {
+                maxWidth = this.width - (maxWidth - pageWidth);
+                float ratio = (maxWidth) / this.width;
+                // 自定义宽度 = 页面宽度 - 左边距 - 右边距
+                this.width = (int) (maxWidth);
+                // 自定义高度 = 自定义宽度 * 图片高度 / 图片宽度
+                this.height = (int) (this.height * ratio );
             }
         }
         // 如果自定义宽度不等于图片宽度，或自定义高度不等于图片高度，则进行图片缩放
@@ -201,79 +239,116 @@ class XEasyPdfImageParam {
      * @param page pdf页面
      */
     void initPosition(XEasyPdfDocument document, XEasyPdfPage page) {
-        // 获取页面尺寸
-        PDRectangle rectangle = page.getLastPage().getMediaBox();
-        // 获取页面宽度
-        float pageWidth = rectangle.getWidth();
-        // 获取页面高度
-        float pageHeight = rectangle.getHeight();
-        // 如果最大宽度未初始化，则进行初始化为页面宽度
-        if (this.maxWidth==null) {
-            // 初始化最大宽度 = 页面宽度
-            this.maxWidth = pageWidth;
-        }
         // 如果页面Y轴起始坐标为空，则初始化
         if (this.beginY==null) {
-            // 定义页脚高度
-            float footerHeight = 0F;
-            // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.isAllowFooter()&&page.getFooter()!=null) {
-                // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight(document, page);
-            }
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
             if (page.getParam().getPageY()!=null) {
                 // 初始化Y轴坐标
-                this.initBeginY(page, pageHeight);
-                // 如果页面Y轴起始坐标-页脚高度小于等于下边距，则分页
-                if (this.beginY - footerHeight <= this.marginBottom) {
+                this.initBeginY(document, page);
+                // 如果页面Y轴起始坐标-页脚高度小于下边距，则分页
+                if (this.beginY < this.marginBottom) {
                     // 添加新页面
-                    page.addNewPage(document, rectangle);
+                    page.addNewPage(document, page.getLastPage().getMediaBox());
                     // 初始化Y轴坐标
-                    this.initBeginY(page, pageHeight);
+                    this.initBeginY(document, page);
                 }
             }
             // 如果pdfBox最新页面当前Y轴坐标为空，则为新页面
             else {
                 // 初始化Y轴坐标
-                this.initBeginY(page,pageHeight);
+                this.initBeginY(document, page);
             }
         }
-        // 如果图片样式为空，或图片样式为居中，则初始化页面X轴起始坐标为居中
-        if (this.style==null || this.style == XEasyPdfImageStyle.CENTER) {
+        // 初始化X轴起始坐标
+        this.initBeginX();
+    }
+
+    /**
+     * 初始化X轴起始坐标
+     */
+    private void initBeginX() {
+        // 如果水平样式为居中，则初始化页面X轴起始坐标为居中
+        if (this.horizontalStyle == XEasyPdfImageStyle.CENTER) {
             // 页面X轴起始坐标 = （最大宽度 - 自定义宽度）/ 2
-            this.beginX += (this.maxWidth - this.width) / 2;
+            this.beginX = this.beginX + (this.maxWidth - this.width) / 2;
         }
-        // 如果图片样式为居左，则初始化页面X轴起始坐标为居左
-        else if (this.style == XEasyPdfImageStyle.LEFT) {
+        // 如果水平样式为居左，则初始化页面X轴起始坐标为居左
+        else if (this.horizontalStyle == XEasyPdfImageStyle.LEFT) {
             // 页面X轴起始坐标 = 左边距
-            this.beginX += this.marginLeft;
+            this.beginX = this.beginX + this.marginLeft;
         }
-        // 如果图片样式为居右，则初始化页面X轴起始坐标为居右
+        // 如果水平样式为居右，则初始化页面X轴起始坐标为居右
         else {
             // 页面X轴起始坐标 = 最大宽度 - 自定义宽度 - 右边距
-            this.beginX += this.maxWidth - this.width - this.marginRight;
+            this.beginX = this.beginX + this.maxWidth - this.width - this.marginRight;
         }
     }
 
     /**
      * 初始化Y轴坐标
+     * @param document pdf文档
      * @param page pdf页面
-     * @param pageHeight 页面高度
      */
-    private void initBeginY(XEasyPdfPage page, float pageHeight) {
-        // 定义Y轴坐标
-        float initY = page.getParam().getPageY()!=null?page.getParam().getPageY():pageHeight;
-        // 如果开启垂直居中，则重置Y轴坐标
-        if (this.enableVerticalCenterStyle) {
-            // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标  - 自定义高度
-            this.beginY = initY - this.height;
-            // 重新计算Y轴起始坐标 = Y轴起始坐标 - Y轴起始坐标 / 2
-            this.beginY -= this.beginY / 2;
+    private void initBeginY(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 获取页面Y轴坐标
+        Float pageY = page.getParam().getPageY();
+        // 如果垂直样式为居中，则重置Y轴坐标为居中
+        if (this.verticalStyle==XEasyPdfImageStyle.CENTER) {
+            // 如果页面Y轴坐标为空，则初始化Y轴起始坐标为y坐标
+            if (pageY==null) {
+                // 初始化Y轴起始坐标为(最大高度-图片高度)/2
+                this.beginY = (this.maxHeight - this.height) / 2;
+            }
+            // 否则初始化
+            else {
+                // 如果页面Y轴起始坐标未初始化，则进行初始化
+                if (this.beginY==null) {
+                    // 初始化Y轴起始坐标为(页面Y轴当前坐标-图片高度)/2
+                    this.beginY = pageY - this.height - (pageY - this.height) / 2;
+                }
+                // 如果为子组件，则Y轴起始坐标-最大高度/2
+                if (this.isChildComponent) {
+                    // 重置Y轴起始坐标为Y轴起始坐标-最大高度/2
+                    this.beginY = this.beginY - this.maxHeight / 2;
+                }
+            }
         }
+        // 如果为垂直居上，则重置为最大高度-上边距
+        else if (this.verticalStyle==XEasyPdfImageStyle.TOP) {
+            // 如果页面Y轴坐标不为空， 则重置为最大高度-上边距
+            if (pageY==null) {
+                // 初始化Y轴起始坐标重置为最大高度-上边距-图片高度
+                this.beginY = this.maxHeight - this.marginTop - this.height;
+            }
+            // 否则初始化为页面Y轴坐标-上边距
+            else {
+                if (!this.isChildComponent) {
+                    // 初始化Y轴起始坐标重置为页面Y轴坐标-上边距-图片高度
+                    this.beginY = pageY - this.marginTop - this.height;
+                }
+            }
+        }
+        // 否则垂直样式为居下，则重置Y轴坐标为居下
         else {
-            // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
-            this.beginY = initY - this.marginTop - this.height;
+            // 定义y坐标为下边距+0.01(补偿，防止分页)
+            float y = this.marginBottom + 0.01F;
+            // 如果为子组件，则重置Y轴起始坐标
+            if (this.isChildComponent) {
+                // 重置Y轴起始坐标为Y轴起始坐标-最大高度-y坐标
+                this.beginY = this.beginY - (this.maxHeight - y);
+            }
+            // 否则Y轴起始坐标为y坐标
+            else {
+                // 重置Y轴起始坐标为y坐标
+                this.beginY = y;
+                // 获取页脚
+                XEasyPdfFooter footer = page.getFooter();
+                // 如果页脚不为空，则重置页面Y轴坐标为页面Y轴当前坐标+页脚高度
+                if (footer!=null) {
+                    // 重置页面Y轴坐标为页面Y轴当前坐标+页脚高度
+                    this.beginY = this.beginY + footer.getHeight(document, page);
+                }
+            }
         }
     }
 

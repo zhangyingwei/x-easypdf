@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2021/4/25
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -102,7 +102,12 @@ class XEasyPdfSimpleCellParam {
      * 表格样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTableStyle style;
+    private XEasyPdfTableStyle horizontalStyle;
+    /**
+     * 表格样式（居上、居中、居下）
+     * 默认居上
+     */
+    private XEasyPdfTableStyle verticalStyle;
 
     /**
      * 初始化
@@ -134,10 +139,15 @@ class XEasyPdfSimpleCellParam {
             // 初始化字体大小
             this.fontSize = rowParam.getFontSize();
         }
-        // 如果文本样式未初始化，则进行初始化
-        if (this.style==null) {
-            // 初始化文本样式
-            this.style = rowParam.getStyle();
+        // 如果水平样式未初始化，则进行初始化
+        if (this.horizontalStyle ==null) {
+            // 初始化水平样式
+            this.horizontalStyle = rowParam.getHorizontalStyle();
+        }
+        // 如果垂直样式未初始化，则进行初始化
+        if (this.verticalStyle ==null) {
+            // 初始化垂直样式
+            this.verticalStyle = rowParam.getVerticalStyle();
         }
     }
 }

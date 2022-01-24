@@ -1,16 +1,20 @@
 package wiki.xsx.core.pdf.mark;
 
 import lombok.SneakyThrows;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.util.Matrix;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
 import java.util.List;
+
 
 /**
  * pdf水印组件
@@ -18,7 +22,7 @@ import java.util.List;
  * @date 2020/3/25
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -60,6 +64,18 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      */
     public XEasyPdfDefaultWatermark setFontPath(String fontPath) {
         this.param.setFontPath(fontPath);
+        return this;
+    }
+
+    /**
+     * 设置默认字体样式
+     * @param style 默认字体样式
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
+        if (style!=null) {
+            this.param.setDefaultFontStyle(style);
+        }
         return this;
     }
 
@@ -128,6 +144,16 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
     }
 
     /**
+     * 设置水印文本行数
+     * @param wordLine 水印文本行数
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark setWordLine(int wordLine) {
+        this.param.setWordLine(Math.abs(wordLine));
+        return this;
+    }
+
+    /**
      * 开启外水印模式
      * @return 返回页面水印组件
      */
@@ -152,47 +178,56 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      */
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
-        // 初始化水印参数，获取pdfBox扩展图形对象
-        PDExtendedGraphicsState state = this.param.init(document, page);
+        // 如果需要初始化，则进行参数初始化
+        if (this.param.isNeedInit()) {
+            // 初始化水印参数
+            this.param.init(document, page);
+        }
+        // 获取任务文档
+        PDDocument target = document.getTarget();
         // 获取pdfBox页面列表
         List<PDPage> pageList = page.getParam().getPageList();
         // 遍历pdfBox页面列表
         for (PDPage pdPage : pageList) {
             // 执行画水印
-            this.doDraw(document, pdPage, state);
+            this.doDraw(target, pdPage);
         }
         // 获取新的pdfBox页面列表
         pageList = page.getParam().getNewPageList();
         // 遍历pdfBox页面列表
         for (PDPage pdPage : pageList) {
             // 执行画水印
-            this.doDraw(document, pdPage, state);
+            this.doDraw(target, pdPage);
         }
-        // 重置字体为null
-        this.param.setFont(null);
     }
 
     /**
      * 执行绘制
-     * @param document pdf文档
-     * @param pdPage pdf页面
-     * @param state pdfBox扩展图形对象
+     * @param document pdfbox文档
+     * @param pdPage pdfbox页面
      */
     @SneakyThrows
-    private void doDraw(XEasyPdfDocument document, PDPage pdPage, PDExtendedGraphicsState state) {
+    private void doDraw(PDDocument document, PDPage pdPage) {
         // 获取页面高度
         float height = pdPage.getMediaBox().getHeight();
         // 获取页面宽度
         float width = pdPage.getMediaBox().getWidth();
+        // 初始化pdfBox扩展图形对象
+        PDExtendedGraphicsState state = new PDExtendedGraphicsState();
+        // 设置文本透明度
+        state.setNonStrokingAlphaConstant(this.param.getAlpha());
+        // 设置透明度标记
+        state.setAlphaSourceFlag(true);
+        // 设置融合模式
+        state.setBlendMode(BlendMode.MULTIPLY);
         // 初始化内容流
         PDPageContentStream cs = new PDPageContentStream(
-                document.getTarget(),
+                document,
                 pdPage,
                 this.param.getContentMode().getMode(),
                 true,
                 true
         );
-
         // 设置图形参数
         cs.setGraphicsStateParameters(state);
         // 设置字体颜色

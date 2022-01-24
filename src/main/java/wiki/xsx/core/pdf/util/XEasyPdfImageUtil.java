@@ -6,10 +6,7 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * 图片工具
@@ -17,7 +14,7 @@ import java.io.OutputStream;
  * @date 2020/3/30
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -56,6 +53,12 @@ public class XEasyPdfImageUtil {
         return ImageIO.read(imageStream);
     }
 
+    /**
+     * 写入文件
+     * @param image 图片对象
+     * @param imageType 图片类型
+     * @param outputStream 输出流
+     */
     @SneakyThrows
     public static void write(BufferedImage image, XEasyPdfImageType imageType, OutputStream outputStream) {
         ImageIO.write(image, imageType.name(), outputStream);
@@ -101,6 +104,7 @@ public class XEasyPdfImageUtil {
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         graphics.drawImage(temp, 0, 0, null);
         graphics.dispose();
+        sourceImage.getGraphics().dispose();
         return image;
     }
 
@@ -118,6 +122,23 @@ public class XEasyPdfImageUtil {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             ImageIO.write(sourceImage, imageType, outputStream);
             return outputStream.toByteArray();
+        }
+    }
+
+    /**
+     * 转为字节数组
+     * @param sourceImage 源图片
+     * @param imageType 图片类型
+     * @return 返回字节数组
+     */
+    @SneakyThrows
+    public static InputStream toInputStream(BufferedImage sourceImage, String imageType) {
+        if (sourceImage==null) {
+            throw new IllegalArgumentException("Image can not be null");
+        }
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(sourceImage, imageType, outputStream);
+            return new ByteArrayInputStream(outputStream.toByteArray());
         }
     }
 
@@ -145,6 +166,7 @@ public class XEasyPdfImageUtil {
         graphics.rotate(Math.toRadians(radians), imageWidth/2D, imageHeight/2D);
         graphics.drawImage(sourceImage, 0, 0, null);
         graphics.dispose();
+        sourceImage.getGraphics().dispose();
         return image;
     }
 

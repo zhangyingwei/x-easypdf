@@ -6,8 +6,8 @@ import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.awt.*;
 import java.util.Collections;
@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2021/4/25
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -161,12 +161,34 @@ public class XEasyPdfSimpleCell {
     }
 
     /**
-     * 设置表格样式（居左、居中、居右）
+     * 设置水平样式（居左、居中、居右）
      * @param style 样式
      * @return 返回单元格组件
      */
-    public XEasyPdfSimpleCell setStyle(XEasyPdfTableStyle style) {
-        this.param.setStyle(style);
+    public XEasyPdfSimpleCell setHorizontalStyle(XEasyPdfTableStyle style) {
+        if (style!=null) {
+            if (style==XEasyPdfTableStyle.LEFT||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.RIGHT) {
+                this.param.setHorizontalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 设置垂直样式（居上、居中、居下）
+     * @param style 样式
+     * @return 返回单元格组件
+     */
+    public XEasyPdfSimpleCell setVerticalStyle(XEasyPdfTableStyle style) {
+        if (style!=null) {
+            if (style==XEasyPdfTableStyle.TOP||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.BOTTOM) {
+                this.param.setVerticalStyle(style);
+            }else {
+                throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
+            }
+        }
         return this;
     }
 
@@ -283,16 +305,22 @@ public class XEasyPdfSimpleCell {
         float rowBeginX = row.getParam().getBeginX();
         // 遍历组件列表
         for (XEasyPdfComponent component : componentList) {
+            // 如果为文本组件，则绘制文本
             if (component instanceof XEasyPdfText) {
+                // 转换为文本组件
                 XEasyPdfText text = (XEasyPdfText) component;
-                text.setPosition(
+                // 设置定位及绘制
+                component.setPosition(
                         row.getParam().getBeginX() + this.param.getBorderWidth(),
                         page.getParam().getPageY() - row.getParam().getMarginTop() - text.getMarginTop() - this.param.getFontSize() + this.param.getBorderWidth()
                 ).draw(document, page);
             }
+            // 如果为图像组件，则绘制图像
             else if(component instanceof XEasyPdfImage) {
+                // 转换为图像组件
                 XEasyPdfImage image = (XEasyPdfImage) component;
-                image.setPosition(
+                // 设置定位及绘制
+                component.setPosition(
                         row.getParam().getBeginX() + this.param.getBorderWidth() / 2,
                         page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - image.getHeight(document, page) - this.param.getBorderWidth() / 2
                 ).draw(document, page);
@@ -341,7 +369,8 @@ public class XEasyPdfSimpleCell {
             .setDefaultFontStyle(this.param.getDefaultFontStyle())
             .setFontSize(this.param.getFontSize())
             .setFontColor(this.param.getFontColor())
-            .setStyle(text.isUseSelfStyle()?text.getStyle():this.param.getStyle().getTextStyle())
+            .setHorizontalStyle(text.isUseSelfStyle()?text.getHorizontalStyle():this.param.getHorizontalStyle().getTextStyle())
+            .setVerticalStyle(text.isUseSelfStyle()?text.getVerticalStyle():this.param.getVerticalStyle().getTextStyle())
             .enableChildComponent();
     }
 
@@ -357,8 +386,11 @@ public class XEasyPdfSimpleCell {
         float height = image.getHeight(document, page);
         image.setContentMode(this.param.getContentMode())
              .setWidth(width - this.param.getBorderWidth() * 2)
-             .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
              .setHeight(height - this.param.getBorderWidth() * 2)
-             .setStyle(image.isUseSelfStyle()?image.getStyle():this.param.getStyle().getImageStyle());
+             .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
+             .setMaxHeight(this.param.getHeight() - this.param.getBorderWidth() * 2)
+             .setHorizontalStyle(image.isUseSelfStyle()?image.getHorizontalStyle():this.param.getHorizontalStyle().getImageStyle())
+             .setVerticalStyle(image.isUseSelfStyle()?image.getVerticalStyle():this.param.getVerticalStyle().getImageStyle())
+             .enableChildComponent();
     }
 }

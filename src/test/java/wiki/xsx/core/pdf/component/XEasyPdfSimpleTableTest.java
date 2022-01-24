@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2021/5/11
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -69,7 +69,7 @@ public class XEasyPdfSimpleTableTest {
         }
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.SimpleTable.build(rowList).setStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
+                        XEasyPdfHandler.SimpleTable.build(rowList).setHorizontalStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
@@ -102,7 +102,7 @@ public class XEasyPdfSimpleTableTest {
         }
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.SimpleTable.build(rowList).setStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F)
+                        XEasyPdfHandler.SimpleTable.build(rowList).setHorizontalStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");

@@ -6,7 +6,7 @@ package wiki.xsx.core.pdf.component.image;
  * @date 2020/3/30
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -19,7 +19,11 @@ package wiki.xsx.core.pdf.component.image;
  */
 public enum XEasyPdfImageStyle {
     /**
-     * 水平居中
+     * 居上
+     */
+    TOP,
+    /**
+     * 居中
      */
     CENTER,
     /**
@@ -29,5 +33,9 @@ public enum XEasyPdfImageStyle {
     /**
      * 居右
      */
-    RIGHT;
+    RIGHT,
+    /**
+     * 居下
+     */
+    BOTTOM;
 }

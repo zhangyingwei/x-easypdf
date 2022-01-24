@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2020/6/6
  * @since 1.8
  * <p>
- * Copyright (c) 2020 xsx All Rights Reserved.
+ * Copyright (c) 2020-2022 xsx All Rights Reserved.
  * x-easypdf is licensed under Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
@@ -77,10 +77,15 @@ class XEasyPdfTableParam {
      */
     private float fontSize = 12F;
     /**
-     * 文本样式（居左、居中、居右）
+     * 水平样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTableStyle style = XEasyPdfTableStyle.LEFT;
+    private XEasyPdfTableStyle horizontalStyle = XEasyPdfTableStyle.LEFT;
+    /**
+     * 垂直样式（居上、居中、居下）
+     * 默认居上
+     */
+    private XEasyPdfTableStyle verticalStyle = XEasyPdfTableStyle.TOP;
     /**
      * 是否完成绘制
      */
