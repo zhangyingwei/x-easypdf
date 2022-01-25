@@ -153,6 +153,14 @@ class XEasyPdfTextParam {
      */
     private Double radians = 0D;
     /**
+     * 超链接地址
+     */
+    private String linkUrl;
+    /**
+     * 评论
+     */
+    private String comment;
+    /**
      * 是否使用自身样式
      */
     private boolean useSelfStyle = false;
@@ -286,13 +294,10 @@ class XEasyPdfTextParam {
                 x = this.initStyleBeginX(text);
             }
         }
-        // 否则判断是否子组件
+        // 否则重置X轴坐标=当前坐标+样式坐标
         else {
-            // 如果为子组件，则加上样式坐标
-            if (this.isChildComponent) {
-                // 重置X轴坐标=当前坐标+样式坐标
-                x = x + this.initStyleBeginX(text);
-            }
+            // 重置X轴坐标=当前坐标+样式坐标
+            x = x + this.initStyleBeginX(text);
         }
         return x;
     }
@@ -366,7 +371,7 @@ class XEasyPdfTextParam {
                 // 如果X轴起始坐标为空，则初始化X轴坐标为页面X轴坐标
                 if (this.beginX==null) {
                     // 初始化X轴坐标为页面X轴坐标
-                    x = page.getParam().getPageX()==null?0F:page.getParam().getPageX();
+                    x = page.getParam().getPageX()==null?this.marginLeft:page.getParam().getPageX()+this.marginLeft;
                 }
                 // 否则初始化为X轴起始坐标
                 else {

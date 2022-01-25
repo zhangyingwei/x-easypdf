@@ -515,4 +515,26 @@ public class XEasyPdfTextTest {
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }
+
+    @Test
+    public void testTextLink() {
+        long begin = System.currentTimeMillis();
+        String filePath = OUTPUT_PATH + "testText12.pdf";
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 20; i++) {
+            builder.append("hello world");
+        }
+        XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build(builder.toString())
+                                .setLink("https://www.baidu.com")
+                                .setComment("转跳百度地址")
+                                .setHorizontalStyle(XEasyPdfTextStyle.CENTER)
+                )
+        ).setGlobalWatermark(
+                XEasyPdfHandler.Watermark.build("爽爽的贵阳")
+        ).save(filePath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
 }
