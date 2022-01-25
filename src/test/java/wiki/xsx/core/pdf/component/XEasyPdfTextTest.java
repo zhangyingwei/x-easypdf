@@ -23,7 +23,9 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author xsx
@@ -534,6 +536,17 @@ public class XEasyPdfTextTest {
         ).setGlobalWatermark(
                 XEasyPdfHandler.Watermark.build("爽爽的贵阳")
         ).save(filePath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
+
+    @Test
+    public void testExtractorForm() {
+        long begin = System.currentTimeMillis();
+        String filePath = OUTPUT_PATH + "fillform.pdf";
+        Map<String, String> data = new HashMap<>(2);
+        XEasyPdfHandler.Document.load(filePath).extractor().extractForm(data).finish().close();
+        System.out.println("data = " + data);
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }

@@ -10,6 +10,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 
@@ -224,6 +226,23 @@ public class XEasyPdfDocumentExtractor {
                 }
                 // 添加图片
                 this.addImage(imageList, pages.get(index).getResources());
+            }
+        }
+        return this;
+    }
+
+    /**
+     * 提取表单
+     * @param formMap 待接收表单字典
+     * @return 返回pdf文档提取器
+     */
+    public XEasyPdfDocumentExtractor extractForm(Map<String, String> formMap) {
+        // 获取pdfBox表单
+        PDAcroForm form = this.document.getDocumentCatalog().getAcroForm();
+        if (form!=null) {
+            List<PDField> fields = form.getFields();
+            for (PDField field : fields) {
+                formMap.put(field.getFullyQualifiedName(), field.getValueAsString());
             }
         }
         return this;

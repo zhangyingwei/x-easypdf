@@ -11,7 +11,6 @@ import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.io.BufferedOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -82,9 +81,9 @@ public class XEasyPdfDocumentFormFiller {
      * 填充表单
      * @param formMap 表单字典
      * @return 返回pdf表单填写器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentFormFiller fill(Map<String, String> formMap) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocumentFormFiller fill(Map<String, String> formMap) {
         // 如果表单字典有内容，则进行填充
         if (formMap!=null&&!formMap.isEmpty()) {
             // 初始化字体

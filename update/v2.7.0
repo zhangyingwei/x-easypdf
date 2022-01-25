@@ -17,8 +17,9 @@
 14. XEasyPdfDocument文档新增设置临时目录方法（临时文件保存路径，用于创建较大文档）
 15. XEasyPdfDocument文档新增获取文档替换器的方法
 16. 新增XEasyPdfDocumentReplacer文档替换器
-17. XEasyPdfDocumentReplacer文档替换器新增文本替换方法（支持正则替换）
-18. XEasyPdfDocumentReplacer文档替换器新增图片替换方法
+17. XEasyPdfDocumentReplacer文档替换器新增文本替换的方法（支持正则替换）
+18. XEasyPdfDocumentReplacer文档替换器新增图片替换的方法
+19. XEasyPdfDocumentExtractor文档提取器新增提取表单的方法
 
 原有变更：
 1. XEasyPdfText文本组件#setStyle方法变更为#setHorizontalStyle方法
