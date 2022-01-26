@@ -215,7 +215,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 定义X轴起始坐标
         float beginX = 0F;
         // 定义Y轴起始坐标
-        float beginY = height;
+        float beginY = height - this.param.getFontSize();
         // 初始化pdfBox扩展图形对象
         PDExtendedGraphicsState state = new PDExtendedGraphicsState();
         // 设置文本透明度
@@ -236,35 +236,31 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         cs.setGraphicsStateParameters(state);
         // 设置字体颜色
         cs.setNonStrokingColor(this.param.getFontColor());
-        // 开启文本输入
-        cs.beginText();
         // 设置字体
         cs.setFont(this.param.getFont(), this.param.getFontSize());
-        // 设置文本坐标
-        cs.newLineAtOffset(0F, height);
-        // 设置文本弧度
-        cs.setTextMatrix(Matrix.getRotateInstance(this.param.getRadians(), -width, height / 2));
-        // 获取行数
-        int lineCount = (int) (height / (this.param.getFontSize() + this.param.getLeading())) * 2;
         // 循环写入文本
-        for (int i = 0; i < lineCount; i++) {
+        for (int i = 0; i < this.param.getWordLine(); i++) {
             do {
+                // 开启文本输入
+                cs.beginText();
+                // 设置文本弧度
+                cs.setTextMatrix(Matrix.getRotateInstance(Math.toRadians(this.param.getRadians()), 0F, 0F));
                 // 设置文本坐标
                 cs.newLineAtOffset(beginX, beginY);
                 // 文本输入
                 cs.showText(this.param.getText());
+                // 结束文本写入
+                cs.endText();
                 // 重置X轴起始坐标为X轴起始+文本间隔
                 beginX = beginX + this.param.getWordSpace();
             }
             // 如果X轴起始坐标大于页面宽度，则结束循环
-            while (!(beginX >= width));
+            while (!(beginX >= width*2));
             // 重置X轴起始坐标为0
             beginX = 0F;
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
             beginY = beginY - this.param.getFontSize() - this.param.getLeading();
         }
-        // 结束文本写入
-        cs.endText();
         // 关闭内容流
         cs.close();
     }

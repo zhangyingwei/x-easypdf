@@ -509,7 +509,7 @@ public class XEasyPdfTextTest {
     @Test
     public void testText10() {
         long begin = System.currentTimeMillis();
-        String sourcePath = OUTPUT_PATH + "testText5.pdf";
+        String sourcePath = OUTPUT_PATH + "testText9.pdf";
         String filePath = OUTPUT_PATH + "testText10.pdf";
         XEasyPdfHandler.Document.load(sourcePath).setGlobalWatermark(
                 XEasyPdfHandler.Watermark.build("爽爽的贵阳")

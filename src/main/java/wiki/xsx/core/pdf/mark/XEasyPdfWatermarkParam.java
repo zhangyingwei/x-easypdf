@@ -62,7 +62,7 @@ class XEasyPdfWatermarkParam {
     /**
      * 文本弧度
      */
-    private Double radians = 120D;
+    private Double radians = 30D;
     /**
      * 水印文本
      */
@@ -74,7 +74,7 @@ class XEasyPdfWatermarkParam {
     /**
      * 文本行数
      */
-    private Integer wordLine = 9;
+    private Integer wordLine = 8;
     /**
      * 文本行间距
      */
