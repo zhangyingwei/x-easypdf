@@ -107,31 +107,7 @@ class XEasyPdfWatermarkParam {
             // 初始化文本行间距为2倍字体大小
             this.leading = this.fontSize * 2;
         }
-        // 初始化水印文本
-        this.text = this.initText();
         // 是否需要初始化为false
         this.isNeedInit = false;
-    }
-
-    /**
-     * 初始化水印文本
-     * @return 返回文本
-     */
-    private String initText() {
-        // 获取空格循环数量
-        int blankCount = (int) (this.wordSpace / this.fontSize);
-        // 创建字符串构建器
-        StringBuilder builder = new StringBuilder();
-        // 循环构建文本
-        for (int i = 0; i < this.wordLine; i++) {
-            // 添加文本
-            builder.append(this.text);
-            // 循环添加空格
-            for (int j = 0; j < blankCount; j++) {
-                // 添加空格
-                builder.append(' ');
-            }
-        }
-        return builder.toString();
     }
 }

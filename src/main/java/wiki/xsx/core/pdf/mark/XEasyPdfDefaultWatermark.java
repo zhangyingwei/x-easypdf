@@ -212,6 +212,10 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         float height = pdPage.getMediaBox().getHeight();
         // 获取页面宽度
         float width = pdPage.getMediaBox().getWidth();
+        // 定义X轴起始坐标
+        float beginX = 0F;
+        // 定义Y轴起始坐标
+        float beginY = height;
         // 初始化pdfBox扩展图形对象
         PDExtendedGraphicsState state = new PDExtendedGraphicsState();
         // 设置文本透明度
@@ -232,8 +236,6 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         cs.setGraphicsStateParameters(state);
         // 设置字体颜色
         cs.setNonStrokingColor(this.param.getFontColor());
-        // 设置行间距
-        cs.setLeading(this.param.getLeading());
         // 开启文本输入
         cs.beginText();
         // 设置字体
@@ -246,10 +248,20 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         int lineCount = (int) (height / (this.param.getFontSize() + this.param.getLeading())) * 2;
         // 循环写入文本
         for (int i = 0; i < lineCount; i++) {
-            // 文本输入
-            cs.showText(this.param.getText());
-            // 换行
-            cs.newLine();
+            do {
+                // 设置文本坐标
+                cs.newLineAtOffset(beginX, beginY);
+                // 文本输入
+                cs.showText(this.param.getText());
+                // 重置X轴起始坐标为X轴起始+文本间隔
+                beginX = beginX + this.param.getWordSpace();
+            }
+            // 如果X轴起始坐标大于页面宽度，则结束循环
+            while (!(beginX >= width));
+            // 重置X轴起始坐标为0
+            beginX = 0F;
+            // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
+            beginY = beginY - this.param.getFontSize() - this.param.getLeading();
         }
         // 结束文本写入
         cs.endText();
