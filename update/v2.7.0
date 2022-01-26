@@ -20,6 +20,7 @@
 17. XEasyPdfDocumentReplacer文档替换器新增文本替换的方法（支持正则替换）
 18. XEasyPdfDocumentReplacer文档替换器新增图片替换的方法
 19. XEasyPdfDocumentExtractor文档提取器新增提取表单的方法
+20. 新增XEasyPdfCircle圆形组件
 
 原有变更：
 1. XEasyPdfText文本组件#setStyle方法变更为#setHorizontalStyle方法

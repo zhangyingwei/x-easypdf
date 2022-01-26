@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.barcode.XEasyPdfBarCode;
+import wiki.xsx.core.pdf.component.circle.XEasyPdfCircle;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.component.line.XEasyPdfBaseLine;
@@ -428,6 +429,31 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfRect build(float width, float height, float beginX, float beginY) {
             return new XEasyPdfRect(width, height, beginX, beginY);
+        }
+    }
+
+    /**
+     * pdf圆形组件
+     */
+    public static class Circle {
+        /**
+         * 构建圆形
+         * @param radius 半径
+         * @return 返回pdf圆形组件
+         */
+        public static XEasyPdfCircle build(float radius) {
+            return new XEasyPdfCircle(radius);
+        }
+
+        /**
+         * 构建圆形
+         * @param radius 半径
+         * @param beginX X轴起始坐标
+         * @param beginY Y轴起始坐标
+         * @return 返回pdf圆形组件
+         */
+        public static XEasyPdfCircle build(float radius, float beginX, float beginY) {
+            return new XEasyPdfCircle(radius, beginX, beginY);
         }
     }
 

@@ -102,11 +102,11 @@ class XEasyPdfRectParam {
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果宽度未设置，则抛异常
         if (this.width==null) {
-            throw new RuntimeException("the width can not null");
+            throw new RuntimeException("the width can not be null");
         }
         // 如果高度未设置，则抛异常
         if (this.height==null) {
-            throw new RuntimeException("the height can not null");
+            throw new RuntimeException("the height can not be null");
         }
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
