@@ -138,6 +138,15 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 开启整行旋转
+     * @return 返回文本组件
+     */
+    public XEasyPdfText enableRotateLine() {
+        this.param.setRotateLine(true);
+        return this;
+    }
+
+    /**
      * 开启自身样式
      * @return 返回文本组件
      */
@@ -356,25 +365,17 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 设置文本弧度(-90至+90)
+     * 设置文本弧度(顺时针旋转)
      * @param radians 文本弧度
      * @return 返回页面水印组件
      */
     public XEasyPdfText setRadians(double radians) {
         if (radians%360!=0) {
-            double radiansTemp = radians%90;
-            if (radiansTemp==0) {
-                if (radians>0) {
-                    radiansTemp = 90;
-                }
-                else {
-                    radiansTemp = 270;
-                }
+            radians = radians%360;
+            if (radians<0) {
+                radians += 360;
             }
-            else if (radiansTemp<0) {
-                radiansTemp += 360;
-            }
-            this.param.setRadians(radiansTemp);
+            this.param.setRadians(radians);
         }
         return this;
     }
@@ -923,28 +924,40 @@ public class XEasyPdfText implements XEasyPdfComponent {
     ) {
         // 如果文本弧度大于0，则进行文本旋转
         if (this.param.getRadians()>0) {
-            // 当前行x轴坐标
-            float x = this.initRadiansX(beginX);
-            // 当前行y轴坐标
-            float y = this.initRadiansY(beginY);
-            // 获取当前行字符数组
-            char[] charArray = text.toCharArray();
-            // 定义临时字符串
-            String textTemp;
-            // 遍历前行字符数组
-            for (char c : charArray) {
-                // 获取待写入文本
-                textTemp = String.valueOf(c);
+            // 如果开启整行旋转，则整行旋转
+            if (this.param.isRotateLine()) {
                 // 开启文本输入
                 stream.beginText();
                 // 设置文本弧度
-                stream.setTextMatrix(Matrix.getRotateInstance(Math.toRadians(this.param.getRadians()), x, y));
+                stream.setTextMatrix(Matrix.getRotateInstance(Math.toRadians(this.param.getRadians()), beginX, beginY));
                 // 文本输入
-                stream.showText(textTemp);
+                stream.showText(text);
                 // 结束文本写入
                 stream.endText();
-                // 重置当前行x轴坐标， x轴坐标 = x轴坐标 + 字体大小
-                x += this.getFontSize();
+            }
+            // 否则单字符旋转
+            else {
+                // 当前行x轴坐标
+                float x = beginX;
+                // 获取当前行字符数组
+                char[] charArray = text.toCharArray();
+                // 定义临时字符串
+                String textTemp;
+                // 遍历前行字符数组
+                for (char c : charArray) {
+                    // 获取待写入文本
+                    textTemp = String.valueOf(c);
+                    // 开启文本输入
+                    stream.beginText();
+                    // 设置文本弧度
+                    stream.setTextMatrix(Matrix.getRotateInstance(Math.toRadians(this.param.getRadians()), x+this.param.getFontSize()/2, beginY+this.param.getFontSize()/2));
+                    // 文本输入
+                    stream.showText(textTemp);
+                    // 结束文本写入
+                    stream.endText();
+                    // 重置当前行x轴坐标， x轴坐标 = x轴坐标 + 字体大小
+                    x += this.getFontSize();
+                }
             }
         }
         // 否则正常文本输入
@@ -1028,30 +1041,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 重置为黑色
             stream.setStrokingColor(Color.BLACK);
         }
-    }
-
-    /**
-     * 初始化文本弧度x轴坐标
-     * @param beginX x轴起始坐标
-     * @return 返回文本弧度x轴坐标
-     */
-    private float initRadiansX(float beginX) {
-        if (this.param.getRadians()<=90) {
-            beginX += this.getFontSize()/90*this.param.getRadians();
-        }
-        return beginX;
-    }
-
-    /**
-     * 初始化文本弧度y轴坐标
-     * @param beginY y轴起始坐标
-     * @return 返回文本弧度y轴坐标
-     */
-    private float initRadiansY(float beginY) {
-        if (this.param.getRadians()>=270) {
-            beginY += this.getFontSize()/90*(90-this.param.getRadians()%90);
-        }
-        return beginY;
     }
 
     /**

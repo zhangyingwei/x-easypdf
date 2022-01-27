@@ -193,6 +193,10 @@ class XEasyPdfTextParam {
      */
     private boolean isHighlight = false;
     /**
+     * 是否整行旋转
+     */
+    private boolean isRotateLine = false;
+    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;
