@@ -273,7 +273,7 @@ class XEasyPdfTextParam {
             this.maxHeight = (this.fontHeight + this.leading) * this.splitTextList.size() + this.marginTop + this.marginBottom;
         }
         // 初始化Y轴起始坐标
-        this.initBeginY(page);
+        this.initBeginY(document, page);
     }
 
     /**
@@ -322,7 +322,7 @@ class XEasyPdfTextParam {
         return this.maxWidth - (this.fontSize * this.font.getStringWidth(text) / 1000) - this.marginRight;
     }
 
-    private void initBeginY(XEasyPdfPage page) {
+    private void initBeginY(XEasyPdfDocument document, XEasyPdfPage page) {
         // 获取页面Y轴坐标
         Float pageY = page.getParam().getPageY();
         if (pageY==null) {
@@ -334,7 +334,7 @@ class XEasyPdfTextParam {
         }
         if (this.verticalStyle==XEasyPdfTextStyle.TOP) {
             if (this.isChildComponent) {
-                this.beginY = this.beginY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
+                this.beginY = this.beginY - this.fontHeight - this.marginTop + this.marginBottom;
             }
             else {
                 this.beginY = pageY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
@@ -343,10 +343,10 @@ class XEasyPdfTextParam {
         }
         if (this.verticalStyle==XEasyPdfTextStyle.CENTER) {
             if (this.isChildComponent) {
-                this.beginY = this.beginY - this.maxHeight / 2 - this.leading - this.marginTop + this.marginBottom;
+                this.beginY = this.beginY - this.maxHeight / 2 - this.marginTop + this.marginBottom;
             }
             else {
-                this.beginY = pageY - this.maxHeight / 2 - this.leading - this.marginTop + this.marginBottom;
+                this.beginY = pageY - (pageY - this.maxHeight) / 2 - this.leading - this.marginTop + this.marginBottom;
             }
             return;
         }
@@ -354,7 +354,19 @@ class XEasyPdfTextParam {
             if (this.isChildComponent) {
                 this.beginY = this.beginY - this.marginTop + this.marginBottom;
             }else {
-                this.beginY = pageY - this.marginTop + this.marginBottom;
+                // 定义页脚高度
+                float footerHeight = 0F;
+                // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+                if (page.isAllowFooter()&&page.getFooter()!=null) {
+                    // 初始化页脚高度
+                    footerHeight = page.getFooter().getHeight(document, page);
+                }
+                if (pageY - this.maxHeight < footerHeight) {
+                    this.beginY = pageY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
+                }
+                else {
+                    this.beginY = footerHeight + this.maxHeight - this.marginTop + this.marginBottom + 0.01F;
+                }
             }
         }
     }

@@ -140,39 +140,39 @@ public class XEasyPdfTableTest {
 
     @Test
     public void testTable3() throws IOException {
-        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage3.jpg";
+        String imagePath = OUTPUT_PATH + "222.jpg";
         String filePath = OUTPUT_PATH + "testTable3.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Table.build(
                                 XEasyPdfHandler.Table.Row.build(
-                                        XEasyPdfHandler.Table.Row.Cell.build(199F,30F).addContent(
+                                        XEasyPdfHandler.Table.Row.Cell.build(200F,50F).addContent(
                                                 XEasyPdfHandler.Image.build(new File(imagePath)).setWidth(28F).setHeight(28F)
                                         ).setMarginLeft(99F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER).setVerticalStyle(XEasyPdfTableStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,30F).addContent(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
                                                 XEasyPdfHandler.Text.build("2-1")
                                         ).setMarginLeft(99F),
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,30F).addContent(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
                                                 XEasyPdfHandler.Text.build("2-2")
                                         )
                                 ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,88F).addContent(
-                                                XEasyPdfHandler.Text.build("3-1").setMarginTop(-30F)
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,148F).addContent(
+                                                XEasyPdfHandler.Text.build("3-1")
                                         ),
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,30F).addContent(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
                                                 XEasyPdfHandler.Text.build("3-2")
                                         ),
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,30F).addContent(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
                                                 XEasyPdfHandler.Text.build("3-3")
                                         ),
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,88F).addContent(
-                                                XEasyPdfHandler.Text.build("3-4").setMarginTop(-30F)
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,148F).addContent(
+                                                XEasyPdfHandler.Text.build("3-4")
                                         )
-                                ).setHeight(30F).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
-                        ).setMarginLeft(100F)
+                                ).setHeight(50F).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                        ).setMarginLeft(100F).setMarginTop(100F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");

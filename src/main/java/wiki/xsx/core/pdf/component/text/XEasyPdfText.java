@@ -656,7 +656,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 设置字体颜色
         contentStream.setNonStrokingColor(this.param.getFontColor());
         // 设置行间距
-        contentStream.setLeading(this.param.getLeading() + this.param.getFontHeight());
+        contentStream.setLeading(this.param.getLeading());
         return contentStream;
     }
 
@@ -708,7 +708,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 如果文本总行数索引大于-1，则重置Y轴起始坐标
             if (totalLineIndex>-1) {
                 // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 + 字体高度 + 行间距，由于之前多减一行，所以现在加回来
-                this.param.setBeginY(this.param.getBeginY() + this.param.getFontHeight() + this.param.getLeading() * 2);
+                this.param.setBeginY(this.param.getBeginY() + this.param.getFontHeight() + this.param.getLeading());
                 // 获取文本宽度
                 float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
                 // 设置页面X轴坐标
@@ -750,7 +750,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 footerHeight = page.getFooter().getHeight(document, page);
             }
             // 分页检查
-            if (this.param.getBeginY() - (this.param.getFontHeight() + footerHeight) <= this.param.getMarginBottom()) {
+            if (this.param.getBeginY() - (this.param.getFontHeight() + footerHeight) < this.param.getMarginBottom()) {
                 // 如果内容流不为空，则关闭并设置为空
                 if (stream!=null) {
                     // 关闭内容流
@@ -818,7 +818,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 添加超链接
+     * 添加超链接（不支持旋转）
      * @param page pdf页面
      * @param text 待写入文本
      * @param beginX X轴坐标
@@ -878,7 +878,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 添加高亮
+     * 添加高亮（不支持旋转）
      * @param stream 内容流
      * @param text 待写入文本
      * @param beginX X轴坐标
@@ -974,7 +974,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 添加下划线
+     * 添加下划线（不支持旋转）
      * @param stream 内容流
      * @param text 待写入文本
      * @param beginX X轴坐标
@@ -1009,7 +1009,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 添加删除线
+     * 添加删除线（不支持旋转）
      * @param stream 内容流
      * @param text 待写入文本
      * @param beginX X轴坐标

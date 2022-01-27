@@ -51,26 +51,26 @@ public class XEasyPdfTextTest {
                         PDRectangle.A4,
                         XEasyPdfHandler.Text.build(20F, "贵阳（贵州省省会）").setHorizontalStyle(XEasyPdfTextStyle.CENTER),
                         XEasyPdfHandler.Text.build(
-                                "    贵阳，简称“筑”，别称林城、筑城，是贵州省省会，国务院批复确定的中国西南地区重要的区域创新中心、中国重要的生态休闲度假旅游城市 [1]  。" +
+                                "贵阳，简称“筑”，别称林城、筑城，是贵州省省会，国务院批复确定的中国西南地区重要的区域创新中心、中国重要的生态休闲度假旅游城市 [1]  。" +
                                         "截至2018年，全市下辖6个区、3个县、代管1个县级市，总面积8034平方千米，" +
                                         "建成区面积360平方千米，常住人口488.19万人，城镇人口368.24万人，城镇化率75.43%。"
-                        ).setMarginLeft(10).setMarginRight(10),
+                        ).setMarginLeft(10).setMarginRight(10).setAutoIndent(12),
                         XEasyPdfHandler.Text.build(
-                                "    贵阳地处中国西南地区、贵州中部，是西南地区重要的中心城市之一 [3]  ，" +
+                                "贵阳地处中国西南地区、贵州中部，是西南地区重要的中心城市之一 [3]  ，" +
                                         "贵州省的政治、经济、文化、科教、交通中心，西南地区重要的交通、通信枢纽、工业基地及商贸旅游服务中心 [4-5]  ，" +
                                         "全国综合性铁路枢纽 [6]  ，也是国家级大数据产业发展集聚区 [7]  、呼叫中心与服务外包集聚区 [8]  、大数据交易中心、数据中心集聚区。"
-                        ).setMarginLeft(10).setMarginRight(10),
+                        ).setMarginLeft(10).setMarginRight(10).setAutoIndent(12),
                         XEasyPdfHandler.Text.build(
-                                "    贵阳之名较早见于明（弘治）《贵州图经新志》，因境内贵山之南而得名，元代始建顺元城，明永乐年间，" +
+                                "贵阳之名较早见于明（弘治）《贵州图经新志》，因境内贵山之南而得名，元代始建顺元城，明永乐年间，" +
                                         "贵州建省，贵阳成为贵州省的政治、军事、经济、文化中心。境内有30多种少数民族，" +
                                         "有山地、河流、峡谷、湖泊、岩溶、洞穴、瀑布、原始森林、人文、古城楼阁等32种旅游景点 [10]  ，" +
                                         "是首个国家森林城市 [11]  、国家循环经济试点城市 [12]  、中国避暑之都 [13]  ，荣登“中国十大避暑旅游城市”榜首。 [14] "
-                        ).setMarginLeft(10).setMarginRight(10),
+                        ).setMarginLeft(10).setMarginRight(10).setAutoIndent(12),
                         XEasyPdfHandler.Text.build(
-                                "    2017年，复查确认保留全国文明城市称号。 [15]  2018年度《中国国家旅游》最佳优质旅游城市。 [16]  " +
+                                "2017年，复查确认保留全国文明城市称号。 [15]  2018年度《中国国家旅游》最佳优质旅游城市。 [16]  " +
                                         "2018年重新确认国家卫生城市。2019年1月12日，中国开放发展与合作高峰论坛暨第八届环球总评榜，" +
                                         "贵阳市荣获“2018中国国际营商环境标杆城市”“2018绿色发展和生态文明建设十佳城市”两项大奖。"
-                        ).setMarginLeft(10).setMarginRight(10),
+                        ).setMarginLeft(10).setMarginRight(10).setAutoIndent(12),
                         XEasyPdfHandler.Text.build("-- 摘自百度百科").setHorizontalStyle(XEasyPdfTextStyle.RIGHT).setMarginRight(10F)
                 ).setWatermark(
                         XEasyPdfHandler.Watermark.build("贵阳").setFontColor(new Color(51,153,255))
@@ -280,6 +280,7 @@ public class XEasyPdfTextTest {
                                 .setHighlightColor(new Color(0x5EB7F0)).enableHighlight(),
                         XEasyPdfHandler.Text.build("爽爽的贵阳，避暑的天堂，也是堵车的天堂")
                                 .setHorizontalStyle(XEasyPdfTextStyle.RIGHT)
+                                .setVerticalStyle(XEasyPdfTextStyle.CENTER)
                                 .setFontSize(12F).setFontColor(Color.BLACK)
                                 .setDeleteLineWidth(1F).enableDeleteLine(),
                         XEasyPdfHandler.Text.build("112233")

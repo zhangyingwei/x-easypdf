@@ -323,7 +323,7 @@ public class XEasyPdfCell {
      * @param row pdf表格行
      */
     private void writeBorder(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) {
-        XEasyPdfHandler.Rect.build(this.param.getWidth(), this.param.getHeight(), row.getParam().getBeginX(), row.getParam().getBeginY())
+        XEasyPdfHandler.Rect.build(this.param.getWidth(), this.param.getHeight(), row.getParam().getBeginX(), row.getParam().getBeginY()-this.param.getMarginTop())
                 .setContentMode(this.param.getContentMode())
                 .setBackgroundColor(this.param.getBackgroundColor())
                 .setBorderColor(this.param.getBorderColor())
@@ -355,8 +355,8 @@ public class XEasyPdfCell {
             .setHorizontalStyle(text.isUseSelfStyle()?text.getHorizontalStyle():this.param.getHorizontalStyle().getTextStyle())
             .setVerticalStyle(text.isUseSelfStyle()?text.getVerticalStyle():this.param.getVerticalStyle().getTextStyle())
             .setPosition(
-                        row.getParam().getBeginX(),
-                        page.getParam().getPageY() - row.getParam().getMarginTop()
+                        row.getParam().getBeginX() - this.param.getBorderWidth(),
+                        page.getParam().getPageY() - row.getParam().getMarginTop() - this.param.getBorderWidth()
             ).draw(document, page);
     }
 
@@ -379,8 +379,8 @@ public class XEasyPdfCell {
              .setHorizontalStyle(image.isUseSelfStyle()?image.getHorizontalStyle():this.param.getHorizontalStyle().getImageStyle())
              .setVerticalStyle(image.isUseSelfStyle()?image.getVerticalStyle():this.param.getHorizontalStyle().getImageStyle())
              .setPosition(
-                    row.getParam().getBeginX(),
-                    page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - height - this.param.getBorderWidth()
+                    row.getParam().getBeginX() - this.param.getBorderWidth(),
+                    page.getParam().getPageY() - row.getParam().getMarginTop() - image.getMarginTop() - height - this.param.getBorderWidth() * 2
              ).draw(document, page);
     }
 
