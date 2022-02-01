@@ -1,11 +1,13 @@
+package wiki.xsx.core.pdf.doc;
+
 /**
- * pdf表格（简单表格）
+ * pdf位置样式
  * @author xsx
- * @date 2021/4/25
+ * @date 2022/1/30
  * @since 1.8
  * <p>
  * Copyright (c) 2020-2022 xsx All Rights Reserved.
- * x-easypdf is licensed under Mulan PSL v2.
+ * x-easypdf is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
  * You may obtain a copy of Mulan PSL v2 at:
  * http://license.coscl.org.cn/MulanPSL2
@@ -15,4 +17,25 @@
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-package wiki.xsx.core.pdf.component.table.simple;
+public enum XEasyPdfPositionStyle {
+    /**
+     * 居上
+     */
+    TOP,
+    /**
+     * 居中
+     */
+    CENTER,
+    /**
+     * 居左
+     */
+    LEFT,
+    /**
+     * 居右
+     */
+    RIGHT,
+    /**
+     * 居下
+     */
+    BOTTOM;
+}

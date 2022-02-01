@@ -7,8 +7,10 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +39,37 @@ class XEasyPdfTableParam {
      */
     private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
     /**
+     * 单元格边框列表
+     */
+    private List<XEasyPdfCellBorder> cellBorderList = new ArrayList<>(256);
+    /**
+     * 是否自动表头
+     */
+    private Boolean isAutoTitle = false;
+    /**
+     * 表头行
+     */
+    private XEasyPdfRow titleRow;
+    /**
      * 行列表
      */
-    private List<XEasyPdfRow> rows = new ArrayList<>(10);
+    private List<XEasyPdfRow> rows = new ArrayList<>(256);
+    /**
+     * 是否带有边框
+     */
+    private Boolean hasBorder = true;
+    /**
+     * 背景颜色
+     */
+    private Color backgroundColor;
+    /**
+     * 边框颜色
+     */
+    private Color borderColor = Color.BLACK;
+    /**
+     * 边框宽度
+     */
+    private float borderWidth = 1F;
     /**
      * 左边距
      */
@@ -77,15 +107,19 @@ class XEasyPdfTableParam {
      */
     private float fontSize = 12F;
     /**
+     * 字体颜色
+     */
+    private Color fontColor = Color.BLACK;
+    /**
      * 水平样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTableStyle horizontalStyle = XEasyPdfTableStyle.LEFT;
+    private XEasyPdfPositionStyle horizontalStyle = XEasyPdfPositionStyle.LEFT;
     /**
      * 垂直样式（居上、居中、居下）
      * 默认居上
      */
-    private XEasyPdfTableStyle verticalStyle = XEasyPdfTableStyle.TOP;
+    private XEasyPdfPositionStyle verticalStyle = XEasyPdfPositionStyle.TOP;
     /**
      * 是否完成绘制
      */
@@ -104,5 +138,10 @@ class XEasyPdfTableParam {
         }
         // 初始化字体
         this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
+        // 如果背景颜色未初始化，则进行初始化
+        if (this.backgroundColor==null) {
+            // 初始化背景颜色
+            this.backgroundColor = page.getParam().getBackgroundColor();
+        }
     }
 }

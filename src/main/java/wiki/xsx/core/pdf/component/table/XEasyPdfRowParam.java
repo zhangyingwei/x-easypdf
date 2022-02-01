@@ -8,8 +8,10 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,22 @@ class XEasyPdfRowParam {
      * 单元格列表
      */
     private List<XEasyPdfCell> cells = new ArrayList<>(10);
+    /**
+     * 是否带有边框
+     */
+    private Boolean hasBorder;
+    /**
+     * 背景颜色
+     */
+    private Color backgroundColor;
+    /**
+     * 边框颜色
+     */
+    private Color borderColor;
+    /**
+     * 边框宽度
+     */
+    private Float borderWidth;
     /**
      * 左边距
      */
@@ -78,15 +96,19 @@ class XEasyPdfRowParam {
      */
     private Float fontSize;
     /**
+     * 字体颜色
+     */
+    private Color fontColor;
+    /**
      * 表格样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTableStyle horizontalStyle;
+    private XEasyPdfPositionStyle horizontalStyle;
     /**
      * 表格样式（居上、居中、居下）
      * 默认居上
      */
-    private XEasyPdfTableStyle verticalStyle;
+    private XEasyPdfPositionStyle verticalStyle;
 
     /**
      * 初始化
@@ -99,20 +121,23 @@ class XEasyPdfRowParam {
         if (!this.cells.isEmpty()) {
             // 获取表格参数
             XEasyPdfTableParam tableParam = table.getParam();
+            // 如果边框标记为空，则初始化边框标记
+            if (this.hasBorder==null) {
+                // 初始化边框标记
+                this.hasBorder = tableParam.getHasBorder();
+            }
+            // 如果开启边框，则初始化边框宽度
+            if (this.hasBorder) {
+                // 如果边框宽度为空，则初始化边框宽度
+                if (this.borderWidth==null) {
+                    // 初始化边框宽度
+                    this.borderWidth = tableParam.getBorderWidth();
+                }
+            }
             // 如果内容模式未初始化，则进行初始化
             if (this.contentMode==null) {
                 // 初始化内容模式
                 this.contentMode = tableParam.getContentMode();
-            }
-            // 如果水平样式未初始化，则进行初始化
-            if (this.horizontalStyle==null) {
-                // 初始化水平样式
-                this.horizontalStyle = tableParam.getHorizontalStyle();
-            }
-            // 如果垂直样式未初始化，则进行初始化
-            if (this.verticalStyle==null) {
-                // 初始化垂直样式
-                this.verticalStyle = tableParam.getVerticalStyle();
             }
             // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
             if (this.fontPath==null&&this.defaultFontStyle!=null) {
@@ -126,10 +151,52 @@ class XEasyPdfRowParam {
                 // 初始化字体大小
                 this.fontSize = tableParam.getFontSize();
             }
+            // 如果字体颜色未初始化，则进行初始化
+            if (this.fontColor==null) {
+                // 初始化字体颜色
+                this.fontColor = tableParam.getFontColor();
+            }
+            // 如果边框宽度未初始化，则进行初始化
+            if (this.borderWidth==null) {
+                // 初始化边框宽度
+                this.borderWidth = tableParam.getBorderWidth();
+            }
+            // 如果边框颜色未初始化，则进行初始化
+            if (this.borderColor==null) {
+                // 初始化边框颜色
+                this.borderColor = tableParam.getBorderColor();
+            }
+            // 如果背景颜色未初始化，则进行初始化
+            if (this.backgroundColor==null) {
+                // 初始化背景颜色
+                this.backgroundColor = tableParam.getBackgroundColor();
+            }
+            // 如果水平样式未初始化，则进行初始化
+            if (this.horizontalStyle==null) {
+                // 初始化水平样式
+                this.horizontalStyle = tableParam.getHorizontalStyle();
+            }
+            // 如果垂直样式未初始化，则进行初始化
+            if (this.verticalStyle==null) {
+                // 初始化垂直样式
+                this.verticalStyle = tableParam.getVerticalStyle();
+            }
+            // 定义行高
+            float rowHeight = 0F;
+            // 遍历单元格列表
+            for (XEasyPdfCell cell : this.cells) {
+                // 如果单元格开启垂直合并，则跳过
+                if (cell.getParam().isVerticalMerge()) {
+                    // 跳过
+                    continue;
+                }
+                // 初始化行高
+                rowHeight = Math.max(rowHeight, cell.init(document, page, row));
+            }
             // 如果行高未初始化，则进行初始化
             if (this.height==null) {
-                // 初始化行高(第一列高度)
-                this.height = cells.get(0).getParam().getHeight();
+                // 初始化行高
+                this.height = rowHeight;
             }
             // 获取页面尺寸
             PDRectangle rectangle = page.getLastPage().getMediaBox();
@@ -142,10 +209,22 @@ class XEasyPdfRowParam {
                 // 初始化页脚高度
                 footerHeight = page.getParam().getFooter().getHeight(document, page);
             }
-            // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距
-            float currentY = pageY - this.height - this.marginTop;
-            // 如果当前Y轴起始坐标-页脚高度小于等于表格下边距，则进行分页
-            if (currentY - footerHeight <= tableParam.getMarginBottom()) {
+            // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
+            float currentY = pageY - this.marginTop;
+            // 如果当前Y轴起始坐标-页脚高度-行高小于表格下边距，则进行分页
+            if (currentY - footerHeight - this.height < tableParam.getMarginBottom()) {
+                // 获取单元格边框列表
+                List<XEasyPdfCellBorder> cellBorderList = tableParam.getCellBorderList();
+                // 如果单元格边框列表不为空，则绘制单元格边框
+                if (!cellBorderList.isEmpty()) {
+                    // 遍历单元格边框列表
+                    for (XEasyPdfCellBorder cellBorder : cellBorderList) {
+                        // 绘制单元格边框
+                        cellBorder.drawBorder();
+                    }
+                    // 重置单元格边框列表
+                    tableParam.setCellBorderList(new ArrayList<>(256));
+                }
                 // 开启页面自动定位
                 page.enablePosition();
                 // 添加新页面
@@ -160,10 +239,20 @@ class XEasyPdfRowParam {
                     // 重置当前页面Y轴起始坐标 = 当前页面Y轴起始坐标 - 表格上边距
                     page.getParam().setPageY(page.getParam().getPageY() - tableParam.getMarginTop());
                 }
+                // 如果开启自动表头，则绘制表头行
+                if (tableParam.getIsAutoTitle()) {
+                    // 获取表头行
+                    XEasyPdfRow titleRow = tableParam.getTitleRow();
+                    // 如果表头行不为空，则绘制表头行
+                    if (titleRow!=null) {
+                        // 绘制表头行
+                        titleRow.doDraw(document, page, table);
+                    }
+                }
                 // 获取当前页面Y轴起始坐标
                 pageY = page.getParam().getPageY();
-                // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 行高 - 上边距
-                currentY = pageY - this.height - this.marginTop;
+                // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
+                currentY = pageY - this.marginTop;
             }
             // 初始化Y轴起始坐标 = 当前Y轴起始坐标
             this.beginY = currentY;

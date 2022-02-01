@@ -3,10 +3,10 @@ package wiki.xsx.core.pdf.page;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.io.File;
@@ -47,7 +47,7 @@ public class XEasyPdfPageTest {
         String filePath = OUTPUT_PATH + "testAddComponent.pdf";
         XEasyPdfHandler.Document.build(
                 XEasyPdfHandler.Page.build().setRotation(XEasyPdfPage.Rotation.FORWARD_0).setFontPath(FONT_PATH).addComponent(
-                        XEasyPdfHandler.Text.build("Hello World").setHorizontalStyle(XEasyPdfTextStyle.CENTER),
+                        XEasyPdfHandler.Text.build("Hello World").setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                         XEasyPdfHandler.Text.build("你好，世界！").setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT),
                         XEasyPdfHandler.Text.build("我是第一页").setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                 )

@@ -2,7 +2,7 @@ package wiki.xsx.core.pdf.component;
 
 import org.junit.Before;
 import org.junit.Test;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.awt.*;
@@ -74,7 +74,7 @@ public class XEasyPdfHeaderTest {
                                 XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(100F).setWidth(100F),
                                 XEasyPdfHandler.Text.build(
                                         "Hello XSX!!!Hello XSX!!!Hello XSX!!!Hello XSX!!!"
-                                ).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setFontSize(30F)
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setFontSize(30F)
                         ).addSplitLine(
                                 XEasyPdfHandler.SplitLine.SolidLine.build().setColor(lineColor).setMarginTop(5F),
                                 XEasyPdfHandler.SplitLine.DottedLine.build().setMarginTop(5F),
@@ -123,7 +123,7 @@ public class XEasyPdfHeaderTest {
                                 "4.这是第四行。。。。",
                                 "5.这是第五行。。。。"
                             )
-                        ).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setFontSize(16F)
+                        ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setFontSize(16F)
                 )
         ).setFontPath(FONT_PATH).setGlobalHeader(
                 XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("Hello World"))

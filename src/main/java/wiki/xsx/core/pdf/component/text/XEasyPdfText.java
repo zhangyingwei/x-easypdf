@@ -12,6 +12,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
@@ -97,7 +98,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableCenterStyle() {
-        this.param.setHorizontalStyle(XEasyPdfTextStyle.CENTER).setVerticalStyle(XEasyPdfTextStyle.CENTER);
+        this.param.setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setVerticalStyle(XEasyPdfPositionStyle.CENTER);
         return this;
     }
 
@@ -385,9 +386,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param style 样式
      * @return 返回文本组件
      */
-    public XEasyPdfText setHorizontalStyle(XEasyPdfTextStyle style) {
+    public XEasyPdfText setHorizontalStyle(XEasyPdfPositionStyle style) {
         if (style!=null) {
-            if (style==XEasyPdfTextStyle.LEFT||style==XEasyPdfTextStyle.CENTER||style==XEasyPdfTextStyle.RIGHT) {
+            if (style==XEasyPdfPositionStyle.LEFT||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.RIGHT) {
                 this.param.setHorizontalStyle(style);
             }else {
                 throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
@@ -401,9 +402,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @param style 样式
      * @return 返回文本组件
      */
-    public XEasyPdfText setVerticalStyle(XEasyPdfTextStyle style) {
+    public XEasyPdfText setVerticalStyle(XEasyPdfPositionStyle style) {
         if (style!=null) {
-            if (style==XEasyPdfTextStyle.TOP||style==XEasyPdfTextStyle.CENTER||style==XEasyPdfTextStyle.BOTTOM) {
+            if (style==XEasyPdfPositionStyle.TOP||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.BOTTOM) {
                 this.param.setVerticalStyle(style);
             }else {
                 throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
@@ -474,7 +475,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfText setHeight(float height) {
-        this.param.setMaxHeight(Math.abs(height));
         return this;
     }
 
@@ -535,24 +535,20 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * 获取高度
      * @param document pdf文档
      * @param page pdf页面
-     * @param marginLeft 左边距
-     * @param marginRight 右边距
      * @return 返回文本高度
      */
-    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
-        return this.param.getHeight(document, page, marginLeft, marginRight);
+    public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
+        return this.param.getHeight(document, page);
     }
 
     /**
      * 获取宽度
      * @param document pdf文档
      * @param page pdf页面
-     * @param marginLeft 左边距
-     * @param marginRight 右边距
      * @return 返回文本宽度
      */
-    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
-        return this.param.getWidth(document, page, marginLeft, marginRight);
+    public float getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
+        return this.param.getWidth(document, page);
     }
 
     /**
@@ -591,7 +587,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * 获取水平样式
      * @return 返回文本样式
      */
-    public XEasyPdfTextStyle getHorizontalStyle() {
+    public XEasyPdfPositionStyle getHorizontalStyle() {
         return this.param.getHorizontalStyle();
     }
 
@@ -599,7 +595,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * 获取垂直样式
      * @return 返回文本样式
      */
-    public XEasyPdfTextStyle getVerticalStyle() {
+    public XEasyPdfPositionStyle getVerticalStyle() {
         return this.param.getVerticalStyle();
     }
 
@@ -617,6 +613,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     public float getFontSize() {
         return this.param.getFontSize();
+    }
+
+    /**
+     * 获取行间距
+     * @return 返回行间距
+     */
+    public float getLeading() {
+        return this.param.getLeading();
     }
 
     /**
@@ -698,8 +702,10 @@ public class XEasyPdfText implements XEasyPdfComponent {
                     this.param.getBeginY(),
                     index==totalLineIndex
             );
-            // 重置X轴起始坐标为左边距
-            this.param.setBeginX(this.getMarginLeft());
+            if (this.param.isTextAppend()) {
+                // 重置X轴起始坐标为0
+                this.param.setBeginX(0F);
+            }
             // 遍历索引自增
             index++;
         }
@@ -750,7 +756,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 footerHeight = page.getFooter().getHeight(document, page);
             }
             // 分页检查
-            if (this.param.getBeginY() - (this.param.getFontHeight() + footerHeight) < this.param.getMarginBottom()) {
+            if (this.param.getBeginY() - footerHeight < this.param.getMarginBottom()) {
                 // 如果内容流不为空，则关闭并设置为空
                 if (stream!=null) {
                     // 关闭内容流
@@ -813,7 +819,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 添加删除线
         this.addDeleteLine(stream, text, beginX, beginY);
         // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
-        this.param.setBeginY(this.param.getBeginY() - (this.param.getFontHeight() + this.param.getLeading()));
+        this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
         return stream;
     }
 

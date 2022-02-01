@@ -5,8 +5,7 @@ import org.junit.Test;
 import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
 import wiki.xsx.core.pdf.component.table.XEasyPdfRow;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
-import wiki.xsx.core.pdf.component.table.XEasyPdfTableStyle;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.awt.*;
@@ -72,12 +71,12 @@ public class XEasyPdfTableTest {
                 XEasyPdfHandler.Header.build(
                         XEasyPdfHandler.Text.build(
                                 "页眉第"+XEasyPdfHandler.Page.getCurrentPagePlaceholder()+"页，共13页"
-                        ).setFontSize(20F).setHorizontalStyle(XEasyPdfTextStyle.CENTER)
+                        ).setFontSize(20F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                 )
         ).addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build("title"),
-                        XEasyPdfHandler.Table.build(rowList).setHorizontalStyle(XEasyPdfTableStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
+                        XEasyPdfHandler.Table.build(rowList).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
                 )
         ).save(filePath).close();
         long end = System.currentTimeMillis();
@@ -103,7 +102,7 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,15F).addContent(
                                                 XEasyPdfHandler.Text.build("1-4")
                                         )
-                                ).setHorizontalStyle(XEasyPdfTableStyle.LEFT),
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.LEFT),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,15F).addContent(
                                                 XEasyPdfHandler.Text.build("2-1")
@@ -117,10 +116,10 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,15F).addContent(
                                                 XEasyPdfHandler.Text.build("2-4")
                                         )
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,15F).addContent(
-                                                XEasyPdfHandler.Text.build(Arrays.asList("3-1")).enableSelfStyle().setVerticalStyle(XEasyPdfTextStyle.CENTER)
+                                                XEasyPdfHandler.Text.build(Arrays.asList("3-1")).enableSelfStyle().setVerticalStyle(XEasyPdfPositionStyle.CENTER)
                                         ),
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,15F).addContent(
                                                 XEasyPdfHandler.Text.build("3-2")
@@ -131,7 +130,7 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,15F).addContent(
                                                 XEasyPdfHandler.Text.build("3-4")
                                         ).setBorderWidth(2F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.RIGHT)
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.RIGHT)
                         ).setMarginLeft(100F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
@@ -146,33 +145,35 @@ public class XEasyPdfTableTest {
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Table.build(
                                 XEasyPdfHandler.Table.Row.build(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,150F).addContent(
+                                                XEasyPdfHandler.Image.build(new File(imagePath)).setWidth(50F).setHeight(50F).setMarginBottom(20F)
+                                        ).setBackgroundColor(Color.BLUE).setVerticalStyle(XEasyPdfPositionStyle.BOTTOM),
                                         XEasyPdfHandler.Table.Row.Cell.build(200F,50F).addContent(
-                                                XEasyPdfHandler.Image.build(new File(imagePath)).setWidth(28F).setHeight(28F)
-                                        ).setMarginLeft(99F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER).setVerticalStyle(XEasyPdfTableStyle.CENTER),
+                                                XEasyPdfHandler.Image.build(new File(imagePath))
+                                        ),
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,150F).addContent(
+                                                XEasyPdfHandler.Text.build(Arrays.asList("3-4-1", "3-4-2", "3-4-3"))
+                                        )
+                                ).setHeight(50F),
                                 XEasyPdfHandler.Table.Row.build(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,50F).enableVerticalMerge(),
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
-                                                XEasyPdfHandler.Text.build("2-1")
-                                        ).setMarginLeft(99F),
+                                                XEasyPdfHandler.Text.build("2-1").setMarginLeft(20F)
+                                        ),
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
                                                 XEasyPdfHandler.Text.build("2-2")
                                         )
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
-                                XEasyPdfHandler.Table.Row.build(
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,148F).addContent(
-                                                XEasyPdfHandler.Text.build("3-1")
-                                        ),
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
+                                ,XEasyPdfHandler.Table.Row.build(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F,50F).enableVerticalMerge(),
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
                                                 XEasyPdfHandler.Text.build("3-2")
                                         ),
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,50F).addContent(
                                                 XEasyPdfHandler.Text.build("3-3")
-                                        ),
-                                        XEasyPdfHandler.Table.Row.Cell.build(100F,148F).addContent(
-                                                XEasyPdfHandler.Text.build("3-4")
                                         )
-                                ).setHeight(50F).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
-                        ).setMarginLeft(100F).setMarginTop(100F)
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
+                        ).setMarginLeft(100F).setMarginTop(100F).setVerticalStyle(XEasyPdfPositionStyle.CENTER).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
@@ -191,7 +192,7 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("2")
                                         ).setMarginLeft(100F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("3")
@@ -199,7 +200,7 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("4")
                                         ).setMarginLeft(100F)
-                                ).setMarginTop(100F).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setMarginTop(100F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("5")
@@ -207,7 +208,7 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("6")
                                         ).setMarginLeft(100F)
-                                ).setMarginTop(100F).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                                ).setMarginTop(100F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                         ).setMarginLeft(150F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
@@ -227,12 +228,12 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("2")
                                         ).setMarginLeft(100F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(101F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("5")
                                         ).setMarginLeft(99F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("3")
@@ -240,7 +241,7 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("4")
                                         ).setMarginLeft(100F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                         ).setMarginLeft(150F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
@@ -260,12 +261,12 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("2")
                                         ).setMarginLeft(50F)
-                                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(101F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("3")
                                         ).setMarginLeft(74F)
-                                ).setMarginTop(-50F).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setMarginTop(-50F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("4")
@@ -273,12 +274,12 @@ public class XEasyPdfTableTest {
                                         XEasyPdfHandler.Table.Row.Cell.build(100F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("5")
                                         ).setMarginLeft(50F)
-                                ).setMarginTop(-50F).setHorizontalStyle(XEasyPdfTableStyle.CENTER),
+                                ).setMarginTop(-50F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                                 XEasyPdfHandler.Table.Row.build(
                                         XEasyPdfHandler.Table.Row.Cell.build(101F,100F).addContent(
                                                 XEasyPdfHandler.Text.build("6")
                                         ).setMarginLeft(74F)
-                                ).setMarginTop(-50F).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                                ).setMarginTop(-50F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                         ).setMarginLeft(150F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
@@ -301,16 +302,16 @@ public class XEasyPdfTableTest {
                         ),XEasyPdfHandler.Table.Row.Cell.build(199F, 16F).addContent(
                                 XEasyPdfHandler.Text.build("2020-01-01 00:00:00")
                         )
-                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
         );
         rows.add(
                 XEasyPdfHandler.Table.Row.build(
                         XEasyPdfHandler.Table.Row.Cell.build(100F, 32F).addContent(
                                 XEasyPdfHandler.Text.build("报修内容").setMarginTop(10F)
                         ),XEasyPdfHandler.Table.Row.Cell.build(395F, 32F).addContent(
-                                XEasyPdfHandler.Text.build("XXXXXXXXXXXXXXXXXXXXXX").setHorizontalStyle(XEasyPdfTextStyle.LEFT).enableSelfStyle()
+                                XEasyPdfHandler.Text.build("XXXXXXXXXXXXXXXXXXXXXX").setHorizontalStyle(XEasyPdfPositionStyle.LEFT).enableSelfStyle()
                         )
-                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
         );
         for (int i = 0; i < 3; i++) {
             rows.add(
@@ -325,7 +326,7 @@ public class XEasyPdfTableTest {
                             ),XEasyPdfHandler.Table.Row.Cell.build(199F, 16F).addContent(
                                     XEasyPdfHandler.Text.build("2020-01-01 00:00:00")
                             )
-                    ).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                    ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
             );
         }
         rows.add(
@@ -340,7 +341,7 @@ public class XEasyPdfTableTest {
                         ),XEasyPdfHandler.Table.Row.Cell.build(199F, 16F).addContent(
                                 XEasyPdfHandler.Text.build("")
                         )
-                ).setHorizontalStyle(XEasyPdfTableStyle.CENTER)
+                ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
         );
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
@@ -381,7 +382,7 @@ public class XEasyPdfTableTest {
                                         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+
                                         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"+
                                         "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-                        ).setHorizontalStyle(XEasyPdfTextStyle.CENTER)
+                        ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                 )
         ).bookmark()
                 .setBookMark(0, "第1页")

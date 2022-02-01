@@ -5,6 +5,7 @@ import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 /**
@@ -143,26 +144,58 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
         if (this.param.getImage()!=null) {
             // 绘制图片
             this.param.getImage()
-                    .setMarginLeft(this.param.getMarginLeft())
-                    .setMarginRight(this.param.getMarginRight())
-                    .setMarginBottom(this.param.getMarginBottom())
-                    .setPosition(this.param.getBeginX(), this.param.getBeginY())
                     .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                    .setPosition(this.param.getBeginX(), this.param.getBeginY()+this.param.getMarginBottom())
                     .draw(document, page);
         }
         // 如果文本不为空，则写入文本
         if (this.param.getText()!=null) {
-            // 写入文本
-            this.param.getText()
-                    .replaceAllPlaceholder(XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+"")
-                    .setMarginLeft(this.param.getMarginLeft())
-                    .setMarginRight(this.param.getMarginRight())
-                    .setMarginBottom(this.param.getMarginBottom())
-                    .setPosition(this.param.getBeginX(), this.param.getBeginY() + this.param.getText().getHeight(document, page, this.param.getMarginLeft(), this.param.getMarginRight()))
-                    .setCheckPage(false)
-                    .draw(document, page);
+            // 获取文本
+            XEasyPdfText text = this.param.getText();
+            // 设置文本参数
+            text.replaceAllPlaceholder(
+                    XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+""
+            ).setCheckPage(false);
+            // 设置位置并绘制文本
+            text.setPosition(
+                    this.param.getBeginX(), this.initYForText(document, page, text)
+            ).draw(document, page);
         }
         // 开启页面自动重置定位
         page.enablePosition();
+    }
+
+    /**
+     * 初始化文本Y轴起始坐标
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param text pdf文本
+     * @return 返回Y轴起始坐标
+     */
+    private float initYForText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfText text) {
+        // 获取页脚高度
+        float height = this.param.getHeight();
+        // 获取文本高度
+        float textHeight = text.getHeight(document, page);
+        // 定义Y轴起始坐标为页面Y轴起始坐标+页脚高度+行间距/2
+        float y = this.param.getBeginY() + height + text.getLeading()/2;
+        // 如果垂直样式为居上，则重置Y轴起始坐标为Y轴起始坐标-字体大小
+        if (text.getVerticalStyle()==XEasyPdfPositionStyle.TOP) {
+            // 重置Y轴起始坐标为Y轴起始坐标-字体大小
+            y = y - text.getFontSize();
+            return y;
+        }
+        // 如果垂直样式为居中，则重置Y轴起始坐标为Y轴起始坐标-字体大小-(页脚高度-文本高度)/2
+        if (text.getVerticalStyle()==XEasyPdfPositionStyle.CENTER) {
+            // 重置Y轴起始坐标为Y轴起始坐标-字体大小-(页脚高度-文本高度)/2
+            y = y - text.getFontSize() - (height - textHeight) / 2;
+            return y;
+        }
+        // 如果垂直样式为居下，则重置Y轴起始坐标为Y轴起始坐标-字体大小-页脚高度+文本高度
+        if (text.getVerticalStyle()==XEasyPdfPositionStyle.BOTTOM) {
+            // 重置Y轴起始坐标为Y轴起始坐标-字体大小-单元格高度+文本高度
+            y = y - text.getFontSize() - height + textHeight;
+        }
+        return y;
     }
 }

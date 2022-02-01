@@ -9,6 +9,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
@@ -107,11 +108,11 @@ class XEasyPdfTextParam {
     /**
      * 水平样式（居左、居中、居右）
      */
-    private XEasyPdfTextStyle horizontalStyle = XEasyPdfTextStyle.LEFT;
+    private XEasyPdfPositionStyle horizontalStyle = XEasyPdfPositionStyle.LEFT;
     /**
      * 垂直样式（居上、居中、居下）
      */
-    private XEasyPdfTextStyle verticalStyle = XEasyPdfTextStyle.TOP;
+    private XEasyPdfPositionStyle verticalStyle = XEasyPdfPositionStyle.TOP;
     /**
      * 页面X轴起始坐标
      */
@@ -207,12 +208,10 @@ class XEasyPdfTextParam {
      * @param page pdf页面
      * @return 返回文本宽度
      */
-    float getWidth(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
+    float getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
         if (this.maxWidth!=null) {
             return this.maxWidth;
         }
-        this.marginLeft = marginLeft;
-        this.marginRight = marginRight;
         this.init(document, page);
         return this.maxWidth;
     }
@@ -223,14 +222,12 @@ class XEasyPdfTextParam {
      * @param page pdf页面
      * @return 返回文本高度
      */
-    float getHeight(XEasyPdfDocument document, XEasyPdfPage page, float marginLeft, float marginRight) {
+    float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
         if (this.maxHeight!=null) {
             return this.maxHeight;
         }
-        this.marginLeft = marginLeft;
-        this.marginRight = marginRight;
         this.init(document, page);
-        return (this.fontHeight + this.leading) * this.splitTextList.size() + this.marginTop + this.marginBottom;
+        return (this.fontHeight + this.leading) * this.splitTextList.size() - this.marginTop - this.marginBottom;
     }
 
     /**
@@ -269,8 +266,8 @@ class XEasyPdfTextParam {
         this.initTextList(page);
         // 如果最大高度未初始化，则进行初始化
         if (this.maxHeight==null) {
-            // 初始化最大高度 = (字体高度+行间距) * 文本行数 + 上边距 + 下边距
-            this.maxHeight = (this.fontHeight + this.leading) * this.splitTextList.size() + this.marginTop + this.marginBottom;
+            // 初始化最大高度 = (字体高度+行间距) * 文本行数 - 上边距 - 下边距
+            this.maxHeight = (this.fontHeight + this.leading) * this.splitTextList.size() - this.marginTop - this.marginBottom;
         }
         // 初始化Y轴起始坐标
         this.initBeginY(document, page);
@@ -295,78 +292,92 @@ class XEasyPdfTextParam {
             // 否则判断文本样式
             else {
                 // 初始化样式
-                x = this.initStyleBeginX(text);
+                x = this.initBeginXForStyle(text);
             }
         }
         // 否则重置X轴坐标=当前坐标+样式坐标
         else {
             // 重置X轴坐标=当前坐标+样式坐标
-            x = x + this.initStyleBeginX(text);
+            x = x + this.initBeginXForStyle(text);
         }
         return x;
     }
 
+    /**
+     * 初始化X轴起始坐标样式
+     * @param text 待添加文本
+     * @return 返回X轴起始坐标
+     */
     @SneakyThrows
-    float initStyleBeginX(String text) {
+    float initBeginXForStyle(String text) {
         // 如果为居左，则初始化为左边距
-        if (this.horizontalStyle ==XEasyPdfTextStyle.LEFT) {
+        if (this.horizontalStyle==XEasyPdfPositionStyle.LEFT) {
             // 初始化为左边距
             return this.marginLeft;
         }
         // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
-        if (this.horizontalStyle ==XEasyPdfTextStyle.CENTER) {
+        if (this.horizontalStyle==XEasyPdfPositionStyle.CENTER) {
             // 初始化为(最大宽度-左边距-右边距-文本宽度)/2
-            return (this.maxWidth  - this.marginLeft - this.marginRight - (this.fontSize * this.font.getStringWidth(text) / 1000)) / 2;
+            return (this.maxWidth  - this.marginLeft - this.marginRight - (this.fontSize * this.font.getStringWidth(text) / 1000)) / 2 + this.marginLeft - this.marginRight;
         }
         // 否则为居右，初始化为最大宽度-右边距-文本宽度
-        return this.maxWidth - (this.fontSize * this.font.getStringWidth(text) / 1000) - this.marginRight;
+        return this.maxWidth - (this.fontSize * this.font.getStringWidth(text) / 1000) + this.marginLeft - this.marginRight;
     }
 
+    /**
+     * 初始化Y轴起始坐标
+     * @param document pdf文档
+     * @param page pdf页面
+     */
     private void initBeginY(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 如果Y轴起始坐标不为空，则重置Y轴起始坐标为Y轴起始坐标-上边距+下边距
+        if (this.beginY!=null) {
+            // 重置Y轴起始坐标为Y轴起始坐标-上边距+下边距
+            this.beginY = this.beginY - this.marginTop + this.marginBottom;
+            return;
+        }
         // 获取页面Y轴坐标
         Float pageY = page.getParam().getPageY();
+        // 如果页面Y轴坐标为空，则获取最新页面高度
         if (pageY==null) {
+            // 重置页面Y轴坐标为最新页面高度
             pageY = page.getLastPage().getMediaBox().getHeight();
         }
+        // 如果为文本追加模式，则重置Y轴起始坐标为页面Y轴坐标-上边距+下边距
         if (this.isTextAppend) {
+            // 重置Y轴起始坐标为页面Y轴坐标-上边距+下边距
             this.beginY = pageY - this.marginTop + this.marginBottom;
             return;
         }
-        if (this.verticalStyle==XEasyPdfTextStyle.TOP) {
-            if (this.isChildComponent) {
-                this.beginY = this.beginY - this.fontHeight - this.marginTop + this.marginBottom;
+        // 如果为居上样式，则重置Y轴起始坐标为页面Y轴坐标-字体高度-行间距-上边距+下边距
+        if (this.verticalStyle==XEasyPdfPositionStyle.TOP) {
+            // 重置Y轴起始坐标为页面Y轴坐标-字体高度-行间距-上边距+下边距
+            this.beginY = pageY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
+            return;
+        }
+        // 如果为居中样式，则重置Y轴起始坐标为页面Y轴坐标-(页面Y轴坐标-最大高度)/2-行间距-上边距+下边距
+        if (this.verticalStyle==XEasyPdfPositionStyle.CENTER) {
+            // 重置Y轴起始坐标为页面Y轴坐标-(页面Y轴坐标-最大高度)/2-行间距-上边距+下边距
+            this.beginY = pageY - (pageY - this.maxHeight) / 2 - this.leading - this.marginTop + this.marginBottom;
+            return;
+        }
+        // 如果为居下样式，则判断是否包含页脚
+        if (this.verticalStyle==XEasyPdfPositionStyle.BOTTOM) {
+            // 定义页脚高度
+            float footerHeight = 0F;
+            // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+            if (page.isAllowFooter()&&page.getFooter()!=null) {
+                // 初始化页脚高度
+                footerHeight = page.getFooter().getHeight(document, page);
             }
-            else {
+            // 如果页面Y轴坐标-最大高度小于页脚高度，则重置Y轴起始坐标为页面Y轴坐标-字体高度-行间距-上边距+下边距
+            if (pageY - this.maxHeight < footerHeight) {
+                // 重置Y轴起始坐标为页面Y轴坐标-字体高度-行间距-上边距+下边距
                 this.beginY = pageY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
             }
-            return;
-        }
-        if (this.verticalStyle==XEasyPdfTextStyle.CENTER) {
-            if (this.isChildComponent) {
-                this.beginY = this.beginY - this.maxHeight / 2 - this.marginTop + this.marginBottom;
-            }
+            // 否则重置Y轴起始坐标为页脚高度+最大高度-上边距+下边距+0.01(防止分页)
             else {
-                this.beginY = pageY - (pageY - this.maxHeight) / 2 - this.leading - this.marginTop + this.marginBottom;
-            }
-            return;
-        }
-        if (this.verticalStyle==XEasyPdfTextStyle.BOTTOM) {
-            if (this.isChildComponent) {
-                this.beginY = this.beginY - this.marginTop + this.marginBottom;
-            }else {
-                // 定义页脚高度
-                float footerHeight = 0F;
-                // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-                if (page.isAllowFooter()&&page.getFooter()!=null) {
-                    // 初始化页脚高度
-                    footerHeight = page.getFooter().getHeight(document, page);
-                }
-                if (pageY - this.maxHeight < footerHeight) {
-                    this.beginY = pageY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
-                }
-                else {
-                    this.beginY = footerHeight + this.maxHeight - this.marginTop + this.marginBottom + 0.01F;
-                }
+                this.beginY = footerHeight + this.maxHeight - this.marginTop + this.marginBottom + 0.01F;
             }
         }
     }
@@ -473,8 +484,6 @@ class XEasyPdfTextParam {
      * 初始化缩进
      */
     private void initIndent() {
-        // 定义自动缩进
-        String autoIndent = "";
         // 如果缩进值不为空，则重置自动缩进
         if (this.indent!=null) {
             // 定义字符串构建器
@@ -484,10 +493,8 @@ class XEasyPdfTextParam {
                 // 添加空格字符
                 builder.append(" ");
             }
-            // 重置自动缩进
-            autoIndent = builder.toString();
+            // 重置待添加文本
+            this.text = builder.toString() + this.text;
         }
-        // 重置待添加文本
-        this.text = autoIndent + this.text;
     }
 }

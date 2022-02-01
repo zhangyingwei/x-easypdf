@@ -3,10 +3,10 @@ package wiki.xsx.core.pdf.component;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
-import wiki.xsx.core.pdf.component.image.XEasyPdfImageStyle;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
@@ -41,6 +41,7 @@ public class XEasyPdfImageTest {
 
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
     private static final String OUTPUT_PATH = "E:\\pdf\\test\\component\\image\\";
+    private static final String IMAGE_PATH = OUTPUT_PATH + "test.png";
 
     @Before
     public void setup() {
@@ -67,19 +68,18 @@ public class XEasyPdfImageTest {
     public void testImage() throws IOException {
         long begin = System.currentTimeMillis();
         String filePath = OUTPUT_PATH + "testFlush.pdf";
-        String imagePath = OUTPUT_PATH + "test.png";
         XEasyPdfDocument document = XEasyPdfHandler.Document.build().setTempDir("E:\\pdf\\test\\component\\image");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             document.setFontPath(FONT_PATH).setGlobalFooter(
                     XEasyPdfHandler.Footer.build(XEasyPdfHandler.Text.build("this is my footer").enableCenterStyle())
             ).addPage(
                     XEasyPdfHandler.Page.build(
-                            XEasyPdfHandler.Image.build(new File(imagePath)).enableCenterStyle().setHeight(800)
+                            XEasyPdfHandler.Image.build(new File(IMAGE_PATH)).enableCenterStyle().setHeight(800)
                     ).setHeader(
                             XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("My Header，当前第"+XEasyPdfHandler.Page.getCurrentPagePlaceholder()+"页"))
                     )
             );
-            if (i>0&&i%2==0) {
+            if (i>0&&i%25==0) {
                 document.flush();
             }
         }
@@ -91,23 +91,22 @@ public class XEasyPdfImageTest {
     @Test
     public void testImage2() throws IOException {
         String filePath = OUTPUT_PATH + "testImage2.pdf";
-        String imagePath = "C:\\Users\\Administrator\\Desktop\\testImage9.jpg";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        XEasyPdfHandler.Image.build(new File(imagePath)).setMarginLeft(150F),
-                        XEasyPdfHandler.Image.build(new File(imagePath))
+                        XEasyPdfHandler.Image.build(new File(IMAGE_PATH)).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
+                        XEasyPdfHandler.Image.build(new File(IMAGE_PATH))
                                 .setWidth(100F)
                                 .setHeight(100F)
-                                .setHorizontalStyle(XEasyPdfImageStyle.LEFT),
-                        XEasyPdfHandler.Image.build(new File(imagePath))
+                                .setHorizontalStyle(XEasyPdfPositionStyle.LEFT),
+                        XEasyPdfHandler.Image.build(new File(IMAGE_PATH))
                                 .setWidth(100F)
                                 .setHeight(100F)
-                                .setHorizontalStyle(XEasyPdfImageStyle.CENTER),
-                        XEasyPdfHandler.Image.build(new File(imagePath))
+                                .setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
+                        XEasyPdfHandler.Image.build(new File(IMAGE_PATH))
                                 .setWidth(100F)
                                 .setHeight(100F)
-                                .setHorizontalStyle(XEasyPdfImageStyle.RIGHT),
-                        XEasyPdfHandler.Image.build(new File(imagePath))
+                                .setHorizontalStyle(XEasyPdfPositionStyle.RIGHT),
+                        XEasyPdfHandler.Image.build(new File(IMAGE_PATH))
                                 .setWidth(300F)
                                 .setHeight(300F)
                 ).setHeader(
@@ -123,12 +122,11 @@ public class XEasyPdfImageTest {
     public void testImage3() throws IOException {
         String sourcePath = OUTPUT_PATH + "testImage2.pdf";
         String filePath = OUTPUT_PATH + "testImage3.pdf";
-        String imagePath = "C:\\Users\\Administrator\\Desktop\\QQ截图20211010155457.png";
         XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath);
         List<XEasyPdfPage> pageList = document.getPageList();
         XEasyPdfPage xEasyPdfPage = pageList.get(pageList.size() - 1);
         xEasyPdfPage.addComponent(
-                XEasyPdfHandler.Image.build(new File(imagePath))
+                XEasyPdfHandler.Image.build(new File(IMAGE_PATH))
                         .setHeight(12)
                         .setWidth(12)
                         .setPosition(12F, 12F)

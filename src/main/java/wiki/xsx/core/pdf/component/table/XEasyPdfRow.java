@@ -3,7 +3,9 @@ package wiki.xsx.core.pdf.component.table;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,6 +84,52 @@ public class XEasyPdfRow {
     }
 
     /**
+     * 设置字体颜色
+     * @param fontColor 字体颜色
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setFontColor(Color fontColor) {
+        if (fontColor!=null) {
+            this.param.setFontColor(fontColor);
+        }
+        return this;
+    }
+
+    /**
+     * 设置背景颜色
+     * @param backgroundColor 背景颜色
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setBackgroundColor(Color backgroundColor) {
+        if (backgroundColor!=null) {
+            this.param.setBackgroundColor(backgroundColor);
+        }
+        return this;
+    }
+
+    /**
+     * 边框宽度
+     * @param lineWidth 宽度
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setBorderWidth(float lineWidth) {
+        this.param.setBorderWidth(Math.abs(lineWidth));
+        return this;
+    }
+
+    /**
+     * 设置边框颜色（开启边框时生效）
+     * @param borderColor 边框颜色
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setBorderColor(Color borderColor) {
+        if (borderColor!=null) {
+            this.param.setBorderColor(borderColor);
+        }
+        return this;
+    }
+
+    /**
      * 设置左边距
      * @param margin 边距
      * @return 返回表格行组件
@@ -106,9 +154,9 @@ public class XEasyPdfRow {
      * @param style 样式
      * @return 返回表格行组件
      */
-    public XEasyPdfRow setHorizontalStyle(XEasyPdfTableStyle style) {
+    public XEasyPdfRow setHorizontalStyle(XEasyPdfPositionStyle style) {
         if (style!=null) {
-            if (style==XEasyPdfTableStyle.LEFT||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.RIGHT) {
+            if (style==XEasyPdfPositionStyle.LEFT||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.RIGHT) {
                 this.param.setHorizontalStyle(style);
             }else {
                 throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
@@ -122,14 +170,41 @@ public class XEasyPdfRow {
      * @param style 样式
      * @return 返回表格行组件
      */
-    public XEasyPdfRow setVerticalStyle(XEasyPdfTableStyle style) {
+    public XEasyPdfRow setVerticalStyle(XEasyPdfPositionStyle style) {
         if (style!=null) {
-            if (style==XEasyPdfTableStyle.TOP||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.BOTTOM) {
+            if (style==XEasyPdfPositionStyle.TOP||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.BOTTOM) {
                 this.param.setVerticalStyle(style);
             }else {
                 throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
             }
         }
+        return this;
+    }
+
+    /**
+     * 开启上下左右居中
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow enableCenterStyle() {
+        this.param.setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setVerticalStyle(XEasyPdfPositionStyle.CENTER);
+        return this;
+    }
+
+    /**
+     * 开启边框
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow enableBorder() {
+        this.param.setHasBorder(true);
+        return this;
+    }
+
+    /**
+     * 关闭边框
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow disableBorder() {
+        this.param.setHasBorder(false);
         return this;
     }
 
@@ -184,26 +259,32 @@ public class XEasyPdfRow {
     void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) {
         // 初始化参数
         this.param.init(document, page, table, this);
-        // 定义边框宽度
-        float borderWidth = 0F;
         // 获取单元格列表
         List<XEasyPdfCell> cells = this.param.getCells();
         // 遍历单元格列表
         for (XEasyPdfCell cell : cells) {
             // 如果单元格不为空，则进行绘制
             if (cell!=null) {
-                // 重置边框宽度为单元格边框宽度
-                borderWidth = cell.getParam().getBorderWidth();
+                // 如果单元格为垂直合并，则跳过绘制
+                if (cell.getParam().isVerticalMerge()) {
+                    // 重置X轴起始坐标
+                    this.param.setBeginX(this.param.getBeginX()+cell.getParam().getWidth()+cell.getParam().getMarginLeft());
+                    // 跳过
+                    continue;
+                }
+                // 设置X轴起始坐标
                 this.param.setBeginX(this.param.getBeginX()+cell.getParam().getMarginLeft());
                 // 绘制单元格
-                cell.doDraw(document, page, this);
+                cell.doDraw(document, page, table, this);
                 // 重置X轴起始坐标
-                this.param.setBeginX(this.param.getBeginX()+cell.getParam().getWidth()-borderWidth);
+                this.param.setBeginX(this.param.getBeginX()+cell.getParam().getWidth());
             }
         }
+        // 重置X轴起始坐标为空
+        this.param.setBeginX(null);
         // 重置页面Y轴起始坐标
-        page.getParam().setPageY(this.param.getBeginY()+borderWidth);
-        // 重置字体为null
+        page.getParam().setPageY(this.param.getBeginY()-this.param.getHeight());
+        // 重置字体为空
         this.param.setFont(null);
     }
 }

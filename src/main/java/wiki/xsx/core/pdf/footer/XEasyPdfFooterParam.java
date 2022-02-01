@@ -72,15 +72,46 @@ class XEasyPdfFooterParam {
         }
         // 如果高度未初始化，则进行初始化
         if (this.height==null) {
-            // 初始化高度，文本高度与图片高度取最大值，加上下边距
-            this.height = Math.max(
-                    this.text==null?0:this.text.getHeight(document, page, this.marginLeft, this.marginRight),
-                    this.image==null?0:this.image.getHeight(document, page)
-            ) + this.marginBottom;
+            // 初始化高度
+            this.initHeight(document, page);
         }
         // 初始化X轴起始坐标
         this.beginX = this.marginLeft;
         // 初始化Y轴起始坐标
-        this.beginY = this.marginBottom;
+        this.beginY = 0F;
+    }
+
+    /**
+     * 初始化高度
+     * @param document pdf文档
+     * @param page pdf页面
+     */
+    private void initHeight(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 如果高度未初始化，则进行初始化
+        if (this.height==null) {
+            // 定义文本高度
+            float textHeight = 0F;
+            // 如果文本不为空，则获取文本高度
+            if (this.text != null) {
+                // 获取文本高度
+                textHeight = this.text.setMarginLeft(this.marginLeft).setMarginRight(this.marginRight).getHeight(document, page);
+            }
+            // 定义图片高度
+            float imageHeight = 0F;
+            // 如果图片不为空，则获取图片高度
+            if (this.image != null) {
+                // 关闭图片自适应
+                this.image.disableSelfAdaption();
+                // 如果自定义图片宽度为空，则设置为页面宽度
+                if (this.image.getWidth(document, page)==null) {
+                    // 设置为页面宽度
+                    this.image.setWidth(page.getLastPage().getMediaBox().getWidth());
+                }
+                // 获取图片高度
+                imageHeight = this.image.getHeight(document, page);
+            }
+            // 初始化高度，文本高度与图片高度取最大值，加下边距
+            this.height = Math.max(textHeight, imageHeight) + this.marginBottom;
+        }
     }
 }

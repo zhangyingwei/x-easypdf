@@ -549,12 +549,20 @@ public class XEasyPdfPage {
             }
             // 如果页面背景图片不为空，则进行绘制
             if (this.param.getBackgroundImage()!=null) {
+                // 获取页面X轴坐标
+                Float pageX = this.getParam().getPageX();
+                // 获取页面Y轴坐标
+                Float pageY = this.getParam().getPageY();
+                // 设置页面X轴Y轴坐标为空
+                this.param.setPageX(null).setPageY(null);
                 // 关闭页面自动重置定位
                 this.disablePosition();
                 // 绘制页面背景图片
                 this.param.getBackgroundImage().setContentMode(XEasyPdfComponent.ContentMode.PREPEND).draw(document, this);
                 // 开启页面自动重置定位
                 this.enablePosition();
+                // 还原页面X轴Y轴坐标
+                this.param.setPageX(pageX).setPageY(pageY);
             }
         }
     }

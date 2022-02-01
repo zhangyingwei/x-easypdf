@@ -3,8 +3,8 @@ package wiki.xsx.core.pdf.component;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
-import wiki.xsx.core.pdf.component.text.XEasyPdfTextStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.awt.*;
@@ -49,7 +49,7 @@ public class XEasyPdfTextTest {
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         PDRectangle.A4,
-                        XEasyPdfHandler.Text.build(20F, "贵阳（贵州省省会）").setHorizontalStyle(XEasyPdfTextStyle.CENTER),
+                        XEasyPdfHandler.Text.build(20F, "贵阳（贵州省省会）").setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                         XEasyPdfHandler.Text.build(
                                 "贵阳，简称“筑”，别称林城、筑城，是贵州省省会，国务院批复确定的中国西南地区重要的区域创新中心、中国重要的生态休闲度假旅游城市 [1]  。" +
                                         "截至2018年，全市下辖6个区、3个县、代管1个县级市，总面积8034平方千米，" +
@@ -71,7 +71,7 @@ public class XEasyPdfTextTest {
                                         "2018年重新确认国家卫生城市。2019年1月12日，中国开放发展与合作高峰论坛暨第八届环球总评榜，" +
                                         "贵阳市荣获“2018中国国际营商环境标杆城市”“2018绿色发展和生态文明建设十佳城市”两项大奖。"
                         ).setMarginLeft(10).setMarginRight(10).setAutoIndent(12),
-                        XEasyPdfHandler.Text.build("-- 摘自百度百科").setHorizontalStyle(XEasyPdfTextStyle.RIGHT).setMarginRight(10F)
+                        XEasyPdfHandler.Text.build("-- 摘自百度百科").setHorizontalStyle(XEasyPdfPositionStyle.RIGHT).setMarginRight(10F)
                 ).setWatermark(
                         XEasyPdfHandler.Watermark.build("贵阳").setFontColor(new Color(51,153,255))
                 )
@@ -91,11 +91,10 @@ public class XEasyPdfTextTest {
                         XEasyPdfHandler.Text.build(
                                 20F,
                                 textBuild.toString()
-                        ).setHorizontalStyle(XEasyPdfTextStyle.CENTER)
+                        ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
+                ).setHeader(
+                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉").setHorizontalStyle(XEasyPdfPositionStyle.RIGHT))
                 )
-//                        .setHeader(
-//                        XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉").setStyle(XEasyPdfTextStyle.RIGHT))
-//                )
         ).setFontPath(FONT_PATH).setGlobalHeader(
                 XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("页眉"))
         ).setGlobalFooter(
@@ -109,13 +108,12 @@ public class XEasyPdfTextTest {
     @Test
     public void testText3() throws IOException {
         String filePath = OUTPUT_PATH + "testText3.pdf";
-        StringBuilder textBuild = new StringBuilder();
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build(
                                 20F,
                                 "贵阳"
-                        ).setMarginRight(50F)
+                        ).setMarginRight(50F).setMarginLeft(50F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");
@@ -130,7 +128,7 @@ public class XEasyPdfTextTest {
                         XEasyPdfHandler.Text.build(
                                 14F,
                                 "爽爽的贵阳"
-                        ).enableTextAppend().setFontColor(Color.GREEN),
+                        ).setFontColor(Color.GREEN),
                         XEasyPdfHandler.Text.build(
                                 14F,
                                 "，"
@@ -155,6 +153,10 @@ public class XEasyPdfTextTest {
                                 30F,
                                 "新的段落"
                         )
+                ).setHeader(
+                        XEasyPdfHandler.Header.build(
+                                XEasyPdfHandler.Text.build("贵阳")
+                        )
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         long end = System.currentTimeMillis();
@@ -166,13 +168,13 @@ public class XEasyPdfTextTest {
         long begin = System.currentTimeMillis();
         String filePath = OUTPUT_PATH + "testText5.pdf";
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 1000; i++) {
             builder.append("爽爽的贵阳，避暑的天堂。");
         }
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
                         PDRectangle.A4,
-                        XEasyPdfHandler.Text.build(builder.toString()).setMargin(10f).setAutoIndent(9)
+                        XEasyPdfHandler.Text.build(builder.toString()).setAutoIndent(9)
                 )
         ).setGlobalWatermark(
                 XEasyPdfHandler.Watermark.build("爽爽的贵阳")
@@ -189,75 +191,75 @@ public class XEasyPdfTextTest {
                 XEasyPdfHandler.Page.build(
                         PDRectangle.A4,
                         XEasyPdfHandler.Text.build("2022心想事成10")
-                                .setRadians(10D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(10D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成20")
-                                .setRadians(20D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(20D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成30")
-                                .setRadians(30D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(30D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成40")
-                                .setRadians(40D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(40D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成45")
-                                .setRadians(45D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(45D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成60")
-                                .setRadians(60D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(60D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成70")
-                                .setRadians(70D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(70D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成80")
-                                .setRadians(80D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(80D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成90")
-                                .setRadians(90D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(90D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-10")
-                                .setRadians(-10D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-10D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-20")
-                                .setRadians(-20D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-20D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-30")
-                                .setRadians(-30D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-30D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-40")
-                                .setRadians(-40D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-40D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-45")
-                                .setRadians(-45D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-45D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-60")
-                                .setRadians(-60D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-60D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-70")
-                                .setRadians(-70D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-70D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-80")
-                                .setRadians(-80D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-80D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline(),
                         XEasyPdfHandler.Text.build("2022心想事成-90")
-                                .setRadians(-90D).setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setRadians(-90D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(2F).enableUnderline()
                 )
@@ -274,18 +276,18 @@ public class XEasyPdfTextTest {
                 XEasyPdfHandler.Page.build(
                         PDRectangle.A4,
                         XEasyPdfHandler.Text.build("2022心想事成")
-                                .setHorizontalStyle(XEasyPdfTextStyle.CENTER).setMarginTop(10F)
+                                .setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(12F).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
                                 .setUnderlineWidth(1F).enableUnderline()
                                 .setHighlightColor(new Color(0x5EB7F0)).enableHighlight(),
                         XEasyPdfHandler.Text.build("爽爽的贵阳，避暑的天堂，也是堵车的天堂")
-                                .setHorizontalStyle(XEasyPdfTextStyle.RIGHT)
-                                .setVerticalStyle(XEasyPdfTextStyle.CENTER)
+                                .setHorizontalStyle(XEasyPdfPositionStyle.RIGHT)
+                                .setVerticalStyle(XEasyPdfPositionStyle.CENTER)
                                 .setFontSize(12F).setFontColor(Color.BLACK)
                                 .setDeleteLineWidth(1F).enableDeleteLine(),
                         XEasyPdfHandler.Text.build("112233")
-                                .setVerticalStyle(XEasyPdfTextStyle.BOTTOM)
-                                .setHorizontalStyle(XEasyPdfTextStyle.RIGHT)
+                                .setVerticalStyle(XEasyPdfPositionStyle.BOTTOM)
+                                .setHorizontalStyle(XEasyPdfPositionStyle.RIGHT)
                 )
         ).setGlobalFooter(
                 XEasyPdfHandler.Footer.build(
@@ -321,7 +323,7 @@ public class XEasyPdfTextTest {
                         XEasyPdfHandler.Text.build(builder.toString())
                                 .setLink("https://www.baidu.com")
                                 .setComment("转跳百度地址")
-                                .setHorizontalStyle(XEasyPdfTextStyle.CENTER)
+                                .setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                 )
         ).setGlobalWatermark(
                 XEasyPdfHandler.Watermark.build("爽爽的贵阳")

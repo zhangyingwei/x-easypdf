@@ -22,11 +22,19 @@
 19. XEasyPdfDocumentReplacer文档替换器新增图片替换的方法
 20. XEasyPdfDocumentExtractor文档提取器新增提取表单的方法
 21. 新增XEasyPdfCircle圆形组件
+22. 新增XEasyPdfPositionStyle位置样式
+23. XEasyPdfTable表格组件新增表头行设置的方法
+24. XEasyPdfTable表格组件新增自动表头开启的方法
 
 原有变更：
 1. XEasyPdfText文本组件#setStyle方法变更为#setHorizontalStyle方法
-2. XEasyPdfText文本组件#setStyle方法变更为#setHorizontalStyle方法
+2. XEasyPdfImage图片组件#setStyle方法变更为#setHorizontalStyle方法
 3. XEasyPdfImage图片组件#enableVerticalCenterStyle方法变更为#setVerticalStyle方法
+4. XEasyPdfCell单元格#addContent方法参数由列表变更为单个
+5. 移除XEasyPdfTableStyle表格样式
+6. 移除XEasyPdfImageStyle图片样式
+7. 移除XEasyPdfTextStyle文本样式
+8. 移除XEasyPdfSimpleTable简单表格组件（可使用XEasyPdfTable表格组件替换）
 
 问题修复：
 1. XEasyPdfText文本组件手动分行失效问题

@@ -7,11 +7,10 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * pdf单元格参数
@@ -38,21 +37,33 @@ class XEasyPdfCellParam {
      */
     private XEasyPdfComponent.ContentMode contentMode;
     /**
+     * 是否水平合并
+     */
+    private boolean isHorizontalMerge = false;
+    /**
+     * 是否垂直合并
+     */
+    private boolean isVerticalMerge = false;
+    /**
      * 是否组件换行
      */
     private boolean isNewLine = true;
     /**
      * 是否带有边框
      */
-    private boolean hasBorder = true;
+    private Boolean hasBorder;
     /**
      * 背景颜色
      */
-    private Color backgroundColor = Color.WHITE;
+    private Color backgroundColor;
     /**
      * 边框颜色
      */
-    private Color borderColor = Color.BLACK;
+    private Color borderColor;
+    /**
+     * 边框宽度
+     */
+    private Float borderWidth;
     /**
      * 列宽
      */
@@ -62,9 +73,9 @@ class XEasyPdfCellParam {
      */
     private Float height;
     /**
-     * pdf组件列表
+     * pdf组件
      */
-    private List<XEasyPdfComponent> componentList = new ArrayList<>(10);
+    private XEasyPdfComponent component;
     /**
      * 默认字体样式
      */
@@ -84,11 +95,7 @@ class XEasyPdfCellParam {
     /**
      * 字体颜色
      */
-    private Color fontColor = Color.BLACK;
-    /**
-     * 边框宽度
-     */
-    private Float borderWidth = 1F;
+    private Color fontColor;
     /**
      * 左边距
      */
@@ -101,13 +108,12 @@ class XEasyPdfCellParam {
      * 表格样式（居左、居中、居右）
      * 默认居左
      */
-    private XEasyPdfTableStyle horizontalStyle;
+    private XEasyPdfPositionStyle horizontalStyle;
     /**
      * 表格样式（居上、居中、居下）
      * 默认居上
      */
-    private XEasyPdfTableStyle verticalStyle;
-
+    private XEasyPdfPositionStyle verticalStyle;
 
     /**
      * 初始化
@@ -118,6 +124,11 @@ class XEasyPdfCellParam {
     void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) {
         // 获取pdf表格行参数
         XEasyPdfRowParam rowParam = row.getParam();
+        // 如果边框标记为空，则初始化边框标记
+        if (this.hasBorder==null) {
+            // 初始化边框标记
+            this.hasBorder = rowParam.getHasBorder();
+        }
         // 如果内容模式未初始化，则进行初始化
         if (this.contentMode==null) {
             // 初始化内容模式
@@ -134,6 +145,26 @@ class XEasyPdfCellParam {
         if (this.fontSize==null) {
             // 初始化字体大小
             this.fontSize = rowParam.getFontSize();
+        }
+        // 如果字体颜色未初始化，则进行初始化
+        if (this.fontColor==null) {
+            // 初始化字体颜色
+            this.fontColor = rowParam.getFontColor();
+        }
+        // 如果边框宽度未初始化，则进行初始化
+        if (this.borderWidth==null) {
+            // 初始化边框宽度
+            this.borderWidth = rowParam.getBorderWidth();
+        }
+        // 如果边框颜色未初始化，则进行初始化
+        if (this.borderColor==null) {
+            // 初始化边框颜色
+            this.borderColor = rowParam.getBorderColor();
+        }
+        // 如果背景颜色未初始化，则进行初始化
+        if (this.backgroundColor==null) {
+            // 初始化背景颜色
+            this.backgroundColor = rowParam.getBackgroundColor();
         }
         // 如果水平样式未初始化，则进行初始化
         if (this.horizontalStyle ==null) {

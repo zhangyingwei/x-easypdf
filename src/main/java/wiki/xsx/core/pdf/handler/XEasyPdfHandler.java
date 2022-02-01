@@ -14,9 +14,6 @@ import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
 import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
 import wiki.xsx.core.pdf.component.table.XEasyPdfRow;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
-import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleCell;
-import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleRow;
-import wiki.xsx.core.pdf.component.table.simple.XEasyPdfSimpleTable;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
@@ -458,75 +455,6 @@ public class XEasyPdfHandler {
     }
 
     /**
-     * pdf简单表格组件
-     */
-    public static class SimpleTable {
-        /**
-         * pdf表格行
-         */
-        public static class Row {
-            /**
-             * pdf单元格
-             */
-            public static class Cell {
-                /**
-                 * 构建单元格
-                 * @param width 宽度
-                 * @return 返回pdf单元格组件
-                 */
-                public static XEasyPdfSimpleCell build(float width) {
-                    return new XEasyPdfSimpleCell(width);
-                }
-                /**
-                 * 构建单元格
-                 * @param width 宽度
-                 * @param height 高度
-                 * @return 返回pdf单元格组件
-                 */
-                public static XEasyPdfSimpleCell build(float width, float height) {
-                    return new XEasyPdfSimpleCell(width, height);
-                }
-            }
-
-            /**
-             * 构建表格行
-             * @param cells 单元格
-             * @return 返回pdf表格行组件
-             */
-            public static XEasyPdfSimpleRow build(XEasyPdfSimpleCell...cells) {
-                return new XEasyPdfSimpleRow(cells);
-            }
-
-            /**
-             * 构建表格行
-             * @param cellList 单元格列表
-             * @return 返回pdf表格行组件
-             */
-            public static XEasyPdfSimpleRow build(List<XEasyPdfSimpleCell> cellList) {
-                return new XEasyPdfSimpleRow(cellList);
-            }
-        }
-
-        /**
-         * 构建表格
-         * @param rows 表格行
-         * @return 返回pdf表格组件
-         */
-        public static XEasyPdfSimpleTable build(XEasyPdfSimpleRow ...rows) {
-            return new XEasyPdfSimpleTable(rows);
-        }
-
-        /**
-         * 构建表格
-         * @param rowList 表格行列表
-         * @return 返回pdf表格组件
-         */
-        public static XEasyPdfSimpleTable build(List<XEasyPdfSimpleRow> rowList) {
-            return new XEasyPdfSimpleTable(rowList);
-        }
-    }
-
-    /**
      * pdf表格组件
      */
     public static class Table {
@@ -538,6 +466,16 @@ public class XEasyPdfHandler {
              * pdf单元格
              */
             public static class Cell {
+
+                /**
+                 * 构建单元格
+                 * @param width 宽度
+                 * @return 返回pdf单元格组件
+                 */
+                public static XEasyPdfCell build(float width) {
+                    return new XEasyPdfCell(width);
+                }
+
                 /**
                  * 构建单元格
                  * @param width 宽度
@@ -611,11 +549,21 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页眉
-         * @param image 待绘制图片
-         * @param text 待写入文本
+         * @param image 图片组件
+         * @param text 文本组件
          * @return 返回pdf页眉组件
          */
         public static XEasyPdfHeader build(XEasyPdfImage image, XEasyPdfText text) {
+            return new XEasyPdfDefaultHeader(image, text);
+        }
+
+        /**
+         * 构建页眉
+         * @param text 文本组件
+         * @param image 图片组件
+         * @return 返回pdf页眉组件
+         */
+        public static XEasyPdfHeader build(XEasyPdfText text, XEasyPdfImage image) {
             return new XEasyPdfDefaultHeader(image, text);
         }
     }
@@ -644,11 +592,21 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页脚
-         * @param image 文本组件
-         * @param text 图片组件
+         * @param image 图片组件
+         * @param text 文本组件
          * @return 返回pdf页脚组件
          */
         public static XEasyPdfFooter build(XEasyPdfImage image, XEasyPdfText text) {
+            return new XEasyPdfDefaultFooter(image, text);
+        }
+
+        /**
+         * 构建页脚
+         * @param text 文本组件
+         * @param image 图片组件
+         * @return 返回pdf页脚组件
+         */
+        public static XEasyPdfFooter build(XEasyPdfText text, XEasyPdfImage image) {
             return new XEasyPdfDefaultFooter(image, text);
         }
     }

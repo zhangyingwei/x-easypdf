@@ -87,15 +87,8 @@ class XEasyPdfHeaderParam {
         if (this.text==null&&this.image==null) {
             throw new IllegalArgumentException("text or image can not be found");
         }
-        // 如果高度未初始化，则进行初始化
-        if (this.height==null) {
-            // 计算图片高度
-            float imageHeight = this.image!=null?this.image.getHeight(document, page):0F;
-            // 计算文本高度
-            float textHeight = this.text!=null?this.text.getHeight(document, page, this.marginLeft, this.marginRight):0F;
-            // 初始化高度，文本高度与图片高度取最大值 + 上边距
-            this.height = Math.max(imageHeight, textHeight) + this.marginTop;
-        }
+        // 初始化高度
+        this.initHeight(document, page);
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果图片不为空，则初始化图片坐标
@@ -103,7 +96,7 @@ class XEasyPdfHeaderParam {
             // 初始化图片X轴起始坐标
             this.imageBeginX = this.marginLeft;
             // 初始化图片Y轴起始坐标
-            this.imageBeginY = rectangle.getHeight() - this.height;
+            this.imageBeginY = rectangle.getHeight() - this.marginTop;
         }
         // 如果文本不为空，则初始化文本坐标
         if (this.text!=null&&this.textBeginX==null&&this.textBeginY==null) {
@@ -111,6 +104,40 @@ class XEasyPdfHeaderParam {
             this.textBeginX = this.marginLeft;
             // 初始化文本Y轴起始坐标
             this.textBeginY = rectangle.getHeight() - this.marginTop;
+        }
+    }
+
+    /**
+     * 初始化高度
+     * @param document pdf文档
+     * @param page pdf页面
+     */
+    private void initHeight(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 如果高度未初始化，则进行初始化
+        if (this.height==null) {
+            // 定义文本高度
+            float textHeight = 0F;
+            // 如果文本不为空，则获取文本高度
+            if (this.text != null) {
+                // 获取文本高度
+                textHeight = this.text.setMarginLeft(this.marginLeft).setMarginRight(this.marginRight).getHeight(document, page);
+            }
+            // 定义图片高度
+            float imageHeight = 0F;
+            // 如果图片不为空，则获取图片高度
+            if (this.image != null) {
+                // 关闭图片自适应
+                this.image.disableSelfAdaption();
+                // 如果自定义图片宽度为空，则设置为页面宽度
+                if (this.image.getWidth(document, page)==null) {
+                    // 设置为页面宽度
+                    this.image.setWidth(page.getLastPage().getMediaBox().getWidth());
+                }
+                // 获取图片高度
+                imageHeight = this.image.getHeight(document, page);
+            }
+            // 初始化高度，文本高度与图片高度取最大值，加上边距
+            this.height = Math.max(textHeight, imageHeight) + this.marginTop;
         }
     }
 }

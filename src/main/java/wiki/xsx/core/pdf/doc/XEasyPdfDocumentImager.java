@@ -7,6 +7,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,7 +48,7 @@ public class XEasyPdfDocumentImager {
      */
     XEasyPdfDocumentImager(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.getTarget();
+        this.document = this.pdfDocument.build();
     }
 
     /**
@@ -88,7 +89,7 @@ public class XEasyPdfDocumentImager {
             // 构建文件名称
             fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append('.').append(imageTypeName);
             // 获取输出流
-            try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString())))) {
+            try (OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
                 // 初始化pdfBox文档渲染器
                 PDFRenderer renderer = new PDFRenderer(this.document);
                 // 渲染图片

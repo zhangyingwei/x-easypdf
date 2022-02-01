@@ -4,7 +4,9 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -83,6 +85,52 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
+     * 设置字体颜色
+     * @param fontColor 字体颜色
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable setFontColor(Color fontColor) {
+        if (fontColor!=null) {
+            this.param.setFontColor(fontColor);
+        }
+        return this;
+    }
+
+    /**
+     * 边框宽度
+     * @param lineWidth 宽度
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable setBorderWidth(float lineWidth) {
+        this.param.setBorderWidth(Math.abs(lineWidth));
+        return this;
+    }
+
+    /**
+     * 设置边框颜色（开启边框时生效）
+     * @param borderColor 边框颜色
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable setBorderColor(Color borderColor) {
+        if (borderColor!=null) {
+            this.param.setBorderColor(borderColor);
+        }
+        return this;
+    }
+
+    /**
+     * 设置背景颜色
+     * @param backgroundColor 背景颜色
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable setBackgroundColor(Color backgroundColor) {
+        if (backgroundColor!=null) {
+            this.param.setBackgroundColor(backgroundColor);
+        }
+        return this;
+    }
+
+    /**
      * 设置左边距
      * @param margin 边距
      * @return 返回表格组件
@@ -117,9 +165,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param style 样式
      * @return 返回表格组件
      */
-    public XEasyPdfTable setHorizontalStyle(XEasyPdfTableStyle style) {
+    public XEasyPdfTable setHorizontalStyle(XEasyPdfPositionStyle style) {
         if (style!=null) {
-            if (style==XEasyPdfTableStyle.LEFT||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.RIGHT) {
+            if (style==XEasyPdfPositionStyle.LEFT||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.RIGHT) {
                 this.param.setHorizontalStyle(style);
             }else {
                 throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
@@ -133,14 +181,41 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param style 样式
      * @return 返回表格组件
      */
-    public XEasyPdfTable setVerticalStyle(XEasyPdfTableStyle style) {
+    public XEasyPdfTable setVerticalStyle(XEasyPdfPositionStyle style) {
         if (style!=null) {
-            if (style==XEasyPdfTableStyle.TOP||style==XEasyPdfTableStyle.CENTER||style==XEasyPdfTableStyle.BOTTOM) {
+            if (style==XEasyPdfPositionStyle.TOP||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.BOTTOM) {
                 this.param.setVerticalStyle(style);
             }else {
                 throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
             }
         }
+        return this;
+    }
+
+    /**
+     * 开启上下左右居中
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable enableCenterStyle() {
+        this.param.setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setVerticalStyle(XEasyPdfPositionStyle.CENTER);
+        return this;
+    }
+
+    /**
+     * 关闭边框
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable disableBorder() {
+        this.param.setHasBorder(false);
+        return this;
+    }
+
+    /**
+     * 开启自动表头（分页自动添加表头）
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable enableAutoTitle() {
+        this.param.setIsAutoTitle(true);
         return this;
     }
 
@@ -192,6 +267,16 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
+     * 设置表头行
+     * @param row pdf表格行
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable setTileRow(XEasyPdfRow row) {
+        this.param.setTitleRow(row);
+        return this;
+    }
+
+    /**
      * 添加表格行
      * @param rows pdf表格行
      * @return 返回表格组件
@@ -213,14 +298,6 @@ public class XEasyPdfTable implements XEasyPdfComponent {
             this.param.getRows().addAll(rowList);
         }
         return this;
-    }
-
-    /**
-     * 获取pdf表格参数
-     * @return 返回表格参数
-     */
-    XEasyPdfTableParam getParam() {
-        return this.param;
     }
 
     /**
@@ -247,12 +324,31 @@ public class XEasyPdfTable implements XEasyPdfComponent {
             // 设置页面Y轴起始坐标 = 页面Y轴起始坐标 - 上边距
             page.getParam().setPageY(page.getParam().getPageY()==null?page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() : page.getParam().getPageY() - this.param.getMarginTop());
         }
+        // 获取表头行
+        XEasyPdfRow titleRow = this.param.getTitleRow();
+        // 如果表头行不为空，则绘制表头行
+        if (titleRow!=null) {
+            // 绘制表头行
+            titleRow.doDraw(document, page, this);
+        }
         // 获取表格行列表
         List<XEasyPdfRow> rows = this.param.getRows();
         // 遍历表格行列表
         for (XEasyPdfRow row : rows) {
             // 绘制表格行
             row.doDraw(document, page, this);
+        }
+        // 获取单元格边框列表
+        List<XEasyPdfCellBorder> cellBorderList = this.param.getCellBorderList();
+        // 如果单元格边框列表不为空，则绘制单元格边框
+        if (!cellBorderList.isEmpty()) {
+            // 遍历单元格边框列表
+            for (XEasyPdfCellBorder cellBorder : cellBorderList) {
+                // 绘制单元格边框
+                cellBorder.drawBorder();
+            }
+            // 重置单元格边框列表
+            cellBorderList.clear();
         }
         // 开启页面自动重置定位
         page.enablePosition();
@@ -269,5 +365,13 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     @Override
     public boolean isDraw() {
         return this.param.isDraw();
+    }
+
+    /**
+     * 获取pdf表格参数
+     * @return 返回表格参数
+     */
+    XEasyPdfTableParam getParam() {
+        return this.param;
     }
 }
