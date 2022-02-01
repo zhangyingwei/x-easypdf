@@ -80,9 +80,13 @@ mvn clean install
 > 代码如下：
 ```java
 public class XpdfTest {
-    public static void main(String[] args) throws IOException {
+    
+    @SneakyThrows
+    public static void main(String[] args) {
+        // 定义图片路径
+        final String imagePath = "E:\\pdf\\test\\doc\\test.png";
         // 定义保存路径
-        final String outputPath = "D:\\pdf\\my.pdf";
+        final String outputPath = "E:\\pdf\\test\\doc\\my.pdf";
         // 定义页眉与页脚字体颜色
         Color headerAndFooterColor = new Color(10, 195, 255);
         // 定义分割线颜色
@@ -92,15 +96,17 @@ public class XpdfTest {
             // 设置背景图片
             XEasyPdfHandler.Document.build().setGlobalBackgroundImage(
                     // 构建图片并垂直居中
-                    XEasyPdfHandler.Image.build(backgroundImageInputStream, XEasyPdfImageType.PNG).enableVerticalCenterStyle()
+                    XEasyPdfHandler.Image.build(backgroundImageInputStream, XEasyPdfImageType.PNG).setVerticalStyle(XEasyPdfPositionStyle.CENTER)
                     // 设置全局页眉
             ).setGlobalHeader(
                     // 构建页眉
                     XEasyPdfHandler.Header.build(
+                            // 构建页眉图片，并居中显示
+                            XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(50F).enableCenterStyle(),
                             // 构建页眉文本，并居中显示
                             XEasyPdfHandler.Text.build("这是粗体页眉")
-                                    // 设置水平居中
-                                    .setStyle(XEasyPdfTextStyle.CENTER)
+                                    // 设置水平垂直居中
+                                    .enableCenterStyle()
                                     // 设置字体大小
                                     .setFontSize(20F)
                                     // 设置字体颜色
@@ -112,10 +118,14 @@ public class XpdfTest {
             ).setGlobalFooter(
                     // 构建页脚
                     XEasyPdfHandler.Footer.build(
-                            // 构建页脚文本，并居中显示
-                            XEasyPdfHandler.Text.build("这是粗体页脚")
+                            // 构建页眉图片，并居中显示
+                            XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(50F).setVerticalStyle(XEasyPdfPositionStyle.BOTTOM),
+                            // 构建页脚文本（手动分行），并居中显示
+                            XEasyPdfHandler.Text.build(Arrays.asList("这是粗体页脚第一行", "这是粗体页脚第二行"))
                                     // 设置水平居中
-                                    .setStyle(XEasyPdfTextStyle.CENTER)
+                                    .setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
+                                    // 设置垂直居下
+                                    .setVerticalStyle(XEasyPdfPositionStyle.BOTTOM)
                                     // 设置字体大小
                                     .setFontSize(20F)
                                     // 设置字体颜色
@@ -130,11 +140,9 @@ public class XpdfTest {
                             // 构建文本
                             XEasyPdfHandler.Text.build(
                                     "x-easypdf简介（细体）"
-                            ).setStyle(XEasyPdfTextStyle.CENTER)
+                            ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                                     // 设置字体大小
                                     .setFontSize(30F)
-                                    // 设置上边距
-                                    .setMarginTop(20F)
                                     // 使用细体字
                                     .setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT)
                             // 构建文本
@@ -160,19 +168,138 @@ public class XpdfTest {
                             // 构建文本
                             ,XEasyPdfHandler.Text.build(
                                     "-- by xsx"
-                            ).setStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
+                            ).setHorizontalStyle(XEasyPdfPositionStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
                             // 构建文本
                             ,XEasyPdfHandler.Text.build(
                                     "2021.10.10"
-                            ).setStyle(XEasyPdfTextStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
+                            ).setHorizontalStyle(XEasyPdfPositionStyle.RIGHT).setMarginTop(10F).setMarginRight(10F)
                             // 构建实线分割线
                             ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F).setColor(lineColor).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
                             // 构建虚线分割线
                             ,XEasyPdfHandler.SplitLine.DottedLine.build().setLineLength(10F).setMarginTop(10F).setLineWidth(10F).setColor(lineColor).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
                             // 构建实线分割线
                             ,XEasyPdfHandler.SplitLine.SolidLine.build().setMarginTop(10F).setColor(lineColor).setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+                            // 构建表格
+                            ,XEasyPdfHandler.Table.build(
+                                    // 构建行
+                                    XEasyPdfHandler.Table.Row.build(
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 50F).addContent(
+                                                    // 添加文本
+                                                    XEasyPdfHandler.Text.build("第一行第一列")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 50F).addContent(
+                                                    XEasyPdfHandler.Text.build("第一行第二列")
+                                            ),
+                                            // 构建单元格并设置字体大小为15，边框颜色为绿色
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 50F).addContent(
+                                                    XEasyPdfHandler.Text.build("第一行第三列")
+                                            ).setFontSize(15F).setBorderColor(Color.GREEN),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 50F).addContent(
+                                                    XEasyPdfHandler.Text.build("第一行第四列")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 50F).addContent(
+                                                    XEasyPdfHandler.Text.build("第一行第五列")
+                                            )
+                                            // 设置该行字体大小为20
+                                    ).setFontSize(20F),
+                                    // 构建行
+                                    XEasyPdfHandler.Table.Row.build(
+                                            // 构建单元格，合并三行
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 300F).addContent(
+                                                    XEasyPdfHandler.Text.build(Arrays.asList("第二行", "第一列", "合并三行"))
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(300F).addContent(
+                                                    XEasyPdfHandler.Text.build("第二行第二列，合并三列")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 300F).addContent(
+                                                    XEasyPdfHandler.Text.build("第二行第三列，合并三行")
+                                            )
+                                            // 设置行高为100（合并行需要设置平均行高）
+                                    ).setHeight(100F),
+                                    // 构建行
+                                    XEasyPdfHandler.Table.Row.build(
+                                            // 构建单元格，开启垂直合并
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).enableVerticalMerge(),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第三行第一列")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第三行第二列")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第三行第三列")
+                                            )
+                                            // 设置行高为100，设置边框颜色为红色，设置字体颜色为蓝色
+                                    ).setHeight(100F).setBorderColor(Color.RED).setFontColor(Color.BLUE),
+                                    // 构建行（单元格已设置高度，则合并行无需设置行高）
+                                    XEasyPdfHandler.Table.Row.build(
+                                            // 构建单元格，开启垂直合并
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F, 100F).enableVerticalMerge(),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(300F, 100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第四行第一列，合并三列")
+                                            )
+                                    ),
+                                    // 构建行（根据文本高度自适应行高）
+                                    XEasyPdfHandler.Table.Row.build(
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第五行第一列，自适应高度！")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第五行第二列，自适应高度！！！！！！！！！！")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第五行第三列，自适应高度！！！！！！！！！！！！！！！！！！！！！！")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第五行第四列，自适应高度！！！！！！！！！！")
+                                            ),
+                                            // 构建单元格
+                                            XEasyPdfHandler.Table.Row.Cell.build(100F).addContent(
+                                                    XEasyPdfHandler.Text.build("第五行第五列，自适应高度！")
+                                            )
+                                    ),
+                                    // 构建行
+                                    XEasyPdfHandler.Table.Row.build(
+                                            // 构建单元格，并设置边框颜色为橘色
+                                            XEasyPdfHandler.Table.Row.Cell.build(500F, 100F).addContent(
+                                                    XEasyPdfHandler.Text.build("分页测试1")
+                                            ).setBorderColor(Color.ORANGE)
+                                    )
+                                    // 设置表头行
+                            ).setTileRow(
+                                    // 构建行
+                                    XEasyPdfHandler.Table.Row.build(
+                                            // 构建单元格，并设置边框颜色为黑色，字体大小为30，字体颜色为紫色
+                                            XEasyPdfHandler.Table.Row.Cell.build(500F, 100F).addContent(
+                                                    XEasyPdfHandler.Text.build("表头")
+                                            ).setBorderColor(Color.BLACK).setFontSize(30F).setFontColor(Color.MAGENTA)
+                                    )
+                                    // 开启表格内容上下左右居中
+                            ).enableCenterStyle()
+                                    // 设置左边距为50
+                                    .setMarginLeft(50F)
+                                    // 设置上边距为10
+                                    .setMarginTop(10F)
+                                    // 设置边框颜色为灰色
+                                    .setBorderColor(Color.GRAY)
+                                    // 开启自动表头（分页时，自动添加表头行）
+                                    .enableAutoTitle()
                     )
-                    // 保存并关闭文档
+                    // 保存、关闭
             ).save(outputPath).close();
         }
     }
@@ -181,7 +308,7 @@ public class XpdfTest {
 
 > 效果如下：
 
-![示例效果](https://oscimg.oschina.net/oscnet/up-3f7c61cfb1a16f03d6a50975af1322b8dce.png "示例效果")
+![示例效果](https://oscimg.oschina.net/oscnet/up-70e3d150d0321a53922ea7c6dd6aeb9a3d2.png "示例效果")
 
 2. 使用说明
 
