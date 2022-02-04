@@ -79,6 +79,17 @@ mvn clean install
 1. 简单小示例
 > 代码如下：
 ```java
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
+import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
+import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Arrays;
+
 public class XpdfTest {
     
     @SneakyThrows
@@ -140,11 +151,14 @@ public class XpdfTest {
                             // 构建文本
                             XEasyPdfHandler.Text.build(
                                     "x-easypdf简介（细体）"
+                                    // 设置水平居中
                             ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER)
                                     // 设置字体大小
-                                    .setFontSize(30F)
+                                    .setFontSize(16F)
                                     // 使用细体字
                                     .setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT)
+                                    // 开启删除线
+                                    .enableDeleteLine()
                             // 构建文本
                             ,XEasyPdfHandler.Text.build(
                                     "x-easypdf是一个基于PDFBOX的开源框架，"
@@ -153,10 +167,14 @@ public class XpdfTest {
                             ,XEasyPdfHandler.Text.build(
                                     "专注于PDF文件导出功能，"
                             ).enableTextAppend().setFontSize(16F).setFontColor(new Color(102, 0, 153))
+                                    // 开启下划线并设置为红色
+                                    .enableUnderline().setUnderlineColor(Color.RED)
                             // 构建文本
                             ,XEasyPdfHandler.Text.build(
                                     "以组件形式进行拼接，"
                             ).enableTextAppend().setFontSize(16F).setFontColor(new Color(153, 0, 153))
+                                    // 开启高亮并设置为橘色
+                                    .enableHighlight().setHighlightColor(Color.ORANGE)
                             // 构建文本
                             ,XEasyPdfHandler.Text.build(
                                     "简单、方便，功能丰富，"
@@ -277,7 +295,7 @@ public class XpdfTest {
                                             // 构建单元格，并设置边框颜色为橘色
                                             XEasyPdfHandler.Table.Row.Cell.build(500F, 100F).addContent(
                                                     XEasyPdfHandler.Text.build("分页测试1")
-                                            ).setBorderColor(Color.ORANGE)
+                                            ).setBorderColor(Color.ORANGE).setFontColor(Color.PINK)
                                     )
                                     // 设置表头行
                             ).setTileRow(
@@ -308,7 +326,7 @@ public class XpdfTest {
 
 > 效果如下：
 
-![示例效果](https://oscimg.oschina.net/oscnet/up-70e3d150d0321a53922ea7c6dd6aeb9a3d2.png "示例效果")
+![示例效果](https://oscimg.oschina.net/oscnet/up-d335d0d5e10d3763b795f3825cdc2670dfb.png "示例效果")
 
 2. 使用说明
 
