@@ -59,6 +59,10 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 
 > rect(矩形组件)：已提供，矩形写入组件
 
+> circle(圆形组件)：已提供，圆形写入组件
+
+> barcode(条形码组件)：已提供，条形码写入组件(包含一维码/二维码)
+
 > 后续将添加更多其他方便实用的组件。。。
 
 #### maven坐标
