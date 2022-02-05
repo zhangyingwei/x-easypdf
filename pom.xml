@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <name>x-easypdf</name>
     <url>http://www.xsx.wiki</url>
-    <description>a util for pdf</description>
+    <description>A framework based on pdfbox</description>
 
     <properties>
         <java.version>1.8</java.version>
