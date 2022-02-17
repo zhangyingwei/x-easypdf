@@ -353,7 +353,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
      */
     @Override
     public boolean isDraw() {
-        return false;
+        return this.param.isDraw();
     }
 
     /**
