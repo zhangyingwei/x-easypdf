@@ -84,6 +84,10 @@ class XEasyPdfBarCodeParam {
      */
     private Integer height;
     /**
+     * 旋转弧度
+     */
+    private Double radians;
+    /**
      * 页面X轴起始坐标
      */
     private Float beginX = 0F;
@@ -168,6 +172,14 @@ class XEasyPdfBarCodeParam {
             // 重置高度 -= 文字大小 - 1
             this.height -= this.wordsSize - 1;
         }
+    }
+
+    /**
+     * 是否旋转
+     * @return 返回布尔值，是为true，否为false
+     */
+    boolean isRotate() {
+        return this.radians!=null&&this.radians%360!=0;
     }
 
     /**
@@ -263,5 +275,14 @@ class XEasyPdfBarCodeParam {
             // 初始化高度
             this.height = this.codeType.isQrType()?this.width:60;
         }
+    }
+
+    /**
+     * 重置页面Y轴起始坐标
+     * @param height 给定高度
+     */
+    void resetBeginY(int height) {
+        // 重置页面Y轴起始坐标 = Y轴起始坐标 + 原有高度 - 给定高度
+        this.beginY = this.beginY + this.height - height;
     }
 }

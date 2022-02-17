@@ -252,6 +252,22 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
     }
 
     /**
+     * 设置条形码旋转弧度
+     * @param radians 条形码旋转弧度
+     * @return 返回条形码组件
+     */
+    public XEasyPdfBarCode setRadians(double radians) {
+        radians = radians%360;
+        if (radians!=0) {
+            if (radians<0) {
+                radians += 360;
+            }
+            this.param.setRadians(radians);
+        }
+        return this;
+    }
+
+    /**
      * 设置左边距
      * @param marginLeft 左边距
      * @return 返回条形码组件
@@ -369,6 +385,13 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
             // 添加图片文字
             bufferedImage = this.addImageWords(bufferedImage);
         }
+        // 如果需要旋转且不旋转文字，则重置图片为旋转后的图片
+        if (this.param.isRotate()) {
+            // 重置图片为旋转后的图片
+            bufferedImage = XEasyPdfImageUtil.rotate(bufferedImage, this.param.getRadians());
+            // 重置Y轴起始坐标
+            this.param.resetBeginY(bufferedImage.getHeight());
+        }
         return bufferedImage;
     }
 
@@ -388,7 +411,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         // 获取高度
         int height = matrix.getHeight();
         // 定义图片
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         // 定义行像素
         int[] rowPixels = new int[width];
         // 定义位数组
@@ -419,7 +442,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         // 获取图像高度
         int height = image.getHeight();
         // 定义转换图像
-        BufferedImage out = new BufferedImage(width, height+this.param.getWordsSize()+1, BufferedImage.TYPE_INT_RGB);
+        BufferedImage out = new BufferedImage(width, height+this.param.getWordsSize()+1, BufferedImage.TYPE_4BYTE_ABGR);
         // 创建图像图形
         Graphics2D graphics = out.createGraphics();
         // 设置保真参数

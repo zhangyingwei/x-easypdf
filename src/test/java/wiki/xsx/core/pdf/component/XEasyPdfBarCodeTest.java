@@ -45,7 +45,7 @@ public class XEasyPdfBarCodeTest {
                         XEasyPdfHandler.BarCode.build(
                                 XEasyPdfBarCode.CodeType.EAN_13,
                                 "6922454332930"
-                        ).setWords("EAN-13").enableShowWords().setMarginLeft(200F).setMarginTop(30F),
+                        ).setWords("EAN-13").setMarginLeft(200F).setMarginTop(100F),
                         XEasyPdfHandler.BarCode.build(
                                 XEasyPdfBarCode.CodeType.QR_CODE,
                                 "https://www.xsx.wiki"

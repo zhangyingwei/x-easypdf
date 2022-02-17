@@ -102,6 +102,8 @@ public class XEasyPdfImageUtil {
         );
         Graphics2D graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics.drawImage(temp, 0, 0, null);
         graphics.dispose();
         sourceImage.getGraphics().dispose();
@@ -162,6 +164,8 @@ public class XEasyPdfImageUtil {
         );
         Graphics2D graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics.translate((rectangle.width-imageWidth)/2D, (rectangle.height-imageHeight)/2D);
         graphics.rotate(Math.toRadians(radians), imageWidth/2D, imageHeight/2D);
         graphics.drawImage(sourceImage, 0, 0, null);
