@@ -236,6 +236,16 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 设置文本间隔
+     * @param characterSpacing 文本间隔
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setCharacterSpacing(float characterSpacing) {
+        this.param.setCharacterSpacing(Math.abs(characterSpacing));
+        return this;
+    }
+
+    /**
      * 设置字体路径
      * @param fontPath 字体路径
      * @return 返回文本组件
@@ -624,6 +634,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 获取文本间隔
+     * @return 返回文本间隔
+     */
+    public float getCharacterSpacing() {
+        return this.param.getCharacterSpacing();
+    }
+
+    /**
      * 是否使用自身样式
      * @return 返回布尔值，是为true，否为false
      */
@@ -661,6 +679,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
         contentStream.setNonStrokingColor(this.param.getFontColor());
         // 设置行间距
         contentStream.setLeading(this.param.getLeading());
+        // 设置文本间隔
+        contentStream.setCharacterSpacing(this.param.getCharacterSpacing());
         return contentStream;
     }
 
@@ -692,6 +712,11 @@ public class XEasyPdfText implements XEasyPdfComponent {
         for (String text:splitTextList) {
             // 初始化X轴坐标
             beginX = this.param.initBeginX(page.getParam().getPageX(), text);
+            // 如果为第一行，且缩进值不为空，则重置X轴坐标
+            if (index==0&&this.param.getIndent()!=null) {
+                // 重置X轴坐标 = X轴坐标 + 缩进值 * (字体大小 + 文本间隔)
+                beginX = beginX + this.param.getIndent() * (this.param.getFontSize() + this.param.getCharacterSpacing());
+            }
             // 分页检查，并居左写入文本
             stream = this.writeText(
                     document,
@@ -1073,7 +1098,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 文本弧度为0，则结束X轴坐标为起始坐标+文本真实宽度
         else {
             // 设置结束X轴坐标为起始坐标+文本真实宽度
-            rectangle.setUpperRightX(beginX+XEasyPdfTextUtil.getTextRealWidth(text, this.param.getFont(), this.param.getFontSize()));
+            rectangle.setUpperRightX(beginX+XEasyPdfTextUtil.getTextRealWidth(text, this.param.getFont(), this.param.getFontSize(), this.getCharacterSpacing()));
         }
         return rectangle;
     }

@@ -31,10 +31,11 @@ public class XEasyPdfTextUtil {
      * @param lineWidth 行宽度
      * @param font 字体
      * @param fontSize 字体大小
+     * @param characterSpacing 文本间隔
      * @return 返回文本列表
      */
     @SneakyThrows
-    public static String splitText(String text, float lineWidth, PDFont font, float fontSize) {
+    public static String splitText(String text, float lineWidth, PDFont font, float fontSize, float characterSpacing) {
         // 如果待输入文本为空，或文本长度为0，或行宽减字体大小小于0，则直接返回空字符串
         if (text==null||text.trim().length()==0||lineWidth-fontSize<0) {
             // 返回空字符串
@@ -45,7 +46,7 @@ public class XEasyPdfTextUtil {
         // 定义当前行真实宽度
         float lineRealWidth;
         // 每行字数（估计）
-        int fontCount = Math.max(1, (int) (lineWidth/fontSize));
+        int fontCount = Math.max(1, (int) (lineWidth/(fontSize+characterSpacing)));
         // 定义开始索引
         int beginIndex = 0;
         // 遍历文本
@@ -53,7 +54,7 @@ public class XEasyPdfTextUtil {
             // 截取临时文本
             tempText = text.substring(beginIndex, i);
             // 计算当前文本真实宽度
-            lineRealWidth = fontSize * font.getStringWidth(tempText) / 1000;
+            lineRealWidth = getTextRealWidth(tempText, font, fontSize, characterSpacing);
             // 如果真实宽度大于行宽度，则减少一个字符
             if (lineRealWidth>lineWidth) {
                 // 返回截取字符串
@@ -69,10 +70,11 @@ public class XEasyPdfTextUtil {
      * @param lineWidth 行宽度
      * @param font 字体
      * @param fontSize 字体大小
+     * @param characterSpacing 文本间隔
      * @return 返回文本列表
      */
     @SneakyThrows
-    public static List<String> splitLines(String text, float lineWidth, PDFont font, float fontSize) {
+    public static List<String> splitLines(String text, float lineWidth, PDFont font, float fontSize, float characterSpacing) {
         // 如果待输入文本为空，或文本长度为0，或行宽减字体大小小于0，则直接返回空列表
         if (text==null||text.trim().length()==0||lineWidth-fontSize<0) {
             // 返回空列表
@@ -85,7 +87,7 @@ public class XEasyPdfTextUtil {
         // 定义当前行真实宽度
         float lineRealWidth;
         // 每行字数（估计）
-        int fontCount = Math.max(1, (int) (lineWidth/fontSize));
+        int fontCount = Math.max(1, (int) (lineWidth/(fontSize+characterSpacing)));
         // 定义开始索引
         int beginIndex = 0;
         // 遍历文本
@@ -93,7 +95,7 @@ public class XEasyPdfTextUtil {
             // 截取临时文本
             tempText = text.substring(beginIndex, i);
             // 计算当前文本真实宽度
-            lineRealWidth = fontSize * font.getStringWidth(tempText) / 1000;
+            lineRealWidth = getTextRealWidth(tempText, font, fontSize, characterSpacing);
             // 如果真实宽度大于行宽度，则减少一个字符
             if (lineRealWidth>lineWidth) {
                 // 加入文本列表
@@ -118,7 +120,7 @@ public class XEasyPdfTextUtil {
     }
 
     @SneakyThrows
-    public static float getTextRealWidth(String text, PDFont font, float fontSize) {
-        return fontSize * font.getStringWidth(text) / 1000;
+    public static float getTextRealWidth(String text, PDFont font, float fontSize, float characterSpacing) {
+        return fontSize * font.getStringWidth(text) / 1000 + (text.length() - 1) * characterSpacing;
     }
 }
