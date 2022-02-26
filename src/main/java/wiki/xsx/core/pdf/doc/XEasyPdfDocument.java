@@ -549,6 +549,8 @@ public class XEasyPdfDocument implements Closeable {
         PDDocument target = this.getTarget();
         // 初始化页面
         this.param.initPage(this);
+        // 设置文档版本
+        target.setVersion(this.param.getVersion());
         // 设置文档信息、保护策略及书签
         this.setInfoAndPolicyAndBookmark(target);
         return target;

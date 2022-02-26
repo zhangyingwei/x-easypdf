@@ -75,7 +75,7 @@ public class XEasyPdfTextTest {
                 ).setWatermark(
                         XEasyPdfHandler.Watermark.build("贵阳").setFontColor(new Color(51,153,255))
                 )
-        ).save(filePath).close();
+        ).setVersion(1.7F).save(filePath).close();
         System.out.println("finish");
     }
 
