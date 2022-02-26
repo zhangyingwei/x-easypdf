@@ -115,6 +115,8 @@ public class XEasyPdfDocumentFormFiller {
                         XEasyPdfFontUtil.addToSubset(this.font, entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
+
+
                     }
                 }
             }
@@ -149,6 +151,8 @@ public class XEasyPdfDocumentFormFiller {
     public void finish(OutputStream outputStream) {
         // 设置文档信息及保护策略
         this.pdfDocument.setInfoAndPolicyAndBookmark(this.document);
+        // 设置表单为空（解决编辑器乱码问题）
+        this.document.getDocumentCatalog().setAcroForm(null);
         // 保存文档
         this.document.save(outputStream);
         // 重置字体为空
