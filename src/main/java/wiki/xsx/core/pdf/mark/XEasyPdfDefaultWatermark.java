@@ -144,12 +144,53 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
     }
 
     /**
+     * 设置水印单行文本数
+     * @param wordCount 水印单行文本数
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark setWordCount(int wordCount) {
+        this.param.setWordCount(Math.abs(wordCount));
+        return this;
+    }
+
+    /**
      * 设置水印文本行数
      * @param wordLine 水印文本行数
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setWordLine(int wordLine) {
         this.param.setWordLine(Math.abs(wordLine));
+        return this;
+    }
+
+    /**
+     * 设置水印文本字符间隔
+     * @param characterSpacing 水印文本字符间隔
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark setCharacterSpacing(float characterSpacing) {
+        this.param.setCharacterSpacing(Math.abs(characterSpacing));
+        return this;
+    }
+
+    /**
+     * 设置水印文本行间距
+     * @param leading 水印文本行间距
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark setLeading(float leading) {
+        this.param.setLeading(Math.abs(leading));
+        return this;
+    }
+
+    /**
+     * 设置坐标
+     * @param beginX X轴起始坐标
+     * @param beginY Y轴起始坐标
+     * @return 返回页面水印组件
+     */
+    public XEasyPdfDefaultWatermark setPosition(float beginX, float beginY) {
+        this.param.setBeginX(beginX).setBeginY(beginY);
         return this;
     }
 
@@ -183,6 +224,10 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
             // 初始化水印参数
             this.param.init(document, page);
         }
+        // 获取X轴起始坐标
+        Float beginX = this.param.getBeginX();
+        // 获取Y轴起始坐标
+        Float beginY = this.param.getBeginY();
         // 获取任务文档
         PDDocument target = document.getTarget();
         // 获取pdfBox页面列表
@@ -191,6 +236,10 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         for (PDPage pdPage : pageList) {
             // 执行画水印
             this.doDraw(target, pdPage);
+            // 重置X轴起始坐标
+            this.param.setBeginX(beginX);
+            // 重置Y轴起始坐标
+            this.param.setBeginY(beginY);
         }
         // 获取新的pdfBox页面列表
         pageList = page.getParam().getNewPageList();
@@ -198,6 +247,10 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         for (PDPage pdPage : pageList) {
             // 执行画水印
             this.doDraw(target, pdPage);
+            // 重置X轴起始坐标
+            this.param.setBeginX(beginX);
+            // 重置Y轴起始坐标
+            this.param.setBeginY(beginY);
         }
     }
 
@@ -212,10 +265,16 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         float height = pdPage.getMediaBox().getHeight();
         // 获取页面宽度
         float width = pdPage.getMediaBox().getWidth();
-        // 定义X轴起始坐标
-        float beginX = 0F;
-        // 定义Y轴起始坐标
-        float beginY = height - this.param.getFontSize();
+        // 如果X轴起始坐标未初始化，则初始化X轴起始坐标为0
+        if (this.param.getBeginX()==null) {
+            // 初始化X轴起始坐标为0
+            this.param.setBeginX(0F);
+        }
+        // 如果Y轴起始坐标未初始化，则初始化Y轴起始坐标为页面高度-字体大小
+        if (this.param.getBeginY()==null) {
+            // 初始化Y轴起始坐标 = 页面高度-字体大小
+            this.param.setBeginY(height - this.param.getFontSize());
+        }
         // 初始化pdfBox扩展图形对象
         PDExtendedGraphicsState state = new PDExtendedGraphicsState();
         // 设置文本透明度
@@ -238,30 +297,94 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         cs.setNonStrokingColor(this.param.getFontColor());
         // 设置字体
         cs.setFont(this.param.getFont(), this.param.getFontSize());
-        // 循环写入文本
-        for (int i = 0; i < this.param.getWordLine(); i++) {
-            do {
-                // 开启文本输入
-                cs.beginText();
-                // 设置文本弧度
-                cs.setTextMatrix(Matrix.getRotateInstance(Math.toRadians(this.param.getRadians()), 0F, 0F));
-                // 设置文本坐标
-                cs.newLineAtOffset(beginX, beginY);
-                // 文本输入
-                cs.showText(this.param.getText());
-                // 结束文本写入
-                cs.endText();
-                // 重置X轴起始坐标为X轴起始+文本间隔
-                beginX = beginX + this.param.getWordSpace();
-            }
-            // 如果X轴起始坐标大于页面宽度，则结束循环
-            while (!(beginX >= width*2));
-            // 重置X轴起始坐标为0
-            beginX = 0F;
-            // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
-            beginY = beginY - this.param.getFontSize() - this.param.getLeading();
-        }
+        // 设置字符间隔
+        cs.setCharacterSpacing(this.param.getCharacterSpacing());
+        // 写入文本
+        this.writeText(cs, width*2);
         // 关闭内容流
         cs.close();
+    }
+
+    /**
+     * 写入文本
+     * @param cs 内容流
+     * @param mixWidth 最大宽度
+     */
+    private void writeText(PDPageContentStream cs, float mixWidth) {
+        // 如果单行文本数不为空，则根据单行文本数写入
+        if (this.param.getWordCount()!=null) {
+            // 根据单行文本数写入
+            this.writeTextWithCount(cs);
+        }
+        // 否则根据最大宽度写入文本
+        else {
+            // 根据最大宽度写入文本
+            this.writeTextWithWidth(cs, mixWidth);
+        }
+    }
+
+    /**
+     * 根据单行文本数写入
+     * @param cs 内容流
+     */
+    private void writeTextWithCount(PDPageContentStream cs) {
+        // 循环写入文本
+        for (int i = 0; i < this.param.getWordLine(); i++) {
+            // 定义当前行文本数索引
+            int index = 0;
+            // 循环写入
+            do {
+                // 写入文本
+                this.writeText(cs);
+                // 重置X轴起始坐标为X轴起始+文本间隔
+                this.param.setBeginX(this.param.getBeginX()+this.param.getWordSpace());
+                // 文本数索引自增
+                index++;
+            }
+            // 如果文本数索引大于等于指定文本数，则结束循环
+            while (!(index >= this.param.getWordCount()));
+            // 重置X轴起始坐标为0
+            this.param.setBeginX(0F);
+            // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
+            this.param.setBeginY(this.param.getBeginY()-this.param.getFontSize()-this.param.getLeading());
+        }
+    }
+
+    /**
+     * 根据最大宽度写入文本
+     * @param cs 内容流
+     * @param mixWidth 最大宽度
+     */
+    private void writeTextWithWidth(PDPageContentStream cs, Float mixWidth) {
+        // 循环写入文本
+        for (int i = 0; i < this.param.getWordLine(); i++) {
+            // 循环写入
+            do {
+                // 写入文本
+                this.writeText(cs);
+                // 重置X轴起始坐标为X轴起始+文本间隔
+                this.param.setBeginX(this.param.getBeginX()+this.param.getWordSpace());
+            }
+            // 如果X轴起始坐标大于等于页面宽度，则结束循环
+            while (!(this.param.getBeginX() >= mixWidth));
+            // 重置X轴起始坐标为0
+            this.param.setBeginX(0F);
+            // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
+            this.param.setBeginY(this.param.getBeginY()-this.param.getFontSize()-this.param.getLeading());
+        }
+    }
+
+    @SneakyThrows
+    private void writeText(PDPageContentStream cs) {
+        // 开启文本输入
+        cs.beginText();
+        // 设置文本弧度
+        cs.setTextMatrix(Matrix.getRotateInstance(Math.toRadians(this.param.getRadians()), 0F, 0F));
+        // 设置文本坐标
+        cs.newLineAtOffset(this.param.getBeginX(), this.param.getBeginY());
+        // 文本输入
+        cs.showText(this.param.getText());
+        // 结束文本写入
+        cs.endText();
     }
 }

@@ -54,11 +54,16 @@ public class XEasyPdfImageTest {
     @Test
     public void test() throws IOException {
         long begin = System.currentTimeMillis();
-        String sourcePath = OUTPUT_PATH + "testImage.pdf";
+        String sourcePath = OUTPUT_PATH + "testImage2.pdf";
         String filePath = OUTPUT_PATH + "testImageWatermark.pdf";
         XEasyPdfDocument document = XEasyPdfHandler.Document.load(sourcePath);
         document.setGlobalWatermark(
                 XEasyPdfHandler.Watermark.build("贵阳")
+                        .setRadians(0D)
+                        .setWordCount(1)
+                        .setWordLine(1)
+                        .setCharacterSpacing(100)
+                        .setPosition(595.27563F/2-100, 841.8898F/2+25)
         ).save(filePath).close();
         long end = System.currentTimeMillis();
         System.out.println("finish：" + (end-begin) + "ms");
@@ -191,6 +196,31 @@ public class XEasyPdfImageTest {
                 .replaceImage(XEasyPdfImageUtil.read(new File(imagePath)), Arrays.asList(1, 0), 0)
                 .finish(filePath);
         inputStream.close();
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testImage7() throws IOException {
+        String filePath = OUTPUT_PATH + "testImage7.pdf";
+        String imagePath = OUTPUT_PATH + "91h687506p0.jpg";
+        File image = new File(imagePath);
+        XEasyPdfHandler.Document.build(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Table.build(
+                                XEasyPdfHandler.Table.Row.build(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100, 100).addContent(
+                                                XEasyPdfHandler.Image.build(image)
+                                        ),
+                                        XEasyPdfHandler.Table.Row.Cell.build(50, 50).addContent(
+                                                XEasyPdfHandler.Image.build(image)
+                                        ).setMarginTop(50),
+                                        XEasyPdfHandler.Table.Row.Cell.build(100, 100).addContent(
+                                                XEasyPdfHandler.Image.build(image)
+                                        )
+                                )
+                        ).disableBorder()
+                )
+        ).save(filePath).close();
         System.out.println("finish");
     }
 }

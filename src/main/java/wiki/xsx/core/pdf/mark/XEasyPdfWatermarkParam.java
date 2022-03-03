@@ -72,13 +72,29 @@ class XEasyPdfWatermarkParam {
      */
     private Float wordSpace;
     /**
+     * 文本单行数
+     */
+    private Integer wordCount;
+    /**
      * 文本行数
      */
     private Integer wordLine = 8;
     /**
+     * 字符间隔
+     */
+    private Float characterSpacing = 0F;
+    /**
      * 文本行间距
      */
     private Float leading;
+    /**
+     * X轴起始坐标
+     */
+    private Float beginX;
+    /**
+     * Y轴起始坐标
+     */
+    private Float beginY;
     /**
      * 是否需要初始化
      */
