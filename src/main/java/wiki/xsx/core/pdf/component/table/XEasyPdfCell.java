@@ -442,7 +442,7 @@ public class XEasyPdfCell {
         // 设置定位及绘制
         text.setPosition(
                 row.getParam().getBeginX(),
-                this.initYForText(document, page, row, text)
+                this.initYForText(document, page, row, text)-this.param.getMarginTop()
         ).draw(document, page);
     }
 
@@ -457,7 +457,7 @@ public class XEasyPdfCell {
         // 设置定位及绘制
         image.setPosition(
                 row.getParam().getBeginX()+this.param.getBorderWidth()/2,
-                this.initYForImage(document, page, row, image)
+                this.initYForImage(document, page, row, image)-this.param.getMarginTop()
         ).draw(document, page);
     }
 
@@ -473,7 +473,7 @@ public class XEasyPdfCell {
                 .setWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
                 .setPosition(
                         row.getParam().getBeginX() + this.param.getBorderWidth() / 2,
-                        page.getParam().getPageY() - row.getParam().getMarginTop() - line.getLineWidth() - this.param.getBorderWidth() / 2
+                        page.getParam().getPageY() - row.getParam().getMarginTop() - line.getLineWidth() - this.param.getBorderWidth() / 2 - this.param.getMarginTop()
                 ).draw(document, page);
     }
 
