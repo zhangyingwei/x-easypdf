@@ -322,8 +322,8 @@ class XEasyPdfTextParam {
         }
         // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
         if (this.horizontalStyle==XEasyPdfPositionStyle.CENTER) {
-            // 初始化为(最大宽度-左边距-右边距-文本宽度)/2
-            return (this.maxWidth  - this.marginLeft - this.marginRight - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing*text.length())) / 2 + this.marginLeft - this.marginRight;
+            // 初始化为(最大宽度-文本宽度)/2
+            return (this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing*text.length())) / 2 + this.marginLeft - this.marginRight;
         }
         // 否则为居右，初始化为最大宽度-右边距-文本宽度
         return this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing*text.length()) + this.marginLeft - this.marginRight;
