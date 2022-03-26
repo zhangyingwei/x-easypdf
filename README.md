@@ -6,7 +6,7 @@
 </p>
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v2.7.3-brightgreen" />
+    <img src="https://img.shields.io/badge/Current%20Version-v2.7.4-brightgreen" />
     <img src="https://img.shields.io/:License-MulanPSL2-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
         <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
@@ -72,6 +72,8 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 > circle(圆形组件)：已提供，圆形写入组件
 
 > barcode(条形码组件)：已提供，条形码写入组件(包含一维码/二维码)
+> 
+> layout(布局组件)：已提供，包含水平布局与垂直布局，支持相互嵌套
 
 > 后续将添加更多其他方便实用的组件。。。
 
@@ -80,7 +82,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 <dependency>
     <groupId>wiki.xsx</groupId>
     <artifactId>x-easypdf</artifactId>
-    <version>2.7.3</version>
+    <version>2.7.4</version>
 </dependency>
 ```
 
