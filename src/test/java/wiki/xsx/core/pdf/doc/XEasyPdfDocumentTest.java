@@ -473,6 +473,11 @@ public class XEasyPdfDocumentTest {
                                                 .setPage(1)
                                                 .setTop(300)
                                                 .setTitleColor(new Color(255,50,100))
+                                                .addChild(
+                                                        XEasyPdfDocumentBookmark.BookmarkNode.build()
+                                                                .setTitle("第二个文件子节点的子节点")
+                                                                .setPage(1)
+                                                )
                                 )
                 )
                 .finish()

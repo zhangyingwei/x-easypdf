@@ -7,6 +7,9 @@ import wiki.xsx.core.pdf.component.barcode.XEasyPdfBarCode;
 import wiki.xsx.core.pdf.component.circle.XEasyPdfCircle;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
+import wiki.xsx.core.pdf.component.layout.XEasyPdfHorizontalLayout;
+import wiki.xsx.core.pdf.component.layout.XEasyPdfLayoutComponent;
+import wiki.xsx.core.pdf.component.layout.XEasyPdfVerticalLayout;
 import wiki.xsx.core.pdf.component.line.XEasyPdfBaseLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfDottedSplitLine;
 import wiki.xsx.core.pdf.component.line.XEasyPdfSolidSplitLine;
@@ -608,6 +611,63 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfFooter build(XEasyPdfText text, XEasyPdfImage image) {
             return new XEasyPdfDefaultFooter(image, text);
+        }
+    }
+
+    /**
+     * pdf布局组件
+     */
+    public static class Layout {
+        /**
+         * 水平布局
+         */
+        public static class Horizontal {
+            /**
+             * 构建水平布局
+             * @return 返回pdf水平布局组件
+             */
+            public static XEasyPdfHorizontalLayout build() {
+                return new XEasyPdfHorizontalLayout();
+            }
+        }
+
+        /**
+         * 垂直布局
+         */
+        public static class Vertical {
+            /**
+             * 构建水平布局
+             * @return 返回pdf水平布局组件
+             */
+            public static XEasyPdfVerticalLayout build() {
+                return new XEasyPdfVerticalLayout();
+            }
+        }
+
+        /**
+         * pdf布局中的组件
+         */
+        public static class Component {
+            /**
+             * 构建布局组件中的组件
+             * @param width 宽度
+             * @param height 高度
+             * @return 返回pdf布局组件中的组件
+             */
+            public static XEasyPdfLayoutComponent build(float width, float height) {
+                return new XEasyPdfLayoutComponent(width, height);
+            }
+
+            /**
+             * 构建布局组件中的组件
+             * @param width 宽度
+             * @param height 高度
+             * @param component pdf组件
+             * @return 返回pdf布局组件中的组件
+             */
+            public static XEasyPdfLayoutComponent build(float width, float height, XEasyPdfComponent component) {
+                return new XEasyPdfLayoutComponent(width, height).setComponent(component);
+            }
         }
     }
 }

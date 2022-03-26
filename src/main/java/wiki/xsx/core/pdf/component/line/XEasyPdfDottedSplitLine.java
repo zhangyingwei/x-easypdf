@@ -183,16 +183,18 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfDottedSplitLine setPosition(float beginX, float beginY) {
+        this.param.setBeginX(beginX).setBeginY(beginY);
         return this;
     }
 
     /**
-     * 设置宽度
-     * @param width 宽度
+     * 设置宽度(线长)
+     * @param width 宽度(线长)
      * @return 返回虚线分割线组件
      */
     @Override
     public XEasyPdfDottedSplitLine setWidth(float width) {
+        this.param.setWidth(Math.abs(width));
         return this;
     }
 
@@ -243,18 +245,28 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
         xpdfLine = new XEasyPdfBaseLine(this.param);
         // 执行画图
         xpdfLine.draw(document, page);
-        // 计算点线数量，点线数量 = (pdfBox最新页面宽度 - 左边距 - 右边距) / (点线长度 + 点线间隔)
-        int count = (int) Math.floor(
-                (page.getLastPage().getMediaBox().getWidth() - this.param.getMarginLeft() - this.param.getMarginRight())
-                /
-                (this.lineLength + this.lineSpace)
-        );
+        // 定义点线数量
+        int count;
+        // 如果宽度未初始化，则计算点线数量为(pdfBox最新页面宽度 - 左边距 - 右边距) / (点线长度 + 点线间隔)
+        if (this.param.getWidth()==null) {
+            // 点线数量 = (pdfBox最新页面宽度-左边距-右边距)/(点线长度+点线间隔)
+            count = (int) Math.floor(
+                    (page.getLastPage().getMediaBox().getWidth()-this.param.getMarginLeft()-this.param.getMarginRight())
+                            /
+                            (this.lineLength+this.lineSpace)
+            );
+        }
+        // 否则计算点线数量为(宽度-左边距-右边距)/(点线长度+点线间隔)
+        else {
+            // 点线数量 = (宽度-左边距-右边距)/(点线长度+点线间隔)
+            count = (int) Math.floor((this.param.getWidth()-this.param.getMarginLeft()-this.param.getMarginRight())/(this.lineLength + this.lineSpace));
+        }
         // 循环点线数量进行画图
         for (int j = 1; j <= count; j++) {
             // 设置页面X轴起始坐标，起始坐标 = 结束坐标 + 点线间隔
             this.param.setBeginX(
                     this.param.getEndX() + this.lineSpace
-            // 设置页面X轴结束坐标，结束坐标 = 起始坐标 + 点线长度
+                    // 设置页面X轴结束坐标，结束坐标 = 起始坐标 + 点线长度
             ).setEndX(
                     this.param.getBeginX() + this.lineLength
             );
@@ -293,26 +305,6 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
     private void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 分页检查
         this.param.checkPage(document, page);
-        // 定义线宽
-        float lineWidth = this.param.getLineWidth() / 2;
-        // 设置X轴Y轴起始结束坐标
-        this.param.setBeginX(
-            // 左边距
-            this.param.getMarginLeft()
-        ).setBeginY(
-            // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
-            page.getParam().getPageY()==null?
-            // pdfBox最新页面高度 - 上边距 - 线宽
-            page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() - lineWidth:
-            // 当前页面Y轴坐标 - 上边距 - 线宽
-            page.getParam().getPageY() - this.param.getMarginTop() - lineWidth
-        ).setEndX(
-            // X轴起始坐标 + 点线长度
-            this.param.getBeginX() + this.lineLength
-        ).setEndY(
-            // Y轴起始坐标
-            this.param.getBeginY()
-        );
         // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
         if (this.param.getFontPath()==null&&this.param.getDefaultFontStyle()!=null) {
             // 初始化字体路径
@@ -320,5 +312,29 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
         }
         // 初始化字体
         this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true));
+        if (this.param.getBeginX()!=null&&this.param.getBeginY()!=null) {
+            this.param.setEndX(this.param.getBeginX()+this.lineLength).setEndY(this.param.getBeginY());
+            return;
+        }
+        // 定义线宽
+        float lineWidth = this.param.getLineWidth() / 2;
+        // 设置X轴Y轴起始结束坐标
+        this.param.setBeginX(
+                // 左边距
+                this.param.getMarginLeft()
+        ).setBeginY(
+                // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
+                page.getParam().getPageY()==null?
+                        // pdfBox最新页面高度 - 上边距 - 线宽
+                        page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() - lineWidth:
+                        // 当前页面Y轴坐标 - 上边距 - 线宽
+                        page.getParam().getPageY() - this.param.getMarginTop() - lineWidth
+        ).setEndX(
+                // X轴起始坐标 + 点线长度
+                this.param.getBeginX() + this.lineLength
+        ).setEndY(
+                // Y轴起始坐标
+                this.param.getBeginY()
+        );
     }
 }

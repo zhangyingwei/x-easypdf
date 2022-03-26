@@ -156,16 +156,18 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfSolidSplitLine setPosition(float beginX, float beginY) {
+        this.param.setBeginX(beginX).setBeginY(beginY);
         return this;
     }
 
     /**
-     * 设置宽度
-     * @param width 宽度
+     * 设置宽度(线长)
+     * @param width 宽度(线长)
      * @return 返回实线分割线组件
      */
     @Override
     public XEasyPdfSolidSplitLine setWidth(float width) {
+        this.param.setWidth(Math.abs(width));
         return this;
     }
 
@@ -243,28 +245,6 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
     private void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 分页检查
         this.param.checkPage(document, page);
-        // 定义线宽
-        float lineWidth = this.param.getLineWidth() / 2;
-        // 获取pdfBox最新页面尺寸
-        PDRectangle rectangle = page.getLastPage().getMediaBox();
-        // 设置X轴Y轴起始结束坐标
-        this.param.setBeginX(
-                // 左边距
-                this.param.getMarginLeft()
-        ).setBeginY(
-                // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getParam().getPageY() == null?
-                // pdfBox最新页面高度 - 上边距 - 线宽
-                rectangle.getHeight() - this.param.getMarginTop() - lineWidth:
-                // 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getParam().getPageY() - this.param.getMarginTop() - lineWidth
-        ).setEndX(
-                // 页面宽度 - 右边距
-                rectangle.getWidth() - this.param.getMarginRight()
-        ).setEndY(
-                // Y轴起始坐标
-                this.param.getBeginY()
-        );
         // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
         if (this.param.getFontPath()==null&&this.param.getDefaultFontStyle()!=null) {
             // 初始化字体路径
@@ -272,5 +252,36 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
         }
         // 初始化字体
         this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true));
+        // 获取pdfBox最新页面尺寸
+        PDRectangle rectangle = page.getLastPage().getMediaBox();
+        if (this.param.getBeginX()!=null&&this.param.getBeginY()!=null) {
+            if (this.param.getWidth()!=null) {
+                this.param.setEndX(this.param.getBeginX()+this.param.getWidth()).setEndY(this.param.getBeginY());
+            }
+            else {
+                this.param.setEndX(rectangle.getWidth()-this.param.getMarginRight()).setEndY(this.param.getBeginY());
+            }
+            return;
+        }
+        // 定义线宽
+        float lineWidth = this.param.getLineWidth()/2;
+        // 设置X轴Y轴起始结束坐标
+        this.param.setBeginX(
+                // 左边距
+                this.param.getMarginLeft()
+        ).setBeginY(
+                // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
+                page.getParam().getPageY() == null?
+                        // pdfBox最新页面高度 - 上边距 - 线宽
+                        rectangle.getHeight() - this.param.getMarginTop() - lineWidth:
+                        // 当前页面Y轴坐标 - 上边距 - 线宽
+                        page.getParam().getPageY() - this.param.getMarginTop() - lineWidth
+        ).setEndX(
+                // 页面宽度 - 右边距
+                rectangle.getWidth() - this.param.getMarginRight()
+        ).setEndY(
+                // Y轴起始坐标
+                this.param.getBeginY()
+        );
     }
 }

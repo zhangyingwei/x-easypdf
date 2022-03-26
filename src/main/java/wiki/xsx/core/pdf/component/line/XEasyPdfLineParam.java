@@ -71,6 +71,10 @@ class XEasyPdfLineParam {
      */
     private Float endY;
     /**
+     * 线长度
+     */
+    private Float width;
+    /**
      * 左边距
      */
     private Float marginLeft = 0F;

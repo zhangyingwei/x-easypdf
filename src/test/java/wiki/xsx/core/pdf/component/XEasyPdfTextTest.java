@@ -368,4 +368,19 @@ public class XEasyPdfTextTest {
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }
+
+    @Test
+    public void test() {
+        long begin = System.currentTimeMillis();
+        String filePath = OUTPUT_PATH + "test.pdf";
+        XEasyPdfHandler.Document.build(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Text.build("LEFT").setWidth(200F).setMarginLeft(100F).setHorizontalStyle(XEasyPdfPositionStyle.LEFT),
+                        XEasyPdfHandler.Text.build("MIDDLE").setWidth(200F).setMarginLeft(100F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
+                        XEasyPdfHandler.Text.build("RIGHT").setWidth(200F).setMarginLeft(100F).setHorizontalStyle(XEasyPdfPositionStyle.RIGHT)
+                )
+        ).save(filePath).close();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
 }

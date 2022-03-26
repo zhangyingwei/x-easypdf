@@ -38,7 +38,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * 有参构造
      * @param param 线条参数
      */
-    public XEasyPdfBaseLine(XEasyPdfLineParam param) {
+    XEasyPdfBaseLine(XEasyPdfLineParam param) {
         this.param = param;
     }
 
@@ -76,24 +76,24 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
     }
 
     /**
-     * 设置左边距(无效)
+     * 设置左边距
      * @param margin 边距
      * @return 返回基础线条组件
      */
     @Override
     public XEasyPdfBaseLine setMarginLeft(float margin) {
-        this.param.setMarginLeft(margin);
+        this.param.setMarginLeft(this.param.getBeginX()+margin);
         return this;
     }
 
     /**
-     * 设置右边距(无效)
+     * 设置右边距
      * @param margin 边距
      * @return 返回基础线条组件
      */
     @Override
     public XEasyPdfBaseLine setMarginRight(float margin) {
-        this.param.setMarginRight(margin);
+        this.param.setMarginRight(this.param.getBeginX()-margin);
         return this;
     }
 
@@ -160,8 +160,8 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
     }
 
     /**
-     * 设置宽度
-     * @param width 宽度
+     * 设置宽度(线长)
+     * @param width 宽度(线长)
      * @return 返回基础线条组件
      */
     @Override
