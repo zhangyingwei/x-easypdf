@@ -209,6 +209,15 @@ public class XEasyPdfRow {
     }
 
     /**
+     * 开启分页
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow enablePaging() {
+        this.param.setPaging(true);
+        return this;
+    }
+
+    /**
      * 设置行高
      * @param height 行高
      * @return 返回表格行组件

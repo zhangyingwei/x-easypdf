@@ -49,9 +49,29 @@ class XEasyPdfCellParam {
      */
     private boolean isNewLine = true;
     /**
+     * 是否组件样式
+     */
+    private boolean isComponentSelfStyle = false;
+    /**
      * 是否带有边框
      */
     private Boolean hasBorder;
+    /**
+     * 是否带有上边框
+     */
+    private boolean hasTopBorder = true;
+    /**
+     * 是否带有下边框
+     */
+    private boolean hasBottomBorder = true;
+    /**
+     * 是否带有左边框
+     */
+    private boolean hasLeftBorder = true;
+    /**
+     * 是否带有右边框
+     */
+    private boolean hasRightBorder = true;
     /**
      * 背景颜色
      */

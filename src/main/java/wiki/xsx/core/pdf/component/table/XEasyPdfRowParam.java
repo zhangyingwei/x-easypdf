@@ -109,6 +109,10 @@ class XEasyPdfRowParam {
      * 默认居上
      */
     private XEasyPdfPositionStyle verticalStyle;
+    /**
+     * 分页标识
+     */
+    private boolean isPaging = false;
 
     /**
      * 初始化
@@ -198,74 +202,111 @@ class XEasyPdfRowParam {
                 // 初始化行高
                 this.height = rowHeight;
             }
-            // 获取页面尺寸
-            PDRectangle rectangle = page.getLastPage().getMediaBox();
-            // 获取当前页面Y轴起始坐标
-            Float pageY = page.getParam().getPageY();
-            // 定义页脚高度
-            float footerHeight = 0F;
-            // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.isAllowFooter()&&page.getFooter()!=null) {
-                // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight(document, page);
+            // 初始化Y轴起始坐标 = 当前Y轴起始坐标
+            this.beginY = this.checkPage(document, page, table);
+            // 如果X轴起始坐标为初始化，则进行初始化
+            if (this.beginX==null) {
+                // 如果表格X轴起始坐标不为空，则重置为表格X轴起始坐标
+                if (tableParam.getBeginX()!=null) {
+                    // 初始化X轴起始坐标 = 表格X轴起始坐标
+                    this.beginX = tableParam.getBeginX();
+                }
+                // 否则重置为左边距
+                else {
+                    // 如果左边距不为空，则X轴起始坐标 = 左边距
+                    if (this.marginLeft!=null) {
+                        // 初始化X轴起始坐标 = 左边距
+                        this.beginX = this.marginLeft;
+                    }else {
+                        // 初始化X轴起始坐标 = 表格左边距
+                        this.beginX = tableParam.getMarginLeft();
+                    }
+                }
             }
-            // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
-            float currentY = pageY - this.marginTop;
-            // 如果当前Y轴起始坐标-页脚高度-行高小于表格下边距，则进行分页
-            if (currentY - footerHeight - this.height < tableParam.getMarginBottom()) {
-                // 获取单元格边框列表
-                List<XEasyPdfCellBorder> cellBorderList = tableParam.getCellBorderList();
-                // 如果单元格边框列表不为空，则绘制单元格边框
-                if (!cellBorderList.isEmpty()) {
-                    // 遍历单元格边框列表
-                    for (XEasyPdfCellBorder cellBorder : cellBorderList) {
-                        // 绘制单元格边框
-                        cellBorder.drawBorder();
-                    }
-                    // 重置单元格边框列表
-                    tableParam.setCellBorderList(new ArrayList<>(256));
-                }
-                // 开启页面自动定位
-                page.enablePosition();
-                // 添加新页面
-                page.addNewPage(document, rectangle);
-                // 关闭页面自动定位
-                page.disablePosition();
-                // 如果当前页面Y轴起始坐标未初始化，则进行初始化
-                if (page.getParam().getPageY()==null) {
-                    // 重置当前页面Y轴起始坐标 = 页面高度 - 表格上边距
-                    page.getParam().setPageY(rectangle.getHeight() - tableParam.getMarginTop());
-                }else {
-                    // 重置当前页面Y轴起始坐标 = 当前页面Y轴起始坐标 - 表格上边距
-                    page.getParam().setPageY(page.getParam().getPageY() - tableParam.getMarginTop());
-                }
-                // 如果开启自动表头，则绘制表头行
-                if (tableParam.getIsAutoTitle()) {
-                    // 获取表头行
-                    XEasyPdfRow titleRow = tableParam.getTitleRow();
-                    // 如果表头行不为空，则绘制表头行
-                    if (titleRow!=null) {
-                        // 绘制表头行
-                        titleRow.doDraw(document, page, table);
-                    }
-                }
+        }
+    }
+
+    /**
+     * 分页检查
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param table pdf表格
+     * @return 返回Y轴起始坐标
+     */
+    private float checkPage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) {
+        // 定义页脚高度
+        float footerHeight = 0F;
+        // 如果允许添加页脚，且页脚不为空则初始化页脚高度
+        if (page.isAllowFooter()&&page.getFooter()!=null) {
+            // 初始化页脚高度
+            footerHeight = page.getParam().getFooter().getHeight(document, page);
+        }
+        // 获取当前页面Y轴起始坐标
+        Float pageY = page.getParam().getPageY();
+        // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
+        float currentY = pageY - this.marginTop;
+        // 如果未设置分页标识，则重置分页标识
+        if (!this.isPaging) {
+            // 重置分页标识为当前Y轴起始坐标-页脚高度-行高小于表格下边距
+            this.isPaging = currentY - footerHeight - this.height < table.getParam().getMarginBottom();
+            // 如果分页标识需要分页，则进行分页
+            if (this.isPaging) {
+                // 分页
+                this.paging(document, page, table);
                 // 获取当前页面Y轴起始坐标
                 pageY = page.getParam().getPageY();
                 // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
                 currentY = pageY - this.marginTop;
             }
-            // 初始化Y轴起始坐标 = 当前Y轴起始坐标
-            this.beginY = currentY;
-            // 如果X轴起始坐标为初始化，则进行初始化
-            if (this.beginX==null) {
-                // 如果左边距不为空，则X轴起始坐标 = 左边距
-                if (this.marginLeft!=null) {
-                    // 初始化X轴起始坐标 = 左边距
-                    this.beginX = this.marginLeft;
-                }else {
-                    // 初始化X轴起始坐标 = 表格左边距
-                    this.beginX = tableParam.getMarginLeft();
-                }
+        }
+        return currentY;
+    }
+
+    /**
+     * 分页
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param table pdf表格
+     */
+    private void paging(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) {
+        // 获取页面尺寸
+        PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 获取表格参数
+        XEasyPdfTableParam tableParam = table.getParam();
+        // 获取单元格边框列表
+        List<XEasyPdfCellBorder> cellBorderList = tableParam.getCellBorderList();
+        // 如果单元格边框列表不为空，则绘制单元格边框
+        if (!cellBorderList.isEmpty()) {
+            // 遍历单元格边框列表
+            for (XEasyPdfCellBorder cellBorder : cellBorderList) {
+                // 绘制单元格边框
+                cellBorder.drawBorder();
+            }
+            // 重置单元格边框列表
+            tableParam.setCellBorderList(new ArrayList<>(256));
+        }
+        // 开启页面自动定位
+        page.enablePosition();
+        // 添加新页面
+        page.addNewPage(document, rectangle);
+        // 关闭页面自动定位
+        page.disablePosition();
+        // 如果当前页面Y轴起始坐标未初始化，则进行初始化
+        if (page.getParam().getPageY()==null) {
+            // 重置当前页面Y轴起始坐标 = 页面高度 - 表格上边距
+            page.getParam().setPageY(rectangle.getHeight() - tableParam.getMarginTop());
+        }else {
+            // 重置当前页面Y轴起始坐标 = 当前页面Y轴起始坐标 - 表格上边距
+            page.getParam().setPageY(page.getParam().getPageY() - tableParam.getMarginTop());
+        }
+        // 如果开启自动表头，则绘制表头行
+        if (tableParam.getIsAutoTitle()) {
+            // 获取表头行
+            XEasyPdfRow titleRow = tableParam.getTitleRow();
+            // 如果表头行不为空，则绘制表头行
+            if (titleRow!=null) {
+                // 绘制表头行
+                titleRow.doDraw(document, page, table);
             }
         }
     }

@@ -257,6 +257,69 @@ public class XEasyPdfCell {
     }
 
     /**
+     * 开启组件自身样式
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell enableComponentSelfStyle() {
+        this.param.setComponentSelfStyle(true);
+        return this;
+    }
+
+    /**
+     * 关闭上边框
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell disableTopBorder() {
+        this.param.setHasTopBorder(false);
+        return this;
+    }
+
+    /**
+     * 关闭下边框
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell disableBottomBorder() {
+        this.param.setHasBottomBorder(false);
+        return this;
+    }
+
+    /**
+     * 关闭左边框
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell disableLeftBorder() {
+        this.param.setHasLeftBorder(false);
+        return this;
+    }
+
+    /**
+     * 关闭右边框
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell disableRightBorder() {
+        this.param.setHasRightBorder(false);
+        return this;
+    }
+
+    /**
+     * 关闭上下边框
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell disableTopBottomBorder() {
+        this.param.setHasTopBorder(false).setHasBottomBorder(false);
+        return this;
+    }
+
+    /**
+     * 关闭左右边框
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell disableLeftRightBorder() {
+        this.param.setHasLeftBorder(false).setHasRightBorder(false);
+        return this;
+    }
+
+    /**
      * 添加内容
      * @param component 组件
      * @return 返回单元格组件
@@ -359,7 +422,13 @@ public class XEasyPdfCell {
             // 写入线条
             this.writeLine(document, page, row, (XEasyPdfLine) component);
         }
-        // TODO 后续有需要，再加入其他组件
+        // 其他组件，则直接绘制
+        else {
+            component.setPosition(
+                    row.getParam().getBeginX(),
+                    page.getParam().getPageY()-this.param.getMarginTop()
+            ).draw(document, page);
+        }
         // 重置为当前行X轴原始坐标
         row.getParam().setBeginX(rowBeginX);
         // 重置为当前页面Y轴原始坐标
@@ -407,7 +476,8 @@ public class XEasyPdfCell {
         // 如果带有边框，则进行写入边框
         if (this.param.getHasBorder()) {
             // 构建单元格边框
-            XEasyPdfCellBorder cellBorder = new XEasyPdfCellBorder().setDocument(document.getTarget())
+            XEasyPdfCellBorder cellBorder = new XEasyPdfCellBorder()
+                    .setDocument(document.getTarget())
                     .setPage(page.getLastPage())
                     .setContentMode(this.param.getContentMode().getMode())
                     .setWidth(this.param.getWidth())
@@ -415,7 +485,11 @@ public class XEasyPdfCell {
                     .setBorderColor(this.param.getBorderColor())
                     .setBorderWidth(this.param.getBorderWidth())
                     .setBeginX(row.getParam().getBeginX())
-                    .setBeginY(row.getParam().getBeginY()-this.param.getMarginTop());
+                    .setBeginY(row.getParam().getBeginY()-this.param.getMarginTop())
+                    .setHasTopBorder(this.param.isHasTopBorder())
+                    .setHasBottomBorder(this.param.isHasBottomBorder())
+                    .setHasLeftBorder(this.param.isHasLeftBorder())
+                    .setHasRightBorder(this.param.isHasRightBorder());
             // 获取表格参数
             XEasyPdfTableParam tableParam = table.getParam();
             // 如果单元格边框颜色与表格边框颜色相同，则直接绘制边框
@@ -462,7 +536,7 @@ public class XEasyPdfCell {
     }
 
     /**
-     * 写入分割线
+     * 写入线条
      * @param document pdf文档
      * @param page pdf页面
      * @param row pdf表格行
@@ -470,10 +544,10 @@ public class XEasyPdfCell {
      */
     private void writeLine(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfLine line) {
         line.setContentMode(this.param.getContentMode())
-                .setWidth(this.param.getWidth() - this.param.getBorderWidth() * 2)
+                .setWidth(this.param.getWidth())
                 .setPosition(
-                        row.getParam().getBeginX() + this.param.getBorderWidth() / 2,
-                        page.getParam().getPageY() - row.getParam().getMarginTop() - line.getLineWidth() - this.param.getBorderWidth() / 2 - this.param.getMarginTop()
+                        row.getParam().getBeginX(),
+                        row.getParam().getBeginY()-this.param.getMarginTop()
                 ).draw(document, page);
     }
 
@@ -482,15 +556,23 @@ public class XEasyPdfCell {
      * @param text pdf文本
      */
     private void initText(XEasyPdfText text) {
+        // 设置文本为子组件并设置宽度
+        text.enableChildComponent().setWidth(this.param.getWidth());
+        // 如果开启组件样式，则使用文本自身样式
+        if (this.param.isComponentSelfStyle()) {
+            // 设置文本自身样式
+            this.param.setVerticalStyle(text.getVerticalStyle()).setHorizontalStyle(text.getHorizontalStyle());
+            // 返回
+            return;
+        }
+        // 设置文本参数
         text.setContentMode(this.param.getContentMode())
-            .enableChildComponent()
-            .setWidth(this.param.getWidth())
-            .setFontPath(this.param.getFontPath())
-            .setDefaultFontStyle(this.param.getDefaultFontStyle())
-            .setFontSize(this.param.getFontSize())
-            .setFontColor(this.param.getFontColor())
-            .setHorizontalStyle(this.param.getHorizontalStyle())
-            .setVerticalStyle(this.param.getVerticalStyle());
+                .setFontPath(this.param.getFontPath())
+                .setDefaultFontStyle(this.param.getDefaultFontStyle())
+                .setFontSize(this.param.getFontSize())
+                .setFontColor(this.param.getFontColor())
+                .setHorizontalStyle(this.param.getHorizontalStyle())
+                .setVerticalStyle(this.param.getVerticalStyle());
     }
 
     /**
@@ -513,14 +595,22 @@ public class XEasyPdfCell {
             height = Float.valueOf(image.getHeight(document, page));
         }
         // 设置图片参数
+        image.enableChildComponent()
+                .setWidth(Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth())
+                .setHeight(Math.min(image.getHeight(document, page), height) - this.param.getBorderWidth())
+                .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth())
+                .setMaxHeight(height - this.param.getBorderWidth());
+        // 如果开启组件样式，则使用图片自身样式
+        if (this.param.isComponentSelfStyle()) {
+            // 设置图片自身样式
+            this.param.setVerticalStyle(image.getVerticalStyle()).setHorizontalStyle(image.getHorizontalStyle());
+            // 返回
+            return;
+        }
+        // 设置图片参数
         image.setContentMode(this.param.getContentMode())
-             .enableChildComponent()
-             .setWidth(Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth())
-             .setHeight(Math.min(image.getHeight(document, page), height) - this.param.getBorderWidth())
-             .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth())
-             .setMaxHeight(height - this.param.getBorderWidth())
-             .setHorizontalStyle(this.param.getHorizontalStyle())
-             .setVerticalStyle(this.param.getVerticalStyle());
+                .setHorizontalStyle(this.param.getHorizontalStyle())
+                .setVerticalStyle(this.param.getVerticalStyle());
     }
 
     /**
