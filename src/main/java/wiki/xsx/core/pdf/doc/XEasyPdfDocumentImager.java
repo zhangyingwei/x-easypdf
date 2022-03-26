@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.doc;
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
@@ -9,7 +10,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -41,6 +41,10 @@ public class XEasyPdfDocumentImager {
      * pdf文档
      */
     private final XEasyPdfDocument pdfDocument;
+    /**
+     * 图像DPI
+     */
+    private Float dpi = 72F;
 
     /**
      * 构造方法
@@ -52,13 +56,24 @@ public class XEasyPdfDocumentImager {
     }
 
     /**
+     * 设置图像DPI
+     * @param dpi 图像DPI
+     * @return 返回pdf文档图像器
+     */
+    public XEasyPdfDocumentImager setDpi(float dpi) {
+        this.dpi = Math.abs(dpi);
+        return this;
+    }
+
+    /**
      * 转为图片（整个文档）
      * @param outputPath 输出路径（目录）
      * @param imageType 图片类型
      * @return 返回pdf文档图像器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentImager image(String outputPath, XEasyPdfImageType imageType) throws IOException {
+
+    @SneakyThrows
+    public XEasyPdfDocumentImager image(String outputPath, XEasyPdfImageType imageType) {
         return this.image(outputPath, imageType, null);
     }
 
@@ -68,9 +83,9 @@ public class XEasyPdfDocumentImager {
      * @param imageType 图片类型
      * @param prefix 图片名称前缀
      * @return 返回pdf文档图像器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentImager image(String outputPath, XEasyPdfImageType imageType, String prefix) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocumentImager image(String outputPath, XEasyPdfImageType imageType, String prefix) {
         // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
         if (prefix==null) {
             // 初始化文档名称前缀
@@ -80,6 +95,8 @@ public class XEasyPdfDocumentImager {
         String imageTypeName = imageType.name().toLowerCase();
         // 文件名称构造器
         StringBuilder fileNameBuilder;
+        // 初始化pdfBox文档渲染器
+        PDFRenderer renderer = new PDFRenderer(this.document);
         // 任务文档页面总数
         int pageCount = this.document.getNumberOfPages();
         // 遍历文档页面
@@ -90,10 +107,8 @@ public class XEasyPdfDocumentImager {
             fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append('.').append(imageTypeName);
             // 获取输出流
             try (OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
-                // 初始化pdfBox文档渲染器
-                PDFRenderer renderer = new PDFRenderer(this.document);
                 // 渲染图片
-                BufferedImage bufferedImage = renderer.renderImage(i);
+                BufferedImage bufferedImage = renderer.renderImageWithDPI(i, this.dpi);
                 // 写出图片
                 ImageIO.write(bufferedImage, imageTypeName, outputStream);
             }
@@ -107,15 +122,15 @@ public class XEasyPdfDocumentImager {
      * @param imageType 图片类型
      * @param pageIndex 页面索引
      * @return 返回pdf文档图像器
-     * @throws IOException IO异常
      */
-    public XEasyPdfDocumentImager image(OutputStream outputStream, XEasyPdfImageType imageType, int pageIndex) throws IOException {
+    @SneakyThrows
+    public XEasyPdfDocumentImager image(OutputStream outputStream, XEasyPdfImageType imageType, int pageIndex) {
         // 重置页面索引（0至文档总页面索引）
         pageIndex = Math.min(Math.max(pageIndex, 0), this.document.getNumberOfPages()-1);
         // 初始化pdfBox文档渲染器
         PDFRenderer renderer = new PDFRenderer(this.document);
         // 渲染图片
-        BufferedImage bufferedImage = renderer.renderImage(pageIndex);
+        BufferedImage bufferedImage = renderer.renderImageWithDPI(pageIndex, this.dpi);
         // 写出图片
         ImageIO.write(bufferedImage, imageType.name().toLowerCase(), outputStream);
         return this;
