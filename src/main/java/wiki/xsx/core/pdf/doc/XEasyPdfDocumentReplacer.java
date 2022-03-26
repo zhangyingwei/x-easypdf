@@ -26,8 +26,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * pdf文档替换器
@@ -47,6 +45,10 @@ import java.util.regex.Pattern;
  * </p>
  */
 public class XEasyPdfDocumentReplacer {
+    /**
+     * pdfbox文档
+     */
+    private static final String FONT_REGEX = "F\\d+|C\\d+.*";
     /**
      * pdfbox文档
      */
@@ -107,7 +109,7 @@ public class XEasyPdfDocumentReplacer {
      */
     @SneakyThrows
     public XEasyPdfDocumentReplacer replaceText(Map<String, String> replaceMap, int ...pageIndex) {
-        return this.replaceText(-1, replaceMap, pageIndex);
+        return this.replaceText(1, replaceMap, pageIndex);
     }
 
     /**
@@ -125,18 +127,15 @@ public class XEasyPdfDocumentReplacer {
             if (!replaceMap.isEmpty()) {
                 // 初始化字体
                 this.initFont();
-                // 获取替换字典文本列表
-                Set<Map.Entry<String, String>> entrySet = replaceMap.entrySet();
                 // 如果页面索引为空，则替换全部页面
                 if (pageIndex==null||pageIndex.length==0) {
                     // 获取页面树
                     PDPageTree pages = this.document.getPages();
                     // 遍历页面树
                     for (PDPage page : pages) {
-                        // 遍历替换字典文本列表
-                        for (Map.Entry<String, String> entry : entrySet) {
+                        for (int i = 0; i < count; i++) {
                             // 替换文本
-                            this.replaceText(count, page, entry.getKey(), entry.getValue());
+                            this.replaceText(page, replaceMap);
                         }
                     }
                 }
@@ -146,10 +145,9 @@ public class XEasyPdfDocumentReplacer {
                     for (int index : pageIndex) {
                         // 如果页面索引大于等于0，则替换文本
                         if (index>=0) {
-                            // 遍历替换字典文本列表
-                            for (Map.Entry<String, String> entry : entrySet) {
+                            for (int i = 0; i < count; i++) {
                                 // 替换文本
-                                this.replaceText(count, this.document.getPage(index), entry.getKey(), entry.getValue());
+                                this.replaceText(this.document.getPage(index), replaceMap);
                             }
                         }
                     }
@@ -273,13 +271,11 @@ public class XEasyPdfDocumentReplacer {
 
     /**
      * 替换文本
-     * @param count 替换次数
      * @param page pdfbox页面
-     * @param oldValue 原字符串（可为正则）
-     * @param replaceValue 替换字符串
+     * @param replaceMap 替换字典（key可为正则）
      */
     @SneakyThrows
-    private void replaceText(int count, PDPage page, String oldValue, String replaceValue) {
+    private void replaceText(PDPage page, Map<String, String> replaceMap) {
         // 获取页面资源
         PDResources resources = page.getResources();
         // 获取pdf解析器
@@ -289,7 +285,7 @@ public class XEasyPdfDocumentReplacer {
         // 获取标记列表
         List<Object> tokens = parser.getTokens();
         // 获取已替换字体字典
-        Map<COSName, PDFont> replaceFontMap = this.replaceTextToken(this.initResourceFontMap(resources), tokens, oldValue, replaceValue, count);
+        Map<COSName, PDFont> replaceFontMap = this.replaceTextToken(this.initResourceFontMap(resources), tokens, replaceMap);
         // 如果已替换字体字典不为空，则更新页面内容
         if (!replaceFontMap.isEmpty()) {
             // 获取替换字体名称
@@ -317,29 +313,21 @@ public class XEasyPdfDocumentReplacer {
      * 替换文本标记
      * @param resourceFontMap 资源字体字典
      * @param tokens 标记列表
-     * @param oldValue 原字符串
-     * @param replaceValue 替换字符串
-     * @param count 替换次数
+     * @param replaceMap 替换次数
      * @return 返回已替换字体字典
      */
     @SneakyThrows
     private Map<COSName, PDFont> replaceTextToken(
             Map<COSName, PDFont> resourceFontMap,
             List<Object> tokens,
-            String oldValue,
-            String replaceValue,
-            int count
+            Map<String, String> replaceMap
     ) {
+        // 获取替换字典文本列表
+        Set<Map.Entry<String, String>> entrySet = replaceMap.entrySet();
         // 定义替换字体字典
         Map<COSName, PDFont> replaceFontMap = new HashMap<>(resourceFontMap.size());
-        // 创建正则
-        final Pattern pattern = Pattern.compile(oldValue);
-        // 定义匹配器
-        Matcher matcher;
         // 定义页面新字符串
         String newValue;
-        // 定义已替换次数
-        int replaceCount = 0;
         // 定义资源字体名称
         COSName resourceFontName = null;
         // 定义资源字体
@@ -353,7 +341,7 @@ public class XEasyPdfDocumentReplacer {
                 // 获取资源名称
                 cosName = ((COSName) token).getName();
                 // 如果为资源字体名称，则重置资源字体
-                if (cosName.matches("F\\d+")) {
+                if (cosName.matches(FONT_REGEX)) {
                     // 重置资源字体
                     resourceFont = resourceFontMap.get(token);
                     // 重置资源字体名称
@@ -383,50 +371,17 @@ public class XEasyPdfDocumentReplacer {
                 }
                 // 新字符串初始化为页面原字符串
                 newValue = builder.toString();
-                // 如果待替换次数小于0，则表示无限替换
-                if (count<0) {
+                // 遍历替换字典文本列表
+                for (Map.Entry<String, String> entry : entrySet) {
                     // 替换字符串
-                    newValue = pattern.matcher(newValue).replaceAll(replaceValue);
-                    // 已替换次数自增
-                    replaceCount++;
-                    // 添加待替换字体
-                    replaceFontMap.put(resourceFontName, this.font);
-                }
-                // 否则判断是否达到替换次数
-                else {
-                    // 如果已替换次数小于待替换次数且，则替换字符串
-                    if (replaceCount<count) {
-                        // 初始化匹配器
-                        matcher = pattern.matcher(newValue);
-                        // 创建字符串构造器
-                        StringBuffer stringBuffer = new StringBuffer();
-                        // 如果已替换次数小于待替换次数且新字符串包含待替换字符串，则继续循环
-                        while (replaceCount<count&&matcher.find()) {
-                            // 替换字符串
-                            matcher.appendReplacement(stringBuffer, replaceValue);
-                            // 已替换次数自增
-                            replaceCount++;
-                        }
-                        // 添加剩余字符串
-                        matcher.appendTail(stringBuffer);
-                        // 重置新字符串
-                        newValue = stringBuffer.toString();
-                        // 添加待替换字体
-                        replaceFontMap.put(resourceFontName, this.font);
-                    }
-                }
-                // 如果替换字体字典包含当前资源字体名称，则设置新文本
-                if (replaceFontMap.containsKey(resourceFontName)) {
+                    newValue = newValue.replaceFirst(entry.getKey(), entry.getValue());
                     // 设置新文本
                     string.setValue(this.font.encode(newValue));
                     // 添加文本关联
                     XEasyPdfFontUtil.addToSubset(this.font, newValue);
                 }
-                // 如果已替换次数到达待替换次数，则结束替换
-                if (replaceCount==count) {
-                    // 结束替换
-                    break;
-                }
+                // 添加待替换字体
+                replaceFontMap.putIfAbsent(resourceFontName, this.font);
             }
         }
         return replaceFontMap;
