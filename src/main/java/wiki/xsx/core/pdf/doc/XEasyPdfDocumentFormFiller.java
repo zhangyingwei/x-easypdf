@@ -36,13 +36,17 @@ import java.util.Set;
  */
 public class XEasyPdfDocumentFormFiller {
     /**
+     * pdf文档
+     */
+    private final XEasyPdfDocument pdfDocument;
+    /**
      * pdfbox文档
      */
     private final PDDocument document;
     /**
-     * pdf文档
+     * pdfbox表单
      */
-    private final XEasyPdfDocument pdfDocument;
+    private PDAcroForm form;
     /**
      * pdfbox字体
      */
@@ -55,6 +59,7 @@ public class XEasyPdfDocumentFormFiller {
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.build();
+        this.form = this.document.getDocumentCatalog().getAcroForm();
     }
 
     /**
@@ -90,12 +95,10 @@ public class XEasyPdfDocumentFormFiller {
             this.initFont();
             // 定义pdfBox表单字段
             PDField field;
-            // 获取pdfBox表单
-            PDAcroForm acroForm = this.document.getDocumentCatalog().getAcroForm();
             // 如果pdfBox表单不为空，则进行填充
-            if (acroForm!=null) {
+            if (this.form !=null) {
                 // 获取表单默认资源
-                PDResources defaultResources = acroForm.getDefaultResources();
+                PDResources defaultResources = this.form.getDefaultResources();
                 // 获取默认资源字体名称
                 Iterable<COSName> fontNames = defaultResources.getFontNames();
                 // 遍历字体名称
@@ -108,20 +111,28 @@ public class XEasyPdfDocumentFormFiller {
                 // 遍历表单字典
                 for (Map.Entry<String, String> entry : entrySet) {
                     // 获取表单字典中对应的pdfBox表单字段
-                    field = acroForm.getField(entry.getKey());
+                    field = this.form.getField(entry.getKey());
                     // 如果pdfBox表单字段不为空，则填充值
                     if (field!=null) {
                         // 添加文本关联
                         XEasyPdfFontUtil.addToSubset(this.font, entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
-
-
                     }
                 }
+                // 重置为null
+                this.form = null;
             }
         }
         return this;
+    }
+
+    /**
+     * 创建表单
+     * @return 返回pdf表单
+     */
+    public XEasyPdfDocumentForm create() {
+        return new XEasyPdfDocumentForm(this);
     }
 
     /**
@@ -152,13 +163,34 @@ public class XEasyPdfDocumentFormFiller {
         // 设置文档信息及保护策略
         this.pdfDocument.setInfoAndPolicyAndBookmark(this.document);
         // 设置表单为空（解决编辑器乱码问题）
-        this.document.getDocumentCatalog().setAcroForm(null);
+        this.document.getDocumentCatalog().setAcroForm(this.form);
         // 保存文档
         this.document.save(outputStream);
+        // 重置表单为空
+        this.form = null;
         // 重置字体为空
         this.font = null;
         // 关闭文档
         this.pdfDocument.close();
+    }
+
+    /**
+     * 获取pdfbox文档
+     * @return 返回pdfbox文档
+     */
+    PDDocument getDocument() {
+        return this.document;
+    }
+
+    /**
+     * 获取pdfbox表单
+     * @return 返回pdfbox表单
+     */
+    PDAcroForm getForm() {
+        if (this.form ==null) {
+            this.form = new PDAcroForm(this.document);
+        }
+        return this.form;
     }
 
     /**

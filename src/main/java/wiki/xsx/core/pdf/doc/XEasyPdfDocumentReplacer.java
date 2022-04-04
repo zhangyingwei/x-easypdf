@@ -48,10 +48,6 @@ public class XEasyPdfDocumentReplacer {
     /**
      * pdfbox文档
      */
-    private static final String FONT_REGEX = "F\\d+|C\\d+.*";
-    /**
-     * pdfbox文档
-     */
     private final PDDocument document;
     /**
      * pdf文档
@@ -332,16 +328,12 @@ public class XEasyPdfDocumentReplacer {
         COSName resourceFontName = null;
         // 定义资源字体
         PDFont resourceFont = null;
-        // 定义标记名称
-        String cosName;
         // 遍历标记列表
         for (Object token : tokens) {
             // 如果标记为字体名称
             if (token instanceof COSName) {
-                // 获取资源名称
-                cosName = ((COSName) token).getName();
                 // 如果为资源字体名称，则重置资源字体
-                if (cosName.matches(FONT_REGEX)) {
+                if (resourceFontMap.get(token)!=null) {
                     // 重置资源字体
                     resourceFont = resourceFontMap.get(token);
                     // 重置资源字体名称

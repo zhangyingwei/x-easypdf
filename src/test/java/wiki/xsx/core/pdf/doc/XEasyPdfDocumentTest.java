@@ -259,7 +259,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "doc1.pdf";
         List<String> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list, ".*第.*").finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractText(list, ".*第.*").finish().close();
         for (String s : list) {
             System.out.println("s = " + s);
         }
@@ -270,9 +270,9 @@ public class XEasyPdfDocumentTest {
     @Test
     public void test16StripText1() throws IOException {
         long begin = System.currentTimeMillis();
-        final String sourcePath = OUTPUT_PATH + "doc1.pdf";
+        final String sourcePath = OUTPUT_PATH + "模板.pdf";
         List<String> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.load(sourcePath).extractor().extract(list).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractText(list, 0).finish().close();
         for (String s : list) {
             System.out.println("s = " + s);
         }
@@ -285,7 +285,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH + "doc1.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
-        XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(600,2000)).extractByRegions(dataList, 0).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(600,2000)).extractTextByRegions(dataList, 0).finish().close();
         System.out.println("dataList = " + dataList);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
@@ -296,7 +296,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<List<String>> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.load(sourcePath).extractor().extractForSimpleTable(list, 0).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractTextForSimpleTable(list, 0).finish().close();
         for (List<String> s : list) {
             System.out.println("s = " + s);
         }
@@ -309,7 +309,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<List<String>> list = new ArrayList<>(1024);
-        XEasyPdfHandler.Document.load(sourcePath).extractor().extractByRegionsForSimpleTable(list, new Rectangle(0,0, 800, 170),1).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().extractTextByRegionsForSimpleTable(list, new Rectangle(0,0, 800, 170),1).finish().close();
         for (List<String> s : list) {
             System.out.println("s = " + s);
         }
@@ -322,7 +322,7 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         final String sourcePath = OUTPUT_PATH +"testAddPage.pdf";
         List<Map<String, String>> dataList = new ArrayList<>();
-        XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(0,320,800,540)).extractByRegions(dataList, 0).finish().close();
+        XEasyPdfHandler.Document.load(sourcePath).extractor().addRegion("test1", new Rectangle(0,320,800,540)).extractTextByRegions(dataList, 0).finish().close();
         System.out.println("dataList = " + dataList);
         long end = System.currentTimeMillis();
         System.out.println("finish("+(end-begin)+"ms)");
@@ -547,11 +547,14 @@ public class XEasyPdfDocumentTest {
     public void test29() throws IOException {
         long begin = System.currentTimeMillis();
         // 定义源路径
-        final String sourcePath = OUTPUT_PATH + "merge.pdf";
+        final String sourcePath = OUTPUT_PATH + "temp.pdf";
         // 定义保存路径
         final String outputPath = OUTPUT_PATH + "replaceText.pdf";
-        Map<String, String> replaceMap = new HashMap<>(1);
-        replaceMap.put("\\d", "数字");
+        Map<String, String> replaceMap = new HashMap<>(4);
+        replaceMap.put("\\{xxx\\}公司", "X-EASYPDF公司");
+        replaceMap.put("\\{xxx供应商\\}", "联想供应商");
+        replaceMap.put("时间：\\{xxx-xx-xx\\}", "时间：2022-04-04");
+        replaceMap.put("到货日期：\\{xxxx-xx-xx\\}", "到货日期：2022-04-10");
         try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
             XEasyPdfHandler.Document.load(sourcePath).replacer().replaceText(replaceMap).finish(outputStream);
         }
