@@ -362,7 +362,9 @@ public class XEasyPdfDocumentSigner {
             Security.addProvider(new BouncyCastleProvider());
             char[] passwordCharArray = this.signer.param.getCertificatePassword().toCharArray();
             KeyStore keyStore = KeyStore.getInstance(this.signer.param.getKeyStoreType().name());
-            keyStore.load(new FileInputStream(this.signer.param.getCertificate()), passwordCharArray);
+            try (FileInputStream inputStream = new FileInputStream(this.signer.param.getCertificate())) {
+                keyStore.load(inputStream, passwordCharArray);
+            }
             String alias = keyStore.aliases().nextElement();
             Certificate[] certificateChain = keyStore.getCertificateChain(alias);
             CMSSignedDataGenerator generator = new CMSSignedDataGenerator();

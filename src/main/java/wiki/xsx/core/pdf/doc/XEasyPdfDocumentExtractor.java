@@ -174,7 +174,7 @@ public class XEasyPdfDocumentExtractor {
         // 如果文本有内容，则进行文本拆分
         if (text!=null&&text.length()>0) {
             // 定义源文本列表
-            List<String> sourceList = new ArrayList<>(1024);
+            List<String> sourceList = new ArrayList<>(textList.size());
             // 获取正则匹配器
             Matcher matcher = TABLE_PATTERN.matcher(text);
             // 循环匹配

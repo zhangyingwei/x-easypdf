@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.component.image;
 
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -29,6 +30,7 @@ import java.io.InputStream;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
+@EqualsAndHashCode
 public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**

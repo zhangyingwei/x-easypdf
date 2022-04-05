@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.component.text;
 
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -38,6 +39,7 @@ import java.util.UUID;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
+@EqualsAndHashCode
 public class XEasyPdfText implements XEasyPdfComponent {
 
     /**

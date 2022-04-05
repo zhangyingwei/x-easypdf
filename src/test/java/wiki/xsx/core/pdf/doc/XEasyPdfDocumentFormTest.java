@@ -30,21 +30,42 @@ public class XEasyPdfDocumentFormTest {
     public void testCreate(){
         String filePath = OUTPUT_PATH + "testCreate.pdf";
         XEasyPdfHandler.Document
+                // 创建文档
                 .build()
+                // 添加页面
                 .addPage(
+                        // 创建空白页
                         XEasyPdfHandler.Page.build()
-                ).formFiller()
+                )
+                // 获取表单填写器
+                .formFiller()
+                // 创建表单
                 .create()
+                // 创建第一个文本属性
                 .createTextField()
-                .setMappingName("test1")
-                .setPosition(50F,500F)
+                // 设置映射名称
+                .setMappingName("property1")
+                // 设置位置坐标
+                .setPosition(50F,700F)
+                // 开启打印
                 .enablePrint()
+                // 完成文本属性创建
                 .finish()
+                // 创建第二个文本属性
                 .createTextField()
-                .setMappingName("test2")
-                .setPosition(200F,500F)
+                // 设置映射名称
+                .setMappingName("property2")
+                // 设置位置坐标
+                .setPosition(200F,700F)
+                // 设置默认值
+                .setDefaultValue("test")
+                // 设置最大字符数
+                .setMaxLength(11)
+                // 完成文本属性创建
                 .finish()
+                // 完成表单操作
                 .finish()
+                // 完成填写器操作
                 .finish(filePath);
     }
 

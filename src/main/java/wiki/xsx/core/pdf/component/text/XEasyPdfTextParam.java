@@ -1,6 +1,7 @@
 package wiki.xsx.core.pdf.component.text;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -35,6 +36,7 @@ import java.util.List;
  * </p>
  */
 @Data
+@EqualsAndHashCode
 @Accessors(chain = true)
 class XEasyPdfTextParam {
     /**
@@ -323,10 +325,10 @@ class XEasyPdfTextParam {
         // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
         if (this.horizontalStyle==XEasyPdfPositionStyle.CENTER) {
             // 初始化为(最大宽度-文本宽度)/2
-            return (this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing*text.length())) / 2 + this.marginLeft - this.marginRight;
+            return (this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing * text.length())) / 2 + this.marginLeft - this.marginRight;
         }
         // 否则为居右，初始化为最大宽度-右边距-文本宽度
-        return this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing*text.length()) + this.marginLeft - this.marginRight;
+        return this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing * text.length()) + this.marginLeft - this.marginRight;
     }
 
     /**
@@ -435,7 +437,7 @@ class XEasyPdfTextParam {
             // 如果第一行文本不为空，则添加文本列表
             if (firstLineText!=null) {
                 // 初始化待添加文本列表
-                this.splitTextList = new ArrayList<>(1024);
+                this.splitTextList = new ArrayList<>(128);
                 // 添加第一行文本
                 this.splitTextList.add(firstLineText);
                 // 第一行文本长度小于待输入文本，则继续拆分剩余文本
@@ -482,24 +484,6 @@ class XEasyPdfTextParam {
         if (this.splitTemplateTextList==null) {
             // 模板列表重置为待添加文本列表
             this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
-        }
-    }
-
-    /**
-     * 初始化缩进
-     */
-    private void initIndent() {
-        // 如果缩进值不为空，则重置自动缩进
-        if (this.indent!=null) {
-            // 定义字符串构建器
-            StringBuilder builder = new StringBuilder();
-            // 循环添加空格字符
-            for (int i = 0; i < this.indent; i++) {
-                // 添加空格字符
-                builder.append(" ");
-            }
-            // 重置待添加文本
-            this.text = builder.toString() + this.text;
         }
     }
 }
