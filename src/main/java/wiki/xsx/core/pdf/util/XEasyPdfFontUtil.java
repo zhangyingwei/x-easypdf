@@ -46,6 +46,10 @@ public class XEasyPdfFontUtil {
      * 字体集合
      */
     private static final String TTC = ".ttc";
+    /**
+     * 字体集合分隔符
+     */
+    private static final String COLLECTION_FONT_SEPARATOR = ",";
 
     /**
      * 获取字体高度
@@ -137,7 +141,10 @@ public class XEasyPdfFontUtil {
                     );
                 }
                 if (lowerPath.contains(TTC)) {
-                    String[] fontPathSplit = fontPath.split(",");
+                    String[] fontPathSplit = fontPath.split(COLLECTION_FONT_SEPARATOR);
+                    if (fontPathSplit.length<2) {
+                        throw new IllegalArgumentException("the font path is error");
+                    }
                     return loadTTC(
                             document,
                             fontPath,
@@ -182,7 +189,10 @@ public class XEasyPdfFontUtil {
                     );
                 }
                 if (lowerPath.contains(TTC)) {
-                    String[] fontPathSplit = fontResourcePath.split(",");
+                    String[] fontPathSplit = fontResourcePath.split(COLLECTION_FONT_SEPARATOR);
+                    if (fontPathSplit.length<2) {
+                        throw new IllegalArgumentException("the font path is error");
+                    }
                     return loadTTC(
                             document,
                             fontResourcePath,

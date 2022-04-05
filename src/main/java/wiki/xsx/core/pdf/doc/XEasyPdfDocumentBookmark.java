@@ -33,7 +33,7 @@ public class XEasyPdfDocumentBookmark {
     /**
      * pdfbox书签节点列表
      */
-    private final List<PDOutlineItem> itemList = new ArrayList<>(256);
+    private final List<PDOutlineItem> itemList = new ArrayList<>(64);
 
     /**
      * 有参构造
@@ -54,8 +54,6 @@ public class XEasyPdfDocumentBookmark {
         PDPageFitWidthDestination destination = new PDPageFitWidthDestination();
         // 设置页面索引
         destination.setPageNumber(pageIndex);
-        // 设置顶点坐标
-        destination.setTop(9999);
         // 定义pdfbox书签节点
         PDOutlineItem item = new PDOutlineItem();
         // 设置定位信息
@@ -115,7 +113,6 @@ public class XEasyPdfDocumentBookmark {
         public BookmarkNode(PDOutlineItem outlineItem) {
             this.outlineItem = outlineItem;
             this.destination = new PDPageFitWidthDestination();
-            this.destination.setTop(Integer.MAX_VALUE);
             this.outlineItem.setDestination(this.destination);
         }
 

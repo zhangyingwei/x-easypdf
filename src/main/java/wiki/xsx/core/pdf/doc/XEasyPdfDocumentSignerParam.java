@@ -110,39 +110,60 @@ class XEasyPdfDocumentSignerParam {
      */
     @SneakyThrows
     public void init(int pageIndex) {
+        // 如果密钥库类型未初始化，则提示错误
         if (this.keyStoreType==null) {
             throw new IllegalArgumentException("keyStore type can not be null");
         }
+        // 如果证书文件未初始化，则提示错误
         if (this.certificate==null) {
             throw new FileNotFoundException("certificate can not be null");
         }
+        // 如果证书密码未初始化，则提示错误
         if (this.certificatePassword==null) {
             throw new IllegalArgumentException("certificate password can not be null");
         }
+        // 如果签名算法未初始化，则提示错误
         if (this.signAlgorithm==null) {
             throw new IllegalArgumentException("signAlgorithm can not be null");
         }
-
+        // 设置过滤器
         this.signature.setFilter(this.filter.getFilter());
+        // 设置子过滤器
         this.signature.setSubFilter(this.subFilter.getFilter());
+        // 设置签名日期
         this.signature.setSignDate(Calendar.getInstance());
-        PDVisibleSigProperties signatureProperty = new PDVisibleSigProperties();
+        // 如果签名图片已初始化，则设置可视化签名属性
         if (this.image!=null) {
+            // 定义可视化签名属性
+            PDVisibleSigProperties signatureProperty = new PDVisibleSigProperties();
+            // 定义可视化签名者
             PDVisibleSignDesigner designer = new PDVisibleSignDesigner(this.document, this.image, pageIndex+1);
+            // 设置签名图片缩放比例
             designer.zoom(this.imageScalePercent);
+            // 设置签名图片左偏移
             designer.xAxis(this.imageMarginLeft);
+            // 设置签名图片上偏移
             designer.yAxis(this.imageMarginTop);
+            // 调整旋转
             designer.adjustForRotation();
-            signatureProperty.setPdVisibleSignature(designer);
+            // 设置签名者名称
             signatureProperty.signerName(this.signature.getName())
+                            // 设置签名位置
                             .signerLocation(this.signature.getLocation())
+                            // 设置签名原因
                             .signatureReason(this.signature.getReason())
+                            // 设置签名页面索引
                             .page(pageIndex)
+                            // 开启可视化
                             .visualSignEnabled(true)
+                            // 开启签名者
                             .setPdVisibleSignature(designer)
+                            // 构建签名
                             .buildSignature();
+            // 设置可视化签名属性
             this.signatureOptions.setVisualSignature(signatureProperty);
         }
+        // 设置签名内存大小
         this.signatureOptions.setPreferredSignatureSize(this.preferredSignatureSize);
     }
 }

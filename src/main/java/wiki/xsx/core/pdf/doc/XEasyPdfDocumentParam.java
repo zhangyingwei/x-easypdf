@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.doc;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -16,6 +17,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.*;
@@ -137,20 +139,34 @@ class XEasyPdfDocumentParam {
 
     /**
      * 初始化
+     * @param inputStream 输入流
      * @param document pdf文档
      */
-    void init(XEasyPdfDocument document) {
-        // 初始化任务文档
-        this.initTarget();
-        // 初始化字体
-        this.initFont(document);
+    @SneakyThrows
+    void init(InputStream inputStream, XEasyPdfDocument document) {
+        // 初始化pdfBox源文档
+        this.source = PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly());
+        // 获取pdfBox页面树
+        PDPageTree pages = this.source.getPages();
+        // 遍历pdfBox页面树
+        for (PDPage page : pages) {
+            // 添加pdfBox页面
+            this.pageList.add(new XEasyPdfPage(page));
+        }
+        // 设置总页数
+        this.initTotalPage(pages.getCount());
+        // 初始化文档权限
+        this.initPermission(document);
+        // 初始化文档信息
+        this.initInfo(document);
     }
 
     /**
-     * 初始任务
+     * 初始化任务
+     * @param document pdf文档
      */
     @SneakyThrows
-    void initTarget() {
+    void initTarget(XEasyPdfDocument document) {
         // 如果任务文档不为空，则关闭
         if (this.target!=null) {
             // 关闭文档
@@ -165,17 +181,8 @@ class XEasyPdfDocumentParam {
         }
         // 设置重置为false
         this.isReset = false;
-    }
-
-    /**
-     * 初始化字体
-     * @param document pdf文档
-     */
-    void initFont(XEasyPdfDocument document) {
-        if (this.fontPath==null) {
-            this.fontPath = this.defaultFontStyle.getPath();
-        }
-        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath, true);
+        // 初始化字体
+        this.initFont(document);
     }
 
     /**
@@ -214,9 +221,35 @@ class XEasyPdfDocumentParam {
     }
 
     /**
+     * 初始化总页数
+     * @param count 加减数量
+     */
+    void initTotalPage(int count) {
+        this.totalPage+=count;
+    }
+
+    /**
+     * 初始化字体
+     * @param document pdf文档
+     */
+    private void initFont(XEasyPdfDocument document) {
+        if (this.fontPath==null) {
+            this.fontPath = this.defaultFontStyle.getPath();
+        }
+        this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath, true);
+    }
+
+    /**
      * 初始化文档信息
      */
-    void initInfo(XEasyPdfDocument document) {
+    private void initPermission(XEasyPdfDocument document) {
+        this.permission = new XEasyPdfDocumentPermission(document, this.source.getCurrentAccessPermission());
+    }
+
+    /**
+     * 初始化文档信息
+     */
+    private void initInfo(XEasyPdfDocument document) {
         PDDocumentInformation documentInformation = this.source.getDocumentInformation();
         this.documentInfo = new XEasyPdfDocumentInfo(document)
                 .setTitle(documentInformation.getTitle())
@@ -226,14 +259,6 @@ class XEasyPdfDocumentParam {
                 .setCreator(documentInformation.getCreator())
                 .setCreateTime(documentInformation.getCreationDate())
                 .setUpdateTime(documentInformation.getModificationDate());
-    }
-
-    /**
-     * 初始化总页数
-     * @param count 加减数量
-     */
-    void initTotalPage(int count) {
-        this.totalPage+=count;
     }
 
     /**

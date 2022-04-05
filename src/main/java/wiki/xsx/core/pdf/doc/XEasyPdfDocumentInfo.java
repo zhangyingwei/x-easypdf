@@ -76,6 +76,14 @@ public class XEasyPdfDocumentInfo {
     }
 
     /**
+     * 获取标题
+     * @return 返回标题
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
      * 设置作者
      * @param author 作者
      * @return 返回pdf文档信息
@@ -83,6 +91,14 @@ public class XEasyPdfDocumentInfo {
     public XEasyPdfDocumentInfo setAuthor(String author) {
         this.author = author;
         return this;
+    }
+
+    /**
+     * 获取作者
+     * @return 返回作者
+     */
+    public String getAuthor() {
+        return this.author;
     }
 
     /**
@@ -96,6 +112,14 @@ public class XEasyPdfDocumentInfo {
     }
 
     /**
+     * 获取主题
+     * @return 返回主题
+     */
+    public String getSubject() {
+        return this.subject;
+    }
+
+    /**
      * 设置关键词
      * @param keywords 关键词
      * @return 返回pdf文档信息
@@ -103,6 +127,14 @@ public class XEasyPdfDocumentInfo {
     public XEasyPdfDocumentInfo setKeywords(String keywords) {
         this.keywords = keywords;
         return this;
+    }
+
+    /**
+     * 获取关键词
+     * @return 返回关键词
+     */
+    public String getKeywords() {
+        return this.keywords;
     }
 
     /**
@@ -116,6 +148,14 @@ public class XEasyPdfDocumentInfo {
     }
 
     /**
+     * 获取创建者
+     * @return 返回创建者
+     */
+    public String getCreator() {
+        return this.creator;
+    }
+
+    /**
      * 设置创建时间
      * @param createTime 创建时间
      * @return 返回pdf文档信息
@@ -126,6 +166,14 @@ public class XEasyPdfDocumentInfo {
     }
 
     /**
+     * 获取创建时间
+     * @return 返回创建时间
+     */
+    public Calendar getCreationDate() {
+        return this.creationDate;
+    }
+
+    /**
      * 设置修改时间
      * @param updateTime 修改时间
      * @return 返回pdf文档信息
@@ -133,6 +181,14 @@ public class XEasyPdfDocumentInfo {
     public XEasyPdfDocumentInfo setUpdateTime(Calendar updateTime) {
         this.modificationDate = updateTime;
         return this;
+    }
+
+    /**
+     * 获取修改时间
+     * @return 返回修改时间
+     */
+    public Calendar getModificationDate() {
+        return this.modificationDate;
     }
 
     /**

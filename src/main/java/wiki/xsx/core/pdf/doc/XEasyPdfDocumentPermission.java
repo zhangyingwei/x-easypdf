@@ -36,7 +36,7 @@ public class XEasyPdfDocumentPermission {
     /**
      * pdf访问权限
      */
-    private final AccessPermission accessPermission = new AccessPermission();
+    private AccessPermission accessPermission = new AccessPermission();
     /**
      * 公钥类型
      */
@@ -48,6 +48,17 @@ public class XEasyPdfDocumentPermission {
      */
     XEasyPdfDocumentPermission(XEasyPdfDocument document) {
         this.document = document;
+    }
+
+    /**
+     * 有参构造
+     * @param document pdf文档
+     * @param accessPermission pdf访问权限
+     */
+    XEasyPdfDocumentPermission(XEasyPdfDocument document, AccessPermission accessPermission) {
+        this.document = document;
+        this.accessPermission = accessPermission;
+        this.finish();
     }
 
     /**
@@ -168,7 +179,9 @@ public class XEasyPdfDocumentPermission {
         policy.setEncryptionKeyLength(length.length);
         // 设置pdfBox文档保护策略
         this.policy = policy;
+        // 设置文档权限
         this.document.setPermission(this);
+        // 返回pdf文档
         return this.document;
     }
 
@@ -184,8 +197,7 @@ public class XEasyPdfDocumentPermission {
         recipient.setPermission(this.accessPermission);
         // 设置X509证书
         recipient.setX509(
-                (X509Certificate) CertificateFactory.getInstance(PUBLIC_KEY_TYPE)
-                        .generateCertificate(certificateInputStream)
+                (X509Certificate) CertificateFactory.getInstance(PUBLIC_KEY_TYPE).generateCertificate(certificateInputStream)
         );
         // 初始化公钥保护策略
         PublicKeyProtectionPolicy policy = new PublicKeyProtectionPolicy();
@@ -193,6 +205,7 @@ public class XEasyPdfDocumentPermission {
         policy.addRecipient(recipient);
         // 设置pdfBox文档保护策略
         this.policy = policy;
+        // 返回pdf文档
         return this.document;
     }
 

@@ -73,7 +73,7 @@ public class XEasyPdfDocument implements Closeable {
     public XEasyPdfDocument(String filePath) {
         // 读取文件流
         try (InputStream inputStream = new BufferedInputStream(new FileInputStream(filePath))) {
-            this.init(inputStream);
+            this.param.init(inputStream, this);
         }
     }
 
@@ -82,61 +82,7 @@ public class XEasyPdfDocument implements Closeable {
      * @param inputStream 数据流
      */
     public XEasyPdfDocument(InputStream inputStream) {
-        this.init(inputStream);
-    }
-
-    /**
-     * 初始化
-     * @param inputStream 数据流
-     */
-    @SneakyThrows
-    private void init(InputStream inputStream) {
-        // 读取pdfBox文档
-        this.param.setSource(PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly()));
-        // 获取pdfBox页面树
-        PDPageTree pages = this.param.getSource().getPages();
-        // 遍历pdfBox页面树
-        for (PDPage page : pages) {
-            // 添加pdfBox页面
-            this.param.getPageList().add(new XEasyPdfPage(page));
-        }
-        // 设置总页数
-        this.param.initTotalPage(pages.getCount());
-        // 初始化文档信息
-        this.param.initInfo(this);
-    }
-
-    /**
-     * 获取文档信息
-     * @return 返回pdf文档信息
-     */
-    public XEasyPdfDocumentInfo information() {
-        // 设置重置
-        this.param.setReset(true);
-        // 返回文档信息
-        return this.param.getDocumentInfo()!=null?this.param.getDocumentInfo():new XEasyPdfDocumentInfo(this);
-    }
-
-    /**
-     * 获取文档权限
-     * @return 返回pdf文档权限
-     */
-    public XEasyPdfDocumentPermission permission() {
-        // 设置重置
-        this.param.setReset(true);
-        // 返回文档权限
-        return this.param.getPermission()!=null?this.param.getPermission():new XEasyPdfDocumentPermission(this);
-    }
-
-    /**
-     * 获取文档书签
-     * @return 返回pdf文档书签
-     */
-    public XEasyPdfDocumentBookmark bookmark() {
-        // 设置重置
-        this.param.setReset(true);
-        // 返回文档书签
-        return this.param.getBookmark()!=null?this.param.getBookmark():new XEasyPdfDocumentBookmark(this);
+        this.param.init(inputStream, this);
     }
 
     /**
@@ -338,7 +284,7 @@ public class XEasyPdfDocument implements Closeable {
         // 如果任务文档未初始化或文档被重置，则进行新任务创建
         if (this.param.getTarget()==null||this.param.isReset()) {
             // 初始化
-            this.param.init(this);
+            this.param.initTarget(this);
         }
         return this.param.getTarget();
     }
@@ -493,6 +439,33 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
+     * 获取文档信息
+     * @return 返回pdf文档信息
+     */
+    public XEasyPdfDocumentInfo information() {
+        // 返回文档信息
+        return this.param.getDocumentInfo()!=null?this.param.getDocumentInfo():new XEasyPdfDocumentInfo(this);
+    }
+
+    /**
+     * 获取文档权限
+     * @return 返回pdf文档权限
+     */
+    public XEasyPdfDocumentPermission permission() {
+        // 返回文档权限
+        return this.param.getPermission()!=null?this.param.getPermission():new XEasyPdfDocumentPermission(this);
+    }
+
+    /**
+     * 获取文档书签
+     * @return 返回pdf文档书签
+     */
+    public XEasyPdfDocumentBookmark bookmark() {
+        // 返回文档书签
+        return this.param.getBookmark()!=null?this.param.getBookmark():new XEasyPdfDocumentBookmark(this);
+    }
+
+    /**
      * 文档替换器
      * @return 返回pdf文档替换器
      */
@@ -549,10 +522,6 @@ public class XEasyPdfDocument implements Closeable {
         PDDocument target = this.getTarget();
         // 初始化页面
         this.param.initPage(this);
-        // 设置文档版本
-        target.setVersion(this.param.getVersion());
-        // 设置文档信息、保护策略及书签
-        this.setInfoAndPolicyAndBookmark(target);
         return target;
     }
 
@@ -566,6 +535,10 @@ public class XEasyPdfDocument implements Closeable {
         PDDocument target = this.build();
         // 获取临时路径
         String tempPath = this.param.getTempUrl();
+        // 设置文档版本
+        target.setVersion(this.param.getVersion());
+        // 设置文档信息、保护策略及书签
+        this.setInfoAndPolicyAndBookmark(target);
         // 临时保存文档
         target.save(new File(tempPath));
         // 添加临时任务列表
@@ -603,6 +576,10 @@ public class XEasyPdfDocument implements Closeable {
         if (this.param.getTempTargetList().isEmpty()) {
             // 构建文档
             PDDocument target = this.build();
+            // 设置文档版本
+            target.setVersion(this.param.getVersion());
+            // 设置文档信息、保护策略及书签
+            this.setInfoAndPolicyAndBookmark(target);
             // 保存文档
             target.save(outputStream);
             return this;
@@ -802,6 +779,10 @@ public class XEasyPdfDocument implements Closeable {
             // 删除临时文件
             file.deleteOnExit();
         }
+        // 设置文档版本
+        target.setVersion(this.param.getVersion());
+        // 设置文档信息、保护策略及书签
+        this.setInfoAndPolicyAndBookmark(target);
         // 保存任务文档
         target.save(outputStream);
         // 设置任务文档

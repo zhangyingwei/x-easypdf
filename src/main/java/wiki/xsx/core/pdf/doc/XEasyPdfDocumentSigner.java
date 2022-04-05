@@ -184,10 +184,8 @@ public class XEasyPdfDocumentSigner {
     public void sign(int pageIndex, OutputStream outputStream) {
         // 初始化参数
         this.param.init(pageIndex);
-        try (
-                // 创建字节数组输出流
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024)
-        ) {
+        // 创建字节数组输出流
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024)) {
             // 创建任务文档
             PDDocument target = this.param.getDocument();
             // 设置文档信息及保护策略
@@ -225,9 +223,13 @@ public class XEasyPdfDocumentSigner {
      * @param target 目标文档
      */
     void resetSignForm(PDDocument target) {
+        // 获取pdfbox表单
         PDAcroForm acroForm = target.getDocumentCatalog().getAcroForm();
+        // 如果表单不为空且首次使用，则清除首次使用项
         if (acroForm!=null&&acroForm.getNeedAppearances()) {
+            // 如果表单字段为空，则清除首次使用项
             if (acroForm.getFields().isEmpty()) {
+                // 清除首次使用项
                 acroForm.getCOSObject().removeItem(COSName.NEED_APPEARANCES);
             }
         }
@@ -359,24 +361,36 @@ public class XEasyPdfDocumentSigner {
         @SneakyThrows
         @Override
         public byte[] sign(InputStream content) {
+            // 设置提供者bc
             Security.addProvider(new BouncyCastleProvider());
+            // 获取密码字符数组
             char[] passwordCharArray = this.signer.param.getCertificatePassword().toCharArray();
+            // 获取密钥库
             KeyStore keyStore = KeyStore.getInstance(this.signer.param.getKeyStoreType().name());
+            // 定义证书文件流
             try (FileInputStream inputStream = new FileInputStream(this.signer.param.getCertificate())) {
+                // 加载证书
                 keyStore.load(inputStream, passwordCharArray);
             }
+            // 证书获取别名
             String alias = keyStore.aliases().nextElement();
+            // 获取证书链
             Certificate[] certificateChain = keyStore.getCertificateChain(alias);
+            // 定义cms签名器
             CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
+            // 定义内容签名器
             ContentSigner sha1Signer = new JcaContentSignerBuilder(
                     this.signer.param.getSignAlgorithm().name()
             ).setProvider(PROVIDER).build((PrivateKey) keyStore.getKey(alias, passwordCharArray));
+            // 添加签名信息
             generator.addSignerInfoGenerator(
                     new JcaSignerInfoGeneratorBuilder(
                             new JcaDigestCalculatorProviderBuilder().setProvider(PROVIDER).build()
                     ).build(sha1Signer, (X509Certificate) certificateChain[0])
             );
+            // 添加证书
             generator.addCertificates(new JcaCertStore(Arrays.asList(certificateChain)));
+            // 返回签名字节数组
             return generator.generate(new CmsProcessableInputStream(content), true).getEncoded();
         }
 
@@ -384,29 +398,57 @@ public class XEasyPdfDocumentSigner {
          * cms数据
          */
         public static class CmsProcessableInputStream implements CMSTypedData {
+            /**
+             * 输入流
+             */
             private final InputStream in;
+            /**
+             * 内容类型
+             */
             private final ASN1ObjectIdentifier contentType;
 
+            /**
+             * 有参构造
+             * @param is 输入流
+             */
             CmsProcessableInputStream(InputStream is) {
                 this(new ASN1ObjectIdentifier(CMSObjectIdentifiers.data.getId()), is);
             }
 
+            /**
+             * 有参构造
+             * @param type 内容类型
+             * @param is 输入流
+             */
             CmsProcessableInputStream(ASN1ObjectIdentifier type, InputStream is) {
                 this.contentType = type;
                 this.in = is;
             }
 
+            /**
+             * 获取内容
+             * @return 返回输入流
+             */
             @Override
             public Object getContent() {
                 return this.in;
             }
 
+            /**
+             * 写出
+             * @param out 输出流
+             * @throws IOException IO异常
+             */
             @Override
             public void write(OutputStream out) throws IOException {
                 IOUtils.copy(this.in, out);
                 this.in.close();
             }
 
+            /**
+             * 获取内容类型
+             * @return 返回内容类型
+             */
             @Override
             public ASN1ObjectIdentifier getContentType() {
                 return this.contentType;
