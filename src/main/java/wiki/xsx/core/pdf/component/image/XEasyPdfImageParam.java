@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
@@ -159,15 +158,15 @@ class XEasyPdfImageParam {
         // 获取页面高度
         float pageHeight = rectangle.getHeight();
         // 创建pdfBox图片
-        PDImageXObject pdImage = PDImageXObject.createFromByteArray(
+        this.imageXObject = PDImageXObject.createFromByteArray(
                 document.getTarget(),
                 XEasyPdfImageUtil.toBytes(this.image, this.imageType),
                 this.imageType
         );
         // 获取图片宽度
-        int imageWidth = pdImage.getWidth();
+        int imageWidth = this.imageXObject.getWidth();
         // 获取图片高度
-        int imageHeight = pdImage.getHeight();
+        int imageHeight = this.imageXObject.getHeight();
         // 如果自定义宽度为空，则将自定义宽度设置为图片宽度
         if (this.width==null) {
             // 自定义宽度设置为图片宽度
@@ -234,18 +233,6 @@ class XEasyPdfImageParam {
                 this.height = (int) (this.height * ratio );
             }
         }
-        // 如果自定义宽度不等于图片宽度，或自定义高度不等于图片高度，则进行图片缩放
-        if (this.width!=imageWidth||this.height!=imageHeight) {
-            // 重新创建pdfBox图片
-            pdImage = LosslessFactory.createFromImage(
-                    // pdfBox文档
-                    document.getTarget(),
-                    // 图片缩放
-                    XEasyPdfImageUtil.scale(this.image, this.width, this.height, this.scaleMode.code)
-            );
-        }
-        // 重置pdfbox图片对象
-        this.imageXObject = pdImage;
         return this.imageXObject;
     }
 

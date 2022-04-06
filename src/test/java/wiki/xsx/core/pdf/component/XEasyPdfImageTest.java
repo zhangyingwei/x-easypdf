@@ -147,7 +147,7 @@ public class XEasyPdfImageTest {
             XEasyPdfHandler.Document.build().addPage(
                     XEasyPdfHandler.Page.build(
                             PDRectangle.A4,
-                            XEasyPdfHandler.Image.build(inputStream, XEasyPdfImageType.PNG).setRadians(-45D)
+                            XEasyPdfHandler.Image.build(inputStream, XEasyPdfImageType.PNG)
                     )
             ).save(filePath).close();
         }

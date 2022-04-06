@@ -222,8 +222,12 @@ public class XEasyPdfDocument implements Closeable {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setVersion(float version) {
+        // 最大版本
+        float maxVersion = 1.7F;
+        // 最小版本
+        float minVersion = 1.7F;
         // 如果版本小于1.0且大于1.7，则提示错误
-        if (version<1.0F&&version>1.7F) {
+        if (version<minVersion||version>maxVersion) {
             // 提示错误
             throw new IllegalArgumentException("the version must be between 1.0 and 1.7");
         }

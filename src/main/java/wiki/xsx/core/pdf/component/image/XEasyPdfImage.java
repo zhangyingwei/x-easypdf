@@ -347,7 +347,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
                 true
         );
         // 添加图片
-        contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY());
+        contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY(), this.param.getWidth(), this.param.getHeight());
         // 关闭内容流
         contentStream.close();
         // 如果允许页面重置定位，则进行重置

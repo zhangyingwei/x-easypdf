@@ -78,7 +78,7 @@ class XEasyPdfDocumentParam {
     /**
      * 版本
      */
-    private Float version = 1.4F;
+    private Float version = 1.5F;
     /**
      * 总页数
      */
