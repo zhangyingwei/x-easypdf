@@ -78,11 +78,19 @@ class XEasyPdfBarCodeParam {
     /**
      * 图像宽度
      */
-    private Integer width;
+    private Integer imageWidth;
     /**
      * 图像高度
      */
-    private Integer height;
+    private Integer imageHeight;
+    /**
+     * 图像宽度
+     */
+    private Integer imageMaxWidth;
+    /**
+     * 图像高度
+     */
+    private Integer imageMaxHeight;
     /**
      * 旋转弧度
      */
@@ -120,6 +128,10 @@ class XEasyPdfBarCodeParam {
      */
     private boolean isShowWords = false;
     /**
+     * 是否重置上下文
+     */
+    private boolean isResetContext = false;
+    /**
      * 编码设置
      */
     private final Map<EncodeHintType, Object> encodeHints = new HashMap<>(8);
@@ -155,7 +167,7 @@ class XEasyPdfBarCodeParam {
         // 如果右边距不为空，则初始化页面X轴起始坐标 += 最大宽度 - 自定义宽度 - 右边距
         if (this.marginRight!=null) {
             // 页面X轴起始坐标 += 最大宽度 - 自定义宽度 - 右边距
-            this.beginX += this.maxWidth - this.width - this.marginRight;
+            this.beginX += this.maxWidth - this.imageWidth - this.marginRight;
         }
         // 否则初始化X轴起始坐标为页面X轴起始坐标 += 左边距
         else {
@@ -170,7 +182,7 @@ class XEasyPdfBarCodeParam {
                 this.words = this.content;
             }
             // 重置高度 -= 文字大小 - 1
-            this.height -= this.wordsSize - 1;
+            this.imageHeight -= this.wordsSize - 1;
         }
     }
 
@@ -244,19 +256,19 @@ class XEasyPdfBarCodeParam {
                 // 定义Y轴坐标
                 float initY = page.getParam().getPageY()!=null?page.getParam().getPageY():rectangle.getHeight();
                 // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
-                this.beginY = initY - this.marginTop - this.height;
+                this.beginY = initY - this.marginTop - this.imageHeight;
                 // 如果页面Y轴起始坐标-页脚高度小于等于下边距，则分页
                 if (this.beginY - footerHeight <= this.marginBottom) {
                     // 添加新页面
                     page.addNewPage(document, rectangle);
                     // 页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
-                    this.beginY = rectangle.getHeight() - this.marginTop - this.height;
+                    this.beginY = rectangle.getHeight() - this.marginTop - this.imageHeight;
                 }
             }
             // 如果pdfBox最新页面当前Y轴坐标为空，则为新页面
             else {
                 // 页面Y轴起始坐标 = 页面高度 - 上边距 - 自定义高度
-                this.beginY = rectangle.getHeight() - this.marginTop - this.height;
+                this.beginY = rectangle.getHeight() - this.marginTop - this.imageHeight;
             }
         }
     }
@@ -265,15 +277,25 @@ class XEasyPdfBarCodeParam {
      * 初始化宽度与高度
      */
     private void initWidthAndHeight() {
-        // 如果宽度为空，则初始化宽度
-        if (this.width==null) {
+        // 如果宽度未初始化，则初始化宽度
+        if (this.imageWidth ==null) {
             // 初始化宽度
-            this.width = this.codeType.isQrType()?100:180;
+            this.imageWidth = this.codeType.isQrType()?100:180;
         }
-        // 如果高度为空，则初始化高度
-        if (this.height==null) {
+        // 如果高度未初始化，则初始化高度
+        if (this.imageHeight ==null) {
             // 初始化高度
-            this.height = this.codeType.isQrType()?this.width:60;
+            this.imageHeight = this.codeType.isQrType()?this.imageWidth :60;
+        }
+        // 如果最大宽度未初始化或小于宽度，则初始化最大宽度
+        if (this.imageMaxWidth==null||this.imageMaxWidth<this.imageWidth) {
+            // 初始化最大宽度为图像宽度
+            this.imageMaxWidth = this.imageWidth;
+        }
+        // 如果最大高度未初始化或小于高度，则初始化最大高度
+        if (this.imageMaxHeight==null||this.imageMaxHeight<this.imageHeight) {
+            // 初始化最大高度为图像高度
+            this.imageMaxHeight = this.imageHeight;
         }
     }
 
@@ -283,6 +305,6 @@ class XEasyPdfBarCodeParam {
      */
     void resetBeginY(int height) {
         // 重置页面Y轴起始坐标 = Y轴起始坐标 + 原有高度 - 给定高度
-        this.beginY = this.beginY + this.height - height;
+        this.beginY = this.beginY + this.imageHeight - height;
     }
 }

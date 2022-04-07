@@ -204,6 +204,15 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回基础线条组件
+     */
+    public XEasyPdfBaseLine enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page pdf页面
@@ -256,7 +265,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                false
+                this.param.isResetContext()
         );
         // 设置字体
         contentStream.setFont(this.param.getFont(), this.param.getFontSize());

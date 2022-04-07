@@ -231,6 +231,15 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回虚线分割线组件
+     */
+    public XEasyPdfDottedSplitLine enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面

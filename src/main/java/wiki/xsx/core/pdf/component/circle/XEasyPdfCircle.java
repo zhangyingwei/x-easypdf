@@ -72,6 +72,15 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回圆形组件
+     */
+    public XEasyPdfCircle enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 设置边距（上下左右）
      * @param margin 边距
      * @return 返回圆形组件
@@ -238,7 +247,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                false
+                this.param.isResetContext()
         );
 
         // 如果带有边框，则进行边框绘制

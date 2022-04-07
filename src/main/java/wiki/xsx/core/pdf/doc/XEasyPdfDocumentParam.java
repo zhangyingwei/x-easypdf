@@ -221,6 +221,20 @@ class XEasyPdfDocumentParam {
     }
 
     /**
+     * 嵌入字体
+     * @param font pdfbox字体
+     */
+    @SuppressWarnings("all")
+    @SneakyThrows
+    void embedFont(Collection<PDFont> fonts) {
+        if (fonts!=null&&!fonts.isEmpty()) {
+            Method method = this.target.getClass().getDeclaredMethod("getFontsToSubset");
+            method.setAccessible(true);
+            ((Set<PDFont>) method.invoke(this.target)).addAll(fonts);
+        }
+    }
+
+    /**
      * 初始化总页数
      * @param count 加减数量
      */
@@ -259,19 +273,5 @@ class XEasyPdfDocumentParam {
                 .setCreator(documentInformation.getCreator())
                 .setCreateTime(documentInformation.getCreationDate())
                 .setUpdateTime(documentInformation.getModificationDate());
-    }
-
-    /**
-     * 嵌入字体
-     * @param font pdfbox字体
-     */
-    @SuppressWarnings("all")
-    @SneakyThrows
-    private void embedFont(Collection<PDFont> fonts) {
-        if (fonts!=null&&!fonts.isEmpty()) {
-            Method method = this.target.getClass().getDeclaredMethod("getFontsToSubset");
-            method.setAccessible(true);
-            ((Set<PDFont>) method.invoke(this.target)).addAll(fonts);
-        }
     }
 }

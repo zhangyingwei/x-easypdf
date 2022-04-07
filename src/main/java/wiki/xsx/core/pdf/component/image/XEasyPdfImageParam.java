@@ -125,6 +125,10 @@ class XEasyPdfImageParam {
      */
     private boolean isChildComponent = false;
     /**
+     * 是否重置上下文
+     */
+    private boolean isResetContext = false;
+    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;

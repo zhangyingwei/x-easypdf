@@ -204,6 +204,15 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回实线分割线组件
+     */
+    public XEasyPdfSolidSplitLine enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
@@ -254,13 +263,21 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
         this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true));
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 如果X轴起始坐标已初始化且Y轴起始坐标已初始化，则直接返回
         if (this.param.getBeginX()!=null&&this.param.getBeginY()!=null) {
+            // 如果宽度已初始化，则设置X轴结束坐标为X轴起始坐标+宽度
             if (this.param.getWidth()!=null) {
-                this.param.setEndX(this.param.getBeginX()+this.param.getWidth()).setEndY(this.param.getBeginY());
+                // 设置X轴结束坐标 = X轴起始坐标+宽度
+                this.param.setEndX(this.param.getBeginX()+this.param.getWidth());
             }
+            // 否则设置X轴结束坐标为页面宽度-右边距
             else {
-                this.param.setEndX(rectangle.getWidth()-this.param.getMarginRight()).setEndY(this.param.getBeginY());
+                // 设置X轴结束坐标 = 页面宽度-右边距
+                this.param.setEndX(rectangle.getWidth()-this.param.getMarginRight());
             }
+            // 设置Y轴结束坐标为Y轴起始坐标
+            this.param.setEndY(this.param.getBeginY());
+            // 返回
             return;
         }
         // 定义线宽

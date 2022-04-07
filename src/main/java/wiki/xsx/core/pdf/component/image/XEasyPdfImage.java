@@ -148,6 +148,15 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 设置旋转弧度
      * @param radians 图片弧度
      * @return 返回图片组件
@@ -344,7 +353,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                true
+                this.param.isResetContext()
         );
         // 添加图片
         contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY(), this.param.getWidth(), this.param.getHeight());

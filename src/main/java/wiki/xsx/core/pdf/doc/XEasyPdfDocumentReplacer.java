@@ -1,6 +1,8 @@
 package wiki.xsx.core.pdf.doc;
 
 import lombok.SneakyThrows;
+import org.apache.pdfbox.cos.COSArray;
+import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.cos.COSString;
 import org.apache.pdfbox.pdfparser.PDFStreamParser;
@@ -229,6 +231,7 @@ public class XEasyPdfDocumentReplacer {
      */
     @SneakyThrows
     public void finish(OutputStream outputStream) {
+        this.pdfDocument.getParam().embedFont(Collections.singleton(this.font));
         // 保存文档
         this.document.save(outputStream);
         // 重置字体为空
@@ -280,64 +283,57 @@ public class XEasyPdfDocumentReplacer {
         parser.parse();
         // 获取标记列表
         List<Object> tokens = parser.getTokens();
-        // 获取已替换字体字典
-        Map<COSName, PDFont> replaceFontMap = this.replaceTextToken(this.initResourceFontMap(resources), tokens, replaceMap);
-        // 如果已替换字体字典不为空，则更新页面内容
-        if (!replaceFontMap.isEmpty()) {
-            // 获取替换字体名称
-            Set<Map.Entry<COSName, PDFont>> entrySet = replaceFontMap.entrySet();
-            // 遍历替换字体名称
-            for (Map.Entry<COSName, PDFont> entry : entrySet) {
-                // 替换字体
-                resources.put(entry.getKey(), entry.getValue());
-            }
-            // 定义更新流
-            PDStream updatedStream = new PDStream(this.document);
-            // 创建输出流
-            try (OutputStream outputStream = updatedStream.createOutputStream(COSName.FLATE_DECODE)) {
-                // 创建内容写入器
-                ContentStreamWriter tokenWriter = new ContentStreamWriter(outputStream);
-                // 写入标记列表
-                tokenWriter.writeTokens(tokens);
-                // 设置页面内容
-                page.setContents(updatedStream);
-            }
+        // 替换文本标记
+        this.replaceTextToken(resources, tokens, replaceMap);
+        // 定义更新流
+        PDStream updatedStream = new PDStream(this.document);
+        // 创建输出流
+        try (OutputStream outputStream = updatedStream.createOutputStream(COSName.FLATE_DECODE)) {
+            // 创建内容写入器
+            ContentStreamWriter tokenWriter = new ContentStreamWriter(outputStream);
+            // 写入标记列表
+            tokenWriter.writeTokens(tokens);
+            // 设置页面内容
+            page.setContents(updatedStream);
         }
     }
 
     /**
      * 替换文本标记
-     * @param resourceFontMap 资源字体字典
+     * @param resources pdfbox页面资源
      * @param tokens 标记列表
      * @param replaceMap 替换次数
-     * @return 返回已替换字体字典
      */
     @SneakyThrows
-    private Map<COSName, PDFont> replaceTextToken(
-            Map<COSName, PDFont> resourceFontMap,
+    private void replaceTextToken(
+            PDResources resources,
             List<Object> tokens,
             Map<String, String> replaceMap
     ) {
+        // 获取资源字体字典
+        Map<COSName, PDFont> resourceFontMap = this.initResourceFontMap(resources);
         // 获取替换字典文本列表
         Set<Map.Entry<String, String>> entrySet = replaceMap.entrySet();
-        // 定义替换字体字典
-        Map<COSName, PDFont> replaceFontMap = new HashMap<>(resourceFontMap.size());
-        // 定义页面新字符串
-        String newValue;
-        // 定义资源字体名称
-        COSName resourceFontName = null;
+        // 获取替换字体名称
+        COSName replaceFontName = COSName.getPDFName(this.font.getName());
+        // 定义处理标记
+        boolean flag = false;
+        // 定义字体索引
+        int fontIndex = 0;
         // 定义资源字体
         PDFont resourceFont = null;
         // 遍历标记列表
-        for (Object token : tokens) {
+        for (int i = 0, count = tokens.size(); i < count; i++) {
+            // 获取标记
+            Object token = tokens.get(i);
             // 如果标记为字体名称
             if (token instanceof COSName) {
                 // 如果为资源字体名称，则重置资源字体
                 if (resourceFontMap.get(token)!=null) {
+                    // 重置字体索引
+                    fontIndex = i;
                     // 重置资源字体
                     resourceFont = resourceFontMap.get(token);
-                    // 重置资源字体名称
-                    resourceFontName = (COSName) token;
                 }
                 // 否则跳过
                 else {
@@ -345,38 +341,134 @@ public class XEasyPdfDocumentReplacer {
                     continue;
                 }
             }
-            // 如果标记为字符串，则替换文本
-            if (token instanceof COSString&&resourceFontName!=null) {
-                // 初始化字符串构造器
-                StringBuilder builder = new StringBuilder();
-                // 转换为字符串
-                COSString string = (COSString) token;
+            // 如果标记为cos数组，则替换文本
+            if (token instanceof COSArray) {
+                // 如果处理cos数组成功，则添加待替换字体
+                if (this.processCOSArray(token, entrySet, resourceFont)) {
+                    // 替换字体
+                    tokens.set(fontIndex, replaceFontName);
+                    // 重置处理标记为true
+                    flag = true;
+                }
+            }
+            // 如果标记为cos字符串，则替换文本
+            if (token instanceof COSString) {
+                // 如果处理cos字符串成功，则添加待替换字体
+                if (this.processCOSString(token, entrySet, resourceFont)) {
+                    // 替换字体
+                    tokens.set(fontIndex, replaceFontName);
+                    // 重置处理标记为true
+                    flag = true;
+                }
+            }
+        }
+        // 如果已处理，则添加字体
+        if (flag) {
+            // 添加字体
+            resources.put(replaceFontName, this.font);
+        }
+    }
+
+    /**
+     * 处理cos数组
+     * @param token 标记
+     * @param entrySet 替换字典文本列表
+     * @param resourceFont 资源字体
+     * @return 返回布尔值，已处理为true，未处理为false
+     */
+    @SneakyThrows
+    private boolean processCOSArray(
+            Object token,
+            Set<Map.Entry<String, String>> entrySet,
+            PDFont resourceFont
+    ) {
+        // 如果资源字体为空，则返回未处理
+        if (resourceFont==null) {
+            // 返回未处理
+            return false;
+        }
+        // 初始化字符串构造器
+        StringBuilder builder = new StringBuilder();
+        // 转换为cos数组
+        COSArray array = (COSArray) token;
+        // 遍历cos数组
+        for (COSBase cosBase : array) {
+            // 如果为cos字符串，则解析
+            if (cosBase instanceof COSString) {
                 // 获取字符串输入流
-                try (InputStream in = new ByteArrayInputStream(string.getBytes())) {
+                try (InputStream in = new ByteArrayInputStream(((COSString) cosBase).getBytes())) {
                     // 读取字符
                     while (in.available()>0) {
-                        // 断言字体不为空
-                        assert resourceFont != null;
                         // 解析字符
                         builder.append(resourceFont.toUnicode(resourceFont.readCode(in)));
                     }
                 }
-                // 新字符串初始化为页面原字符串
-                newValue = builder.toString();
-                // 遍历替换字典文本列表
-                for (Map.Entry<String, String> entry : entrySet) {
-                    // 替换字符串
-                    newValue = newValue.replaceFirst(entry.getKey(), entry.getValue());
-                    // 设置新文本
-                    string.setValue(this.font.encode(newValue));
-                    // 添加文本关联
-                    XEasyPdfFontUtil.addToSubset(this.font, newValue);
-                }
-                // 添加待替换字体
-                replaceFontMap.putIfAbsent(resourceFontName, this.font);
             }
         }
-        return replaceFontMap;
+        // 获取页面原字符串
+        String value = builder.toString();
+        // 如果字符串不为空，则替换
+        if (value.trim().length()>0) {
+            // 遍历替换字典文本列表
+            for (Map.Entry<String, String> entry : entrySet) {
+                // 替换字符串
+                value = value.replaceFirst(entry.getKey(), entry.getValue());
+            }
+        }
+        // 清空数组
+        array.clear();
+        // 添加新cos字符串
+        array.add(new COSString(this.font.encode(value)));
+        // 添加文本关联
+        XEasyPdfFontUtil.addToSubset(this.font, value);
+        return true;
+    }
+
+    /**
+     * 处理cos字符串
+     * @param token 标记
+     * @param entrySet 替换字典文本列表
+     * @param resourceFont 资源字体
+     * @return 返回布尔值，已处理为true，未处理为false
+     */
+    @SneakyThrows
+    private boolean processCOSString(
+            Object token,
+            Set<Map.Entry<String, String>> entrySet,
+            PDFont resourceFont
+    ) {
+        // 如果资源字体为空，则返回未处理
+        if (resourceFont==null) {
+            // 返回未处理
+            return false;
+        }
+        // 初始化字符串构造器
+        StringBuilder builder = new StringBuilder();
+        // 转换为cos字符串
+        COSString cosString = (COSString) token;
+        // 获取字符串输入流
+        try (InputStream in = new ByteArrayInputStream(cosString.getBytes())) {
+            // 读取字符
+            while (in.available()>0) {
+                // 解析字符
+                builder.append(resourceFont.toUnicode(resourceFont.readCode(in)));
+            }
+        }
+        // 获取页面原字符串
+        String value = builder.toString();
+        // 如果字符串不为空，则替换
+        if (value.trim().length()>0) {
+            // 遍历替换字典文本列表
+            for (Map.Entry<String, String> entry : entrySet) {
+                // 替换字符串
+                value = value.replaceFirst(entry.getKey(), entry.getValue());
+            }
+        }
+        // 设置新文本
+        cosString.setValue(this.font.encode(value));
+        // 添加文本关联
+        XEasyPdfFontUtil.addToSubset(this.font, value);
+        return true;
     }
 
     /**
@@ -455,7 +547,9 @@ public class XEasyPdfDocumentReplacer {
                             // 重置替换索引
                             replaceIndex = iterator.next();
                         }
+                        // 否则结束遍历
                         else {
+                            // 结束遍历
                             break;
                         }
                     }

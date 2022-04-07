@@ -71,11 +71,14 @@ public class XEasyPdfDocumentFormTest {
 
     @Test
     public void testFill(){
-        String sourcePath = OUTPUT_PATH + "testCreate.pdf";
+        String sourcePath = OUTPUT_PATH + "template.pdf";
         String filePath = OUTPUT_PATH + "testFill.pdf";
-        Map<String, String> map = new HashMap<>(2);
-        map.put("test1", "贵阳1");
-        map.put("test2", "贵阳2");
+        Map<String, String> map = new HashMap<>(5);
+        map.put("title", "贵州省贵阳市");
+        map.put("Text1", "贵阳1");
+        map.put("Text2", "贵阳2");
+        map.put("Text3", "2022-04-06");
+        map.put("Text4", "2022-04-06 10:00:00");
         XEasyPdfHandler.Document
                 .load(sourcePath)
                 .formFiller()

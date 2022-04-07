@@ -90,6 +90,10 @@ class XEasyPdfRectParam {
      */
     private boolean isNewLine = true;
     /**
+     * 是否重置上下文
+     */
+    private boolean isResetContext = false;
+    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;
@@ -127,7 +131,7 @@ class XEasyPdfRectParam {
                     pageY - this.marginTop - this.height;
         }
         // 如果检查页面为真，并且Y轴起始坐标-页脚高度小于等于下边距，则进行分页
-        if (checkPage && this.beginY - footerHeight <= this.marginBottom) {
+        if (this.checkPage && this.beginY - footerHeight <= this.marginBottom) {
             // 添加新页面
             page.addNewPage(document, rectangle);
             // 获取当前页面Y轴起始坐标

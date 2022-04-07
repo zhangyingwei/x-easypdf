@@ -53,6 +53,15 @@ public class XEasyPdfRect implements XEasyPdfComponent {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回矩形组件
+     */
+    public XEasyPdfRect enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 开启检查页面（自动分页）
      * @return 返回矩形组件
      */
@@ -237,7 +246,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                false
+                this.param.isResetContext()
         );
         // 如果带有边框，则进行边框绘制
         if (this.param.isHasBorder()) {

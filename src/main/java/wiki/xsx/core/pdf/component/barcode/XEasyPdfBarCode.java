@@ -103,24 +103,44 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
     }
 
     /**
-     * 设置宽度
+     * 设置宽度（图像显示宽度）
      * @param width 宽度
      * @return 返回条形码组件
      */
     @Override
     public XEasyPdfBarCode setWidth(float width) {
-        this.param.setWidth((int) Math.abs(width));
+        this.param.setImageWidth((int) Math.abs(width));
         return this;
     }
 
     /**
-     * 设置高度
+     * 设置高度（图像显示宽度）
      * @param height 高度
      * @return 返回条形码组件
      */
     @Override
     public XEasyPdfBarCode setHeight(float height) {
-        this.param.setHeight((int) Math.abs(height));
+        this.param.setImageHeight((int) Math.abs(height));
+        return this;
+    }
+
+    /**
+     * 设置最大宽度（图像实际宽度）
+     * @param width 宽度
+     * @return 返回条形码组件
+     */
+    public XEasyPdfBarCode setMaxWidth(float width) {
+        this.param.setImageMaxWidth((int) Math.abs(width));
+        return this;
+    }
+
+    /**
+     * 设置最大高度（图像实际高度）
+     * @param height 高度
+     * @return 返回条形码组件
+     */
+    public XEasyPdfBarCode setMaxHeight(float height) {
+        this.param.setImageHeight((int) Math.abs(height));
         return this;
     }
 
@@ -317,6 +337,15 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回条形码组件
+     */
+    public XEasyPdfBarCode enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
@@ -330,8 +359,8 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         BitMatrix bitMatrix = new MultiFormatWriter().encode(
                 this.param.getContent(),
                 this.param.getCodeType().codeFormat,
-                this.param.getWidth(),
-                this.param.getHeight(),
+                this.param.getImageMaxWidth(),
+                this.param.getImageMaxHeight(),
                 this.param.getEncodeHints()
         );
         // 获取条形码图片
@@ -348,10 +377,10 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                false
+                this.param.isResetContext()
         );
         // 添加图片
-        contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY());
+        contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY(), this.param.getImageWidth(), this.param.getImageHeight());
         // 关闭内容流
         contentStream.close();
         // 如果允许页面重置定位，则进行重置

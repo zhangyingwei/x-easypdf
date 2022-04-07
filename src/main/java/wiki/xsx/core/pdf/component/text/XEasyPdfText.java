@@ -150,6 +150,15 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回文本组件
+     */
+    public XEasyPdfText enableResetContext() {
+        this.param.setResetContext(true);
+        return this;
+    }
+
+    /**
      * 开启自身样式
      * @return 返回文本组件
      */
@@ -665,7 +674,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                false
+                this.param.isResetContext()
         );
         // 初始化pdfBox扩展图形对象
         PDExtendedGraphicsState state = new PDExtendedGraphicsState();
