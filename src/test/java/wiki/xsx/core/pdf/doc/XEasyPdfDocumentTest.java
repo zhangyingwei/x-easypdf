@@ -546,18 +546,22 @@ public class XEasyPdfDocumentTest {
     @Test
     public void test29() throws IOException {
         long begin = System.currentTimeMillis();
+        final String fontPath = "C:\\Windows\\Fonts\\simsun.ttc,0";
         // 定义源路径
-        final String sourcePath = OUTPUT_PATH + "temp.pdf";
+        final String sourcePath = OUTPUT_PATH + "nodisplayText.pdf";
         // 定义保存路径
         final String outputPath = OUTPUT_PATH + "replaceText.pdf";
-        Map<String, String> replaceMap = new HashMap<>(4);
-        replaceMap.put("\\{xxx\\}公司", "X-EASYPDF公司");
-        replaceMap.put("\\{xxx供应商\\}", "联想供应商");
-        replaceMap.put("时间：\\{xxx-xx-xx\\}", "时间：2022-04-04");
-        replaceMap.put("到货日期：\\{xxxx-xx-xx\\}", "到货日期：2022-04-10");
-        try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
-            XEasyPdfHandler.Document.load(sourcePath).replacer().replaceText(replaceMap).finish(outputStream);
-        }
+        Map<String, String> replaceMap = new HashMap<>(9);
+        replaceMap.put("模板", "标题");
+        replaceMap.put("test1", "联想供应商");
+        replaceMap.put("test2", "2022-04-04");
+        replaceMap.put("test3", "0001");
+        replaceMap.put("test4", "2022-04-10 10:00:00");
+        replaceMap.put("\\$\\{name1\\}", "商品XXX");
+        replaceMap.put("sku1", "规格-大");
+        replaceMap.put("num1", "10");
+        replaceMap.put("remark1", "单位：ml");
+        XEasyPdfHandler.Document.load(sourcePath).replacer().setFontPath(fontPath).replaceText(replaceMap).finish(outputPath);
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }

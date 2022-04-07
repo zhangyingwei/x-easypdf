@@ -131,6 +131,7 @@ public class XEasyPdfDocumentReplacer {
                     PDPageTree pages = this.document.getPages();
                     // 遍历页面树
                     for (PDPage page : pages) {
+                        // 遍历替换次数
                         for (int i = 0; i < count; i++) {
                             // 替换文本
                             this.replaceText(page, replaceMap);
@@ -143,6 +144,7 @@ public class XEasyPdfDocumentReplacer {
                     for (int index : pageIndex) {
                         // 如果页面索引大于等于0，则替换文本
                         if (index>=0) {
+                            // 遍历替换次数
                             for (int i = 0; i < count; i++) {
                                 // 替换文本
                                 this.replaceText(this.document.getPage(index), replaceMap);
@@ -231,6 +233,7 @@ public class XEasyPdfDocumentReplacer {
      */
     @SneakyThrows
     public void finish(OutputStream outputStream) {
+        // 添加字体嵌入
         this.pdfDocument.getParam().embedFont(Collections.singleton(this.font));
         // 保存文档
         this.document.save(outputStream);
@@ -347,7 +350,7 @@ public class XEasyPdfDocumentReplacer {
                 if (this.processCOSArray(token, entrySet, resourceFont)) {
                     // 替换字体
                     tokens.set(fontIndex, replaceFontName);
-                    // 重置处理标记为true
+                    // 重置处理标记为已处理
                     flag = true;
                 }
             }
@@ -357,7 +360,7 @@ public class XEasyPdfDocumentReplacer {
                 if (this.processCOSString(token, entrySet, resourceFont)) {
                     // 替换字体
                     tokens.set(fontIndex, replaceFontName);
-                    // 重置处理标记为true
+                    // 重置处理标记为已处理
                     flag = true;
                 }
             }
@@ -387,41 +390,22 @@ public class XEasyPdfDocumentReplacer {
             // 返回未处理
             return false;
         }
-        // 初始化字符串构造器
-        StringBuilder builder = new StringBuilder();
+        // 定义处理标记
+        boolean flag = false;
         // 转换为cos数组
         COSArray array = (COSArray) token;
         // 遍历cos数组
         for (COSBase cosBase : array) {
-            // 如果为cos字符串，则解析
+            // 如果为cos字符串，则进行处理
             if (cosBase instanceof COSString) {
-                // 获取字符串输入流
-                try (InputStream in = new ByteArrayInputStream(((COSString) cosBase).getBytes())) {
-                    // 读取字符
-                    while (in.available()>0) {
-                        // 解析字符
-                        builder.append(resourceFont.toUnicode(resourceFont.readCode(in)));
-                    }
+                // 如果处理cos字符串成功，则重置处理标记为已处理
+                if (this.processCOSString(cosBase, entrySet, resourceFont)) {
+                    // 重置处理标记为已处理
+                    flag = true;
                 }
             }
         }
-        // 获取页面原字符串
-        String value = builder.toString();
-        // 如果字符串不为空，则替换
-        if (value.trim().length()>0) {
-            // 遍历替换字典文本列表
-            for (Map.Entry<String, String> entry : entrySet) {
-                // 替换字符串
-                value = value.replaceFirst(entry.getKey(), entry.getValue());
-            }
-        }
-        // 清空数组
-        array.clear();
-        // 添加新cos字符串
-        array.add(new COSString(this.font.encode(value)));
-        // 添加文本关联
-        XEasyPdfFontUtil.addToSubset(this.font, value);
-        return true;
+        return flag;
     }
 
     /**
@@ -456,6 +440,7 @@ public class XEasyPdfDocumentReplacer {
         }
         // 获取页面原字符串
         String value = builder.toString();
+        System.out.println("value = " + value);
         // 如果字符串不为空，则替换
         if (value.trim().length()>0) {
             // 遍历替换字典文本列表
