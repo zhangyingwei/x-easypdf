@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 
@@ -208,7 +207,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @return 返回基础线条组件
      */
     public XEasyPdfBaseLine enableResetContext() {
-        this.param.setResetContext(true);
+        this.param.setIsResetContext(true);
         return this;
     }
 
@@ -265,7 +264,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                this.param.isResetContext()
+                this.param.getIsResetContext()
         );
         // 设置字体
         contentStream.setFont(this.param.getFont(), this.param.getFontSize());
@@ -282,17 +281,19 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * @param page pdf页面
      */
     private void init(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 初始化参数
+        this.param.init(document, page);
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果X轴起始坐标为空，则初始化为左边距
         if (this.param.getBeginX()==null) {
             // 初始化X轴起始坐标为左边距
-            this.param.setBeginX(page.getParam().getPageX()==null?this.param.getMarginLeft():page.getParam().getPageX());
+            this.param.setBeginX(page.getPageX()==null?this.param.getMarginLeft():page.getPageX());
         }
         // 如果Y轴起始坐标为空，则初始化为上边距
         if (this.param.getBeginY()==null) {
             // 初始化Y轴起始坐标为上边距
-            this.param.setBeginY(page.getParam().getPageY()==null?this.param.getMarginTop():page.getParam().getPageY());
+            this.param.setBeginY(page.getPageY()==null?this.param.getMarginTop():page.getPageY());
         }
         // 如果X轴结束坐标为空，则初始化为页面宽度
         if (this.param.getEndX()==null) {
@@ -304,12 +305,5 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
             // 初始化Y轴结束坐标为页面高度
             this.param.setEndY(rectangle.getHeight());
         }
-        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
-        if (this.param.getFontPath()==null&&this.param.getDefaultFontStyle()!=null) {
-            // 初始化字体路径
-            this.param.setFontPath(this.param.getDefaultFontStyle().getPath());
-        }
-        // 初始化字体
-        this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true));
     }
 }

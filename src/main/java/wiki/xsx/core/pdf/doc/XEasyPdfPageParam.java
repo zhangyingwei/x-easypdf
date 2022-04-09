@@ -35,11 +35,27 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class XEasyPdfPageParam {
+class XEasyPdfPageParam {
+    /**
+     * 每英寸像素点
+     */
+    private static final float POINTS_PER_INCH = 72;
+    /**
+     * 每毫米像素点
+     */
+    private static final float POINTS_PER_MM = 1 / (10 * 2.54f) * POINTS_PER_INCH;
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
     /**
      * 默认字体样式
      */
-    private XEasyPdfDefaultFontStyle defaultFontStyle = XEasyPdfDefaultFontStyle.NORMAL;
+    private XEasyPdfDefaultFontStyle defaultFontStyle;
     /**
      * 字体路径
      */
@@ -130,31 +146,39 @@ public class XEasyPdfPageParam {
     private boolean allowRotateInherentPage = true;
 
     /**
+     * 获取每毫米像素点
+     */
+    public static float getUnit() {
+        return POINTS_PER_MM;
+    }
+
+    /**
      * 初始化
      * @param document pdf文档
      * @param page pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 如果内容模式未初始化，则初始化为文档内容模式
+        if (this.contentMode==null) {
+            // 初始化为文档内容模式
+            this.contentMode = document.getParam().getContentMode();
+        }
+        // 如果重置上下文未初始化，则初始化为文档重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为文档重置上下文
+            this.isResetContext = document.getParam().getIsResetContext();
+        }
+        // 如果默认字体样式未初始化，则初始化为文档默认字体样式
+        if (this.defaultFontStyle==null) {
+            // 初始化为文档默认字体样式
+            this.defaultFontStyle = document.getParam().getDefaultFontStyle();
+        }
+        // 如果字体路径未初始化，则初始化为默认字体样式路径
         if (this.fontPath==null) {
-            this.fontPath = document.getParam().getFontPath();
+            // 初始化为默认字体样式路径
+            this.fontPath = this.defaultFontStyle.getPath();
         }
+        // 初始化字体
         this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
-        if (this.allowBackgroundColor) {
-            if (this.backgroundColor==null) {
-                this.backgroundColor = document.getGlobalBackgroundColor();
-            }
-            if (this.backgroundColor==null) {
-                this.backgroundColor = Color.WHITE;
-            }
-        }
-    }
-
-    /**
-     * 重置包含的pdfBox页面列表
-     * @param newPageList 新pdfBox页面列表
-     */
-    void resetPageList(List<PDPage> newPageList) {
-        this.pageList.clear();
-        this.pageList = newPageList;
     }
 }

@@ -7,12 +7,17 @@ import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
+import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.printing.PDFPrintable;
 import org.apache.pdfbox.printing.Scaling;
+import org.apache.xmpbox.XMPMetadata;
+import org.apache.xmpbox.schema.AdobePDFSchema;
+import org.apache.xmpbox.xml.XmpSerializer;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
@@ -50,6 +55,9 @@ import java.util.List;
  */
 public class XEasyPdfDocument implements Closeable {
 
+    /**
+     * 日志
+     */
     private final Log log = LogFactory.getLog(XEasyPdfDocument.class);
 
     /**
@@ -86,15 +94,46 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
-     * 设置文档背景色
-     * @param backgroundColor 背景色
+     * 开启重置上下文
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument setGlobalBackgroundColor(Color backgroundColor) {
-        // 设置重置
-        this.param.setReset(true);
-        // 设置文档背景色
-        this.param.setBackgroundColor(backgroundColor);
+    public XEasyPdfDocument enableResetContext() {
+        this.param.setIsResetContext(true);
+        return this;
+    }
+
+    /**
+     * 设置文档内容模式（每个页面都将设置该模式）
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setGlobalContentMode(XEasyPdfComponent.ContentMode contentMode) {
+        if (contentMode!=null) {
+            this.param.setContentMode(contentMode);
+        }
+        return this;
+    }
+
+    /**
+     * 获取文档内容模式
+     * @return 返回文档内容模式
+     */
+    public XEasyPdfComponent.ContentMode getGlobalContentMode() {
+        return this.param.getContentMode();
+    }
+
+    /**
+     * 设置文档背景色（每个页面都将添加背景色）
+     * @param globalBackgroundColor 背景色
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument setGlobalBackgroundColor(Color globalBackgroundColor) {
+        // 如果背景色不为空，则设置
+        if (globalBackgroundColor!=null) {
+            // 设置重置
+            this.param.setReset(true);
+            // 设置文档背景色
+            this.param.setGlobalBackgroundColor(globalBackgroundColor);
+        }
         return this;
     }
 
@@ -103,7 +142,7 @@ public class XEasyPdfDocument implements Closeable {
      * @return 返回文档背景色
      */
     public Color getGlobalBackgroundColor() {
-        return this.param.getBackgroundColor();
+        return this.param.getGlobalBackgroundColor();
     }
 
     /**
@@ -225,14 +264,12 @@ public class XEasyPdfDocument implements Closeable {
         // 最大版本
         float maxVersion = 1.7F;
         // 最小版本
-        float minVersion = 1.7F;
+        float minVersion = 1.0F;
         // 如果版本小于1.0且大于1.7，则提示错误
         if (version<minVersion||version>maxVersion) {
             // 提示错误
             throw new IllegalArgumentException("the version must be between 1.0 and 1.7");
         }
-        // 设置重置
-        this.param.setReset(true);
         // 设置版本
         this.param.setVersion(version);
         return this;
@@ -417,7 +454,7 @@ public class XEasyPdfDocument implements Closeable {
             // 获取对应pdf页面
             XEasyPdfPage page = pageList.get(index);
             // 初始化总页数
-            this.param.initTotalPage(-(page.getParam().getPageList().size()+page.getParam().getNewPageList().size()));
+            this.param.initTotalPage(-(page.getPageList().size()+page.getNewPageList().size()));
             // 移除页面
             pageList.remove(index);
         }
@@ -539,10 +576,6 @@ public class XEasyPdfDocument implements Closeable {
         PDDocument target = this.build();
         // 获取临时路径
         String tempPath = this.param.getTempUrl();
-        // 设置文档版本
-        target.setVersion(this.param.getVersion());
-        // 设置文档信息、保护策略及书签
-        this.setInfoAndPolicyAndBookmark(target);
         // 临时保存文档
         target.save(new File(tempPath));
         // 添加临时任务列表
@@ -550,9 +583,9 @@ public class XEasyPdfDocument implements Closeable {
         // 关闭文档
         this.close();
         // 打印日志
-        if (log.isInfoEnabled()) {
+        if (log.isDebugEnabled()) {
             // 打印当前刷新次数
-            log.info("current count of flush：" + this.param.getTempTargetList().size());
+            log.debug("current count of flush：" + this.param.getTempTargetList().size());
         }
         return this;
     }
@@ -580,10 +613,8 @@ public class XEasyPdfDocument implements Closeable {
         if (this.param.getTempTargetList().isEmpty()) {
             // 构建文档
             PDDocument target = this.build();
-            // 设置文档版本
-            target.setVersion(this.param.getVersion());
-            // 设置文档信息、保护策略及书签
-            this.setInfoAndPolicyAndBookmark(target);
+            // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+            this.setBasicInfo(target);
             // 保存文档
             target.save(outputStream);
             return this;
@@ -696,11 +727,11 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
-     * 设置文档信息、保护策略及书签
+     * 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
      * @param target 任务文档
      */
     @SneakyThrows
-    void setInfoAndPolicyAndBookmark(PDDocument target) {
+    void setBasicInfo(PDDocument target) {
         // 如果文档信息不为空，则进行设置
         if (this.param.getDocumentInfo()!=null) {
             // 设置文档信息
@@ -711,34 +742,12 @@ public class XEasyPdfDocument implements Closeable {
             // 设置pdfBox保护策略
             target.protect(this.param.getPermission().getPolicy());
         }
+        // 设置版本
+        target.setVersion(this.param.getVersion());
+        // 初始化文档xmp信息
+        this.initXMPMetadata(target);
         // 初始化文档书签
         this.initBookmark(target);
-    }
-
-    /**
-     * 初始化文档书签
-     * @param target 任务文档
-     */
-    void initBookmark(PDDocument target) {
-        // 获取pdfbox书签
-        PDDocumentOutline outline = target.getDocumentCatalog().getDocumentOutline();
-        // 如果书签不为空，则设置书签信息
-        if (this.param.getBookmark()!=null) {
-            // 如果书签为空，则创建书签
-            if (outline==null) {
-                // 创建书签
-                outline = new PDDocumentOutline();
-            }
-            // 获取书签项
-            List<PDOutlineItem> items = this.param.getBookmark().getItemList();
-            // 遍历书签项
-            for (PDOutlineItem item : items) {
-                // 添加书签项
-                outline.addLast(item);
-            }
-        }
-        // 设置书签
-        target.getDocumentCatalog().setDocumentOutline(outline);
     }
 
     /**
@@ -783,10 +792,8 @@ public class XEasyPdfDocument implements Closeable {
             // 删除临时文件
             file.deleteOnExit();
         }
-        // 设置文档版本
-        target.setVersion(this.param.getVersion());
-        // 设置文档信息、保护策略及书签
-        this.setInfoAndPolicyAndBookmark(target);
+        // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+        this.setBasicInfo(target);
         // 保存任务文档
         target.save(outputStream);
         // 设置任务文档
@@ -796,5 +803,60 @@ public class XEasyPdfDocument implements Closeable {
             // 关闭临时文档
             temp.close();
         }
+    }
+
+    /**
+     * 初始化文档书签
+     * @param target 任务文档
+     */
+    @SneakyThrows
+    private void initXMPMetadata(PDDocument target) {
+        // 定义pdf元数据
+        PDMetadata pdMetadata = new PDMetadata(target);
+        // 创建xmp元数据
+        XMPMetadata xmpMetadata = XMPMetadata.createXMPMetadata();
+        // 创建adobe纲要
+        AdobePDFSchema adobePdfSchema = xmpMetadata.createAndAddAdobePDFSchema();
+        // 设置pdf版本
+        adobePdfSchema.setPDFVersion(this.param.getVersion().toString());
+        // 设置生产者
+        adobePdfSchema.setProducer(this.param.getProducer());
+        // 添加adobe纲要
+        xmpMetadata.addSchema(adobePdfSchema);
+        // 定义输出流
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            // 序列化xmp元数据
+            new XmpSerializer().serialize(xmpMetadata, outputStream, true);
+            // 导入xmp元数据
+            pdMetadata.importXMPMetadata(outputStream.toByteArray());
+        }
+        // 设置元数据
+        target.getDocumentCatalog().setMetadata(pdMetadata);
+    }
+
+    /**
+     * 初始化文档书签
+     * @param target 任务文档
+     */
+    private void initBookmark(PDDocument target) {
+        // 获取pdfbox书签
+        PDDocumentOutline outline = target.getDocumentCatalog().getDocumentOutline();
+        // 如果书签不为空，则设置书签信息
+        if (this.param.getBookmark()!=null) {
+            // 如果书签为空，则创建书签
+            if (outline==null) {
+                // 创建书签
+                outline = new PDDocumentOutline();
+            }
+            // 获取书签项
+            List<PDOutlineItem> items = this.param.getBookmark().getItemList();
+            // 遍历书签项
+            for (PDOutlineItem item : items) {
+                // 添加书签项
+                outline.addLast(item);
+            }
+        }
+        // 设置书签
+        target.getDocumentCatalog().setDocumentOutline(outline);
     }
 }

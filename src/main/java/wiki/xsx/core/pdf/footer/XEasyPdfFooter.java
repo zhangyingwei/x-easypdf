@@ -25,6 +25,12 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 public interface XEasyPdfFooter {
 
     /**
+     * 开启上下文重置
+     * @return 返回页脚组件
+     */
+    XEasyPdfFooter enableResetContext();
+
+    /**
      * 设置边距（左右下）
      * @param margin 边距
      * @return 返回页脚组件

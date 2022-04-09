@@ -7,6 +7,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 
@@ -33,7 +34,11 @@ class XEasyPdfLineParam {
     /**
      * 内容模式
      */
-    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    private XEasyPdfComponent.ContentMode contentMode;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
     /**
      * 默认字体样式
      */
@@ -103,13 +108,39 @@ class XEasyPdfLineParam {
      */
     private Color color = Color.BLACK;
     /**
-     * 是否重置上下文
-     */
-    private boolean isResetContext = false;
-    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;
+
+    /**
+     * 初始化参数
+     * @param document pdf文档
+     * @param page pdf页面
+     */
+    void init(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 如果内容模式未初始化，则初始化为页面内容模式
+        if (this.contentMode==null) {
+            // 初始化为页面内容模式
+            this.contentMode = page.getContentMode();
+        }
+        // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为页面是否重置上下文
+            this.isResetContext = page.isResetContext();
+        }
+        // 如果默认字体未初始化，则初始化为页面默认字体
+        if (this.defaultFontStyle==null) {
+            // 初始化为页面默认字体
+            this.defaultFontStyle = page.getDefaultFontStyle();
+        }
+        // 如果字体路径未初始化，则初始化为默认字体路径
+        if (this.fontPath==null) {
+            // 初始化为默认字体路径
+            this.fontPath = this.defaultFontStyle.getPath();
+        }
+        // 初始化字体
+        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
+    }
 
     /**
      * 分页检查
@@ -122,14 +153,14 @@ class XEasyPdfLineParam {
         // 如果允许添加页脚，且页脚不为空则初始化页脚高度
         if (page.isAllowFooter()&&page.getFooter()!=null) {
             // 初始化页脚高度
-            footerHeight = page.getParam().getFooter().getHeight(document, page);
+            footerHeight = page.getFooter().getHeight(document, page);
         }
         // 如果当前页面Y轴坐标不为空，则进行分页判断
-        if (page.getParam().getPageY()!=null) {
+        if (page.getPageY()!=null) {
             // 定义线宽
             float lineWidth = this.lineWidth / 2;
             // 分页判断，如果（当前Y轴坐标-上边距-线宽-页脚高度）小于下边距，则进行分页
-            if (page.getParam().getPageY() - this.marginTop - lineWidth - footerHeight <= this.marginBottom) {
+            if (page.getPageY() - this.marginTop - lineWidth - footerHeight <= this.marginBottom) {
                 // 添加新页面
                 page.addNewPage(document, page.getLastPage().getMediaBox());
             }

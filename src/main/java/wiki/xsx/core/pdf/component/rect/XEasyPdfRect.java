@@ -57,7 +57,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @return 返回矩形组件
      */
     public XEasyPdfRect enableResetContext() {
-        this.param.setResetContext(true);
+        this.param.setIsResetContext(true);
         return this;
     }
 
@@ -246,7 +246,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                this.param.isResetContext()
+                this.param.getIsResetContext()
         );
         // 如果带有边框，则进行边框绘制
         if (this.param.isHasBorder()) {
@@ -290,16 +290,16 @@ public class XEasyPdfRect implements XEasyPdfComponent {
         // 关闭内容流
         contentStream.close();
         // 如果允许页面重置定位，则进行重置
-        if (page.getParam().isAllowResetPosition()) {
+        if (page.isAllowResetPosition()) {
             // 如果允许自动换行，则重置页面Y轴起始坐标
             if (this.param.isNewLine()) {
                 // 重置页面X轴起始坐标
-                page.getParam().setPageX(null);
+                page.setPageX(null);
                 // 重置页面Y轴起始坐标
-                page.getParam().setPageY(this.param.getBeginY());
+                page.setPageY(this.param.getBeginY());
             }else {
                 // 重置页面X轴起始坐标
-                page.getParam().setPageX(this.param.getBeginX()+this.param.getWidth());
+                page.setPageX(this.param.getBeginX()+this.param.getWidth());
             }
         }
         // 完成标记

@@ -160,8 +160,8 @@ public class XEasyPdfDocumentFormFiller {
      */
     @SneakyThrows
     public void finish(OutputStream outputStream) {
-        // 设置文档信息及保护策略
-        this.pdfDocument.setInfoAndPolicyAndBookmark(this.document);
+        // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+        this.pdfDocument.setBasicInfo(this.document);
         // 设置表单为空（解决编辑器乱码问题）
         this.document.getDocumentCatalog().setAcroForm(this.form);
         // 保存文档

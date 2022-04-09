@@ -6,7 +6,7 @@
 </p>
 <p align="center">
     <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v2.7.7-brightgreen" />
+    <img src="https://img.shields.io/badge/Current%20Version-v2.7.8-brightgreen" />
     <img src="https://img.shields.io/:License-MulanPSL2-yellowgreen.svg" />
     <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
         <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
@@ -17,7 +17,7 @@
 </p>
 
 #### 更新说明
-master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.7.7，QQ交流群：15018726
+master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.7.8，QQ交流群：15018726
 
 #### 介绍
 x-easypdf基于pdfbox二次封装，极大降低使用门槛，以组件化的形式进行pdf的构建。简单易用，仅需一行代码，便可完成pdf的相关操作
@@ -82,7 +82,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 <dependency>
     <groupId>wiki.xsx</groupId>
     <artifactId>x-easypdf</artifactId>
-    <version>2.7.7</version>
+    <version>2.7.8</version>
 </dependency>
 ```
 

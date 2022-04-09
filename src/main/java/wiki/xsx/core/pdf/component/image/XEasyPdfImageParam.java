@@ -39,7 +39,11 @@ class XEasyPdfImageParam {
     /**
      * 内容模式
      */
-    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    private XEasyPdfComponent.ContentMode contentMode;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
     /**
      * pdfbox图片对象
      */
@@ -125,10 +129,6 @@ class XEasyPdfImageParam {
      */
     private boolean isChildComponent = false;
     /**
-     * 是否重置上下文
-     */
-    private boolean isResetContext = false;
-    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;
@@ -149,6 +149,16 @@ class XEasyPdfImageParam {
         // 如果图片为空，则抛出异常信息
         if (this.image==null) {
             throw new FileNotFoundException("the image can not be found");
+        }
+        // 如果内容模式未初始化，则初始化为页面内容模式
+        if (this.contentMode==null) {
+            // 初始化为页面内容模式
+            this.contentMode = page.getContentMode();
+        }
+        // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为页面是否重置上下文
+            this.isResetContext = page.isResetContext();
         }
         // 如果需要旋转，则重置图片为旋转后的图片
         if (this.isRotate()) {
@@ -212,7 +222,7 @@ class XEasyPdfImageParam {
             // 高度超过页面高度，则进行调整
             if ((this.height + this.marginTop + this.marginBottom + headerFooterHeight)>pageHeight) {
                 // 获取页面Y轴坐标
-                Float pageY = page.getParam().getPageY();
+                Float pageY = page.getPageY();
                 // 如果页面Y轴坐标为空，则重置为页面高度
                 if (pageY==null) {
                     // 重置页面Y轴坐标为页面高度
@@ -249,7 +259,7 @@ class XEasyPdfImageParam {
         // 如果页面Y轴起始坐标为空，则初始化
         if (this.beginY==null) {
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
-            if (page.getParam().getPageY()!=null) {
+            if (page.getPageY()!=null) {
                 // 初始化Y轴坐标
                 this.initBeginY(document, page);
                 // 如果页面Y轴起始坐标-页脚高度小于下边距，则分页
@@ -300,7 +310,7 @@ class XEasyPdfImageParam {
      */
     private void initBeginY(XEasyPdfDocument document, XEasyPdfPage page) {
         // 获取页面Y轴坐标
-        Float pageY = page.getParam().getPageY();
+        Float pageY = page.getPageY();
         // 如果垂直样式为居中，则重置Y轴坐标为居中
         if (this.verticalStyle==XEasyPdfPositionStyle.CENTER) {
             // 如果页面Y轴坐标为空，则初始化Y轴起始坐标为y坐标

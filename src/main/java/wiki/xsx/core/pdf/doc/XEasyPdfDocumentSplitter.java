@@ -124,8 +124,8 @@ public class XEasyPdfDocumentSplitter {
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(index).append(".pdf");
                 // 获取输出流
                 try(OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
-                    // 设置文档信息及保护策略
-                    this.pdfDocument.setInfoAndPolicyAndBookmark(target);
+                    // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+                    this.pdfDocument.setBasicInfo(target);
                     // 保存文档
                     target.save(outputStream);
                     // 关闭文档
@@ -159,8 +159,8 @@ public class XEasyPdfDocumentSplitter {
                 // 设置页面资源缓存
                 importPage.setResources(pdPage.getResources());
             }
-            // 设置文档信息及保护策略
-            this.pdfDocument.setInfoAndPolicyAndBookmark(target);
+            // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+            this.pdfDocument.setBasicInfo(target);
             // 保存任务文档
             target.save(outputStream);
             // 关闭文档

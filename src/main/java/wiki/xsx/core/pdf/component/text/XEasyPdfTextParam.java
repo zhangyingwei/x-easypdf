@@ -42,7 +42,11 @@ class XEasyPdfTextParam {
     /**
      * 内容模式
      */
-    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    private XEasyPdfComponent.ContentMode contentMode;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
     /**
      * 默认字体样式
      */
@@ -204,10 +208,6 @@ class XEasyPdfTextParam {
      */
     private boolean isRotateLine = false;
     /**
-     * 是否重置上下文
-     */
-    private boolean isResetContext = false;
-    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;
@@ -254,9 +254,24 @@ class XEasyPdfTextParam {
             // 初始化最大宽度，最大宽度 = 页面宽度
             this.maxWidth = rectangle.getWidth();
         }
-        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
-        if (this.fontPath==null&&this.defaultFontStyle!=null) {
-            // 初始化字体路径
+        // 如果内容模式未初始化，则初始化为页面内容模式
+        if (this.contentMode==null) {
+            // 初始化为页面内容模式
+            this.contentMode = page.getContentMode();
+        }
+        // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为页面是否重置上下文
+            this.isResetContext = page.isResetContext();
+        }
+        // 如果默认字体未初始化，则初始化为页面默认字体
+        if (this.defaultFontStyle==null) {
+            // 初始化为页面默认字体
+            this.defaultFontStyle = page.getDefaultFontStyle();
+        }
+        // 如果字体路径未初始化，则初始化为默认字体路径
+        if (this.fontPath==null) {
+            // 初始化为默认字体路径
             this.fontPath = this.defaultFontStyle.getPath();
         }
         // 初始化字体
@@ -348,7 +363,7 @@ class XEasyPdfTextParam {
             return;
         }
         // 获取页面Y轴坐标
-        Float pageY = page.getParam().getPageY();
+        Float pageY = page.getPageY();
         // 如果页面Y轴坐标为空，则获取最新页面高度
         if (pageY==null) {
             // 重置页面Y轴坐标为最新页面高度
@@ -412,7 +427,7 @@ class XEasyPdfTextParam {
                 // 如果X轴起始坐标为空，则初始化X轴坐标为页面X轴坐标
                 if (this.beginX == null) {
                     // 初始化X轴坐标为页面X轴坐标+左边距
-                    x = x + (page.getParam().getPageX() == null ? this.marginLeft : page.getParam().getPageX() + this.marginLeft);
+                    x = x + (page.getPageX() == null ? this.marginLeft : page.getPageX() + this.marginLeft);
                 }
                 // 否则初始化为X轴起始坐标
                 else {
@@ -481,7 +496,7 @@ class XEasyPdfTextParam {
                 // 重置页面X轴起始坐标（换行）
                 this.beginX = this.marginLeft;
                 // 重置页面X轴
-                page.getParam().setPageX(null);
+                page.setPageX(null);
             }
         }
         // 如果模板列表未初始化，则进行初始化

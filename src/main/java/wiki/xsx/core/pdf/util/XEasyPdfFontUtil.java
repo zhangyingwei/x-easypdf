@@ -217,7 +217,7 @@ public class XEasyPdfFontUtil {
     private static PDFont loadFont(XEasyPdfDocument document, XEasyPdfPage page) {
         PDFont font = null;
         if (page!=null) {
-            font = page.getParam().getFont();
+            font = page.getFont();
         }
         if (document!=null) {
             font = document.getFont();
@@ -228,6 +228,14 @@ public class XEasyPdfFontUtil {
         return font;
     }
 
+    /**
+     * 加载ttf字体
+     * @param document pdf文档
+     * @param fontPath 字体路径
+     * @param fontInputStream 字体输入流
+     * @param isEmbedded 是否嵌入
+     * @return 返回pdfBox字体
+     */
     @SneakyThrows
     private static PDFont loadTTF(XEasyPdfDocument document, String fontPath, InputStream fontInputStream, boolean isEmbedded) {
         try {
@@ -245,6 +253,15 @@ public class XEasyPdfFontUtil {
         }
     }
 
+    /**
+     * 加载ttc字体
+     * @param document pdf文档
+     * @param fontPath 字体路径
+     * @param fontInputStream 字体输入流
+     * @param isEmbedded 是否嵌入
+     * @param index 字体索引
+     * @return 返回pdfBox字体
+     */
     @SneakyThrows
     private static PDFont loadTTC(XEasyPdfDocument document, String fontPath, InputStream fontInputStream, boolean isEmbedded, int index) {
         try {

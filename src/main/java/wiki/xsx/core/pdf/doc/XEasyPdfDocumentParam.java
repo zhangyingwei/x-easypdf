@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
@@ -19,8 +20,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -43,6 +44,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 @Accessors(chain = true)
 class XEasyPdfDocumentParam {
+    /**
+     * 生产者
+     */
+    private static final String PRODUCER = "x-easypdf/pdfbox";
+    /**
+     * 内容模式
+     */
+    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext = false;
     /**
      * 默认字体样式
      */
@@ -92,6 +105,10 @@ class XEasyPdfDocumentParam {
      */
     private List<XEasyPdfPage> pageList = new ArrayList<>(256);
     /**
+     * 全局页面背景色
+     */
+    private Color globalBackgroundColor = Color.WHITE;
+    /**
      * 全局页面背景图片
      */
     private XEasyPdfImage globalBackgroundImage;
@@ -123,11 +140,6 @@ class XEasyPdfDocumentParam {
      * 是否重置
      */
     private boolean isReset = false;
-    /**
-     * 文档背景色
-     */
-    private Color backgroundColor = Color.WHITE;
-
 
     /**
      * 获取临时存放路径
@@ -198,7 +210,7 @@ class XEasyPdfDocumentParam {
             // pdf页面构建
             pdfPage.build(document);
             // 初始化pdfBox页面列表
-            pdfboxPageList = pdfPage.getParam().getPageList();
+            pdfboxPageList = pdfPage.getPageList();
             // 遍历pdfBox页面列表
             for (PDPage page : pdfboxPageList) {
                 // 任务文档添加页面
@@ -209,7 +221,7 @@ class XEasyPdfDocumentParam {
             // 获取pdfbox页面树
             PDPageTree pageTree = this.target.getPages();
             // 初始化pdfBox新增页面列表
-            pdfboxPageList = pdfPage.getParam().getNewPageList();
+            pdfboxPageList = pdfPage.getNewPageList();
             // 遍历pdfBox页面列表
             for (PDPage page : pdfboxPageList) {
                 // 任务文档添加页面
@@ -240,6 +252,14 @@ class XEasyPdfDocumentParam {
      */
     void initTotalPage(int count) {
         this.totalPage+=count;
+    }
+
+    /**
+     * 获取生产者
+     * @return 返回生产者
+     */
+    String getProducer() {
+        return PRODUCER;
     }
 
     /**

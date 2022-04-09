@@ -38,7 +38,11 @@ class XEasyPdfBarCodeParam {
     /**
      * 内容模式
      */
-    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    private XEasyPdfComponent.ContentMode contentMode;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
     /**
      * 条形码类型
      */
@@ -128,10 +132,6 @@ class XEasyPdfBarCodeParam {
      */
     private boolean isShowWords = false;
     /**
-     * 是否重置上下文
-     */
-    private boolean isResetContext = false;
-    /**
      * 编码设置
      */
     private final Map<EncodeHintType, Object> encodeHints = new HashMap<>(8);
@@ -159,7 +159,17 @@ class XEasyPdfBarCodeParam {
         this.initWidthAndHeight();
         // 初始化Y轴坐标
         this.initBeginY(document, page, rectangle);
-        // 如果最大宽度未初始化，则进行初始化为页面宽度
+        // 如果内容模式未初始化，则初始化为页面内容模式
+        if (this.contentMode==null) {
+            // 初始化为页面内容模式
+            this.contentMode = page.getContentMode();
+        }
+        // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为页面是否重置上下文
+            this.isResetContext = page.isResetContext();
+        }
+        // 如果最大宽度未初始化，则初始化为页面宽度
         if (this.maxWidth==null) {
             // 初始化最大宽度 = 页面宽度
             this.maxWidth = rectangle.getWidth();
@@ -212,7 +222,7 @@ class XEasyPdfBarCodeParam {
     private void initErrorLevel() {
         // 获取纠错级别
         Object errorLevel = this.encodeHints.get(EncodeHintType.ERROR_CORRECTION);
-        // 如果纠错级别不为空，则检查条形码格式化类型，并重置
+        // 如果纠错级别不为空，则检查条形码格式化类型并重置
         if (errorLevel!=null) {
             // 类型转换
             ErrorCorrectionLevel level = (ErrorCorrectionLevel) errorLevel;
@@ -222,6 +232,7 @@ class XEasyPdfBarCodeParam {
                 this.encodeHints.put(EncodeHintType.ERROR_CORRECTION, level.getBits());
             }
         }
+        // 否则重置纠错级别
         else {
             // 如果条形码格式化类型为阿兹特克码或PDF-417码，则重置纠错级别
             if(BarcodeFormat.AZTEC==this.codeType.codeFormat||BarcodeFormat.PDF_417==this.codeType.codeFormat){
@@ -249,12 +260,12 @@ class XEasyPdfBarCodeParam {
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
             if (page.isAllowFooter()&&page.getFooter()!=null) {
                 // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight(document, page);
+                footerHeight = page.getFooter().getHeight(document, page);
             }
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
-            if (page.getParam().getPageY()!=null) {
+            if (page.getPageY()!=null) {
                 // 定义Y轴坐标
-                float initY = page.getParam().getPageY()!=null?page.getParam().getPageY():rectangle.getHeight();
+                float initY = page.getPageY()!=null?page.getPageY():rectangle.getHeight();
                 // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
                 this.beginY = initY - this.marginTop - this.imageHeight;
                 // 如果页面Y轴起始坐标-页脚高度小于等于下边距，则分页

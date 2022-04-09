@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.component.table;
 
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
@@ -51,6 +52,18 @@ public class XEasyPdfRow {
         if (cellList!=null) {
             this.param.getCells().addAll(cellList);
         }
+    }
+
+    /**
+     * 设置内容模式
+     * @param mode 内容模式
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setContentMode(XEasyPdfComponent.ContentMode mode) {
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
+        return this;
     }
 
     /**
@@ -126,6 +139,16 @@ public class XEasyPdfRow {
         if (borderColor!=null) {
             this.param.setBorderColor(borderColor);
         }
+        return this;
+    }
+
+    /**
+     * 设置行高
+     * @param height 行高
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setHeight(float height) {
+        this.param.setHeight(Math.abs(height));
         return this;
     }
 
@@ -218,12 +241,11 @@ public class XEasyPdfRow {
     }
 
     /**
-     * 设置行高
-     * @param height 行高
+     * 开启上下文重置
      * @return 返回表格行组件
      */
-    public XEasyPdfRow setHeight(float height) {
-        this.param.setHeight(Math.abs(height));
+    public XEasyPdfRow enableResetContext() {
+        this.param.setIsResetContext(true);
         return this;
     }
 
@@ -292,7 +314,7 @@ public class XEasyPdfRow {
         // 重置X轴起始坐标为空
         this.param.setBeginX(null);
         // 重置页面Y轴起始坐标
-        page.getParam().setPageY(this.param.getBeginY()-this.param.getHeight());
+        page.setPageY(this.param.getBeginY()-this.param.getHeight());
         // 重置字体为空
         this.param.setFont(null);
     }

@@ -25,6 +25,12 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 public interface XEasyPdfHeader {
 
     /**
+     * 开启上下文重置
+     * @return 返回页眉组件
+     */
+    XEasyPdfHeader enableResetContext();
+
+    /**
      * 添加分割线
      * @param splitLine pdf分割线
      * @return 返回页眉组件

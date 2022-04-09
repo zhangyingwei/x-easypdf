@@ -40,6 +40,10 @@ class XEasyPdfRowParam {
      */
     private XEasyPdfComponent.ContentMode contentMode;
     /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
+    /**
      * 单元格列表
      */
     private List<XEasyPdfCell> cells = new ArrayList<>(10);
@@ -138,14 +142,24 @@ class XEasyPdfRowParam {
                     this.borderWidth = tableParam.getBorderWidth();
                 }
             }
-            // 如果内容模式未初始化，则进行初始化
+            // 如果内容模式未初始化，则初始化为页面内容模式
             if (this.contentMode==null) {
-                // 初始化内容模式
+                // 初始化为页面内容模式
                 this.contentMode = tableParam.getContentMode();
             }
-            // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
-            if (this.fontPath==null&&this.defaultFontStyle!=null) {
-                // 初始化字体路径
+            // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+            if (this.isResetContext==null) {
+                // 初始化为页面是否重置上下文
+                this.isResetContext = tableParam.getIsResetContext();
+            }
+            // 如果默认字体未初始化，则初始化为页面默认字体
+            if (this.defaultFontStyle==null) {
+                // 初始化为页面默认字体
+                this.defaultFontStyle = tableParam.getDefaultFontStyle();
+            }
+            // 如果字体路径未初始化，则初始化为默认字体路径
+            if (this.fontPath==null) {
+                // 初始化为默认字体路径
                 this.fontPath = this.defaultFontStyle.getPath();
             }
             // 初始化字体
@@ -239,10 +253,10 @@ class XEasyPdfRowParam {
         // 如果允许添加页脚，且页脚不为空则初始化页脚高度
         if (page.isAllowFooter()&&page.getFooter()!=null) {
             // 初始化页脚高度
-            footerHeight = page.getParam().getFooter().getHeight(document, page);
+            footerHeight = page.getFooter().getHeight(document, page);
         }
         // 获取当前页面Y轴起始坐标
-        Float pageY = page.getParam().getPageY();
+        Float pageY = page.getPageY();
         // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
         float currentY = pageY - this.marginTop;
         // 如果未设置分页标识，则重置分页标识
@@ -254,7 +268,7 @@ class XEasyPdfRowParam {
                 // 分页
                 this.paging(document, page, table);
                 // 获取当前页面Y轴起始坐标
-                pageY = page.getParam().getPageY();
+                pageY = page.getPageY();
                 // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
                 currentY = pageY - this.marginTop;
             }
@@ -292,12 +306,12 @@ class XEasyPdfRowParam {
         // 关闭页面自动定位
         page.disablePosition();
         // 如果当前页面Y轴起始坐标未初始化，则进行初始化
-        if (page.getParam().getPageY()==null) {
+        if (page.getPageY()==null) {
             // 重置当前页面Y轴起始坐标 = 页面高度 - 表格上边距
-            page.getParam().setPageY(rectangle.getHeight() - tableParam.getMarginTop());
+            page.setPageY(rectangle.getHeight() - tableParam.getMarginTop());
         }else {
             // 重置当前页面Y轴起始坐标 = 当前页面Y轴起始坐标 - 表格上边距
-            page.getParam().setPageY(page.getParam().getPageY() - tableParam.getMarginTop());
+            page.setPageY(page.getPageY() - tableParam.getMarginTop());
         }
         // 如果开启自动表头，则绘制表头行
         if (tableParam.getIsAutoTitle()) {

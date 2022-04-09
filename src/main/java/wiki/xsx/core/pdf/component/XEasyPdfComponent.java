@@ -54,6 +54,12 @@ public interface XEasyPdfComponent {
     XEasyPdfComponent setContentMode(ContentMode mode);
 
     /**
+     * 开启上下文重置
+     * @return 返回pdf组件
+     */
+    XEasyPdfComponent enableResetContext();
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page pdf页面

@@ -1,11 +1,10 @@
 package wiki.xsx.core.pdf.doc;
 
-import lombok.Data;
 import lombok.SneakyThrows;
-import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
@@ -33,14 +32,12 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-@Data
-@Accessors(chain = true)
 public class XEasyPdfPage {
 
     /**
      * pdf页面参数
      */
-    private XEasyPdfPageParam param = new XEasyPdfPageParam();
+    private final XEasyPdfPageParam param = new XEasyPdfPageParam();
 
     /**
      * 无参构造
@@ -72,48 +69,6 @@ public class XEasyPdfPage {
     }
 
     /**
-     * 添加pdfBox页面
-     *  @param page pdfBox页面
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage addPage(PDPage page) {
-        if (page!=null) {
-            // 添加pdfBox页面
-            this.param.getPageList().add(page);
-        }
-        return this;
-    }
-
-    /**
-     * 添加新页面
-     * @param pageSize 页面尺寸
-     * @param document pdf文档
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) {
-        // 定义pdfBox页面
-        PDPage page = pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize);
-        // 如果旋转角度不为空，则设置旋转角度
-        if (this.param.getRotation()!=null) {
-            // 设置旋转角度
-            page.setRotation(this.param.getRotation());
-        }
-        // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
-        this.param.getNewPageList().add(page);
-        // 初始化总页数
-        document.getParam().initTotalPage(1);
-        // 重置页面X轴Y轴起始坐标
-        this.getParam().setPageX(null).setPageY(null);
-        // 绘制页眉与页脚
-        this.drawHeaderAndFooter(document);
-        // 绘制背景图片
-        this.drawBackgroundImage(document);
-        // 设置背景颜色
-        this.setLastPageBackgroundColor(document);
-        return this;
-    }
-
-    /**
      * 设置旋转角度
      * @param rotation 旋转角度
      * @return 返回pdf页面
@@ -134,6 +89,14 @@ public class XEasyPdfPage {
     }
 
     /**
+     * 获取页面字体
+     * @return 返回pdfBox字体
+     */
+    public PDFont getFont() {
+        return this.param.getFont();
+    }
+
+    /**
      * 设置默认字体样式
      * @param style 默认字体样式
      * @return 返回pdf页面
@@ -143,6 +106,70 @@ public class XEasyPdfPage {
             this.param.setDefaultFontStyle(style);
         }
         return this;
+    }
+
+    /**
+     * 获取默认字体样式
+     * @return 返回默认字体样式
+     */
+    public XEasyPdfDefaultFontStyle getDefaultFontStyle() {
+        return this.param.getDefaultFontStyle();
+    }
+
+    /**
+     * 设置页面X轴坐标
+     * @param pageX X轴坐标
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage setPageX(Float pageX) {
+        this.param.setPageX(pageX);
+        return this;
+    }
+
+    /**
+     * 获取页面X轴坐标
+     * @return 返回页面X轴坐标
+     */
+    public Float getPageX() {
+        return this.param.getPageX();
+    }
+
+    /**
+     * 设置页面X轴坐标
+     * @param pageY Y轴坐标
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage setPageY(Float pageY) {
+        this.param.setPageY(pageY);
+        return this;
+    }
+
+    /**
+     * 获取页面Y轴坐标
+     * @return 返回页面Y轴坐标
+     */
+    public Float getPageY() {
+        return this.param.getPageY();
+    }
+
+    /**
+     * 设置内容模式
+     * @param contentMode 内容模式
+     * @return 返回返回pdf页面
+     */
+    public XEasyPdfPage setContentMode(XEasyPdfComponent.ContentMode contentMode) {
+        if (contentMode!=null) {
+            this.param.setContentMode(contentMode);
+        }
+        return this;
+    }
+
+    /**
+     * 获取内容模式
+     * @return 返回内容模式
+     */
+    public XEasyPdfComponent.ContentMode getContentMode() {
+        return this.param.getContentMode();
     }
 
     /**
@@ -235,6 +262,13 @@ public class XEasyPdfPage {
         return this.param.getFooter();
     }
 
+    /**
+     * 获取每毫米像素点
+     * @return 返回每毫米像素点
+     */
+    public float getUnit() {
+        return XEasyPdfPageParam.getUnit();
+    }
 
     /**
      * 获取pdfBox最新页面
@@ -264,6 +298,22 @@ public class XEasyPdfPage {
      */
     public int getCurrentIndex(XEasyPdfDocument document) {
         return document.getParam().getTotalPage();
+    }
+
+    /**
+     * 获取包含的pdfBox页面列表
+     * @return 返回包含的pdfBox页面列表
+     */
+    public List<PDPage> getPageList() {
+        return this.param.getPageList();
+    }
+
+    /**
+     * 获取新增的pdfBox页面列表
+     * @return 返回新增的pdfBox页面列表
+     */
+    public List<PDPage> getNewPageList() {
+        return this.param.getNewPageList();
     }
 
     /**
@@ -339,6 +389,23 @@ public class XEasyPdfPage {
     }
 
     /**
+     * 开启重置上下文
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage enableResetContext() {
+        this.param.setIsResetContext(true);
+        return this;
+    }
+
+    /**
+     * 是否允许重置定位
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isAllowResetPosition() {
+        return this.param.isAllowResetPosition();
+    }
+
+    /**
      * 是否允许添加页眉
      * @return 返回布尔值，true为是，false为否
      */
@@ -387,6 +454,56 @@ public class XEasyPdfPage {
     }
 
     /**
+     * 是否重置上下文
+     * @return 返回布尔值，true为是，false为否
+     */
+    public boolean isResetContext() {
+        return this.param.getIsResetContext();
+    }
+
+    /**
+     * 添加pdfBox页面
+     *  @param page pdfBox页面
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage addPage(PDPage page) {
+        if (page!=null) {
+            // 添加pdfBox页面
+            this.param.getPageList().add(page);
+        }
+        return this;
+    }
+
+    /**
+     * 添加新页面
+     * @param pageSize 页面尺寸
+     * @param document pdf文档
+     * @return 返回pdf页面
+     */
+    public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) {
+        // 定义pdfBox页面
+        PDPage page = pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize);
+        // 如果旋转角度不为空，则设置旋转角度
+        if (this.param.getRotation()!=null) {
+            // 设置旋转角度
+            page.setRotation(this.param.getRotation());
+        }
+        // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
+        this.param.getNewPageList().add(page);
+        // 初始化总页数
+        document.getParam().initTotalPage(1);
+        // 重置页面X轴Y轴起始坐标
+        this.param.setPageX(null).setPageY(null);
+        // 绘制页眉与页脚
+        this.drawHeaderAndFooter(document);
+        // 绘制背景图片
+        this.drawBackgroundImage(document);
+        // 设置背景颜色
+        this.setLastPageBackgroundColor(document);
+        return this;
+    }
+
+    /**
      * 添加pdf组件
      * @param components pdf组件
      * @return 返回pdf页面
@@ -420,6 +537,7 @@ public class XEasyPdfPage {
      * @return 返回pdf页面
      */
     public XEasyPdfPage modifyPageSize(PDRectangle pageSize) {
+        // 如果页面尺寸不为空，则修改页面尺寸
         if (pageSize!=null) {
             // 设置新增页面尺寸
             this.param.setPageSize(pageSize);
@@ -500,37 +618,45 @@ public class XEasyPdfPage {
      */
     @SneakyThrows
     private void setLastPageBackgroundColor(XEasyPdfDocument document) {
-        // 如果背景颜色不为空，且背景颜色不为白色，则进行背景颜色设置
-        if (!Color.WHITE.equals(this.param.getBackgroundColor())) {
-            // 获取pdfBox最新页面
-            PDPage lastPage = this.getLastPage();
-            // 如果最新页面不为空，则进行背景颜色设置
-            if (lastPage!=null) {
-                // 获取页面尺寸
-                PDRectangle rectangle = lastPage.getMediaBox();
-                // 新建内容流
-                PDPageContentStream contentStream = new PDPageContentStream(
-                        document.getTarget(),
-                        lastPage,
-                        PDPageContentStream.AppendMode.PREPEND,
-                        true,
-                        false
-                );
-                // 绘制矩形（背景矩形）
-                contentStream.addRect(
-                        0,
-                        0,
-                        rectangle.getWidth(),
-                        rectangle.getHeight()
-                );
-                // 设置矩形颜色（背景颜色）
-                contentStream.setNonStrokingColor(this.param.getBackgroundColor());
-                // 填充矩形（背景矩形）
-                contentStream.fill();
-                // 内容流重置颜色为黑色
-                contentStream.setNonStrokingColor(Color.BLACK);
-                // 关闭内容流
-                contentStream.close();
+        // 如果当前pdf页面允许添加页面背景色，则进行页面背景色绘制
+        if (this.param.isAllowBackgroundColor()) {
+            // 如果页面背景色未初始化，则设置全局页面背景色
+            if (this.param.getBackgroundColor()==null) {
+                // 设置全局页面背景色
+                this.param.setBackgroundColor(document.getGlobalBackgroundColor());
+            }
+            // 如果背景颜色不为白色，则进行背景颜色设置
+            if (!Color.WHITE.equals(this.param.getBackgroundColor())) {
+                // 获取pdfBox最新页面
+                PDPage lastPage = this.getLastPage();
+                // 如果最新页面不为空，则进行背景颜色设置
+                if (lastPage!=null) {
+                    // 获取页面尺寸
+                    PDRectangle rectangle = lastPage.getMediaBox();
+                    // 新建内容流
+                    PDPageContentStream contentStream = new PDPageContentStream(
+                            document.getTarget(),
+                            lastPage,
+                            PDPageContentStream.AppendMode.PREPEND,
+                            true,
+                            this.param.getIsResetContext()
+                    );
+                    // 绘制矩形（背景矩形）
+                    contentStream.addRect(
+                            0,
+                            0,
+                            rectangle.getWidth(),
+                            rectangle.getHeight()
+                    );
+                    // 设置矩形颜色（背景颜色）
+                    contentStream.setNonStrokingColor(this.param.getBackgroundColor());
+                    // 填充矩形（背景矩形）
+                    contentStream.fill();
+                    // 内容流重置颜色为黑色
+                    contentStream.setNonStrokingColor(Color.BLACK);
+                    // 关闭内容流
+                    contentStream.close();
+                }
             }
         }
     }
@@ -550,9 +676,9 @@ public class XEasyPdfPage {
             // 如果页面背景图片不为空，则进行绘制
             if (this.param.getBackgroundImage()!=null) {
                 // 获取页面X轴坐标
-                Float pageX = this.getParam().getPageX();
+                Float pageX = this.param.getPageX();
                 // 获取页面Y轴坐标
-                Float pageY = this.getParam().getPageY();
+                Float pageY = this.param.getPageY();
                 // 设置页面X轴Y轴坐标为空
                 this.param.setPageX(null).setPageY(null);
                 // 关闭页面自动重置定位

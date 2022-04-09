@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
+import wiki.xsx.core.pdf.component.rect.XEasyPdfRect;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
@@ -52,6 +53,18 @@ public class XEasyPdfCell {
      */
     public XEasyPdfCell(float width, float height) {
         this.param.setWidth(Math.abs(width)).setHeight(Math.abs(height));
+    }
+
+    /**
+     * 设置内容模式
+     * @param mode 内容模式
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setContentMode(XEasyPdfComponent.ContentMode mode) {
+        if (mode!=null) {
+            this.param.setContentMode(mode);
+        }
+        return this;
     }
 
     /**
@@ -320,6 +333,15 @@ public class XEasyPdfCell {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell enableResetContext() {
+        this.param.setIsResetContext(true);
+        return this;
+    }
+
+    /**
      * 添加内容
      * @param component 组件
      * @return 返回单元格组件
@@ -402,11 +424,16 @@ public class XEasyPdfCell {
             page.enablePosition();
         }
         // 获取当前页面Y轴起始坐标
-        float pageY = page.getParam().getPageY();
+        float pageY = page.getPageY();
         // 获取当前行X轴起始坐标
         float rowBeginX = row.getParam().getBeginX();
         // 获取组件
         XEasyPdfComponent component = this.param.getComponent();
+        // 如果重置上下文，则组件开启重置上下文
+        if (this.param.getIsResetContext()) {
+            // 组件开启重置上下文
+            component.enableResetContext();
+        }
         // 如果组件属于文本组件，则写入文本
         if (component instanceof XEasyPdfText) {
             // 写入文本
@@ -424,15 +451,13 @@ public class XEasyPdfCell {
         }
         // 其他组件，则直接绘制
         else {
-            component.setPosition(
-                    row.getParam().getBeginX(),
-                    page.getParam().getPageY()-this.param.getMarginTop()
-            ).draw(document, page);
+            // 写入其他组件
+            this.writeOtherComponent(document, page, row, component);
         }
         // 重置为当前行X轴原始坐标
         row.getParam().setBeginX(rowBeginX);
         // 重置为当前页面Y轴原始坐标
-        page.getParam().setPageY(pageY);
+        page.setPageY(pageY);
         // 关闭页面自动定位
         page.disablePosition();
         // 重置字体为null
@@ -451,17 +476,24 @@ public class XEasyPdfCell {
             // 获取边框宽度
             float borderWidth = this.param.getBorderWidth();
             // 绘制矩形填充背景色
-            XEasyPdfHandler.Rect.build(
+            XEasyPdfRect rect = XEasyPdfHandler.Rect.build(
                     this.param.getWidth(),
-                    this.param.getHeight()-borderWidth,
-                    row.getParam().getBeginX()+borderWidth/2,
-                    row.getParam().getBeginY()-this.param.getHeight()-this.param.getMarginTop()+borderWidth/2
-            ).setContentMode(this.param.getContentMode())
-                    .setBackgroundColor(this.param.getBackgroundColor())
-                    .setBorderColor(this.param.getBackgroundColor())
-                    .setNewLine(false)
-                    .disableCheckPage()
-                    .draw(document, page);
+                    this.param.getHeight() - borderWidth,
+                    row.getParam().getBeginX() + borderWidth / 2,
+                    row.getParam().getBeginY() - this.param.getHeight() - this.param.getMarginTop() + borderWidth / 2
+            );
+            // 如果重置上下文，则开启重置上下文
+            if (this.param.getIsResetContext()) {
+                // 开启重置上下文
+                rect.enableResetContext();
+            }
+            // 设置其他参数
+            rect.setContentMode(this.param.getContentMode())
+                .setBackgroundColor(this.param.getBackgroundColor())
+                .setBorderColor(this.param.getBackgroundColor())
+                .setNewLine(false)
+                .disableCheckPage()
+                .draw(document, page);
         }
     }
 
@@ -480,6 +512,7 @@ public class XEasyPdfCell {
                     .setDocument(document.getTarget())
                     .setPage(page.getLastPage())
                     .setContentMode(this.param.getContentMode().getMode())
+                    .setIsResetContext(this.param.getIsResetContext())
                     .setWidth(this.param.getWidth())
                     .setHeight(this.param.getHeight())
                     .setBorderColor(this.param.getBorderColor())
@@ -549,6 +582,21 @@ public class XEasyPdfCell {
                         row.getParam().getBeginX(),
                         row.getParam().getBeginY()-this.param.getMarginTop()
                 ).draw(document, page);
+    }
+
+    /**
+     * 写入其他组件
+     * @param document pdf文档
+     * @param page pdf页面
+     * @param row pdf表格行
+     * @param component pdf组件
+     */
+    private void writeOtherComponent(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfComponent component) {
+        // 设置定位并绘制
+        component.setPosition(
+                row.getParam().getBeginX(),
+                page.getPageY()-this.param.getMarginTop()
+        ).draw(document, page);
     }
 
     /**
@@ -625,7 +673,7 @@ public class XEasyPdfCell {
         // 获取文本高度
         float height = text.getHeight(document, page);
         // 定义Y轴起始坐标为页面Y轴起始坐标
-        float y = page.getParam().getPageY();
+        float y = page.getPageY();
         // 如果垂直样式为居上，则重置Y轴起始坐标为Y轴起始坐标-字体大小-边框宽度-行上边距
         if (this.param.getVerticalStyle()==XEasyPdfPositionStyle.TOP) {
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-边框宽度-行上边距
@@ -658,7 +706,7 @@ public class XEasyPdfCell {
         // 获取图片高度
         float height = image.getHeight(document, page);
         // 定义Y轴起始坐标为页面Y轴起始坐标
-        float y = page.getParam().getPageY();
+        float y = page.getPageY();
         // 如果图片高度等于单元格高度-边框宽度或垂直样式为居上，则重置Y轴起始坐标为Y轴起始坐标-图片高度-边框宽度/2-行上边距
         if (height==this.param.getHeight()-this.param.getBorderWidth()||this.param.getVerticalStyle()==XEasyPdfPositionStyle.TOP) {
             // 重置Y轴起始坐标为Y轴起始坐标-图片高度-边框宽度/2-行上边距

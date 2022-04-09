@@ -4,7 +4,6 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 
@@ -208,7 +207,7 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      * @return 返回实线分割线组件
      */
     public XEasyPdfSolidSplitLine enableResetContext() {
-        this.param.setResetContext(true);
+        this.param.setIsResetContext(true);
         return this;
     }
 
@@ -224,17 +223,14 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
         // 执行画图
         new XEasyPdfBaseLine(this.param).draw(document, page);
         // 如果允许重置定位，则重置pdf页面Y轴坐标
-        if (page.getParam().isAllowResetPosition()) {
+        if (page.isAllowResetPosition()) {
             // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
-            page.getParam().setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
+            page.setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
         }
         // 完成标记
         this.param.setDraw(true);
-        // 字体路径不为空，说明该组件设置字体，则直接进行字体关联
-        if (this.param.getFontPath()!=null&&this.param.getFontPath().length()>0) {
-            // 重置字体为null
-            this.param.setFont(null);
-        }
+        // 重置字体为null
+        this.param.setFont(null);
     }
 
     /**
@@ -254,13 +250,8 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
     private void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 分页检查
         this.param.checkPage(document, page);
-        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
-        if (this.param.getFontPath()==null&&this.param.getDefaultFontStyle()!=null) {
-            // 初始化字体路径
-            this.param.setFontPath(this.param.getDefaultFontStyle().getPath());
-        }
-        // 初始化字体
-        this.param.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true));
+        // 初始化参数
+        this.param.init(document, page);
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果X轴起始坐标已初始化且Y轴起始坐标已初始化，则直接返回
@@ -288,11 +279,11 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
                 this.param.getMarginLeft()
         ).setBeginY(
                 // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getParam().getPageY() == null?
+                page.getPageY() == null?
                         // pdfBox最新页面高度 - 上边距 - 线宽
                         rectangle.getHeight() - this.param.getMarginTop() - lineWidth:
                         // 当前页面Y轴坐标 - 上边距 - 线宽
-                        page.getParam().getPageY() - this.param.getMarginTop() - lineWidth
+                        page.getPageY() - this.param.getMarginTop() - lineWidth
         ).setEndX(
                 // 页面宽度 - 右边距
                 rectangle.getWidth() - this.param.getMarginRight()

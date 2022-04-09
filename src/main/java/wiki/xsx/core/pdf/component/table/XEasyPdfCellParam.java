@@ -37,6 +37,10 @@ class XEasyPdfCellParam {
      */
     private XEasyPdfComponent.ContentMode contentMode;
     /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
+    /**
      * 是否水平合并
      */
     private boolean isHorizontalMerge = false;
@@ -149,14 +153,24 @@ class XEasyPdfCellParam {
             // 初始化边框标记
             this.hasBorder = rowParam.getHasBorder();
         }
-        // 如果内容模式未初始化，则进行初始化
+        // 如果内容模式未初始化，则初始化为页面内容模式
         if (this.contentMode==null) {
-            // 初始化内容模式
+            // 初始化为页面内容模式
             this.contentMode = rowParam.getContentMode();
         }
-        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
-        if (this.fontPath==null&&this.defaultFontStyle!=null) {
-            // 初始化字体路径
+        // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为页面是否重置上下文
+            this.isResetContext = rowParam.getIsResetContext();
+        }
+        // 如果默认字体未初始化，则初始化为页面默认字体
+        if (this.defaultFontStyle==null) {
+            // 初始化为页面默认字体
+            this.defaultFontStyle = rowParam.getDefaultFontStyle();
+        }
+        // 如果字体路径未初始化，则初始化为默认字体路径
+        if (this.fontPath==null) {
+            // 初始化为默认字体路径
             this.fontPath = this.defaultFontStyle.getPath();
         }
         // 初始化字体

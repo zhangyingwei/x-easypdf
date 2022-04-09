@@ -33,6 +33,10 @@ import java.util.List;
 @Accessors(chain = true)
 class XEasyPdfHeaderParam {
     /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
+    /**
      * 文本
      */
     private XEasyPdfText text;
@@ -86,6 +90,11 @@ class XEasyPdfHeaderParam {
         // 如果文本和图片都未初始化，则抛出异常信息
         if (this.text==null&&this.image==null) {
             throw new IllegalArgumentException("text or image can not be found");
+        }
+        // 如果重置上下文未初始化，则初始化为文档重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为文档重置上下文
+            this.isResetContext = page.isResetContext();
         }
         // 初始化高度
         this.initHeight(document, page);

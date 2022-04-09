@@ -43,6 +43,10 @@ final class XEasyPdfCellBorder {
      */
     private PDPageContentStream.AppendMode contentMode;
     /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
+    /**
      * 宽度
      */
     private Float width;
@@ -88,7 +92,7 @@ final class XEasyPdfCellBorder {
     @SneakyThrows
     void drawBorder() {
         // 新建内容流
-        PDPageContentStream contentStream = new PDPageContentStream(this.document, this.page, this.contentMode, true, false);
+        PDPageContentStream contentStream = new PDPageContentStream(this.document, this.page, this.contentMode, true, this.isResetContext);
         // 设置颜色
         contentStream.setStrokingColor(this.borderColor);
         // 设置线宽

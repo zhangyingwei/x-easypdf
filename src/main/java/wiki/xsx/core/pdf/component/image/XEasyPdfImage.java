@@ -152,7 +152,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage enableResetContext() {
-        this.param.setResetContext(true);
+        this.param.setIsResetContext(true);
         return this;
     }
 
@@ -353,16 +353,16 @@ public class XEasyPdfImage implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                this.param.isResetContext()
+                this.param.getIsResetContext()
         );
         // 添加图片
         contentStream.drawImage(pdImage, this.param.getBeginX(), this.param.getBeginY(), this.param.getWidth(), this.param.getHeight());
         // 关闭内容流
         contentStream.close();
         // 如果允许页面重置定位，则进行重置
-        if (page.getParam().isAllowResetPosition()) {
+        if (page.isAllowResetPosition()) {
             // 设置文档页面X轴坐标Y轴坐标
-            page.getParam().setPageX(this.param.getBeginX()).setPageY(this.param.getBeginY());
+            page.setPageX(this.param.getBeginX()).setPageY(this.param.getBeginY());
         }
         // 完成标记
         this.param.setDraw(true);

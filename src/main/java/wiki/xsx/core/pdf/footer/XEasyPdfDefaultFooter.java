@@ -58,6 +58,16 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回页脚组件
+     */
+    @Override
+    public XEasyPdfDefaultFooter enableResetContext() {
+        this.param.setIsResetContext(true);
+        return this;
+    }
+
+    /**
      * 设置边距（左右下）
      * @param margin 边距
      * @return 返回页脚组件
@@ -109,20 +119,32 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      */
     @Override
     public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 如果高度未初始化，则初始化参数
         if (this.param.getHeight()==null) {
             // 初始化参数
             this.param.init(document, page);
         }
+        // 返回高度
         return this.param.getHeight();
     }
 
+    /**
+     * 检查组件
+     * @param component 组件
+     * @return 返回布尔值，true为是，false为否
+     */
     @Override
     public boolean check(XEasyPdfComponent component) {
+        // 如果组件不为空，则判断对应组件
         if (component!=null) {
+            // 如果组件为图片，则判断图片是否相同
             if (component instanceof XEasyPdfImage) {
+                // 判断是否相同
                 return this.param.getImage()!=null&&this.param.getImage().equals(component);
             }
+            // 如果组件为文本，则判断文本是否相同
             if (component instanceof XEasyPdfText) {
+                // 判断是否相同
                 return this.param.getText()!=null&&this.param.getText().equals(component);
             }
         }
@@ -142,9 +164,15 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
         page.disablePosition();
         // 如果图片不为空，则绘制图片
         if (this.param.getImage()!=null) {
+            // 获取图片
+            XEasyPdfImage image = this.param.getImage();
+            // 如果开启重置上下文，则设置图片开启重置上下文
+            if (this.param.getIsResetContext()) {
+                // 图片开启重置上下文
+                image.enableResetContext();
+            }
             // 绘制图片
-            this.param.getImage()
-                    .setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
+            image.setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
                     .setPosition(this.param.getBeginX(), this.param.getBeginY()+this.param.getMarginBottom())
                     .draw(document, page);
         }
@@ -152,6 +180,11 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
         if (this.param.getText()!=null) {
             // 获取文本
             XEasyPdfText text = this.param.getText();
+            // 如果开启重置上下文，则设置文本开启重置上下文
+            if (this.param.getIsResetContext()) {
+                // 文本开启重置上下文
+                text.enableResetContext();
+            }
             // 设置文本参数
             text.replaceAllPlaceholder(
                     XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+""

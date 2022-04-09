@@ -37,7 +37,11 @@ class XEasyPdfTableParam {
     /**
      * 内容模式
      */
-    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    private XEasyPdfComponent.ContentMode contentMode;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
     /**
      * 单元格边框列表
      */
@@ -131,9 +135,24 @@ class XEasyPdfTableParam {
      * @param page pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
-        // 如果字体路径为空，且默认字体样式不为空，则进行初始化字体路径
-        if (this.fontPath==null&&this.defaultFontStyle!=null) {
-            // 初始化字体路径
+        // 如果内容模式未初始化，则初始化为页面内容模式
+        if (this.contentMode==null) {
+            // 初始化为页面内容模式
+            this.contentMode = page.getContentMode();
+        }
+        // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为页面是否重置上下文
+            this.isResetContext = page.isResetContext();
+        }
+        // 如果默认字体未初始化，则初始化为页面默认字体
+        if (this.defaultFontStyle==null) {
+            // 初始化为页面默认字体
+            this.defaultFontStyle = page.getDefaultFontStyle();
+        }
+        // 如果字体路径未初始化，则初始化为默认字体路径
+        if (this.fontPath==null) {
+            // 初始化为默认字体路径
             this.fontPath = this.defaultFontStyle.getPath();
         }
         // 初始化字体
@@ -141,7 +160,7 @@ class XEasyPdfTableParam {
         // 如果背景颜色未初始化，则进行初始化
         if (this.backgroundColor==null) {
             // 初始化背景颜色
-            this.backgroundColor = page.getParam().getBackgroundColor();
+            this.backgroundColor = page.getBackgroundColor();
         }
     }
 }

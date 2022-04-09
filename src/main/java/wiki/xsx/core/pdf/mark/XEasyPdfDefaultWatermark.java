@@ -213,6 +213,16 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
     }
 
     /**
+     * 开启重置上下文
+     * @return 返回页面水印组件
+     */
+    @Override
+    public XEasyPdfDefaultWatermark enableResetContext() {
+        this.param.setIsResetContext(true);
+        return this;
+    }
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面
@@ -231,7 +241,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 获取任务文档
         PDDocument target = document.getTarget();
         // 获取pdfBox页面列表
-        List<PDPage> pageList = page.getParam().getPageList();
+        List<PDPage> pageList = page.getPageList();
         // 遍历pdfBox页面列表
         for (PDPage pdPage : pageList) {
             // 执行画水印
@@ -242,7 +252,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
             this.param.setBeginY(beginY);
         }
         // 获取新的pdfBox页面列表
-        pageList = page.getParam().getNewPageList();
+        pageList = page.getNewPageList();
         // 遍历pdfBox页面列表
         for (PDPage pdPage : pageList) {
             // 执行画水印
@@ -289,7 +299,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
                 pdPage,
                 this.param.getContentMode().getMode(),
                 true,
-                true
+                this.param.getIsResetContext()
         );
         // 设置图形参数
         cs.setGraphicsStateParameters(state);

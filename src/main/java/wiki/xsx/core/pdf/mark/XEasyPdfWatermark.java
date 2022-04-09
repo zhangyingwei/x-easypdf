@@ -24,6 +24,12 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 public interface XEasyPdfWatermark {
 
     /**
+     * 开启上下文重置
+     * @return 返回水印组件
+     */
+    XEasyPdfWatermark enableResetContext();
+
+    /**
      * 绘制
      * @param document pdf文档
      * @param page     pdf页面

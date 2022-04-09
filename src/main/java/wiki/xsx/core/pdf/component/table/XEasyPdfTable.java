@@ -220,6 +220,15 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
+     * 开启上下文重置
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable enableResetContext() {
+        this.param.setIsResetContext(true);
+        return this;
+    }
+
+    /**
      * 设置坐标
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
@@ -314,15 +323,15 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         // 如果X轴起始坐标不为空，则设置页面X轴起始坐标
         if (this.param.getBeginX()!=null) {
             // 设置页面X轴起始坐标 = 表格X轴起始坐标
-            page.getParam().setPageX(this.param.getBeginX());
+            page.setPageX(this.param.getBeginX());
         }
         // 如果Y轴起始坐标不为空，则设置页面Y轴起始坐标
         if (this.param.getBeginY()!=null) {
             // 设置页面Y轴起始坐标 = 表格Y轴起始坐标 - 上边距
-            page.getParam().setPageY(this.param.getBeginY() - this.param.getMarginTop());
+            page.setPageY(this.param.getBeginY() - this.param.getMarginTop());
         }else {
             // 设置页面Y轴起始坐标 = 页面Y轴起始坐标 - 上边距
-            page.getParam().setPageY(page.getParam().getPageY()==null?page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() : page.getParam().getPageY() - this.param.getMarginTop());
+            page.setPageY(page.getPageY()==null?page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() : page.getPageY() - this.param.getMarginTop());
         }
         // 获取表头行
         XEasyPdfRow titleRow = this.param.getTitleRow();

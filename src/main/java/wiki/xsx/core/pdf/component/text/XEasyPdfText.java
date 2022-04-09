@@ -154,7 +154,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableResetContext() {
-        this.param.setResetContext(true);
+        this.param.setIsResetContext(true);
         return this;
     }
 
@@ -674,7 +674,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,
-                this.param.isResetContext()
+                this.param.getIsResetContext()
         );
         // 初始化pdfBox扩展图形对象
         PDExtendedGraphicsState state = new PDExtendedGraphicsState();
@@ -722,7 +722,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 遍历文本输入
         for (String text:splitTextList) {
             // 初始化X轴坐标
-            beginX = this.param.initBeginX(page.getParam().getPageX(), text);
+            beginX = this.param.initBeginX(page.getPageX(), text);
             // 如果为第一行，且缩进值不为空，则重置X轴坐标
             if (index==0&&this.param.getIndent()!=null) {
                 // 重置X轴坐标 = X轴坐标 + 缩进值 * (字体大小 + 文本间隔)
@@ -754,20 +754,20 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 // 获取文本宽度
                 float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
                 // 设置页面X轴坐标
-                page.getParam().setPageX(beginX+textWidth);
+                page.setPageX(beginX+textWidth);
             }
             // 内容流重置颜色为黑色
             stream.setNonStrokingColor(Color.BLACK);
             // 关闭内容流
             stream.close();
             // 如果允许页面重置定位，则进行重置
-            if (page.getParam().isAllowResetPosition()) {
+            if (page.isAllowResetPosition()) {
                 // 设置文档页面Y轴坐标
-                page.getParam().setPageY(this.param.getBeginY());
+                page.setPageY(this.param.getBeginY());
             }
         }
         // 如果不允许页面重置定位，则进行重置
-        if (!page.getParam().isAllowResetPosition()) {
+        if (!page.isAllowResetPosition()) {
             // 开启页面自动重置定位
             page.enablePosition();
         }
@@ -807,9 +807,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 // 重置页面Y轴起始坐标
                 this.param.setBeginY(
                         // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 字体高度 - 行间距，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 字体高度 - 行间距
-                        page.getParam().getPageY()==null?
+                        page.getPageY()==null?
                                 rectangle.getHeight() - this.param.getMarginTop() - this.param.getFontHeight() - this.param.getLeading():
-                                page.getParam().getPageY() - this.param.getMarginTop() - this.param.getFontHeight() - this.param.getLeading()
+                                page.getPageY() - this.param.getMarginTop() - this.param.getFontHeight() - this.param.getLeading()
                 );
             }
         }

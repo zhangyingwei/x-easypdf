@@ -32,7 +32,11 @@ class XEasyPdfRectParam {
     /**
      * 内容模式
      */
-    private XEasyPdfComponent.ContentMode contentMode = XEasyPdfComponent.ContentMode.APPEND;
+    private XEasyPdfComponent.ContentMode contentMode;
+    /**
+     * 是否重置上下文
+     */
+    private Boolean isResetContext;
     /**
      * 左边距
      */
@@ -90,10 +94,6 @@ class XEasyPdfRectParam {
      */
     private boolean isNewLine = true;
     /**
-     * 是否重置上下文
-     */
-    private boolean isResetContext = false;
-    /**
      * 是否完成绘制
      */
     private boolean isDraw = false;
@@ -112,6 +112,16 @@ class XEasyPdfRectParam {
         if (this.height==null) {
             throw new RuntimeException("the height can not be null");
         }
+        // 如果内容模式未初始化，则初始化为页面内容模式
+        if (this.contentMode==null) {
+            // 初始化为页面内容模式
+            this.contentMode = page.getContentMode();
+        }
+        // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
+        if (this.isResetContext==null) {
+            // 初始化为页面是否重置上下文
+            this.isResetContext = page.isResetContext();
+        }
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 定义页脚高度
@@ -121,10 +131,10 @@ class XEasyPdfRectParam {
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
             if (page.isAllowFooter()&&page.getFooter()!=null) {
                 // 初始化页脚高度
-                footerHeight = page.getParam().getFooter().getHeight(document, page);
+                footerHeight = page.getFooter().getHeight(document, page);
             }
             // 获取当前页面Y轴起始坐标
-            Float pageY = page.getParam().getPageY();
+            Float pageY = page.getPageY();
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 矩形高度，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 矩形高度
             this.beginY = pageY == null?
                     rectangle.getHeight() - this.marginTop - this.height :
@@ -135,7 +145,7 @@ class XEasyPdfRectParam {
             // 添加新页面
             page.addNewPage(document, rectangle);
             // 获取当前页面Y轴起始坐标
-            Float pageY = page.getParam().getPageY();
+            Float pageY = page.getPageY();
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 矩形高度，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 矩形高度
             this.beginY = pageY == null?
                     rectangle.getHeight() - this.marginTop - this.height:
@@ -144,7 +154,7 @@ class XEasyPdfRectParam {
         // 如果页面Y轴起始坐标未初始化，则进行初始化
         if (this.beginX==null) {
             // 获取当前页面X轴起始坐标
-            Float pageX = page.getParam().getPageX();
+            Float pageX = page.getPageX();
             // 初始化页面X轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 左边距，否则起始坐标 = 当前页面X轴起始坐标 + 左边距
             this.beginX = pageX == null?
                     this.marginLeft :

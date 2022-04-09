@@ -1,6 +1,8 @@
 package wiki.xsx.core.pdf.doc;
 
 import lombok.SneakyThrows;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSName;
@@ -47,6 +49,8 @@ import java.util.*;
  * </p>
  */
 public class XEasyPdfDocumentReplacer {
+
+    private final Log log = LogFactory.getLog(XEasyPdfDocumentReplacer.class);
     /**
      * pdfbox文档
      */
@@ -235,6 +239,8 @@ public class XEasyPdfDocumentReplacer {
     public void finish(OutputStream outputStream) {
         // 添加字体嵌入
         this.pdfDocument.getParam().embedFont(Collections.singleton(this.font));
+        // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+        this.pdfDocument.setBasicInfo(this.document);
         // 保存文档
         this.document.save(outputStream);
         // 重置字体为空
@@ -440,7 +446,11 @@ public class XEasyPdfDocumentReplacer {
         }
         // 获取页面原字符串
         String value = builder.toString();
-        System.out.println("value = " + value);
+        // 日志打印
+        if (log.isDebugEnabled()) {
+            // 打印当前待替换字符串
+            log.debug("current string: " + value);
+        }
         // 如果字符串不为空，则替换
         if (value.trim().length()>0) {
             // 遍历替换字典文本列表

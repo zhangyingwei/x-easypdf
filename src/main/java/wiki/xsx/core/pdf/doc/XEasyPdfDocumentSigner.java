@@ -188,8 +188,8 @@ public class XEasyPdfDocumentSigner {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024)) {
             // 创建任务文档
             PDDocument target = this.param.getDocument();
-            // 设置文档信息及保护策略
-            this.param.getPdfDocument().setInfoAndPolicyAndBookmark(target);
+            // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+            this.param.getPdfDocument().setBasicInfo(target);
             // 保存文档
             target.save(byteArrayOutputStream);
             // 添加签名

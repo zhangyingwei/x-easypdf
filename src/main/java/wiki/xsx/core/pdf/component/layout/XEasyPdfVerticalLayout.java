@@ -116,6 +116,16 @@ public class XEasyPdfVerticalLayout implements XEasyPdfLayout {
     }
 
     /**
+     * 开启重置上下文
+     * @return 返回垂直布局组件
+     */
+    @Override
+    public XEasyPdfVerticalLayout enableResetContext() {
+        this.param.getTable().enableResetContext();
+        return this;
+    }
+
+    /**
      * 添加组件
      * @param components 组件列表
      * @return 返回垂直布局组件
