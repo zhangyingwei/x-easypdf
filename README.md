@@ -4,11 +4,6 @@
 <p align="center">
 	<strong>一个用搭积木的方式构建pdf的框架（基于pdfbox）</strong>
 </p>
-<p align="center">
-    <a href='https://gitee.com/xsxgit/x-easypdf/stargazers'>
-        <img src='https://gitee.com/xsxgit/x-easypdf/badge/star.svg?theme=dark' alt='star' />
-    </a>
-</p>
 
 #### 更新说明
 master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.7.8，QQ交流群：15018726
