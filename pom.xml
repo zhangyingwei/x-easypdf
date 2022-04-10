@@ -16,6 +16,7 @@
         <pdfbox.version>2.0.25</pdfbox.version>
         <bouncycastle.version>1.70</bouncycastle.version>
         <zxing.core.version>3.4.1</zxing.core.version>
+        <aspose-words.version>22.4</aspose-words.version>
         <junit.version>4.13.2</junit.version>
 
         <skipTests>true</skipTests>
@@ -177,10 +178,26 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-words</artifactId>
+            <version>${aspose-words.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>AsposeJavaAPI</id>
+            <name>Aspose Java API</name>
+            <url>https://repository.aspose.com/repo/</url>
+        </repository>
+    </repositories>
 </project>

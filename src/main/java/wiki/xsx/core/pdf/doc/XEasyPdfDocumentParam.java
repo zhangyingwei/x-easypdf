@@ -157,7 +157,7 @@ class XEasyPdfDocumentParam {
     @SneakyThrows
     void init(InputStream inputStream, XEasyPdfDocument document) {
         // 初始化pdfBox源文档
-        this.source = PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly());
+        this.source = PDDocument.load(inputStream, MemoryUsageSetting.setupMainMemoryOnly());
         // 获取pdfBox页面树
         PDPageTree pages = this.source.getPages();
         // 遍历pdfBox页面树
