@@ -7,6 +7,8 @@ import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
+import java.io.Serializable;
+
 /**
  * pdf页脚组件参数
  * @author xsx
@@ -26,7 +28,10 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfFooterParam {
+class XEasyPdfFooterParam implements Serializable {
+
+    private static final long serialVersionUID = -1024397509263922127L;
+
     /**
      * 是否重置上下文
      */
@@ -103,7 +108,7 @@ class XEasyPdfFooterParam {
             // 如果文本不为空，则获取文本高度
             if (this.text != null) {
                 // 获取文本高度
-                textHeight = this.text.setMarginLeft(this.marginLeft).setMarginRight(this.marginRight).getHeight(document, page);
+                textHeight = this.text.getHeight(document, page);
             }
             // 定义图片高度
             float imageHeight = 0F;

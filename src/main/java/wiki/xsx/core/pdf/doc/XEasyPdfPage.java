@@ -12,6 +12,7 @@ import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +33,9 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfPage {
+public class XEasyPdfPage implements Serializable {
+
+    private static final long serialVersionUID = 2960592445501222343L;
 
     /**
      * pdf页面参数
@@ -402,7 +405,7 @@ public class XEasyPdfPage {
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowResetPosition() {
-        return this.param.isAllowResetPosition();
+        return this.param.getAllowResetPosition();
     }
 
     /**
@@ -410,7 +413,7 @@ public class XEasyPdfPage {
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowHeader() {
-        return this.param.isAllowHeader();
+        return this.param.getAllowHeader();
     }
 
     /**
@@ -418,7 +421,7 @@ public class XEasyPdfPage {
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowFooter() {
-        return this.param.isAllowFooter();
+        return this.param.getAllowFooter();
     }
 
     /**
@@ -426,7 +429,7 @@ public class XEasyPdfPage {
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowWatermark() {
-        return this.param.isAllowWatermark();
+        return this.param.getAllowWatermark();
     }
 
     /**
@@ -434,7 +437,7 @@ public class XEasyPdfPage {
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowBackgroundImage() {
-        return this.param.isAllowBackgroundImage();
+        return this.param.getAllowBackgroundImage();
     }
 
     /**
@@ -442,7 +445,7 @@ public class XEasyPdfPage {
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowBackgroundColor() {
-        return this.param.isAllowBackgroundColor();
+        return this.param.getAllowBackgroundColor();
     }
 
     /**
@@ -450,7 +453,7 @@ public class XEasyPdfPage {
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowRotateInherentPage() {
-        return this.param.isAllowRotateInherentPage();
+        return this.param.getAllowRotateInherentPage();
     }
 
     /**
@@ -459,19 +462,6 @@ public class XEasyPdfPage {
      */
     public boolean isResetContext() {
         return this.param.getIsResetContext();
-    }
-
-    /**
-     * 添加pdfBox页面
-     *  @param page pdfBox页面
-     * @return 返回pdf页面
-     */
-    public XEasyPdfPage addPage(PDPage page) {
-        if (page!=null) {
-            // 添加pdfBox页面
-            this.param.getPageList().add(page);
-        }
-        return this;
     }
 
     /**
@@ -567,7 +557,7 @@ public class XEasyPdfPage {
         if (this.param.getPageList().isEmpty()) {
             // 添加新页面
             this.addNewPage(document, pageSize);
-        // 如果原有pdfbox页面列表不为空，则设置页面尺寸
+            // 如果原有pdfbox页面列表不为空，则设置页面尺寸
         }else {
             // 获取原有pdfbox页面列表
             List<PDPage> pageList = this.param.getPageList();
@@ -576,22 +566,9 @@ public class XEasyPdfPage {
                 // 获取页面尺寸
                 PDRectangle modifyPageSize = this.param.getModifyPageSize();
                 // 遍历pdfbox页面列表
-                for (PDPage pdPage : pageList) {
-                    // 设置页面尺寸
-                    pdPage.setArtBox(modifyPageSize);
-                    // 设置页面尺寸
-                    pdPage.setBleedBox(modifyPageSize);
-                    // 设置页面尺寸
-                    pdPage.setCropBox(modifyPageSize);
-                    // 设置页面尺寸
-                    pdPage.setMediaBox(modifyPageSize);
-                    // 设置页面尺寸
-                    pdPage.setTrimBox(modifyPageSize);
-                    // 如果允许旋转固有页面且旋转角度不为空，则设置旋转角度
-                    if (this.param.isAllowRotateInherentPage()&&this.param.getRotation()!=null) {
-                        // 设置旋转角度
-                        pdPage.setRotation(this.param.getRotation());
-                    }
+                for (PDPage page : pageList) {
+                    // 修改页面尺寸
+                    this.modifyPageSize(page, modifyPageSize);
                 }
             }
         }
@@ -613,13 +590,36 @@ public class XEasyPdfPage {
     }
 
     /**
+     * 修改页面尺寸
+     * @param page pdfbox页面
+     * @param pageSize pdfbox页面尺寸
+     */
+    private void modifyPageSize(PDPage page, PDRectangle pageSize) {
+        // 设置页面尺寸
+        page.setArtBox(pageSize);
+        // 设置页面尺寸
+        page.setBleedBox(pageSize);
+        // 设置页面尺寸
+        page.setCropBox(pageSize);
+        // 设置页面尺寸
+        page.setMediaBox(pageSize);
+        // 设置页面尺寸
+        page.setTrimBox(pageSize);
+        // 如果允许旋转固有页面且旋转角度不为空，则设置旋转角度
+        if (this.param.getAllowRotateInherentPage()&&this.param.getRotation()!=null) {
+            // 设置旋转角度
+            page.setRotation(this.param.getRotation());
+        }
+    }
+
+    /**
      * 设置最新页面背景颜色
      * @param document pdf文档
      */
     @SneakyThrows
     private void setLastPageBackgroundColor(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页面背景色，则进行页面背景色绘制
-        if (this.param.isAllowBackgroundColor()) {
+        if (this.param.getAllowBackgroundColor()) {
             // 如果页面背景色未初始化，则设置全局页面背景色
             if (this.param.getBackgroundColor()==null) {
                 // 设置全局页面背景色
@@ -667,7 +667,7 @@ public class XEasyPdfPage {
      */
     private void drawBackgroundImage(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页面背景图片，则进行页面背景图片绘制
-        if (this.param.isAllowBackgroundImage()) {
+        if (this.param.getAllowBackgroundImage()) {
             // 如果页面背景图片未初始化，则设置全局页面背景图片
             if (this.param.getBackgroundImage()==null) {
                 // 设置全局页面背景图片
@@ -710,7 +710,7 @@ public class XEasyPdfPage {
      */
     private void drawHeader(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页眉，则进行页眉绘制
-        if (this.param.isAllowHeader()) {
+        if (this.param.getAllowHeader()) {
             // 如果页眉未初始化，则设置全局页眉
             if (this.param.getHeader()==null) {
                 // 设置全局页眉
@@ -730,7 +730,7 @@ public class XEasyPdfPage {
      */
     private void drawFooter(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页脚，则进行页脚绘制
-        if (this.param.isAllowFooter()) {
+        if (this.param.getAllowFooter()) {
             // 如果页脚未初始化，则设置全局页脚
             if (this.param.getFooter()==null) {
                 // 设置全局页脚
@@ -750,7 +750,7 @@ public class XEasyPdfPage {
      */
     private void drawWatermark(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页面水印，则进行页面水印绘制
-        if (this.param.isAllowWatermark()) {
+        if (this.param.getAllowWatermark()) {
             // 获取页面水印
             XEasyPdfWatermark watermark = this.param.getWatermark();
             // 如果页面水印未初始化，则重置为全局页面水印

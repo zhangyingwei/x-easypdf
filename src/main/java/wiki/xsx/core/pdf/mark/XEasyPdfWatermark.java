@@ -4,6 +4,8 @@ package wiki.xsx.core.pdf.mark;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
+import java.io.Serializable;
+
 /**
  * pdf水印组件接口
  * @author xsx
@@ -21,7 +23,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public interface XEasyPdfWatermark {
+public interface XEasyPdfWatermark extends Serializable {
 
     /**
      * 开启上下文重置

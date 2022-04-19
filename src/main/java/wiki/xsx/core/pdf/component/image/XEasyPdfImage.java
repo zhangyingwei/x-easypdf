@@ -33,6 +33,8 @@ import java.io.InputStream;
 @EqualsAndHashCode
 public class XEasyPdfImage implements XEasyPdfComponent {
 
+    private static final long serialVersionUID = -5646605850827547633L;
+
     /**
      * pdf图片参数
      */
@@ -143,7 +145,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage enableChildComponent() {
-        this.param.setChildComponent(true);
+        this.param.setIsChildComponent(true);
         return this;
     }
 
@@ -364,8 +366,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
             // 设置文档页面X轴坐标Y轴坐标
             page.setPageX(this.param.getBeginX()).setPageY(this.param.getBeginY());
         }
-        // 完成标记
-        this.param.setDraw(true);
         // 设置X轴Y轴坐标为初始值
         this.param.setBeginX(0F).setBeginY(null);
         // 如果待添加图片不为空，则释放图片资源
@@ -378,22 +378,13 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 是否完成绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
-    }
-
-    /**
      * 获取图片宽度
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回图片宽度
      */
     public Integer getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (!this.param.isEnableSelfAdaption()&&this.param.getWidth()!=null) {
+        if (!this.param.getEnableSelfAdaption()&&this.param.getWidth()!=null) {
             return this.param.getWidth();
         }
         return this.param.init(document, page, this).getWidth();
@@ -406,7 +397,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片高度
      */
     public Integer getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (!this.param.isEnableSelfAdaption()&&this.param.getHeight()!=null) {
+        if (!this.param.getEnableSelfAdaption()&&this.param.getHeight()!=null) {
             return this.param.getHeight();
         }
         return this.param.init(document, page, this).getHeight();
@@ -465,7 +456,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回布尔值，是为true，否为false
      */
     public boolean isUseSelfStyle() {
-        return this.param.isUseSelfStyle();
+        return this.param.getUseSelfStyle();
     }
 
 }

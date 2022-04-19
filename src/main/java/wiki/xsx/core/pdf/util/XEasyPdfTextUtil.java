@@ -119,8 +119,50 @@ public class XEasyPdfTextUtil {
         return lineList;
     }
 
+    /**
+     * 获取文本真实宽度
+     * @param text 文本
+     * @param font pdfbox字体
+     * @param fontSize 字体大小
+     * @param characterSpacing 字符间隔
+     * @return 返回文本真实宽度
+     */
     @SneakyThrows
     public static float getTextRealWidth(String text, PDFont font, float fontSize, float characterSpacing) {
         return fontSize * font.getStringWidth(text) / 1000 + (text.length() - 1) * characterSpacing;
+    }
+
+    /**
+     * 转义正则字符
+     * @param text 待转义文本
+     * @return 返回转义文本
+     */
+    public static String escapeForRegex(String text) {
+        // 如果待转义文本为空，则返回空字符串
+        if (text==null||text.trim().length()==0) {
+            return "";
+        }
+        // 定义待转义字符数组
+        final char[] escapeChars = {'$', '(', ')', '*', '+', '.', '[', '?', '\\', '^', '{', '|'};
+        // 定义字符串构建器
+        StringBuilder builder = new StringBuilder();
+        // 获取转义文本字符数组
+        char[] charArray = text.toCharArray();
+        // 遍历转义文本字符数组
+        for (char c : charArray) {
+            // 遍历待转义字符数组
+            for (char escapeChar : escapeChars) {
+                // 如果字符为待转义字符，则添加转义字符
+                if (escapeChar==c) {
+                    // 添加转义字符
+                    builder.append("\\");
+                    // 结束遍历
+                    break;
+                }
+            }
+            // 添加字符
+            builder.append(c);
+        }
+        return builder.toString();
     }
 }

@@ -13,6 +13,7 @@ import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,10 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfPageParam {
+class XEasyPdfPageParam implements Serializable {
+
+    private static final long serialVersionUID = 3226308238459966086L;
+
     /**
      * 每英寸像素点
      */
@@ -43,7 +47,7 @@ class XEasyPdfPageParam {
     /**
      * 每毫米像素点
      */
-    private static final float POINTS_PER_MM = 1 / (10 * 2.54f) * POINTS_PER_INCH;
+    private static final float POINTS_PER_MM = 1 / 25.4f * POINTS_PER_INCH;
     /**
      * 内容模式
      */
@@ -119,36 +123,36 @@ class XEasyPdfPageParam {
     /**
      * 是否允许添加水印
      */
-    private boolean allowWatermark = true;
+    private Boolean allowWatermark = true;
     /**
      * 是否允许添加背景图片
      */
-    private boolean allowBackgroundImage = true;
+    private Boolean allowBackgroundImage = true;
     /**
      * 是否允许添加背景色
      */
-    private boolean allowBackgroundColor = true;
+    private Boolean allowBackgroundColor = true;
     /**
      * 是否允许添加页眉
      */
-    private boolean allowHeader = true;
+    private Boolean allowHeader = true;
     /**
      * 是否允许添加页脚
      */
-    private boolean allowFooter = true;
+    private Boolean allowFooter = true;
     /**
      * 是否允许重置定位
      */
-    private boolean allowResetPosition = true;
+    private Boolean allowResetPosition = true;
     /**
      * 是否允许旋转固有页面
      */
-    private boolean allowRotateInherentPage = true;
+    private Boolean allowRotateInherentPage = true;
 
     /**
      * 获取每毫米像素点
      */
-    public static float getUnit() {
+    public static Float getUnit() {
         return POINTS_PER_MM;
     }
 

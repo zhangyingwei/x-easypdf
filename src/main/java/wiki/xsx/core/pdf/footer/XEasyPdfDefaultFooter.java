@@ -27,6 +27,8 @@ import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
  */
 public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
 
+    private static final long serialVersionUID = 6124740112893964108L;
+
     /**
      * 页脚参数
      */
@@ -129,6 +131,36 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
     }
 
     /**
+     * 获取总页码占位符
+     * @return 返回总页码占位符
+     */
+    @Override
+    public String getTotalPagePlaceholder() {
+        return XEasyPdfHandler.Page.getTotalPagePlaceholder();
+    }
+
+    /**
+     * 获取当前页码占位符
+     * @return 返回当前页码占位符
+     */
+    @Override
+    public String getCurrentPagePlaceholder() {
+        return XEasyPdfHandler.Page.getCurrentPagePlaceholder();
+    }
+
+    /**
+     * 获取文本字体路径
+     * @return 返回文本字体路径
+     */
+    @Override
+    public String getTextFontPath() {
+        if (this.param.getText()!=null) {
+            return this.param.getText().getFontPath();
+        }
+        return null;
+    }
+
+    /**
      * 检查组件
      * @param component 组件
      * @return 返回布尔值，true为是，false为否
@@ -192,7 +224,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
             // 设置位置并绘制文本
             text.setPosition(
                     this.param.getBeginX(), this.initYForText(document, page, text)
-            ).draw(document, page);
+            ).enableChildComponent().draw(document, page);
         }
         // 开启页面自动重置定位
         page.enablePosition();

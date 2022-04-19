@@ -48,7 +48,10 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentSigner {
+public class XEasyPdfDocumentSigner implements Serializable {
+
+    private static final long serialVersionUID = -3449241065190072431L;
+
     /**
      * pdf文档签名器参数
      */
@@ -185,9 +188,11 @@ public class XEasyPdfDocumentSigner {
         // 初始化参数
         this.param.init(pageIndex);
         // 创建字节数组输出流
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024)) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(8192)) {
             // 创建任务文档
             PDDocument target = this.param.getDocument();
+            // 替换总页码占位符
+            this.param.getPdfDocument().replaceTotalPagePlaceholder(target, false);
             // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
             this.param.getPdfDocument().setBasicInfo(target);
             // 保存文档
@@ -338,7 +343,7 @@ public class XEasyPdfDocumentSigner {
         /**
          * pdf签名器
          */
-        private XEasyPdfDocumentSigner signer;
+        private final XEasyPdfDocumentSigner signer;
 
         /**
          * 提供者bc

@@ -1,5 +1,7 @@
 package wiki.xsx.core.pdf.doc;
 
+import java.io.Serializable;
+
 /**
  * pdf文档表单
  * @author xsx
@@ -17,7 +19,9 @@ package wiki.xsx.core.pdf.doc;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentForm {
+public class XEasyPdfDocumentForm implements Serializable {
+
+    private static final long serialVersionUID = 347480015461916142L;
 
     /**
      * pdf文档表单填写器

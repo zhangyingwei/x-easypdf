@@ -20,9 +20,11 @@ import org.apache.xmpbox.xml.XmpSerializer;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
+import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.header.XEasyPdfHeader;
 import wiki.xsx.core.pdf.mark.XEasyPdfWatermark;
 import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import javax.print.PrintServiceLookup;
 import java.awt.*;
@@ -32,9 +34,8 @@ import java.awt.print.PrinterJob;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.*;
 
 /**
  * pdf文档
@@ -53,7 +54,9 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocument implements Closeable {
+public class XEasyPdfDocument implements Closeable, Serializable {
+
+    private static final long serialVersionUID = -4298644812517253946L;
 
     /**
      * 日志
@@ -103,6 +106,15 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
+     * 开启总页码占位符替换
+     * @return 返回pdf文档
+     */
+    public XEasyPdfDocument enableReplaceTotalPagePlaceholder() {
+        this.param.setIsReplaceTotalPagePlaceholder(true);
+        return this;
+    }
+
+    /**
      * 设置文档内容模式（每个页面都将设置该模式）
      * @return 返回pdf文档
      */
@@ -130,7 +142,7 @@ public class XEasyPdfDocument implements Closeable {
         // 如果背景色不为空，则设置
         if (globalBackgroundColor!=null) {
             // 设置重置
-            this.param.setReset(true);
+            this.param.setIsReset(true);
             // 设置文档背景色
             this.param.setGlobalBackgroundColor(globalBackgroundColor);
         }
@@ -152,7 +164,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument setGlobalBackgroundImage(XEasyPdfImage globalBackgroundImage) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 设置背景图片
         this.param.setGlobalBackgroundImage(globalBackgroundImage);
         return this;
@@ -173,7 +185,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 设置文档水印
         this.param.setGlobalWatermark(globalWatermark);
         return this;
@@ -194,7 +206,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument setGlobalHeader(XEasyPdfHeader globalHeader) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 设置文档页眉
         this.param.setGlobalHeader(globalHeader);
         return this;
@@ -215,7 +227,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument setGlobalFooter(XEasyPdfFooter globalFooter) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 设置文档页脚
         this.param.setGlobalFooter(globalFooter);
         return this;
@@ -236,7 +248,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument setFontPath(String fontPath) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 设置字体路径
         this.param.setFontPath(fontPath);
         return this;
@@ -249,7 +261,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 设置字体样式
         this.param.setDefaultFontStyle(style);
         return this;
@@ -323,7 +335,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public PDDocument getTarget() {
         // 如果任务文档未初始化或文档被重置，则进行新任务创建
-        if (this.param.getTarget()==null||this.param.isReset()) {
+        if (this.param.getTarget()==null||this.param.getIsReset()) {
             // 初始化
             this.param.initTarget(this);
         }
@@ -353,7 +365,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument addPage(XEasyPdfPage...pages) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 添加页面
         Collections.addAll(this.param.getPageList(), pages);
         return this;
@@ -379,7 +391,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument insertPage(int pageIndex, XEasyPdfPage...pages) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果pdf页面列表数量大于索引，则插入页面，否则添加页面
@@ -417,7 +429,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument modifyPageSize(PDRectangle pageSize, int ...pageIndex) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果页面索引不为空，则根据给定索引设置，否则全部页面进行设置
@@ -446,7 +458,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument removePage(int ...pageIndex) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 遍历页面索引
@@ -468,7 +480,7 @@ public class XEasyPdfDocument implements Closeable {
      */
     public XEasyPdfDocument merge(XEasyPdfDocument ...documents) {
         // 设置重置
-        this.param.setReset(true);
+        this.param.setIsReset(true);
         // 遍历待合并文档
         for (XEasyPdfDocument document : documents) {
             // 添加合并源pdf文档
@@ -555,15 +567,11 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
-     * 构建文档
-     * @return 返回pdfbox文档
+     * 文档分析器
+     * @return 返回pdf文档分析器
      */
-    public PDDocument build() {
-        // 获取任务文档
-        PDDocument target = this.getTarget();
-        // 初始化页面
-        this.param.initPage(this);
-        return target;
+    public XEasyPdfDocumentAnalyzer analyzer() {
+        return new XEasyPdfDocumentAnalyzer(this);
     }
 
     /**
@@ -613,6 +621,8 @@ public class XEasyPdfDocument implements Closeable {
         if (this.param.getTempTargetList().isEmpty()) {
             // 构建文档
             PDDocument target = this.build();
+            // 替换总页码占位符
+            this.replaceTotalPagePlaceholder(target, false);
             // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
             this.setBasicInfo(target);
             // 保存文档
@@ -703,6 +713,18 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
+     * 构建文档
+     * @return 返回pdfbox文档
+     */
+    PDDocument build() {
+        // 获取任务文档
+        PDDocument target = this.getTarget();
+        // 初始化页面
+        this.param.initPage(this);
+        return target;
+    }
+
+    /**
      * 设置文档信息
      * @param info pdf文档信息
      */
@@ -751,6 +773,41 @@ public class XEasyPdfDocument implements Closeable {
     }
 
     /**
+     * 替换总页码占位符
+     * @param target 任务文档
+     */
+    void replaceTotalPagePlaceholder(PDDocument target, boolean isMultiDocument) {
+        // 如果开启替换总页码占位符，则进行替换
+        if (this.param.getIsReplaceTotalPagePlaceholder()) {
+            // 获取文档总页码
+            int totalPage = target.getNumberOfPages();
+            // 如果页码大于0，则进行替换
+            if (totalPage>0) {
+                // 创建pdf文本替换器
+                XEasyPdfDocumentReplacer replacer = new XEasyPdfDocumentReplacer(this, target);
+                // 开启替换cos数组
+                replacer.enableReplaceCOSArray();
+                // 定义待替换文本字典
+                Map<String, String> replaceMap = new HashMap<>(1);
+                // 设置替换文本
+                replaceMap.put(XEasyPdfTextUtil.escapeForRegex(XEasyPdfHandler.Page.getTotalPagePlaceholder()), String.valueOf(totalPage));
+                // 如果为多文档，则使用多文档替换方式
+                if (isMultiDocument) {
+                    // 替换总页码占位符
+                    this.replaceTotalPagePlaceholder(target, replacer, replaceMap);
+                }
+                // 否则使用单文档替换方式
+                else {
+                    // 替换总页码占位符
+                    this.replaceTotalPagePlaceholder(replacer, replaceMap, this.getPageList());
+                }
+                // 完成操作
+                replacer.finish();
+            }
+        }
+    }
+
+    /**
      * 获取pdf文档参数
      * @return 返回pdf文档参数
      */
@@ -792,6 +849,8 @@ public class XEasyPdfDocument implements Closeable {
             // 删除临时文件
             file.deleteOnExit();
         }
+        // 替换总页码占位符
+        this.replaceTotalPagePlaceholder(target, true);
         // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
         this.setBasicInfo(target);
         // 保存任务文档
@@ -858,5 +917,91 @@ public class XEasyPdfDocument implements Closeable {
         }
         // 设置书签
         target.getDocumentCatalog().setDocumentOutline(outline);
+    }
+
+    /**
+     * 替换总页码占位符（多文档）
+     * @param target 任务文档
+     * @param replacer pdf文本替换器
+     * @param replaceMap 待替换文本字典
+     */
+    private void replaceTotalPagePlaceholder(
+            PDDocument target,
+            XEasyPdfDocumentReplacer replacer,
+            Map<String, String> replaceMap
+    ) {
+        // 获取pdfbox页面树
+        PDPageTree pages = target.getPages();
+        // 设置字体路径
+        replacer.setFontPath(this.param.getFontPath());
+        // 遍历页面树
+        for (PDPage pdfboxPage : pages) {
+            // 替换文本
+            replacer.replaceText(pdfboxPage, replaceMap);
+        }
+    }
+
+    /**
+     * 替换总页码占位符（单文档）
+     * @param replacer pdf文本替换器
+     * @param replaceMap 待替换文本字典
+     * @param pageList 待替换pdf页面列表
+     */
+    private void replaceTotalPagePlaceholder(
+            XEasyPdfDocumentReplacer replacer,
+            Map<String, String> replaceMap,
+            List<XEasyPdfPage> pageList
+    ) {
+        // 遍历pdf页面列表
+        for (XEasyPdfPage page : pageList) {
+            // 获取pdf页眉
+            XEasyPdfHeader header = page.getHeader();
+            // 如果页眉不为空，则替换
+            if (header!=null) {
+                // 替换总页码占位符
+                this.replaceTotalPagePlaceholder(header.getTextFontPath(), replacer, replaceMap, page);
+            }
+            // 获取pdf页脚
+            XEasyPdfFooter footer = page.getFooter();
+            // 如果页脚不为空，则替换
+            if (footer!=null) {
+                // 替换总页码占位符
+                this.replaceTotalPagePlaceholder(footer.getTextFontPath(), replacer, replaceMap, page);
+            }
+        }
+    }
+
+    /**
+     * 替换总页码占位符
+     * @param fontPath 字体路径
+     * @param replacer pdf文档替换器
+     * @param replaceMap 代替换字典
+     * @param page pdf页面
+     */
+    private void replaceTotalPagePlaceholder(
+            String fontPath,
+            XEasyPdfDocumentReplacer replacer,
+            Map<String, String> replaceMap,
+            XEasyPdfPage page
+    ) {
+        // 如果字体路径不为空，则替换
+        if (fontPath!=null) {
+            // 设置字体路径
+            replacer.setFontPath(fontPath);
+            // 获取原有pdfBox页面列表
+            List<PDPage> pdfboxPageList = page.getPageList();
+            // 遍历页面列表
+            for (PDPage pdfboxPage : pdfboxPageList) {
+                // 替换文本
+                replacer.replaceText(pdfboxPage, replaceMap);
+            }
+            // 获取新增的pdfBox页面列表
+            pdfboxPageList = page.getNewPageList();
+            // 遍历页面列表
+            for (PDPage pdfboxPage : pdfboxPageList) {
+                // 替换文本
+                replacer.replaceText(pdfboxPage, replaceMap);
+            }
+        }
     }
 }

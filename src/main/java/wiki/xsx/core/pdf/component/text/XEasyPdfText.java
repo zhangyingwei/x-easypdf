@@ -42,6 +42,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class XEasyPdfText implements XEasyPdfComponent {
 
+    private static final long serialVersionUID = -4199419015054023227L;
+
     /**
      * 文本参数
      */
@@ -91,7 +93,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableTextAppend() {
-        this.param.setTextAppend(true);
+        this.param.setIsTextAppend(true);
         return this;
     }
 
@@ -109,7 +111,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableChildComponent() {
-        this.param.setChildComponent(true);
+        this.param.setIsChildComponent(true);
         return this;
     }
 
@@ -118,7 +120,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableUnderline() {
-        this.param.setUnderline(true);
+        this.param.setIsUnderline(true);
         return this;
     }
 
@@ -127,7 +129,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableDeleteLine() {
-        this.param.setDeleteLine(true);
+        this.param.setIsDeleteLine(true);
         return this;
     }
 
@@ -136,7 +138,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableHighlight() {
-        this.param.setHighlight(true);
+        this.param.setIsHighlight(true);
         return this;
     }
 
@@ -145,7 +147,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableRotateLine() {
-        this.param.setRotateLine(true);
+        this.param.setIsRotateLine(true);
         return this;
     }
 
@@ -452,7 +454,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText setNewLine(boolean isNewLine) {
-        this.param.setNewLine(isNewLine);
+        this.param.setIsNewLine(isNewLine);
         return this;
     }
 
@@ -474,7 +476,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfText setPosition(float beginX, float beginY) {
-        this.param.setBeginX(beginX).setBeginY(beginY).setChildComponent(true);
+        this.param.setBeginX(beginX).setBeginY(beginY);
         return this;
     }
 
@@ -541,15 +543,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
         this.doDraw(document, page);
         // 重置字体为null
         this.param.setFont(null);
-    }
-
-    /**
-     * 是否已经绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
     }
 
     /**
@@ -637,6 +630,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 获取字体路径
+     * @return 返回字体路径
+     */
+    public String getFontPath() {
+        return this.param.getFontPath();
+    }
+
+    /**
      * 获取行间距
      * @return 返回行间距
      */
@@ -657,7 +658,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回布尔值，是为true，否为false
      */
     public boolean isUseSelfStyle() {
-        return this.param.isUseSelfStyle();
+        return this.param.getUseSelfStyle();
     }
 
     /**
@@ -703,7 +704,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
     @SneakyThrows
     private void doDraw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果设置不自动换行，则关闭页面自动重置定位
-        if (!this.param.isNewLine()) {
+        if (!this.param.getIsNewLine()) {
             // 关闭页面自动重置定位
             page.disablePosition();
         }
@@ -738,7 +739,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                     this.param.getBeginY(),
                     index==totalLineIndex
             );
-            if (this.param.isTextAppend()) {
+            if (this.param.getIsTextAppend()) {
                 // 重置X轴起始坐标为0
                 this.param.setBeginX(0F);
             }
@@ -771,8 +772,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 开启页面自动重置定位
             page.enablePosition();
         }
-        // 完成标记
-        this.param.setDraw(true);
     }
 
     /**
@@ -783,7 +782,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @SneakyThrows
     private PDPageContentStream checkPage(XEasyPdfDocument document, XEasyPdfPage page, PDPageContentStream stream) {
-        if (this.param.isCheckPage()) {
+        if (this.param.getCheckPage()) {
             // 定义页脚高度
             float footerHeight = 0F;
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
@@ -934,7 +933,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             float beginY
     ) {
         // 如果开启高亮显示，则设置高亮
-        if (this.param.isHighlight()) {
+        if (this.param.getIsHighlight()) {
             // 初始化Y轴起始坐标为Y轴起始坐标-字体高度/10
             beginY = beginY - this.param.getFontHeight()/10;
             // 获取写入尺寸
@@ -967,7 +966,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 如果文本弧度大于0，则进行文本旋转
         if (this.param.getRadians()>0) {
             // 如果开启整行旋转，则整行旋转
-            if (this.param.isRotateLine()) {
+            if (this.param.getIsRotateLine()) {
                 // 开启文本输入
                 stream.beginText();
                 // 设置文本弧度
@@ -1030,7 +1029,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             float beginY
     ) {
         // 如果开启下划线，则设置下划线
-        if (this.param.isUnderline()) {
+        if (this.param.getIsUnderline()) {
             // 初始化Y轴起始坐标为Y轴起始坐标-下划线宽度/2-字体高度/10
             beginY = beginY - this.param.getUnderlineWidth()/2 - this.param.getFontHeight()/10;
             // 获取写入尺寸
@@ -1065,7 +1064,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             float beginY
     ) {
         // 如果开启删除线，则设置删除线
-        if (this.param.isDeleteLine()) {
+        if (this.param.getIsDeleteLine()) {
             // 初始化Y轴起始坐标为Y轴起始坐标-删除线宽度/2+字体高度/2
             beginY = beginY - this.param.getDeleteLineWidth()/2 + this.param.getFontHeight()/2;
             // 获取写入尺寸

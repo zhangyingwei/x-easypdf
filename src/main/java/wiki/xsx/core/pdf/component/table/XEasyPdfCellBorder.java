@@ -73,19 +73,19 @@ final class XEasyPdfCellBorder {
     /**
      * 是否带有上边框
      */
-    private boolean hasTopBorder = true;
+    private Boolean hasTopBorder = true;
     /**
      * 是否带有下边框
      */
-    private boolean hasBottomBorder = true;
+    private Boolean hasBottomBorder = true;
     /**
      * 是否带有左边框
      */
-    private boolean hasLeftBorder = true;
+    private Boolean hasLeftBorder = true;
     /**
      * 是否带有右边框
      */
-    private boolean hasRightBorder = true;
+    private Boolean hasRightBorder = true;
     /**
      * 绘制边框
      */

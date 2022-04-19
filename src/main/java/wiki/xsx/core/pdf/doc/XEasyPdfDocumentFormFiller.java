@@ -12,6 +12,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -34,7 +35,10 @@ import java.util.Set;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentFormFiller {
+public class XEasyPdfDocumentFormFiller implements Serializable {
+
+    private static final long serialVersionUID = -178730035810612354L;
+
     /**
      * pdf文档
      */
@@ -164,6 +168,8 @@ public class XEasyPdfDocumentFormFiller {
         this.pdfDocument.setBasicInfo(this.document);
         // 设置表单为空（解决编辑器乱码问题）
         this.document.getDocumentCatalog().setAcroForm(this.form);
+        // 替换总页码占位符
+        this.pdfDocument.replaceTotalPagePlaceholder(this.document, false);
         // 保存文档
         this.document.save(outputStream);
         // 重置表单为空

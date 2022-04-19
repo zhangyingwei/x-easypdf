@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.component.layout;
 import lombok.Data;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +24,14 @@ import java.util.List;
  * </p>
  */
 @Data
-class XEasyPdfLayoutParam {
+class XEasyPdfLayoutParam implements Serializable {
+
+    private static final long serialVersionUID = 6269937080892192541L;
 
     /**
      * 是否包含表格边框
      */
-    private boolean hasTableBorder = false;
+    private Boolean hasTableBorder = false;
     /**
      * pdf表格
      */
@@ -45,8 +48,4 @@ class XEasyPdfLayoutParam {
      * 高度
      */
     private Float height;
-    /**
-     * 是否完成绘制
-     */
-    private boolean isDraw = false;
 }

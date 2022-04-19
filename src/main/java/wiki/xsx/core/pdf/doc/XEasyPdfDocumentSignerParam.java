@@ -13,6 +13,7 @@ import org.apache.pdfbox.pdmodel.interactive.digitalsignature.visible.PDVisibleS
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
@@ -34,7 +35,10 @@ import java.util.Calendar;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfDocumentSignerParam {
+class XEasyPdfDocumentSignerParam implements Serializable {
+
+    private static final long serialVersionUID = -444541984762721143L;
+
     /**
      * pdfbox文档
      */
@@ -82,7 +86,7 @@ class XEasyPdfDocumentSignerParam {
     /**
      * pdf访问权限
      */
-    private int accessPermissions = 1;
+    private Integer accessPermissions = 1;
     /**
      * 签名图片
      */
@@ -102,7 +106,7 @@ class XEasyPdfDocumentSignerParam {
     /**
      * 签名内存大小（默认：250K）
      */
-    private int preferredSignatureSize = 0x3e800;
+    private Integer preferredSignatureSize = 0x3e800;
 
     /**
      * 初始化

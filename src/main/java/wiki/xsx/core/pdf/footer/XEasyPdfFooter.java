@@ -5,6 +5,8 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
+import java.io.Serializable;
+
 /**
  * pdf页脚组件接口
  * @author xsx
@@ -22,7 +24,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public interface XEasyPdfFooter {
+public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 开启上下文重置
@@ -65,6 +67,24 @@ public interface XEasyPdfFooter {
      * @return 返回页脚高度
      */
     float getHeight(XEasyPdfDocument document, XEasyPdfPage page);
+
+    /**
+     * 获取总页码占位符
+     * @return 返回总页码占位符
+     */
+    String getTotalPagePlaceholder();
+
+    /**
+     * 获取当前页码占位符
+     * @return 返回当前页码占位符
+     */
+    String getCurrentPagePlaceholder();
+
+    /**
+     * 获取文本字体路径
+     * @return 返回文本字体路径
+     */
+    String getTextFontPath();
 
     /**
      * 检查组件

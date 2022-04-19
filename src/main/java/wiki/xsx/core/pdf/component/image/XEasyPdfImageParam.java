@@ -15,6 +15,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
 /**
  * pdf图片参数
@@ -35,7 +36,10 @@ import java.io.FileNotFoundException;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfImageParam {
+class XEasyPdfImageParam implements Serializable {
+
+    private static final long serialVersionUID = -1443161179636974232L;
+
     /**
      * 内容模式
      */
@@ -95,15 +99,15 @@ class XEasyPdfImageParam {
     /**
      * 是否使用自身样式
      */
-    private boolean useSelfStyle = false;
+    private Boolean useSelfStyle = false;
     /**
      * 自适应图片大小
      */
-    private boolean enableSelfAdaption = true;
+    private Boolean enableSelfAdaption = true;
     /**
      * 垂直居中样式
      */
-    private boolean enableVerticalCenterStyle = false;
+    private Boolean enableVerticalCenterStyle = false;
     /**
      * 图片压缩模式（质量、速度、平衡，默认为质量）
      */
@@ -127,11 +131,7 @@ class XEasyPdfImageParam {
     /**
      * 是否子组件
      */
-    private boolean isChildComponent = false;
-    /**
-     * 是否完成绘制
-     */
-    private boolean isDraw = false;
+    private Boolean isChildComponent = false;
 
     /**
      * 初始化

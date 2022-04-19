@@ -28,6 +28,8 @@ import java.awt.*;
  */
 public class XEasyPdfBaseLine implements XEasyPdfLine {
 
+    private static final long serialVersionUID = -2997710088689093318L;
+
     /**
      * 线条参数
      */
@@ -233,19 +235,8 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
         contentStream.setStrokingColor(Color.BLACK);
         // 关闭内容流
         contentStream.close();
-        // 完成标记
-        this.param.setDraw(true);
         // 重置字体为null
         this.param.setFont(null);
-    }
-
-    /**
-     * 是否完成绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
     }
 
     /**

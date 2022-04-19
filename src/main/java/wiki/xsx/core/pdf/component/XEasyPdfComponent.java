@@ -5,6 +5,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
+import java.io.Serializable;
+
 /**
  * pdf组件接口
  * @author xsx
@@ -22,7 +24,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public interface XEasyPdfComponent {
+public interface XEasyPdfComponent extends Serializable {
 
     /**
      * 设置坐标
@@ -65,12 +67,6 @@ public interface XEasyPdfComponent {
      * @param page pdf页面
      */
     void draw(XEasyPdfDocument document, XEasyPdfPage page);
-
-    /**
-     * 是否完成绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    boolean isDraw();
 
     /**
      * 内容模式

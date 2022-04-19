@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class XEasyPdfTable implements XEasyPdfComponent {
 
+    private static final long serialVersionUID = 4155761069922557517L;
+
     /**
      * pdf表格参数
      */
@@ -361,19 +363,8 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         }
         // 开启页面自动重置定位
         page.enablePosition();
-        // 完成标记
-        this.param.setDraw(true);
         // 重置字体为null
         this.param.setFont(null);
-    }
-
-    /**
-     * 是否完成绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
     }
 
     /**

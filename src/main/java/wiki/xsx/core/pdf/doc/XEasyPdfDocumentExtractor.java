@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.*;
@@ -42,7 +43,9 @@ import java.util.regex.Pattern;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentExtractor {
+public class XEasyPdfDocumentExtractor implements Serializable {
+
+    private static final long serialVersionUID = 8464226596006053066L;
 
     /**
      * pdfbox文档

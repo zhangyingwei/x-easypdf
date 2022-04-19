@@ -12,6 +12,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,10 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfRowParam {
+class XEasyPdfRowParam implements Serializable {
+
+    private static final long serialVersionUID = -8085463000293380631L;
+
     /**
      * 内容模式
      */
@@ -116,7 +120,7 @@ class XEasyPdfRowParam {
     /**
      * 分页标识
      */
-    private boolean isPaging = false;
+    private Boolean isPaging = false;
 
     /**
      * 初始化
@@ -204,7 +208,7 @@ class XEasyPdfRowParam {
             // 遍历单元格列表
             for (XEasyPdfCell cell : this.cells) {
                 // 如果单元格开启垂直合并，则跳过
-                if (cell.getParam().isVerticalMerge()) {
+                if (cell.getParam().getIsVerticalMerge()) {
                     // 跳过
                     continue;
                 }

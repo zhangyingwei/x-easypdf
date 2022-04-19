@@ -101,9 +101,14 @@ public class XEasyPdfHandler {
     public static class Page {
 
         /**
+         * 总页码占位符
+         */
+        private static final String TOTAL_PAGE_PLACEHOLDER = "${TPE}";
+
+        /**
          * 当前页码占位符
          */
-        private static final String CURRENT_PAGE_PLACEHOLDER = "${PAGE}";
+        private static final String CURRENT_PAGE_PLACEHOLDER = "${PE}";
 
         /**
          * 构建页面
@@ -183,6 +188,14 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfDefaultWatermark watermark, List<XEasyPdfComponent> components) {
             return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
+        }
+
+        /**
+         * 获取总页码占位符
+         * @return 返回总页码占位符
+         */
+        public static String getTotalPagePlaceholder() {
+            return TOTAL_PAGE_PLACEHOLDER;
         }
 
         /**

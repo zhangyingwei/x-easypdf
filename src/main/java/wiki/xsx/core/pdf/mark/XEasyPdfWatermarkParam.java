@@ -10,6 +10,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * pdf页面水印参数
@@ -30,7 +31,10 @@ import java.awt.*;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfWatermarkParam {
+class XEasyPdfWatermarkParam implements Serializable {
+
+    private static final long serialVersionUID = -3423024754445075443L;
+
     /**
      * 内容模式
      */
@@ -102,7 +106,7 @@ class XEasyPdfWatermarkParam {
     /**
      * 是否需要初始化
      */
-    private boolean isNeedInit = true;
+    private Boolean isNeedInit = true;
 
     /**
      * 初始化

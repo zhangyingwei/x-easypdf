@@ -10,6 +10,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -32,7 +33,9 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentSplitter {
+public class XEasyPdfDocumentSplitter implements Serializable {
+
+    private static final long serialVersionUID = -1959028511245585789L;
 
     /**
      * pdfbox文档
@@ -124,6 +127,8 @@ public class XEasyPdfDocumentSplitter {
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(index).append(".pdf");
                 // 获取输出流
                 try(OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
+                    // 替换总页码占位符
+                    this.pdfDocument.replaceTotalPagePlaceholder(target, false);
                     // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
                     this.pdfDocument.setBasicInfo(target);
                     // 保存文档
@@ -159,6 +164,8 @@ public class XEasyPdfDocumentSplitter {
                 // 设置页面资源缓存
                 importPage.setResources(pdPage.getResources());
             }
+            // 替换总页码占位符
+            this.pdfDocument.replaceTotalPagePlaceholder(target, false);
             // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
             this.pdfDocument.setBasicInfo(target);
             // 保存任务文档

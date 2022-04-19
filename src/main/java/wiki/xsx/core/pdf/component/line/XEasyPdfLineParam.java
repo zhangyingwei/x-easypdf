@@ -10,6 +10,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * pdf线条参数
@@ -30,7 +31,10 @@ import java.awt.*;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfLineParam {
+class XEasyPdfLineParam implements Serializable {
+
+    private static final long serialVersionUID = 1496963673664295875L;
+
     /**
      * 内容模式
      */
@@ -107,10 +111,6 @@ class XEasyPdfLineParam {
      * 颜色（默认黑色）
      */
     private Color color = Color.BLACK;
-    /**
-     * 是否完成绘制
-     */
-    private boolean isDraw = false;
 
     /**
      * 初始化参数

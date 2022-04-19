@@ -26,6 +26,8 @@ import java.awt.*;
  */
 public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
 
+    private static final long serialVersionUID = 923483874195529438L;
+
     /**
      * 分割线参数
      */
@@ -227,19 +229,8 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
             // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
             page.setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
         }
-        // 完成标记
-        this.param.setDraw(true);
         // 重置字体为null
         this.param.setFont(null);
-    }
-
-    /**
-     * 是否完成绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
     }
 
     /**

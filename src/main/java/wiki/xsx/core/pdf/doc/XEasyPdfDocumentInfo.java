@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.doc;
 
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 
@@ -23,7 +24,10 @@ import java.util.Calendar;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentInfo {
+public class XEasyPdfDocumentInfo implements Serializable {
+
+    private static final long serialVersionUID = -9083747658446890160L;
+
     /**
      * pdf文档
      */

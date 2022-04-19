@@ -7,6 +7,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +28,9 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfRow {
+public class XEasyPdfRow implements Serializable {
+
+    private static final long serialVersionUID = 2954489044413380387L;
 
     /**
      * pdf表格行参数
@@ -236,7 +239,7 @@ public class XEasyPdfRow {
      * @return 返回表格行组件
      */
     public XEasyPdfRow enablePaging() {
-        this.param.setPaging(true);
+        this.param.setIsPaging(true);
         return this;
     }
 
@@ -297,7 +300,7 @@ public class XEasyPdfRow {
             // 如果单元格不为空，则进行绘制
             if (cell!=null) {
                 // 如果单元格为垂直合并，则跳过绘制
-                if (cell.getParam().isVerticalMerge()) {
+                if (cell.getParam().getIsVerticalMerge()) {
                     // 重置X轴起始坐标
                     this.param.setBeginX(this.param.getBeginX()+cell.getParam().getWidth()+cell.getParam().getMarginLeft());
                     // 跳过

@@ -1,5 +1,8 @@
 package wiki.xsx.core.pdf.util;
 
+import lombok.SneakyThrows;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,5 +51,26 @@ public class XEasyPdfConvertUtil {
             list.add(index);
         }
         return list;
+    }
+
+    /**
+     * 转为新对象（深拷贝）
+     * @param object 源对象
+     * @param <T> 对象类型
+     * @return 返回新对象
+     */
+    @SuppressWarnings("all")
+    @SneakyThrows
+    public <T> T toNewObject(Serializable object) {
+        try (
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(bos)
+        ) {
+            oos.writeObject(object);
+            oos.flush();
+            try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()))) {
+                return (T) ois.readObject();
+            }
+        }
     }
 }

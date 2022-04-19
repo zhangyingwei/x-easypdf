@@ -11,6 +11,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * pdf单元格参数
@@ -31,7 +32,10 @@ import java.awt.*;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfCellParam {
+class XEasyPdfCellParam implements Serializable {
+
+    private static final long serialVersionUID = 8411726264113185762L;
+
     /**
      * 内容模式
      */
@@ -43,19 +47,19 @@ class XEasyPdfCellParam {
     /**
      * 是否水平合并
      */
-    private boolean isHorizontalMerge = false;
+    private Boolean isHorizontalMerge = false;
     /**
      * 是否垂直合并
      */
-    private boolean isVerticalMerge = false;
+    private Boolean isVerticalMerge = false;
     /**
      * 是否组件换行
      */
-    private boolean isNewLine = true;
+    private Boolean isNewLine = true;
     /**
      * 是否组件样式
      */
-    private boolean isComponentSelfStyle = false;
+    private Boolean isComponentSelfStyle = false;
     /**
      * 是否带有边框
      */
@@ -63,19 +67,19 @@ class XEasyPdfCellParam {
     /**
      * 是否带有上边框
      */
-    private boolean hasTopBorder = true;
+    private Boolean hasTopBorder = true;
     /**
      * 是否带有下边框
      */
-    private boolean hasBottomBorder = true;
+    private Boolean hasBottomBorder = true;
     /**
      * 是否带有左边框
      */
-    private boolean hasLeftBorder = true;
+    private Boolean hasLeftBorder = true;
     /**
      * 是否带有右边框
      */
-    private boolean hasRightBorder = true;
+    private Boolean hasRightBorder = true;
     /**
      * 背景颜色
      */

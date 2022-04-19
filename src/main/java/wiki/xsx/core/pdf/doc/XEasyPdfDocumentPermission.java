@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.doc;
 import org.apache.pdfbox.pdmodel.encryption.*;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -24,7 +25,10 @@ import java.security.cert.X509Certificate;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentPermission {
+public class XEasyPdfDocumentPermission implements Serializable {
+
+    private static final long serialVersionUID = 489321495313792173L;
+
     /**
      * pdf文档
      */

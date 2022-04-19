@@ -11,6 +11,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,10 @@ import java.util.Map;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfBarCodeParam {
+class XEasyPdfBarCodeParam implements Serializable {
+
+    private static final long serialVersionUID = 4749447908058798998L;
+
     /**
      * 内容模式
      */
@@ -124,13 +128,9 @@ class XEasyPdfBarCodeParam {
      */
     private Float marginBottom = 0F;
     /**
-     * 是否完成绘制
-     */
-    private boolean isDraw = false;
-    /**
      * 是否显示文字
      */
-    private boolean isShowWords = false;
+    private Boolean isShowWords = false;
     /**
      * 编码设置
      */

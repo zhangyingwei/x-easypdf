@@ -15,6 +15,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,10 @@ import java.util.List;
 @Data
 @EqualsAndHashCode
 @Accessors(chain = true)
-class XEasyPdfTextParam {
+class XEasyPdfTextParam implements Serializable {
+
+    private static final long serialVersionUID = 8028404070423440838L;
+
     /**
      * 内容模式
      */
@@ -174,44 +178,39 @@ class XEasyPdfTextParam {
     /**
      * 是否使用自身样式
      */
-    private boolean useSelfStyle = false;
+    private Boolean useSelfStyle = false;
     /**
      * 是否换行
      */
-    private boolean isNewLine = true;
+    private Boolean isNewLine = true;
     /**
      * 是否分页检查
      */
-    private boolean checkPage = true;
+    private Boolean checkPage = true;
     /**
      * 是否文本追加
      */
-    private boolean isTextAppend = false;
+    private Boolean isTextAppend = false;
     /**
      * 是否子组件
      */
-    private boolean isChildComponent = false;
+    private Boolean isChildComponent = false;
     /**
      * 是否添加下划线
      */
-    private boolean isUnderline = false;
+    private Boolean isUnderline = false;
     /**
      * 是否添加删除线
      */
-    private boolean isDeleteLine = false;
+    private Boolean isDeleteLine = false;
     /**
      * 是否高亮显示
      */
-    private boolean isHighlight = false;
+    private Boolean isHighlight = false;
     /**
      * 是否整行旋转
      */
-    private boolean isRotateLine = false;
-    /**
-     * 是否完成绘制
-     */
-    private boolean isDraw = false;
-
+    private Boolean isRotateLine = false;
 
     /**
      * 获取宽度

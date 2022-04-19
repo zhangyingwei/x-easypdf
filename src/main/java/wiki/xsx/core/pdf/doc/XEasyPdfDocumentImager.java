@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -31,7 +32,9 @@ import java.nio.file.Paths;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentImager {
+public class XEasyPdfDocumentImager implements Serializable {
+
+    private static final long serialVersionUID = 4542844990362703412L;
 
     /**
      * pdfbox文档
@@ -53,6 +56,8 @@ public class XEasyPdfDocumentImager {
     XEasyPdfDocumentImager(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.build();
+        // 替换总页码占位符
+        this.pdfDocument.replaceTotalPagePlaceholder(this.document, false);
     }
 
     /**

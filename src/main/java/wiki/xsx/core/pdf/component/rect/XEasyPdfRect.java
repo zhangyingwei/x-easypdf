@@ -27,6 +27,8 @@ import java.awt.*;
  */
 public class XEasyPdfRect implements XEasyPdfComponent {
 
+    private static final long serialVersionUID = 7685200001639953693L;
+
     /**
      * pdf矩形参数
      */
@@ -179,7 +181,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @return 返回矩形组件
      */
     public XEasyPdfRect setNewLine(boolean newLine) {
-        this.param.setNewLine(newLine);
+        this.param.setIsNewLine(newLine);
         return this;
     }
 
@@ -249,7 +251,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
                 this.param.getIsResetContext()
         );
         // 如果带有边框，则进行边框绘制
-        if (this.param.isHasBorder()) {
+        if (this.param.getHasBorder()) {
             // 绘制矩形（边框矩形）
             contentStream.addRect(
                     this.param.getBeginX(),
@@ -292,7 +294,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
         // 如果允许页面重置定位，则进行重置
         if (page.isAllowResetPosition()) {
             // 如果允许自动换行，则重置页面Y轴起始坐标
-            if (this.param.isNewLine()) {
+            if (this.param.getIsNewLine()) {
                 // 重置页面X轴起始坐标
                 page.setPageX(null);
                 // 重置页面Y轴起始坐标
@@ -302,16 +304,5 @@ public class XEasyPdfRect implements XEasyPdfComponent {
                 page.setPageX(this.param.getBeginX()+this.param.getWidth());
             }
         }
-        // 完成标记
-        this.param.setDraw(true);
-    }
-
-    /**
-     * 是否完成绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
     }
 }

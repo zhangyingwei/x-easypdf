@@ -19,9 +19,10 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -43,7 +44,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfDocumentParam {
+class XEasyPdfDocumentParam implements Serializable {
+
+    private static final long serialVersionUID = 2578484264342461916L;
+
     /**
      * 生产者
      */
@@ -56,6 +60,10 @@ class XEasyPdfDocumentParam {
      * 是否重置上下文
      */
     private Boolean isResetContext = false;
+    /**
+     * 是否替换总页码占位符
+     */
+    private Boolean isReplaceTotalPagePlaceholder = false;
     /**
      * 默认字体样式
      */
@@ -95,7 +103,7 @@ class XEasyPdfDocumentParam {
     /**
      * 总页数
      */
-    private int totalPage = 0;
+    private Integer totalPage = 0;
     /**
      * 合并pdf源文档
      */
@@ -139,7 +147,7 @@ class XEasyPdfDocumentParam {
     /**
      * 是否重置
      */
-    private boolean isReset = false;
+    private Boolean isReset = false;
 
     /**
      * 获取临时存放路径

@@ -8,6 +8,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * pdf矩形参数
@@ -28,7 +29,10 @@ import java.awt.*;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfRectParam {
+class XEasyPdfRectParam implements Serializable {
+
+    private static final long serialVersionUID = 1621265990621255413L;
+
     /**
      * 内容模式
      */
@@ -72,7 +76,7 @@ class XEasyPdfRectParam {
     /**
      * 是否有边框
      */
-    private boolean hasBorder = false;
+    private Boolean hasBorder = false;
     /**
      * 边框宽度
      */
@@ -88,15 +92,11 @@ class XEasyPdfRectParam {
     /**
      * 页面检查
      */
-    private boolean checkPage = true;
+    private Boolean checkPage = true;
     /**
      * 是否自动换行
      */
-    private boolean isNewLine = true;
-    /**
-     * 是否完成绘制
-     */
-    private boolean isDraw = false;
+    private Boolean isNewLine = true;
 
     /**
      * 初始化

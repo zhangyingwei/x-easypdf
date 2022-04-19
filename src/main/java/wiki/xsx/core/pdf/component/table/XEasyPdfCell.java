@@ -13,6 +13,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * pdf单元格组件
@@ -31,7 +32,9 @@ import java.awt.*;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfCell {
+public class XEasyPdfCell implements Serializable {
+
+    private static final long serialVersionUID = -94458460877280249L;
 
     /**
      * pdf单元格参数
@@ -247,7 +250,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableVerticalMerge() {
-        this.param.setVerticalMerge(true);
+        this.param.setIsVerticalMerge(true);
         return this;
     }
 
@@ -256,7 +259,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableNewLine() {
-        this.param.setNewLine(true);
+        this.param.setIsNewLine(true);
         return this;
     }
 
@@ -265,7 +268,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableNewLine() {
-        this.param.setNewLine(false);
+        this.param.setIsNewLine(false);
         return this;
     }
 
@@ -274,7 +277,7 @@ public class XEasyPdfCell {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableComponentSelfStyle() {
-        this.param.setComponentSelfStyle(true);
+        this.param.setIsComponentSelfStyle(true);
         return this;
     }
 
@@ -419,7 +422,7 @@ public class XEasyPdfCell {
         // 填充背景色
         this.fillBackgroundColor(document, page, row);
         // 如果开启组件自动换行，则开启页面自动定位
-        if (this.param.isNewLine()) {
+        if (this.param.getIsNewLine()) {
             // 开启页面自动定位
             page.enablePosition();
         }
@@ -519,10 +522,10 @@ public class XEasyPdfCell {
                     .setBorderWidth(this.param.getBorderWidth())
                     .setBeginX(row.getParam().getBeginX())
                     .setBeginY(row.getParam().getBeginY()-this.param.getMarginTop())
-                    .setHasTopBorder(this.param.isHasTopBorder())
-                    .setHasBottomBorder(this.param.isHasBottomBorder())
-                    .setHasLeftBorder(this.param.isHasLeftBorder())
-                    .setHasRightBorder(this.param.isHasRightBorder());
+                    .setHasTopBorder(this.param.getHasTopBorder())
+                    .setHasBottomBorder(this.param.getHasBottomBorder())
+                    .setHasLeftBorder(this.param.getHasLeftBorder())
+                    .setHasRightBorder(this.param.getHasRightBorder());
             // 获取表格参数
             XEasyPdfTableParam tableParam = table.getParam();
             // 如果单元格边框颜色与表格边框颜色相同，则直接绘制边框
@@ -550,7 +553,7 @@ public class XEasyPdfCell {
         text.setPosition(
                 row.getParam().getBeginX(),
                 this.initYForText(document, page, row, text)-this.param.getMarginTop()
-        ).draw(document, page);
+        ).enableChildComponent().draw(document, page);
     }
 
     /**
@@ -607,7 +610,7 @@ public class XEasyPdfCell {
         // 设置文本为子组件并设置宽度
         text.enableChildComponent().setWidth(this.param.getWidth());
         // 如果开启组件样式，则使用文本自身样式
-        if (this.param.isComponentSelfStyle()) {
+        if (this.param.getIsComponentSelfStyle()) {
             // 设置文本自身样式
             this.param.setVerticalStyle(text.getVerticalStyle()).setHorizontalStyle(text.getHorizontalStyle());
             // 返回
@@ -649,7 +652,7 @@ public class XEasyPdfCell {
                 .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth())
                 .setMaxHeight(height - this.param.getBorderWidth());
         // 如果开启组件样式，则使用图片自身样式
-        if (this.param.isComponentSelfStyle()) {
+        if (this.param.getIsComponentSelfStyle()) {
             // 设置图片自身样式
             this.param.setVerticalStyle(image.getVerticalStyle()).setHorizontalStyle(image.getHorizontalStyle());
             // 返回

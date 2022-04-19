@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
+    private static final long serialVersionUID = 9095729509463996323L;
+
     /**
      * pdf水印参数
      */
@@ -230,7 +232,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果需要初始化，则进行参数初始化
-        if (this.param.isNeedInit()) {
+        if (this.param.getIsNeedInit()) {
             // 初始化水印参数
             this.param.init(document, page);
         }

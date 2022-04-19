@@ -9,6 +9,7 @@ import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,10 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfHeaderParam {
+class XEasyPdfHeaderParam implements Serializable {
+
+    private static final long serialVersionUID = -5055961872807917576L;
+
     /**
      * 是否重置上下文
      */
@@ -127,14 +131,14 @@ class XEasyPdfHeaderParam {
             // 定义文本高度
             float textHeight = 0F;
             // 如果文本不为空，则获取文本高度
-            if (this.text != null) {
+            if (this.text!=null) {
                 // 获取文本高度
-                textHeight = this.text.setMarginLeft(this.marginLeft).setMarginRight(this.marginRight).getHeight(document, page);
+                textHeight = this.text.getHeight(document, page);
             }
             // 定义图片高度
             float imageHeight = 0F;
             // 如果图片不为空，则获取图片高度
-            if (this.image != null) {
+            if (this.image!=null) {
                 // 关闭图片自适应
                 this.image.disableSelfAdaption();
                 // 如果自定义图片宽度为空，则设置为页面宽度

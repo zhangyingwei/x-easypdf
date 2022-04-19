@@ -23,10 +23,7 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -48,7 +45,9 @@ import java.util.*;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentReplacer {
+public class XEasyPdfDocumentReplacer implements Serializable {
+
+    private static final long serialVersionUID = 5248577569799461988L;
 
     /**
      * 日志
@@ -57,11 +56,11 @@ public class XEasyPdfDocumentReplacer {
     /**
      * pdfbox文档
      */
-    private final PDDocument document;
+    private PDDocument document;
     /**
      * pdf文档
      */
-    private final XEasyPdfDocument pdfDocument;
+    private XEasyPdfDocument pdfDocument;
     /**
      * pdfbox字体
      */
@@ -69,15 +68,25 @@ public class XEasyPdfDocumentReplacer {
     /**
      * 是否允许替换cos数组
      */
-    private boolean isAllowReplaceCOSArray = false;
+    private Boolean isAllowReplaceCOSArray = false;
 
     /**
-     * 构造方法
+     * 有参构造
      * @param pdfDocument pdf文档
      */
     XEasyPdfDocumentReplacer(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.build();
+    }
+
+    /**
+     * 有参构造
+     * @param pdfDocument pdf文档
+     * @param target pdfbox文档
+     */
+    XEasyPdfDocumentReplacer(XEasyPdfDocument pdfDocument, PDDocument target) {
+        this.pdfDocument = pdfDocument;
+        this.document = target;
     }
 
     /**
@@ -223,11 +232,17 @@ public class XEasyPdfDocumentReplacer {
      */
     @SneakyThrows
     public XEasyPdfDocumentReplacer replaceImage(BufferedImage image, XEasyPdfImageType imageType, List<Integer> replaceIndexList, int ...pageIndex) {
-        return this.replaceImage(
-                PDImageXObject.createFromByteArray(this.document, XEasyPdfImageUtil.toBytes(image, imageType.name()), imageType.name()),
-                replaceIndexList,
-                pageIndex
-        );
+        // 定义pdf图像
+        PDImageXObject imageObject = null;
+        // 如果待替换图像不为空，则重置pdf图像
+        if (image!=null) {
+            // 重置pdf图像
+            imageObject = PDImageXObject.createFromByteArray(
+                    this.document,
+                    XEasyPdfImageUtil.toBytes(image, imageType.name()), imageType.name()
+            );
+        }
+        return this.replaceImage(imageObject, replaceIndexList, pageIndex);
     }
 
     /**
@@ -255,8 +270,13 @@ public class XEasyPdfDocumentReplacer {
      */
     @SneakyThrows
     public void finish(OutputStream outputStream) {
-        // 添加字体嵌入
-        this.pdfDocument.getParam().embedFont(Collections.singleton(this.font));
+        // 如果字体不为空，则添加字体嵌入
+        if (this.font!=null) {
+            // 添加字体嵌入
+            this.pdfDocument.getParam().embedFont(Collections.singleton(this.font));
+        }
+        // 替换总页码占位符
+        this.pdfDocument.replaceTotalPagePlaceholder(this.document, false);
         // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
         this.pdfDocument.setBasicInfo(this.document);
         // 保存文档
@@ -265,6 +285,46 @@ public class XEasyPdfDocumentReplacer {
         this.font = null;
         // 关闭文档
         this.pdfDocument.close();
+    }
+
+    /**
+     * 完成操作
+     */
+    void finish() {
+        this.pdfDocument = null;
+        this.document = null;
+        this.font = null;
+    }
+
+    /**
+     * 替换文本
+     * @param page pdfbox页面
+     * @param replaceMap 替换字典（key可为正则）
+     */
+    @SneakyThrows
+    void replaceText(PDPage page, Map<String, String> replaceMap) {
+        // 获取页面资源
+        PDResources resources = page.getResources();
+        // 获取pdf解析器
+        PDFStreamParser parser = new PDFStreamParser(page);
+        // 解析页面
+        parser.parse();
+        // 获取标记列表
+        List<Object> tokens = parser.getTokens();
+        // 如果替换文本标记成功，则更新内容
+        if (this.replaceTextToken(resources, tokens, replaceMap)) {
+            // 定义更新流
+            PDStream updatedStream = new PDStream(this.document);
+            // 创建输出流
+            try (OutputStream outputStream = updatedStream.createOutputStream(COSName.FLATE_DECODE)) {
+                // 创建内容写入器
+                ContentStreamWriter tokenWriter = new ContentStreamWriter(outputStream);
+                // 写入标记列表
+                tokenWriter.writeTokens(tokens);
+                // 设置页面内容
+                page.setContents(updatedStream);
+            }
+        }
     }
 
     /**
@@ -296,37 +356,6 @@ public class XEasyPdfDocumentReplacer {
     }
 
     /**
-     * 替换文本
-     * @param page pdfbox页面
-     * @param replaceMap 替换字典（key可为正则）
-     */
-    @SneakyThrows
-    private void replaceText(PDPage page, Map<String, String> replaceMap) {
-        // 获取页面资源
-        PDResources resources = page.getResources();
-        // 获取pdf解析器
-        PDFStreamParser parser = new PDFStreamParser(page);
-        // 解析页面
-        parser.parse();
-        // 获取标记列表
-        List<Object> tokens = parser.getTokens();
-        // 如果替换文本标记成功，则更新内容
-        if (this.replaceTextToken(resources, tokens, replaceMap)) {
-            // 定义更新流
-            PDStream updatedStream = new PDStream(this.document);
-            // 创建输出流
-            try (OutputStream outputStream = updatedStream.createOutputStream(COSName.FLATE_DECODE)) {
-                // 创建内容写入器
-                ContentStreamWriter tokenWriter = new ContentStreamWriter(outputStream);
-                // 写入标记列表
-                tokenWriter.writeTokens(tokens);
-                // 设置页面内容
-                page.setContents(updatedStream);
-            }
-        }
-    }
-
-    /**
      * 替换文本标记
      * @param resources pdfbox页面资源
      * @param tokens 标记列表
@@ -345,7 +374,7 @@ public class XEasyPdfDocumentReplacer {
         // 获取替换字典文本列表
         Set<Map.Entry<String, String>> entrySet = replaceMapTemp.entrySet();
         // 获取替换字体名称
-        COSName replaceFontName = COSName.getPDFName("F_"+resourceFontMap.size());
+        COSName replaceFontName = COSName.getPDFName(this.font.getName());
         // 定义字体索引
         int fontIndex = 0;
         // 定义资源字体
@@ -363,11 +392,8 @@ public class XEasyPdfDocumentReplacer {
                     // 重置资源字体
                     resourceFont = resourceFontMap.get(token);
                 }
-                // 否则跳过
-                else {
-                    // 跳过
-                    continue;
-                }
+                // 跳过
+                continue;
             }
             // 如果标记为cos数组，则替换文本
             if (token instanceof COSArray) {
@@ -431,6 +457,7 @@ public class XEasyPdfDocumentReplacer {
         boolean flag = false;
         // 转换为cos数组
         COSArray array = (COSArray) token;
+        // 如果允许替换替换cos数组，则替换cos数组
         if (this.isAllowReplaceCOSArray) {
             // 如果处理cos字符串成功，则重置处理标记为已处理
             if (this.processCOSArray(array, entrySet, resourceFont)) {
@@ -568,16 +595,20 @@ public class XEasyPdfDocumentReplacer {
         int count = entrySet.size();
         // 如果字符串不为空，则替换
         if (value.trim().length()>0) {
+            // 定义临时字符串
+            String temp;
             // 获取待替换字典文本迭代器
             Iterator<Map.Entry<String, String>> iterator = entrySet.iterator();
             // 遍历待替换字典文本列表
             while (iterator.hasNext()) {
                 // 获取待替换文本字典
                 Map.Entry<String, String> entry = iterator.next();
-                // 如果当前字符串包含待替换字符串，则进行替换
-                if (value.matches(entry.getKey())) {
+                // 替换字符串
+                temp = value.replaceFirst(entry.getKey(), entry.getValue());
+                // 如果当前字符串不等于临时字符串，则说明已替换
+                if (!value.equals(temp)) {
                     // 替换字符串
-                    value = value.replaceFirst(entry.getKey(), entry.getValue());
+                    value = temp;
                     // 移除已替换的文本字典
                     iterator.remove();
                 }

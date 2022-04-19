@@ -1,89 +1,6 @@
-<p align="center">
-	<img src="https://images.gitee.com/uploads/images/2021/0621/111332_1f43ae97_1494292.png" width="45%">
-</p>
-<p align="center">
-	<strong>一个用搭积木的方式构建pdf的框架（基于pdfbox）</strong>
-</p>
+package wiki.xsx.core.pdf.doc;
 
-#### 更新说明
-master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.7.9，QQ交流群：15018726
-
-#### 介绍
-x-easypdf基于pdfbox二次封装，极大降低使用门槛，以组件化的形式进行pdf的构建。简单易用，仅需一行代码，便可完成pdf的相关操作
-
-#### API文档
-https://apidoc.gitee.com/xsxgit/x-easypdf
-
-#### 特性
-1. 体积轻量
-> 仅依赖pdfbox，无其他依赖（数字签名需单独添加bouncycastle依赖，条形码需单独添加zxing依赖）
-2. 简单智能
-> 文本超出单行显示时，即可自动换行；内容超出单页显示时，即可自动分页。只需记住一个类，学习成本低
-3. 表单填充
-> 可轻松实现pdf表单的填充
-4. 图片转换
-> 可轻松实现pdf转为图片
-5. 提取内容
-> 可提取pdf页面中的文本及图片
-6. 文本替换
-> 可将pdf中的文本内容进行替换，支持正则
-7. 拆分合并
-> 可将pdf按照单页或多页进行拆分与合并
-8. 数字签名
-> 可对已有pdf或新创建的pdf进行数字签名
-9. 内置字体
-> 内置细体、正常、粗体三种开源中文字体（思源字体）
-10. 扩展灵活
-> 只需实现框架提供的接口，即可完成自定义的组件扩展
-11. 组件构建
-> 页面所有内容均采用组件化的形式进行构建
-
-#### 软件架构
-
-![软件架构](https://oscimg.oschina.net/oscnet/up-0ac3aeedb9264d9bac0d54adc95ea1e597d.png "x-easypdf整体架构")
-
-1. document(文档)：PDF文档
-2. page(页面)：若干个页面组成PDF文档
-3. watermark(水印)：每个页面可设置页面级别的独立水印，也可设置文档级别的全局水印，优先级为：页面级别>文档级别
-4. header(页眉)：每个页面可设置页面级别的独立页眉，也可设置文档级别的全局页眉，优先级为：页面级别>文档级别
-5. footer(页脚)：每个页面可设置页面级别的独立页脚，也可设置文档级别的全局页脚，优先级为：页面级别>文档级别
-6. component(组件)：核心，每个页面由若干个组件构成
-> text(文本组件)：已提供，文本写入组件
-
-> line(线条组件)：已提供，线条写入组件
-
-> image(图片组件)：已提供，图片写入组件
-
-> table(表格组件)：已提供，表格写入组件，cell(单元格)->row(行)->table(表格)
-
-> rect(矩形组件)：已提供，矩形写入组件
-
-> circle(圆形组件)：已提供，圆形写入组件
-
-> barcode(条形码组件)：已提供，条形码写入组件(包含一维码/二维码)
-> 
-> layout(布局组件)：已提供，包含水平布局与垂直布局，支持相互嵌套
-
-> 后续将添加更多其他方便实用的组件。。。
-
-#### maven坐标
-```maven
-<dependency>
-    <groupId>wiki.xsx</groupId>
-    <artifactId>x-easypdf</artifactId>
-    <version>2.7.9</version>
-</dependency>
-```
-
-#### 安装教程
-```cmd
-mvn clean install
-```
-
-#### 使用说明
-1. 简单小示例
-> 代码如下：
-```java
+import org.junit.Test;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
@@ -95,14 +12,32 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 
-public class XpdfTest {
-    
-    @SneakyThrows
-    public static void main(String[] args) {
-        // 定义图片路径
-        final String imagePath = "E:\\pdf\\test\\doc\\test.png";
+/**
+ * @author xsx
+ * @date 2022/4/19
+ * @since 1.8
+ * <p>
+ * Copyright (c) 2022 xsx All Rights Reserved.
+ * x-easypdf is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ * http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ * </p>
+ */
+public class XEasyPdfTest {
+
+    private static final String OUTPUT_PATH = "E:\\pdf\\test\\test\\";
+    private static final String IMAGE_PATH = OUTPUT_PATH + "test.png";
+
+    @Test
+    public void allTest() throws IOException {
+        long begin = System.currentTimeMillis();
         // 定义保存路径
-        final String outputPath = "E:\\pdf\\test\\doc\\my.pdf";
+        final String outputPath = OUTPUT_PATH + "allTest.pdf";
         // 定义页眉与页脚字体颜色
         Color headerAndFooterColor = new Color(10, 195, 255);
         // 定义分割线颜色
@@ -118,15 +53,17 @@ public class XpdfTest {
                     // 构建页眉
                     XEasyPdfHandler.Header.build(
                             // 构建页眉图片，并居中显示
-                            XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(50F).enableCenterStyle(),
-                            // 构建页眉文本，并居中显示
-                            XEasyPdfHandler.Text.build("这是粗体页眉")
-                                    // 设置水平垂直居中
-                                    .enableCenterStyle()
+                            XEasyPdfHandler.Image.build(new File(IMAGE_PATH)).setHeight(50F).enableCenterStyle(),
+                            // 构建页眉文本，并居右显示
+                            XEasyPdfHandler.Text.build("当第"+XEasyPdfHandler.Page.getCurrentPagePlaceholder()+"页,共"+XEasyPdfHandler.Page.getTotalPagePlaceholder()+"页")
+                                    // 设置居右显示
+                                    .setHorizontalStyle(XEasyPdfPositionStyle.RIGHT)
                                     // 设置字体大小
                                     .setFontSize(20F)
+                                    // 设置左边距
+                                    .setMarginLeft(50F)
                                     // 设置字体颜色
-                                    .setFontColor(headerAndFooterColor)
+                                    .setFontColor(new Color(220, 0, 220))
                                     // 使用粗体字
                                     .setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                     )
@@ -135,7 +72,7 @@ public class XpdfTest {
                     // 构建页脚
                     XEasyPdfHandler.Footer.build(
                             // 构建页眉图片，并居中显示
-                            XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(50F).setVerticalStyle(XEasyPdfPositionStyle.BOTTOM),
+                            XEasyPdfHandler.Image.build(new File(IMAGE_PATH)).setHeight(50F).enableCenterStyle(),
                             // 构建页脚文本（手动分行），并居中显示
                             XEasyPdfHandler.Text.build(Arrays.asList("这是粗体页脚第一行", "这是粗体页脚第二行"))
                                     // 设置水平居中
@@ -322,17 +259,12 @@ public class XpdfTest {
                                     // 开启自动表头（分页时，自动添加表头行）
                                     .enableAutoTitle()
                     )
+                    // 开启总页数替换
+            ).enableReplaceTotalPagePlaceholder()
                     // 保存、关闭
-            ).save(outputPath).close();
+                    .save(outputPath).close();
         }
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
     }
 }
-```
-
-> 效果如下：
-
-![示例效果](https://oscimg.oschina.net/oscnet/up-d335d0d5e10d3763b795f3825cdc2670dfb.png "示例效果")
-
-2. 使用说明
-
-请查看[wiki](https://gitee.com/xsxgit/x-easypdf/wikis/pages)

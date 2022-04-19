@@ -31,6 +31,8 @@ import java.util.List;
  */
 public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
+    private static final long serialVersionUID = -7390695218795028439L;
+
     /**
      * 页眉参数
      */
@@ -144,6 +146,36 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     }
 
     /**
+     * 获取总页码占位符
+     * @return 返回总页码占位符
+     */
+    @Override
+    public String getTotalPagePlaceholder() {
+        return XEasyPdfHandler.Page.getTotalPagePlaceholder();
+    }
+
+    /**
+     * 获取当前页码占位符
+     * @return 返回当前页码占位符
+     */
+    @Override
+    public String getCurrentPagePlaceholder() {
+        return XEasyPdfHandler.Page.getCurrentPagePlaceholder();
+    }
+
+    /**
+     * 获取文本字体路径
+     * @return 返回文本字体路径
+     */
+    @Override
+    public String getTextFontPath() {
+        if (this.param.getText()!=null) {
+            return this.param.getText().getFontPath();
+        }
+        return null;
+    }
+
+    /**
      * 检查组件
      * @param component 组件
      * @return 返回布尔值，true为是，false为否
@@ -191,7 +223,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
             // 设置位置并绘制文本
             text.setPosition(
                     this.param.getTextBeginX(), this.initYForText(document, page, text)
-            ).draw(document, page);
+            ).enableChildComponent().draw(document, page);
         }
         // 如果图片不为空，则进行图片绘制
         if (this.param.getImage()!=null) {

@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class XEasyPdfVerticalLayout implements XEasyPdfLayout {
 
+    private static final long serialVersionUID = -6412230973258885503L;
+
     /**
      * pdf布局参数
      */
@@ -184,22 +186,11 @@ public class XEasyPdfVerticalLayout implements XEasyPdfLayout {
         // 获取pdf表格
         XEasyPdfTable table = this.param.getTable();
         // 如果不包含表格边框，则关闭表格边框
-        if (!this.param.isHasTableBorder()) {
+        if (!this.param.getHasTableBorder()) {
             // 关闭表格边框
             table.disableBorder();
         }
         // 添加表格行并绘制
         table.addRow(rows).setMarginBottom(0F).draw(document, page);
-        // 完成绘制
-        this.param.setDraw(true);
-    }
-
-    /**
-     * 是否完成绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
     }
 }

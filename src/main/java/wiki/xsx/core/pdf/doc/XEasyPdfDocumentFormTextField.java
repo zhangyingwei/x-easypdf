@@ -8,6 +8,8 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 
+import java.io.Serializable;
+
 /**
  * pdf文档表单文本属性
  * @author xsx
@@ -25,7 +27,9 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentFormTextField {
+public class XEasyPdfDocumentFormTextField implements Serializable {
+
+    private static final long serialVersionUID = -6308558126594489097L;
 
     /**
      * 打印选项

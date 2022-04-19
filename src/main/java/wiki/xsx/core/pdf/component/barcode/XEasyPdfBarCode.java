@@ -37,6 +37,8 @@ import java.awt.image.BufferedImage;
  */
 public class XEasyPdfBarCode implements XEasyPdfComponent {
 
+    private static final long serialVersionUID = 5127121806423508565L;
+
     /**
      * 条形码参数
      */
@@ -332,7 +334,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode enableShowWords() {
-        this.param.setShowWords(true);
+        this.param.setIsShowWords(true);
         return this;
     }
 
@@ -388,17 +390,6 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
             // 设置文档页面X轴坐标Y轴坐标
             page.setPageX(this.param.getBeginX()).setPageY(this.param.getBeginY());
         }
-        // 完成标记
-        this.param.setDraw(true);
-    }
-
-    /**
-     * 是否已经绘制
-     * @return 返回布尔值，完成为true，未完成为false
-     */
-    @Override
-    public boolean isDraw() {
-        return this.param.isDraw();
     }
 
     /**
@@ -410,7 +401,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         // 获取图片
         BufferedImage bufferedImage = this.toBufferedImage(matrix);
         // 如果显示文字，则添加图片文字
-        if (this.param.isShowWords()) {
+        if (this.param.getIsShowWords()) {
             // 添加图片文字
             bufferedImage = this.addImageWords(bufferedImage);
         }

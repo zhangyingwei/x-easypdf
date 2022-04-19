@@ -4,6 +4,7 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPa
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,10 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDocumentBookmark {
+public class XEasyPdfDocumentBookmark implements Serializable {
+
+    private static final long serialVersionUID = 7120771777001614541L;
+
     /**
      * pdf文档
      */

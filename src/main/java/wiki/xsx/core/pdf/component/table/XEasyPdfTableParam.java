@@ -11,6 +11,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,10 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-class XEasyPdfTableParam {
+class XEasyPdfTableParam implements Serializable {
+
+    private static final long serialVersionUID = 8648004404874837308L;
+
     /**
      * 内容模式
      */
@@ -73,7 +77,7 @@ class XEasyPdfTableParam {
     /**
      * 边框宽度
      */
-    private float borderWidth = 1F;
+    private Float borderWidth = 1F;
     /**
      * 左边距
      */
@@ -109,7 +113,7 @@ class XEasyPdfTableParam {
     /**
      * 字体大小
      */
-    private float fontSize = 12F;
+    private Float fontSize = 12F;
     /**
      * 字体颜色
      */
@@ -124,10 +128,6 @@ class XEasyPdfTableParam {
      * 默认居上
      */
     private XEasyPdfPositionStyle verticalStyle = XEasyPdfPositionStyle.TOP;
-    /**
-     * 是否完成绘制
-     */
-    private boolean isDraw = false;
 
     /**
      * 初始化
