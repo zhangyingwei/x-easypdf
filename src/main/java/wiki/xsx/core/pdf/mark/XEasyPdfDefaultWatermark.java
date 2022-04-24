@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.blend.BlendMode;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.util.Matrix;
@@ -11,6 +12,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 import java.util.List;
@@ -76,7 +78,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      */
     public XEasyPdfDefaultWatermark setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
         if (style!=null) {
-            this.param.setDefaultFontStyle(style);
+            this.param.setFontPath(style.getPath());
         }
         return this;
     }
@@ -236,6 +238,8 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
             // 初始化水印参数
             this.param.init(document, page);
         }
+        // 获取pdfbox字体
+        PDFont font = XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true);
         // 获取X轴起始坐标
         Float beginX = this.param.getBeginX();
         // 获取Y轴起始坐标
@@ -247,7 +251,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 遍历pdfBox页面列表
         for (PDPage pdPage : pageList) {
             // 执行画水印
-            this.doDraw(target, pdPage);
+            this.doDraw(target, pdPage, font);
             // 重置X轴起始坐标
             this.param.setBeginX(beginX);
             // 重置Y轴起始坐标
@@ -258,7 +262,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 遍历pdfBox页面列表
         for (PDPage pdPage : pageList) {
             // 执行画水印
-            this.doDraw(target, pdPage);
+            this.doDraw(target, pdPage, font);
             // 重置X轴起始坐标
             this.param.setBeginX(beginX);
             // 重置Y轴起始坐标
@@ -269,14 +273,15 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
     /**
      * 执行绘制
      * @param document pdfbox文档
-     * @param pdPage pdfbox页面
+     * @param page pdfbox页面
+     * @param font pdfbox字体
      */
     @SneakyThrows
-    private void doDraw(PDDocument document, PDPage pdPage) {
+    private void doDraw(PDDocument document, PDPage page, PDFont font) {
         // 获取页面高度
-        float height = pdPage.getMediaBox().getHeight();
+        float height = page.getMediaBox().getHeight();
         // 获取页面宽度
-        float width = pdPage.getMediaBox().getWidth();
+        float width = page.getMediaBox().getWidth();
         // 如果X轴起始坐标未初始化，则初始化X轴起始坐标为0
         if (this.param.getBeginX()==null) {
             // 初始化X轴起始坐标为0
@@ -298,7 +303,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 初始化内容流
         PDPageContentStream cs = new PDPageContentStream(
                 document,
-                pdPage,
+                page,
                 this.param.getContentMode().getMode(),
                 true,
                 this.param.getIsResetContext()
@@ -308,7 +313,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 设置字体颜色
         cs.setNonStrokingColor(this.param.getFontColor());
         // 设置字体
-        cs.setFont(this.param.getFont(), this.param.getFontSize());
+        cs.setFont(font, this.param.getFontSize());
         // 设置字符间隔
         cs.setCharacterSpacing(this.param.getCharacterSpacing());
         // 写入文本

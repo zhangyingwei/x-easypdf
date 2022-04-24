@@ -61,7 +61,7 @@ public class XEasyPdfConvertUtil {
      */
     @SuppressWarnings("all")
     @SneakyThrows
-    public <T> T toNewObject(Serializable object) {
+    public static <T> T toNewObject(Serializable object) {
         try (
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(bos)

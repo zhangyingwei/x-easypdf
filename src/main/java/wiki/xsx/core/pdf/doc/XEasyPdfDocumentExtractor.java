@@ -75,7 +75,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
     @SneakyThrows
     XEasyPdfDocumentExtractor(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.build();
+        this.document = this.pdfDocument.build(true);
         this.simpleExtractor = new SimpleExtractor(this.document);
         this.regionExtractor = new RegionExtractor();
     }

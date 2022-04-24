@@ -55,7 +55,7 @@ public class XEasyPdfDocumentSplitter implements Serializable {
      */
     XEasyPdfDocumentSplitter(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.build();
+        this.document = this.pdfDocument.build(true);
     }
 
     /**

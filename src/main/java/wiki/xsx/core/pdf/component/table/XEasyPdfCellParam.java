@@ -2,13 +2,10 @@ package wiki.xsx.core.pdf.component.table;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
-import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -105,17 +102,9 @@ class XEasyPdfCellParam implements Serializable {
      */
     private XEasyPdfComponent component;
     /**
-     * 默认字体样式
-     */
-    private XEasyPdfDefaultFontStyle defaultFontStyle;
-    /**
      * 字体路径
      */
     private String fontPath;
-    /**
-     * 字体
-     */
-    private PDFont font;
     /**
      * 字体大小
      */
@@ -167,18 +156,11 @@ class XEasyPdfCellParam implements Serializable {
             // 初始化为页面是否重置上下文
             this.isResetContext = rowParam.getIsResetContext();
         }
-        // 如果默认字体未初始化，则初始化为页面默认字体
-        if (this.defaultFontStyle==null) {
-            // 初始化为页面默认字体
-            this.defaultFontStyle = rowParam.getDefaultFontStyle();
-        }
         // 如果字体路径未初始化，则初始化为默认字体路径
         if (this.fontPath==null) {
             // 初始化为默认字体路径
-            this.fontPath = this.defaultFontStyle.getPath();
+            this.fontPath = rowParam.getFontPath();
         }
-        // 初始化字体
-        this.font = XEasyPdfFontUtil.getFont(document, this.fontPath, rowParam.getFont());
         // 如果字体大小未初始化，则进行初始化
         if (this.fontSize==null) {
             // 初始化字体大小

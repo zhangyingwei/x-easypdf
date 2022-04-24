@@ -2,12 +2,9 @@ package wiki.xsx.core.pdf.mark;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -44,17 +41,9 @@ class XEasyPdfWatermarkParam implements Serializable {
      */
     private Boolean isResetContext;
     /**
-     * 默认字体样式
-     */
-    private XEasyPdfDefaultFontStyle defaultFontStyle = XEasyPdfDefaultFontStyle.NORMAL;
-    /**
      * 字体路径
      */
     private String fontPath;
-    /**
-     * 字体
-     */
-    private PDFont font;
     /**
      * 字体大小
      */
@@ -124,18 +113,11 @@ class XEasyPdfWatermarkParam implements Serializable {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
-        // 如果默认字体未初始化，则初始化为页面默认字体
-        if (this.defaultFontStyle==null) {
-            // 初始化为页面默认字体
-            this.defaultFontStyle = page.getDefaultFontStyle();
-        }
-        // 如果字体路径未初始化，则初始化为默认字体路径
+        // 如果字体路径未初始化，则初始化为页面字体路径
         if (this.fontPath==null) {
-            // 初始化为默认字体路径
-            this.fontPath = this.defaultFontStyle.getPath();
+            // 初始化为页面字体路径
+            this.fontPath = page.getFontPath();
         }
-        // 初始化字体
-        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
         // 如果文本间隔未初始化，则进行初始化
         if (this.wordSpace==null) {
             // 初始化文本间隔为6倍字体大小

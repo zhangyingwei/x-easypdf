@@ -46,6 +46,7 @@ public class XEasyPdfPage implements Serializable {
      * 无参构造
      */
     public XEasyPdfPage() {
+        this.param.setLastPage(new PDPage(PDRectangle.A4));
     }
 
     /**
@@ -54,6 +55,8 @@ public class XEasyPdfPage implements Serializable {
      */
     public XEasyPdfPage(PDPage page) {
         if (page!=null) {
+            // 重置最新页面
+            this.param.setLastPage(page);
             // 添加pdfBox页面
             this.param.getPageList().add(page);
         }
@@ -66,6 +69,8 @@ public class XEasyPdfPage implements Serializable {
     public XEasyPdfPage(PDRectangle pageSize) {
         // 如果pdfBox页面尺寸不为空，则设置pdfBox页面尺寸
         if (pageSize!=null) {
+            // 重置最新页面
+            this.param.setLastPage(new PDPage(pageSize));
             // 设置pdfBox页面尺寸
             this.param.setPageSize(pageSize);
         }
@@ -92,6 +97,14 @@ public class XEasyPdfPage implements Serializable {
     }
 
     /**
+     * 获取页面字体路径
+     * @return 返回页面字体路径
+     */
+    public String getFontPath() {
+        return this.param.getFontPath();
+    }
+
+    /**
      * 获取页面字体
      * @return 返回pdfBox字体
      */
@@ -106,17 +119,9 @@ public class XEasyPdfPage implements Serializable {
      */
     public XEasyPdfPage setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
         if (style!=null) {
-            this.param.setDefaultFontStyle(style);
+            this.param.setFontPath(style.getPath());
         }
         return this;
-    }
-
-    /**
-     * 获取默认字体样式
-     * @return 返回默认字体样式
-     */
-    public XEasyPdfDefaultFontStyle getDefaultFontStyle() {
-        return this.param.getDefaultFontStyle();
     }
 
     /**
@@ -274,30 +279,40 @@ public class XEasyPdfPage implements Serializable {
     }
 
     /**
+     * 获取页面宽度
+     * @return 返回页面宽度
+     */
+    public float getWidth() {
+        return this.param.getPageSize().getWidth();
+    }
+
+    /**
+     * 获取页面高度
+     * @return 返回页面高度
+     */
+    public float getHeight() {
+        return this.param.getPageSize().getHeight();
+    }
+
+    /**
+     * 获取页面尺寸
+     * @return 返回页面尺寸
+     */
+    public PDRectangle getRectangle() {
+        return this.param.getPageSize();
+    }
+
+    /**
      * 获取pdfBox最新页面
      * @return 返回pdfBox最新页面
      */
     public PDPage getLastPage() {
-        // 定义pdfbox页面
-        PDPage pdPage;
-        // 获取新页面列表
-        List<PDPage> pageList = this.param.getNewPageList();
-        // 如果新页面列表为空，则取旧页面列表，否则取新页面列表中最新一个页面
-        if (pageList.isEmpty()) {
-            // 获取旧页面列表
-            List<PDPage> oldPageList = this.param.getPageList();
-            // 初始化pdfbox页面，如果旧页面列表为空，则初始化为null，否则初始化为最新一个页面
-            pdPage = oldPageList.isEmpty()?null:oldPageList.get(oldPageList.size()-1);
-        }else {
-            // 初始化pdfbox页面为新页面列表中最新一个页面
-            pdPage = pageList.get(pageList.size()-1);
-        }
-        return pdPage;
+        return this.param.getLastPage();
     }
 
     /**
-     * 获取pdfBox当前索引
-     * @return 返回pdfBox当前索引
+     * 获取当前页面索引
+     * @return 返回当前页面索引
      */
     public int getCurrentIndex(XEasyPdfDocument document) {
         return document.getParam().getTotalPage();
@@ -478,6 +493,8 @@ public class XEasyPdfPage implements Serializable {
             // 设置旋转角度
             page.setRotation(this.param.getRotation());
         }
+        // 重置最新页面
+        this.param.setLastPage(page);
         // 添加pdfBox页面，如果页面尺寸为空，则添加默认A4页面，否则添加所给尺寸页面
         this.param.getNewPageList().add(page);
         // 初始化总页数

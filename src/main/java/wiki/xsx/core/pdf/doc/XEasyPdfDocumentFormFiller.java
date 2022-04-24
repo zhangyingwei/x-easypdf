@@ -52,9 +52,9 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      */
     private PDAcroForm form;
     /**
-     * pdfbox字体
+     * 字体路径
      */
-    private PDFont font;
+    private String fontPath;
 
     /**
      * 构造方法
@@ -62,7 +62,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      */
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.build();
+        this.document = this.pdfDocument.build(true);
         this.form = this.document.getDocumentCatalog().getAcroForm();
     }
 
@@ -72,7 +72,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller setFontPath(String fontPath) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, fontPath, true);
+        this.fontPath = fontPath;
         return this;
     }
 
@@ -82,7 +82,9 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, style.getPath(), true);
+        if (style!=null) {
+            this.fontPath = style.getPath();
+        }
         return this;
     }
 
@@ -96,7 +98,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
         // 如果表单字典有内容，则进行填充
         if (formMap!=null&&!formMap.isEmpty()) {
             // 初始化字体
-            this.initFont();
+            PDFont font = this.initFont();
             // 定义pdfBox表单字段
             PDField field;
             // 如果pdfBox表单不为空，则进行填充
@@ -108,7 +110,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
                 // 遍历字体名称
                 for (COSName fontName : fontNames) {
                     // 字体替换为当前文档字体
-                    defaultResources.put(fontName, this.font);
+                    defaultResources.put(fontName, font);
                 }
                 // 获取表单字典键值集合
                 Set<Map.Entry<String, String>> entrySet = formMap.entrySet();
@@ -119,7 +121,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
                     // 如果pdfBox表单字段不为空，则填充值
                     if (field!=null) {
                         // 添加文本关联
-                        XEasyPdfFontUtil.addToSubset(this.font, entry.getValue());
+                        XEasyPdfFontUtil.addToSubset(font, entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
                     }
@@ -174,8 +176,6 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
         this.document.save(outputStream);
         // 重置表单为空
         this.form = null;
-        // 重置字体为空
-        this.font = null;
         // 关闭文档
         this.pdfDocument.close();
     }
@@ -201,12 +201,15 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 初始化字体
+     * @return 返回pdfbox字体
      */
-    private void initFont() {
-        // 如果字体为空，则初始化字体
-        if (this.font==null) {
-            // 初始化字体
-            this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, this.pdfDocument.getParam().getFontPath(), true);
+    private PDFont initFont() {
+        // 如果字体路径为空，则初始化字体路径
+        if (this.fontPath==null) {
+            // 初始化字体路径为文档字体路径
+            this.fontPath = this.pdfDocument.getFontPath();
         }
+        // 读取字体
+        return XEasyPdfFontUtil.loadFont(this.pdfDocument, this.fontPath, true);
     }
 }

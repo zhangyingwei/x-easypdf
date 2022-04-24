@@ -178,7 +178,9 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.param.setDefaultFontStyle(style);
+        if (style!=null) {
+            this.param.setFontPath(style.getPath());
+        }
         return this;
     }
 
@@ -350,9 +352,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell addContent(XEasyPdfComponent component) {
-        if (component!=null) {
-            this.param.setComponent(component);
-        }
+        this.param.setComponent(component);
         return this;
     }
 
@@ -382,7 +382,7 @@ public class XEasyPdfCell implements Serializable {
             // 获取文本组件
             XEasyPdfText text = (XEasyPdfText) component;
             // 初始化文本组件
-            this.initText(text);
+            this.initText(document, page, row, text);
             // 如果行高为空，则重置行高
             if (rowHeight==null) {
                 // 重置行高
@@ -401,7 +401,7 @@ public class XEasyPdfCell implements Serializable {
                 rowHeight = Float.valueOf(image.getHeight(document, page));
             }
         }
-        return rowHeight;
+        return rowHeight==null?0:rowHeight;
     }
 
     /**
@@ -432,30 +432,33 @@ public class XEasyPdfCell implements Serializable {
         float rowBeginX = row.getParam().getBeginX();
         // 获取组件
         XEasyPdfComponent component = this.param.getComponent();
-        // 如果重置上下文，则组件开启重置上下文
-        if (this.param.getIsResetContext()) {
-            // 组件开启重置上下文
-            component.enableResetContext();
-        }
-        // 如果组件属于文本组件，则写入文本
-        if (component instanceof XEasyPdfText) {
-            // 写入文本
-            this.writeText(document, page, row, (XEasyPdfText) component);
-        }
-        // 如果组件属于图片组件，则写入图片
-        else if (component instanceof XEasyPdfImage) {
-            // 写入图片
-            this.writeImage(document, page, row, (XEasyPdfImage) component);
-        }
-        // 如果组件属于线条组件，则写入线条
-        else if (component instanceof XEasyPdfLine) {
-            // 写入线条
-            this.writeLine(document, page, row, (XEasyPdfLine) component);
-        }
-        // 其他组件，则直接绘制
-        else {
-            // 写入其他组件
-            this.writeOtherComponent(document, page, row, component);
+        // 如果组件不为空，则绘制组件
+        if (component!=null) {
+            // 如果重置上下文，则组件开启重置上下文
+            if (this.param.getIsResetContext()) {
+                // 组件开启重置上下文
+                component.enableResetContext();
+            }
+            // 如果组件属于文本组件，则写入文本
+            if (component instanceof XEasyPdfText) {
+                // 写入文本
+                this.writeText(document, page, row, (XEasyPdfText) component);
+            }
+            // 如果组件属于图片组件，则写入图片
+            else if (component instanceof XEasyPdfImage) {
+                // 写入图片
+                this.writeImage(document, page, row, (XEasyPdfImage) component);
+            }
+            // 如果组件属于线条组件，则写入线条
+            else if (component instanceof XEasyPdfLine) {
+                // 写入线条
+                this.writeLine(document, page, row, (XEasyPdfLine) component);
+            }
+            // 其他组件，则直接绘制
+            else {
+                // 写入其他组件
+                this.writeOtherComponent(document, page, row, component);
+            }
         }
         // 重置为当前行X轴原始坐标
         row.getParam().setBeginX(rowBeginX);
@@ -463,8 +466,6 @@ public class XEasyPdfCell implements Serializable {
         page.setPageY(pageY);
         // 关闭页面自动定位
         page.disablePosition();
-        // 重置字体为null
-        this.param.setFont(null);
     }
 
     /**
@@ -492,11 +493,11 @@ public class XEasyPdfCell implements Serializable {
             }
             // 设置其他参数
             rect.setContentMode(this.param.getContentMode())
-                .setBackgroundColor(this.param.getBackgroundColor())
-                .setBorderColor(this.param.getBackgroundColor())
-                .setNewLine(false)
-                .disableCheckPage()
-                .draw(document, page);
+                    .setBackgroundColor(this.param.getBackgroundColor())
+                    .setBorderColor(this.param.getBackgroundColor())
+                    .setNewLine(false)
+                    .disableCheckPage()
+                    .draw(document, page);
         }
     }
 
@@ -606,20 +607,19 @@ public class XEasyPdfCell implements Serializable {
      * 写入文本
      * @param text pdf文本
      */
-    private void initText(XEasyPdfText text) {
+    private void initText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfText text) {
         // 设置文本为子组件并设置宽度
         text.enableChildComponent().setWidth(this.param.getWidth());
         // 如果开启组件样式，则使用文本自身样式
         if (this.param.getIsComponentSelfStyle()) {
             // 设置文本自身样式
-            this.param.setVerticalStyle(text.getVerticalStyle()).setHorizontalStyle(text.getHorizontalStyle());
-            // 返回
-            return;
+            this.param.setContentMode(text.getContentMode())
+                    .setVerticalStyle(text.getVerticalStyle())
+                    .setHorizontalStyle(text.getHorizontalStyle());
         }
-        // 设置文本参数
+        // 设置文本为子组件并设置宽度
         text.setContentMode(this.param.getContentMode())
                 .setFontPath(this.param.getFontPath())
-                .setDefaultFontStyle(this.param.getDefaultFontStyle())
                 .setFontSize(this.param.getFontSize())
                 .setFontColor(this.param.getFontColor())
                 .setHorizontalStyle(this.param.getHorizontalStyle())
@@ -633,6 +633,13 @@ public class XEasyPdfCell implements Serializable {
      * @param image pdf图片
      */
     private void initImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfImage image) {
+        // 如果开启组件样式，则使用图片自身样式
+        if (this.param.getIsComponentSelfStyle()) {
+            // 设置图片自身样式
+            this.param.setContentMode(image.getContentMode())
+                    .setVerticalStyle(image.getVerticalStyle())
+                    .setHorizontalStyle(image.getHorizontalStyle());
+        }
         // 获取单元格高度
         Float height = this.param.getHeight();
         // 如果高度为空，则重置为行高
@@ -650,16 +657,8 @@ public class XEasyPdfCell implements Serializable {
                 .setWidth(Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth())
                 .setHeight(Math.min(image.getHeight(document, page), height) - this.param.getBorderWidth())
                 .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth())
-                .setMaxHeight(height - this.param.getBorderWidth());
-        // 如果开启组件样式，则使用图片自身样式
-        if (this.param.getIsComponentSelfStyle()) {
-            // 设置图片自身样式
-            this.param.setVerticalStyle(image.getVerticalStyle()).setHorizontalStyle(image.getHorizontalStyle());
-            // 返回
-            return;
-        }
-        // 设置图片参数
-        image.setContentMode(this.param.getContentMode())
+                .setMaxHeight(height - this.param.getBorderWidth())
+                .setContentMode(this.param.getContentMode())
                 .setHorizontalStyle(this.param.getHorizontalStyle())
                 .setVerticalStyle(this.param.getVerticalStyle());
     }

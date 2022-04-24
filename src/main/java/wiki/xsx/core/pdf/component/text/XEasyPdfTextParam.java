@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
@@ -52,17 +51,9 @@ class XEasyPdfTextParam implements Serializable {
      */
     private Boolean isResetContext;
     /**
-     * 默认字体样式
-     */
-    private XEasyPdfDefaultFontStyle defaultFontStyle;
-    /**
      * 字体路径
      */
     private String fontPath;
-    /**
-     * 字体
-     */
-    private PDFont font;
     /**
      * 字体大小
      */
@@ -263,18 +254,12 @@ class XEasyPdfTextParam implements Serializable {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
-        // 如果默认字体未初始化，则初始化为页面默认字体
-        if (this.defaultFontStyle==null) {
-            // 初始化为页面默认字体
-            this.defaultFontStyle = page.getDefaultFontStyle();
-        }
-        // 如果字体路径未初始化，则初始化为默认字体路径
+        // 如果字体路径未初始化，则初始化为页面字体路径
         if (this.fontPath==null) {
-            // 初始化为默认字体路径
-            this.fontPath = this.defaultFontStyle.getPath();
+            // 初始化为页面字体路径
+            this.fontPath = page.getFontPath();
         }
-        // 初始化字体
-        this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
+
         // 初始化字体高度
         this.fontHeight = this.fontSize;
         // 如果下划线颜色为空，则重置为字体颜色
@@ -288,7 +273,7 @@ class XEasyPdfTextParam implements Serializable {
             this.deleteLineColor = this.fontColor;
         }
         // 初始化待添加文本列表
-        this.initTextList(page);
+        this.initTextList(document, page);
         // 如果最大高度未初始化，则进行初始化
         if (this.maxHeight==null) {
             // 初始化最大高度 = (字体高度+行间距) * 文本行数 - 上边距 - 下边距
@@ -300,11 +285,12 @@ class XEasyPdfTextParam implements Serializable {
 
     /**
      * 初始化X轴起始坐标
-     * @param pageX 页面Y轴坐标
+     * @param document pdf文档
+     * @param page pdf页面
      * @param text 待添加文本
      */
     @SneakyThrows
-    float initBeginX(Float pageX, String text) {
+    float initBeginX(XEasyPdfDocument document, XEasyPdfPage page, String text) {
         // 定义X轴坐标
         Float x = this.beginX;
         // 如果页面X轴起始坐标未初始化，则进行初始化
@@ -312,18 +298,18 @@ class XEasyPdfTextParam implements Serializable {
             // 如果为文本追加，则初始化为左边距+页面X轴起始坐标
             if (this.isTextAppend) {
                 // 初始化为左边距+页面X轴起始坐标
-                x = this.marginLeft + (pageX==null?0F:pageX);
+                x = this.marginLeft + (page.getPageX()==null?0F:page.getPageX());
             }
             // 否则判断文本样式
             else {
                 // 初始化样式
-                x = this.initBeginXForStyle(text);
+                x = this.initBeginXForStyle(document, page, text);
             }
         }
         // 否则重置X轴坐标=当前坐标+样式坐标
         else {
             // 重置X轴坐标=当前坐标+样式坐标
-            x = x + this.initBeginXForStyle(text);
+            x = x + this.initBeginXForStyle(document, page, text);
         }
         return x;
     }
@@ -334,19 +320,21 @@ class XEasyPdfTextParam implements Serializable {
      * @return 返回X轴起始坐标
      */
     @SneakyThrows
-    float initBeginXForStyle(String text) {
+    float initBeginXForStyle(XEasyPdfDocument document, XEasyPdfPage page, String text) {
         // 如果为居左，则初始化为左边距
         if (this.horizontalStyle==XEasyPdfPositionStyle.LEFT) {
             // 初始化为左边距
             return this.marginLeft;
         }
+        // 获取字体
+        PDFont font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
         // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
         if (this.horizontalStyle==XEasyPdfPositionStyle.CENTER) {
             // 初始化为(最大宽度-文本宽度)/2
-            return (this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing * text.length())) / 2 + this.marginLeft - this.marginRight;
+            return (this.maxWidth - ((this.fontSize * font.getStringWidth(text) / 1000) + this.characterSpacing * text.length())) / 2 + this.marginLeft - this.marginRight;
         }
         // 否则为居右，初始化为最大宽度-右边距-文本宽度
-        return this.maxWidth - ((this.fontSize * this.font.getStringWidth(text) / 1000) + this.characterSpacing * text.length()) + this.marginLeft - this.marginRight;
+        return this.maxWidth - ((this.fontSize * font.getStringWidth(text) / 1000) + this.characterSpacing * text.length()) + this.marginLeft - this.marginRight;
     }
 
     /**
@@ -411,9 +399,11 @@ class XEasyPdfTextParam implements Serializable {
      * 初始化待添加文本列表
      * @param page pdf页面
      */
-    private void initTextList(XEasyPdfPage page) {
+    private void initTextList(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
         if (this.splitTextList==null) {
+            // 获取字体
+            PDFont font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
             // 定义X轴坐标
             float x = 0F;
             // 如果缩进值不为空，则重置X轴起始坐标
@@ -446,7 +436,7 @@ class XEasyPdfTextParam implements Serializable {
                     // 行宽度 = 最大宽度 - 左边距 - 右边距
                     this.maxWidth - x - this.marginRight,
                     // 字体
-                    this.font,
+                    font,
                     // 字体大小
                     this.fontSize,
                     // 文本间隔
@@ -468,7 +458,7 @@ class XEasyPdfTextParam implements Serializable {
                                     // 行宽度 = 最大宽度 - 左边距 - 右边距
                                     this.maxWidth - this.marginLeft - this.marginRight,
                                     // 字体
-                                    this.font,
+                                    font,
                                     // 字体大小
                                     this.fontSize,
                                     // 文本间隔
@@ -486,7 +476,7 @@ class XEasyPdfTextParam implements Serializable {
                         // 行宽度 = 最大宽度 - 左边距 - 右边距
                         this.maxWidth - this.marginLeft - this.marginRight,
                         // 字体
-                        this.font,
+                        font,
                         // 字体大小
                         this.fontSize,
                         // 文本间隔

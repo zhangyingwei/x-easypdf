@@ -62,13 +62,13 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      */
     private XEasyPdfDocument pdfDocument;
     /**
-     * pdfbox字体
-     */
-    private PDFont font;
-    /**
      * 是否允许替换cos数组
      */
     private Boolean isAllowReplaceCOSArray = false;
+    /**
+     * 字体路径
+     */
+    private String fontPath;
 
     /**
      * 有参构造
@@ -76,7 +76,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      */
     XEasyPdfDocumentReplacer(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.build();
+        this.document = this.pdfDocument.build(true);
     }
 
     /**
@@ -104,7 +104,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      * @return 返回pdf文档替换器
      */
     public XEasyPdfDocumentReplacer setFontPath(String fontPath) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, fontPath, true);
+        this.fontPath = fontPath;
         return this;
     }
 
@@ -114,7 +114,9 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      * @return 返回pdf文档替换器
      */
     public XEasyPdfDocumentReplacer setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, style.getPath(), true);
+        if (style!=null) {
+            this.fontPath = style.getPath();
+        }
         return this;
     }
 
@@ -149,35 +151,31 @@ public class XEasyPdfDocumentReplacer implements Serializable {
     @SneakyThrows
     public XEasyPdfDocumentReplacer replaceText(int count, Map<String, String> replaceMap, int ...pageIndex) {
         // 替换字典不为空且替换次数大于0，则替换文本
-        if (replaceMap!=null&&count>0) {
-            // 替换字典有内容，则替换文本
-            if (!replaceMap.isEmpty()) {
-                // 初始化字体
-                this.initFont();
-                // 如果页面索引为空，则替换全部页面
-                if (pageIndex==null||pageIndex.length==0) {
-                    // 获取页面树
-                    PDPageTree pages = this.document.getPages();
-                    // 遍历页面树
-                    for (PDPage page : pages) {
+        if (replaceMap!=null&&!replaceMap.isEmpty()&&count>0) {
+
+            // 如果页面索引为空，则替换全部页面
+            if (pageIndex==null||pageIndex.length==0) {
+                // 获取页面树
+                PDPageTree pages = this.document.getPages();
+                // 遍历页面树
+                for (PDPage page : pages) {
+                    // 遍历替换次数
+                    for (int i = 0; i < count; i++) {
+                        // 替换文本
+                        this.replaceText(page, replaceMap);
+                    }
+                }
+            }
+            // 否则替换给定页面索引
+            else {
+                // 遍历页面索引
+                for (int index : pageIndex) {
+                    // 如果页面索引大于等于0，则替换文本
+                    if (index>=0) {
                         // 遍历替换次数
                         for (int i = 0; i < count; i++) {
                             // 替换文本
-                            this.replaceText(page, replaceMap);
-                        }
-                    }
-                }
-                // 否则替换给定页面索引
-                else {
-                    // 遍历页面索引
-                    for (int index : pageIndex) {
-                        // 如果页面索引大于等于0，则替换文本
-                        if (index>=0) {
-                            // 遍历替换次数
-                            for (int i = 0; i < count; i++) {
-                                // 替换文本
-                                this.replaceText(this.document.getPage(index), replaceMap);
-                            }
+                            this.replaceText(this.document.getPage(index), replaceMap);
                         }
                     }
                 }
@@ -270,19 +268,12 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      */
     @SneakyThrows
     public void finish(OutputStream outputStream) {
-        // 如果字体不为空，则添加字体嵌入
-        if (this.font!=null) {
-            // 添加字体嵌入
-            this.pdfDocument.getParam().embedFont(Collections.singleton(this.font));
-        }
         // 替换总页码占位符
         this.pdfDocument.replaceTotalPagePlaceholder(this.document, false);
         // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
         this.pdfDocument.setBasicInfo(this.document);
         // 保存文档
         this.document.save(outputStream);
-        // 重置字体为空
-        this.font = null;
         // 关闭文档
         this.pdfDocument.close();
     }
@@ -293,7 +284,6 @@ public class XEasyPdfDocumentReplacer implements Serializable {
     void finish() {
         this.pdfDocument = null;
         this.document = null;
-        this.font = null;
     }
 
     /**
@@ -303,6 +293,8 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      */
     @SneakyThrows
     void replaceText(PDPage page, Map<String, String> replaceMap) {
+        // 获取pdfbox字体
+        PDFont font = this.initFont();
         // 获取页面资源
         PDResources resources = page.getResources();
         // 获取pdf解析器
@@ -312,7 +304,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
         // 获取标记列表
         List<Object> tokens = parser.getTokens();
         // 如果替换文本标记成功，则更新内容
-        if (this.replaceTextToken(resources, tokens, replaceMap)) {
+        if (this.replaceTextToken(font, resources, tokens, replaceMap)) {
             // 定义更新流
             PDStream updatedStream = new PDStream(this.document);
             // 创建输出流
@@ -324,18 +316,23 @@ public class XEasyPdfDocumentReplacer implements Serializable {
                 // 设置页面内容
                 page.setContents(updatedStream);
             }
+            // 添加字体嵌入
+            this.pdfDocument.getParam().embedFont(Collections.singleton(font));
         }
     }
 
     /**
      * 初始化字体
+     * @return 返回pdfbox字体
      */
-    private void initFont() {
-        // 如果字体为空，则初始化字体
-        if (this.font==null) {
-            // 初始化字体
-            this.font = XEasyPdfFontUtil.loadFont(this.pdfDocument, this.pdfDocument.getParam().getFontPath(), true);
+    private PDFont initFont() {
+        // 如果字体路径为空，则初始化为文档字体路径
+        if (this.fontPath==null) {
+            // 初始化为文档字体路径
+            this.fontPath = this.pdfDocument.getFontPath();
         }
+        // 读取字体
+        return XEasyPdfFontUtil.loadFont(this.pdfDocument, this.fontPath, true);
     }
 
     /**
@@ -357,12 +354,14 @@ public class XEasyPdfDocumentReplacer implements Serializable {
 
     /**
      * 替换文本标记
+     * @param font pdfbox字体
      * @param resources pdfbox页面资源
      * @param tokens 标记列表
      * @param replaceMap 替换字典（key可为正则）
      */
     @SneakyThrows
     private boolean replaceTextToken(
+            PDFont font,
             PDResources resources,
             List<Object> tokens,
             Map<String, String> replaceMap
@@ -374,7 +373,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
         // 获取替换字典文本列表
         Set<Map.Entry<String, String>> entrySet = replaceMapTemp.entrySet();
         // 获取替换字体名称
-        COSName replaceFontName = COSName.getPDFName(this.font.getName());
+        COSName replaceFontName = COSName.getPDFName(font.getName());
         // 定义字体索引
         int fontIndex = 0;
         // 定义资源字体
@@ -398,7 +397,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
             // 如果标记为cos数组，则替换文本
             if (token instanceof COSArray) {
                 // 如果处理cos数组成功，则添加待替换字体
-                if (this.processCOSArray(token, entrySet, resourceFont)) {
+                if (this.processCOSArray(token, entrySet, resourceFont, font)) {
                     // 替换字体
                     tokens.set(fontIndex, replaceFontName);
                 }
@@ -406,7 +405,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
             // 如果标记为cos字符串，则替换文本
             if (token instanceof COSString) {
                 // 如果处理cos字符串成功，则添加待替换字体
-                if (this.processCOSString(false, token, entrySet, resourceFont)) {
+                if (this.processCOSString(false, token, entrySet, resourceFont, font)) {
                     // 替换字体
                     tokens.set(fontIndex, replaceFontName);
                 }
@@ -429,7 +428,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
         // 如果已替换数量大于0，则添加字体
         if (replacedCount>0) {
             // 添加字体
-            resources.put(replaceFontName, this.font);
+            resources.put(replaceFontName, font);
             return true;
         }
         return false;
@@ -440,13 +439,15 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      * @param token 标记
      * @param entrySet 待替换字典文本列表
      * @param resourceFont 资源字体
+     * @param replaceFont 替换字体
      * @return 返回布尔值，已处理为true，未处理为false
      */
     @SneakyThrows
     private boolean processCOSArray(
             Object token,
             Set<Map.Entry<String, String>> entrySet,
-            PDFont resourceFont
+            PDFont resourceFont,
+            PDFont replaceFont
     ) {
         // 如果资源字体为空，则返回未处理
         if (resourceFont==null) {
@@ -460,7 +461,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
         // 如果允许替换替换cos数组，则替换cos数组
         if (this.isAllowReplaceCOSArray) {
             // 如果处理cos字符串成功，则重置处理标记为已处理
-            if (this.processCOSArray(array, entrySet, resourceFont)) {
+            if (this.processCOSArray(array, entrySet, resourceFont, replaceFont)) {
                 // 重置处理标记为已处理
                 flag = true;
             }
@@ -470,7 +471,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
                 // 如果为cos字符串，则进行处理
                 if (cosBase instanceof COSString) {
                     // 如果处理cos字符串成功，则重置处理标记为已处理
-                    if (this.processCOSString(true, cosBase, entrySet, resourceFont)) {
+                    if (this.processCOSString(true, cosBase, entrySet, resourceFont, replaceFont)) {
                         // 重置处理标记为已处理
                         flag = true;
                         // 如果待替换字典文本列表为空，则结束遍历
@@ -490,13 +491,15 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      * @param array cos数组
      * @param entrySet 待替换字典文本列表
      * @param resourceFont 资源字体
+     * @param replaceFont 替换字体
      * @return 返回布尔值，已处理为true，未处理为false
      */
     @SneakyThrows
     private boolean processCOSArray(
             COSArray array,
             Set<Map.Entry<String, String>> entrySet,
-            PDFont resourceFont
+            PDFont resourceFont,
+            PDFont replaceFont
     ) {
         // 定义字符串构建器
         StringBuilder builder = new StringBuilder();
@@ -517,7 +520,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
             }
         }
         // 获取编码字节数组
-        byte[] bytes = this.encode(true, builder.toString(), entrySet);
+        byte[] bytes = this.encode(true, builder.toString(), entrySet, replaceFont);
         // 如果编码字节数组不为空，则添加新文本
         if (bytes!=null) {
             // 清空数组内容
@@ -534,6 +537,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      * @param token 标记
      * @param entrySet 待替换字典文本列表
      * @param resourceFont 资源字体
+     * @param replaceFont 替换字体
      * @return 返回布尔值，已处理为true，未处理为false
      */
     @SneakyThrows
@@ -541,7 +545,8 @@ public class XEasyPdfDocumentReplacer implements Serializable {
             boolean isArray,
             Object token,
             Set<Map.Entry<String, String>> entrySet,
-            PDFont resourceFont
+            PDFont resourceFont,
+            PDFont replaceFont
     ) {
         // 如果资源字体为空，则返回未处理
         if (resourceFont==null) {
@@ -561,7 +566,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
             }
         }
         // 获取编码字节数组
-        byte[] bytes = this.encode(isArray, builder.toString(), entrySet);
+        byte[] bytes = this.encode(isArray, builder.toString(), entrySet, replaceFont);
         // 如果编码字节数组不为空，则设置新文本
         if (bytes!=null) {
             // 设置新文本
@@ -576,10 +581,11 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      * @param isArray 是否数组
      * @param value 当前字符串
      * @param entrySet 待替换文本字典
+     * @param font pdfbox字体
      * @return 返回编码字节数组，如果未替换，则返回null
      */
     @SneakyThrows
-    private byte[] encode(boolean isArray, String value, Set<Map.Entry<String, String>> entrySet) {
+    private byte[] encode(boolean isArray, String value, Set<Map.Entry<String, String>> entrySet, PDFont font) {
         // 日志打印
         if (log.isDebugEnabled()) {
             // 如果为数组，则提示为数组
@@ -617,9 +623,9 @@ public class XEasyPdfDocumentReplacer implements Serializable {
         // 如果替换过字符串，则关联文本
         if (count>entrySet.size()) {
             // 添加文本关联
-            XEasyPdfFontUtil.addToSubset(this.font, value);
+            XEasyPdfFontUtil.addToSubset(font, value);
             // 字符串编码
-            return this.font.encode(value);
+            return font.encode(value);
         }
         return null;
     }

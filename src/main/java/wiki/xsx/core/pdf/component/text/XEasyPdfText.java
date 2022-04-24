@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
@@ -14,6 +15,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
@@ -274,7 +276,9 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.param.setDefaultFontStyle(style);
+        if (style!=null) {
+            this.param.setFontPath(style.getPath());
+        }
         return this;
     }
 
@@ -498,6 +502,17 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfText setHeight(float height) {
+        this.param.setMaxHeight(Math.abs(height));
+        return this;
+    }
+
+    /**
+     * 设置最大高度
+     * @param maxHeight 最大高度
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setMaxHeight(Float maxHeight) {
+        this.param.setMaxHeight(maxHeight);
         return this;
     }
 
@@ -541,8 +556,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
         this.doDraw(document, page);
-        // 重置字体为null
-        this.param.setFont(null);
+    }
+
+    /**
+     * 获取内容模式
+     * @return 返回内容模式
+     */
+    public XEasyPdfComponent.ContentMode getContentMode() {
+        return this.param.getContentMode();
     }
 
     /**
@@ -665,10 +686,11 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * 初始化内容流
      * @param document pdf文档
      * @param page pdf页面
+     * @param font pdfbox字体
      * @return 返回内容流
      */
     @SneakyThrows
-    private PDPageContentStream initPageContentStream(XEasyPdfDocument document, XEasyPdfPage page) {
+    private PDPageContentStream initPageContentStream(XEasyPdfDocument document, XEasyPdfPage page, PDFont font) {
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
                 document.getTarget(),
@@ -677,6 +699,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 true,
                 this.param.getIsResetContext()
         );
+
         // 初始化pdfBox扩展图形对象
         PDExtendedGraphicsState state = new PDExtendedGraphicsState();
         // 设置文本透明度
@@ -686,7 +709,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 设置图形参数
         contentStream.setGraphicsStateParameters(state);
         // 设置字体
-        contentStream.setFont(this.param.getFont(), this.param.getFontSize());
+        contentStream.setFont(font, this.param.getFontSize());
         // 设置字体颜色
         contentStream.setNonStrokingColor(this.param.getFontColor());
         // 设置行间距
@@ -714,6 +737,8 @@ public class XEasyPdfText implements XEasyPdfComponent {
         List<String> splitTextList = this.param.getSplitTextList();
         // 文本总行数索引
         int totalLineIndex = splitTextList.size() - 1;
+        // 获取字体
+        PDFont font = XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true);
         // 定义内容流
         PDPageContentStream stream = null;
         // 定义X轴坐标
@@ -723,7 +748,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 遍历文本输入
         for (String text:splitTextList) {
             // 初始化X轴坐标
-            beginX = this.param.initBeginX(page.getPageX(), text);
+            beginX = this.param.initBeginX(document, page, text);
             // 如果为第一行，且缩进值不为空，则重置X轴坐标
             if (index==0&&this.param.getIndent()!=null) {
                 // 重置X轴坐标 = X轴坐标 + 缩进值 * (字体大小 + 文本间隔)
@@ -753,7 +778,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
                 // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 + 字体高度 + 行间距，由于之前多减一行，所以现在加回来
                 this.param.setBeginY(this.param.getBeginY() + this.param.getFontHeight() + this.param.getLeading());
                 // 获取文本宽度
-                float textWidth = this.param.getFontSize() * this.param.getFont().getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
+                float textWidth = this.param.getFontSize() * font.getStringWidth(splitTextList.get(totalLineIndex)) / 1000;
                 // 设置页面X轴坐标
                 page.setPageX(beginX+textWidth);
             }
@@ -836,23 +861,25 @@ public class XEasyPdfText implements XEasyPdfComponent {
             float beginY,
             boolean isLast
     ) {
+        // 获取字体
+        PDFont font = XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true);
         // 如果内容流为空，则初始化内容流
         if (stream==null) {
             // 初始化内容流
-            stream = this.initPageContentStream(document, page);
+            stream = this.initPageContentStream(document, page, font);
         }
         // 添加评论
-        this.addComment(page, text, beginX, beginY, isLast);
+        this.addComment(font, page, text, beginX, beginY, isLast);
         // 添加超链接
-        this.addLink(page, text, beginX, beginY);
+        this.addLink(font, page, text, beginX, beginY);
         // 添加高亮
-        this.addHighlight(stream, text, beginX, beginY);
+        this.addHighlight(font, stream, text, beginX, beginY);
         // 添加文本
         this.addText(stream, text, beginX, beginY);
         // 添加下划线
-        this.addUnderline(stream, text, beginX, beginY);
+        this.addUnderline(font, stream, text, beginX, beginY);
         // 添加删除线
-        this.addDeleteLine(stream, text, beginX, beginY);
+        this.addDeleteLine(font, stream, text, beginX, beginY);
         // 重置Y轴起始坐标，Y轴起始坐标 = Y轴起始坐标 - 字体高度 - 行间距
         this.param.setBeginY(this.param.getBeginY() - this.param.getFontHeight() - this.param.getLeading());
         return stream;
@@ -860,13 +887,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 添加超链接（不支持旋转）
+     * @param font pdfbox字体
      * @param page pdf页面
      * @param text 待写入文本
      * @param beginX X轴坐标
      * @param beginY Y轴坐标
      */
     @SneakyThrows
-    private void addLink(XEasyPdfPage page, String text, float beginX, float beginY) {
+    private void addLink(PDFont font, XEasyPdfPage page, String text, float beginX, float beginY) {
         // 获取超链接地址
         String linkUrl = this.param.getLinkUrl();
         // 如果超链接地址不为空，则添加超链接
@@ -882,7 +910,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 设置动作
             link.setAction(action);
             // 设置范围
-            link.setRectangle(this.getRectangleForWrite(text, beginX, beginY));
+            link.setRectangle(this.getRectangleForWrite(font, text, beginX, beginY));
             // 添加链接
             page.getLastPage().getAnnotations().add(link);
         }
@@ -890,13 +918,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 添加评论
+     * @param font pdfbox字体
      * @param page pdf页面
      * @param text 待写入文本
      * @param beginX X轴坐标
      * @param beginY Y轴坐标
      */
     @SneakyThrows
-    private void addComment(XEasyPdfPage page, String text, float beginX, float beginY, boolean isLast) {
+    private void addComment(PDFont font, XEasyPdfPage page, String text, float beginX, float beginY, boolean isLast) {
         // 获取评论
         String content = this.param.getComment();
         // 如果评论不为空，则添加评论
@@ -912,7 +941,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 设置日期
             comment.setCreationDate((new GregorianCalendar()));
             // 设置范围
-            comment.setRectangle(this.getRectangleForWrite(text, beginX, beginY));
+            comment.setRectangle(this.getRectangleForWrite(font, text, beginX, beginY));
             // 添加评论
             page.getLastPage().getAnnotations().add(comment);
         }
@@ -920,6 +949,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 添加高亮（不支持旋转）
+     * @param font pdfbox字体
      * @param stream 内容流
      * @param text 待写入文本
      * @param beginX X轴坐标
@@ -927,6 +957,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @SneakyThrows
     private void addHighlight(
+            PDFont font,
             PDPageContentStream stream,
             String text,
             float beginX,
@@ -937,7 +968,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 初始化Y轴起始坐标为Y轴起始坐标-字体高度/10
             beginY = beginY - this.param.getFontHeight()/10;
             // 获取写入尺寸
-            PDRectangle rectangle = this.getRectangleForWrite(text, beginX, beginY);
+            PDRectangle rectangle = this.getRectangleForWrite(font, text, beginX, beginY);
             // 绘制矩形
             stream.addRect(rectangle.getLowerLeftX(), rectangle.getLowerLeftY(), rectangle.getWidth(), rectangle.getHeight());
             // 设置矩形颜色
@@ -1016,6 +1047,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 添加下划线（不支持旋转）
+     * @param font pdfbox字体
      * @param stream 内容流
      * @param text 待写入文本
      * @param beginX X轴坐标
@@ -1023,6 +1055,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @SneakyThrows
     private void addUnderline(
+            PDFont font,
             PDPageContentStream stream,
             String text,
             float beginX,
@@ -1033,7 +1066,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 初始化Y轴起始坐标为Y轴起始坐标-下划线宽度/2-字体高度/10
             beginY = beginY - this.param.getUnderlineWidth()/2 - this.param.getFontHeight()/10;
             // 获取写入尺寸
-            PDRectangle rectangle = this.getRectangleForWrite(text, beginX, beginY);
+            PDRectangle rectangle = this.getRectangleForWrite(font, text, beginX, beginY);
             // 设置颜色
             stream.setStrokingColor(this.param.getUnderlineColor());
             // 设置线宽
@@ -1051,6 +1084,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 添加删除线（不支持旋转）
+     * @param font pdfbox字体
      * @param stream 内容流
      * @param text 待写入文本
      * @param beginX X轴坐标
@@ -1058,6 +1092,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @SneakyThrows
     private void addDeleteLine(
+            PDFont font,
             PDPageContentStream stream,
             String text,
             float beginX,
@@ -1068,7 +1103,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
             // 初始化Y轴起始坐标为Y轴起始坐标-删除线宽度/2+字体高度/2
             beginY = beginY - this.param.getDeleteLineWidth()/2 + this.param.getFontHeight()/2;
             // 获取写入尺寸
-            PDRectangle rectangle = this.getRectangleForWrite(text, beginX, beginY);
+            PDRectangle rectangle = this.getRectangleForWrite(font, text, beginX, beginY);
             // 设置颜色
             stream.setStrokingColor(this.param.getDeleteLineColor());
             // 设置线宽
@@ -1086,12 +1121,13 @@ public class XEasyPdfText implements XEasyPdfComponent {
 
     /**
      * 获取写入尺寸
+     * @param font pdfbox字体
      * @param text 待写入文本
      * @param beginX x轴起始坐标
      * @param beginY y轴起始坐标
      * @return 返回写入尺寸
      */
-    private PDRectangle getRectangleForWrite(String text, float beginX, float beginY) {
+    private PDRectangle getRectangleForWrite(PDFont font, String text, float beginX, float beginY) {
         // 创建尺寸
         PDRectangle rectangle = new PDRectangle();
         // 设置起始X轴坐标
@@ -1108,7 +1144,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
         // 文本弧度为0，则结束X轴坐标为起始坐标+文本真实宽度
         else {
             // 设置结束X轴坐标为起始坐标+文本真实宽度
-            rectangle.setUpperRightX(beginX+XEasyPdfTextUtil.getTextRealWidth(text, this.param.getFont(), this.param.getFontSize(), this.getCharacterSpacing()));
+            rectangle.setUpperRightX(beginX+XEasyPdfTextUtil.getTextRealWidth(text, font, this.param.getFontSize(), this.getCharacterSpacing()));
         }
         return rectangle;
     }

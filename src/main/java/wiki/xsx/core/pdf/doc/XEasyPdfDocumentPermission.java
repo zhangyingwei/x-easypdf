@@ -155,11 +155,14 @@ public class XEasyPdfDocumentPermission implements Serializable {
     }
 
     /**
-     * 完成权限设置（标准策略，空密码）
+     * 完成权限设置（无密码）
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
-        return this.finishWithStandardPolicy(false, XEasyPdfDocumentPermission.PWLength.LENGTH_40, "", "");
+        // 设置文档权限
+        this.document.setPermission(this);
+        // 返回pdf文档
+        return this.document;
     }
 
     /**

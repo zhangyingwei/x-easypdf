@@ -57,10 +57,6 @@ class XEasyPdfPageParam implements Serializable {
      */
     private Boolean isResetContext;
     /**
-     * 默认字体样式
-     */
-    private XEasyPdfDefaultFontStyle defaultFontStyle;
-    /**
      * 字体路径
      */
     private String fontPath;
@@ -96,6 +92,10 @@ class XEasyPdfPageParam implements Serializable {
      * 新增的pdfBox页面列表
      */
     private List<PDPage> newPageList = new ArrayList<>(64);
+    /**
+     * 最新页面
+     */
+    private PDPage lastPage;
     /**
      * pdf组件列表
      */
@@ -172,15 +172,10 @@ class XEasyPdfPageParam implements Serializable {
             // 初始化为文档重置上下文
             this.isResetContext = document.getParam().getIsResetContext();
         }
-        // 如果默认字体样式未初始化，则初始化为文档默认字体样式
-        if (this.defaultFontStyle==null) {
-            // 初始化为文档默认字体样式
-            this.defaultFontStyle = document.getParam().getDefaultFontStyle();
-        }
-        // 如果字体路径未初始化，则初始化为默认字体样式路径
+        // 如果字体路径未初始化，则初始化为文档字体路径
         if (this.fontPath==null) {
-            // 初始化为默认字体样式路径
-            this.fontPath = this.defaultFontStyle.getPath();
+            // 初始化为文档字体路径
+            this.fontPath = document.getFontPath();
         }
         // 初始化字体
         this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);

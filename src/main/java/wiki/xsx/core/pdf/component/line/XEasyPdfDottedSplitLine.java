@@ -63,7 +63,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfDottedSplitLine setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.param.setDefaultFontStyle(style);
+        if (style!=null) {
+            this.param.setFontPath(style.getPath());
+        }
         return this;
     }
 
@@ -290,8 +292,6 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
             // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
             page.setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
         }
-        // 重置字体为null
-        this.param.setFont(null);
     }
 
     /**

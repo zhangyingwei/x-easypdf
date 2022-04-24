@@ -7,7 +7,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 
 import java.awt.*;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,9 +41,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param rows pdf表格行
      */
     public XEasyPdfTable(XEasyPdfRow...rows) {
-        if (rows!=null) {
-            Collections.addAll(this.param.getRows(), rows);
-        }
+        this.addRow(rows);
     }
 
     /**
@@ -51,9 +49,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param rowList pdf表格行列表
      */
     public XEasyPdfTable(List<XEasyPdfRow> rowList) {
-        if (rowList!=null) {
-            this.param.getRows().addAll(rowList);
-        }
+        this.addRow(rowList);
     }
 
     /**
@@ -72,7 +68,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.param.setDefaultFontStyle(style);
+        if (style!=null) {
+            this.param.setFontPath(style.getPath());
+        }
         return this;
     }
 
@@ -204,6 +202,15 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
+     * 关闭自动拆分行（分页时，自动拆分行数据）
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable disableAutoSplitRow() {
+        this.param.setIsAutoSplit(false);
+        return this;
+    }
+
+    /**
      * 关闭边框
      * @return 返回表格组件
      */
@@ -293,8 +300,10 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable addRow(XEasyPdfRow...rows) {
+        // 如果待添加表格行不为空，则添加
         if (rows!=null) {
-            Collections.addAll(this.param.getRows(), rows);
+            // 添加表格行
+            this.addRow(Arrays.asList(rows));
         }
         return this;
     }
@@ -305,8 +314,23 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
+        // 如果待添加表格行不为空，则添加
         if (rowList!=null) {
+            // 添加表格行
             this.param.getRows().addAll(rowList);
+        }
+        return this;
+    }
+
+    /**
+     * 插入表格行
+     * @param row pdf表格行
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable insertRow(int rowIndex, XEasyPdfRow row) {
+        if (row!=null) {
+            // 添加表格行
+            this.param.getRows().add(rowIndex, row);
         }
         return this;
     }
@@ -363,8 +387,6 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         }
         // 开启页面自动重置定位
         page.enablePosition();
-        // 重置字体为null
-        this.param.setFont(null);
     }
 
     /**

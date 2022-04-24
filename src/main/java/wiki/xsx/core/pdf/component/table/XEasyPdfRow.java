@@ -85,7 +85,9 @@ public class XEasyPdfRow implements Serializable {
      * @return 返回表格行组件
      */
     public XEasyPdfRow setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.param.setDefaultFontStyle(style);
+        if (style!=null) {
+            this.param.setFontPath(style.getPath());
+        }
         return this;
     }
 
@@ -318,7 +320,12 @@ public class XEasyPdfRow implements Serializable {
         this.param.setBeginX(null);
         // 重置页面Y轴起始坐标
         page.setPageY(this.param.getBeginY()-this.param.getHeight());
-        // 重置字体为空
-        this.param.setFont(null);
+        // 获取拆分行
+        XEasyPdfRow splitRow = this.param.getSplitRow();
+        // 如果拆分行不为空，则绘制拆分行
+        if (splitRow!=null) {
+            // 绘制拆分行
+            splitRow.doDraw(document, page, table);
+        }
     }
 }

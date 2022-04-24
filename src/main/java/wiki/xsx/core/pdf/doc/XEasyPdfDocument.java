@@ -330,6 +330,14 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
+     * 获取文档字体路径
+     * @return 返回文档字体路径
+     */
+    public String getFontPath() {
+        return this.param.getFontPath();
+    }
+
+    /**
      * 获取任务文档
      * @return 返回任务文档
      */
@@ -717,10 +725,24 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      * @return 返回pdfbox文档
      */
     PDDocument build() {
+        return this.build(false);
+    }
+
+    /**
+     * 构建文档
+     * @param isReplaceTotalPagePlaceholder 是否替换总页码占位符
+     * @return 返回pdfbox文档
+     */
+    PDDocument build(boolean isReplaceTotalPagePlaceholder) {
         // 获取任务文档
         PDDocument target = this.getTarget();
         // 初始化页面
         this.param.initPage(this);
+        // 如果替换总页码占位符，则进行替换
+        if (isReplaceTotalPagePlaceholder) {
+            // 替换总页码占位符
+            this.replaceTotalPagePlaceholder(target, false);
+        }
         return target;
     }
 

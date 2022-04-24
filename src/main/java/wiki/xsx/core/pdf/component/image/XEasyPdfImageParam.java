@@ -109,10 +109,6 @@ class XEasyPdfImageParam implements Serializable {
      */
     private Boolean enableVerticalCenterStyle = false;
     /**
-     * 图片压缩模式（质量、速度、平衡，默认为质量）
-     */
-    private XEasyPdfImageScaleMode scaleMode = XEasyPdfImageScaleMode.QUALITY;
-    /**
      * 水平样式（居左、居中、居右）
      */
     private XEasyPdfPositionStyle horizontalStyle = XEasyPdfPositionStyle.LEFT;

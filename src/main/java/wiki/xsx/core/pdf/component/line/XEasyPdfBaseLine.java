@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 
 import java.awt.*;
 
@@ -72,7 +73,9 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        this.param.setDefaultFontStyle(style);
+        if (style!=null) {
+            this.param.setFontPath(style.getPath());
+        }
         return this;
     }
 
@@ -235,8 +238,6 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
         contentStream.setStrokingColor(Color.BLACK);
         // 关闭内容流
         contentStream.close();
-        // 重置字体为null
-        this.param.setFont(null);
     }
 
     /**
@@ -258,7 +259,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
                 this.param.getIsResetContext()
         );
         // 设置字体
-        contentStream.setFont(this.param.getFont(), this.param.getFontSize());
+        contentStream.setFont(XEasyPdfFontUtil.loadFont(document, page, this.param.getFontPath(), true), this.param.getFontSize());
         // 设置线宽
         contentStream.setLineWidth(this.param.getLineWidth());
         // 设置线型

@@ -169,6 +169,7 @@ public class XEasyPdfFontUtil {
      * @param isEmbedded 是否嵌入
      * @return 返回pdfBox字体
      */
+    @SuppressWarnings("all")
     public static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath, boolean isEmbedded) {
         if (fontResourcePath!=null) {
             PDFont font;

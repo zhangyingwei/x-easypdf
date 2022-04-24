@@ -63,7 +63,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
      */
     XEasyPdfDocumentSigner(XEasyPdfDocument pdfDocument) {
         this.param.setPdfDocument(pdfDocument);
-        this.param.setDocument(this.param.getPdfDocument().build());
+        this.param.setDocument(this.param.getPdfDocument().build(true));
     }
 
     /**

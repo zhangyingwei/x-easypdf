@@ -277,18 +277,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
-     * 设置图片压缩模式（质量、速度、平衡，默认为质量）
-     * @param scaleMode 压缩模式
-     * @return 返回图片组件
-     */
-    public XEasyPdfImage setScaleMode(XEasyPdfImageScaleMode scaleMode) {
-        if (scaleMode!=null) {
-            this.param.setScaleMode(scaleMode);
-        }
-        return this;
-    }
-
-    /**
      * 设置定位
      * @param beginX 当前页面X轴坐标
      * @param beginY 当前页面Y轴坐标
@@ -378,16 +366,25 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
+     * 获取内容模式
+     * @return 返回内容模式
+     */
+    public XEasyPdfComponent.ContentMode getContentMode() {
+        return this.param.getContentMode();
+    }
+
+    /**
      * 获取图片宽度
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回图片宽度
      */
     public Integer getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (!this.param.getEnableSelfAdaption()&&this.param.getWidth()!=null) {
+        if (this.param.getWidth()!=null) {
             return this.param.getWidth();
         }
-        return this.param.init(document, page, this).getWidth();
+        this.param.init(document, page, this);
+        return this.param.getWidth();
     }
 
     /**
@@ -397,10 +394,11 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片高度
      */
     public Integer getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (!this.param.getEnableSelfAdaption()&&this.param.getHeight()!=null) {
+        if (this.param.getHeight()!=null) {
             return this.param.getHeight();
         }
-        return this.param.init(document, page, this).getHeight();
+        this.param.init(document, page, this);
+        return this.param.getHeight();
     }
 
     /**

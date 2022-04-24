@@ -55,9 +55,7 @@ public class XEasyPdfDocumentImager implements Serializable {
      */
     XEasyPdfDocumentImager(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
-        this.document = this.pdfDocument.build();
-        // 替换总页码占位符
-        this.pdfDocument.replaceTotalPagePlaceholder(this.document, false);
+        this.document = this.pdfDocument.build(true);
     }
 
     /**
