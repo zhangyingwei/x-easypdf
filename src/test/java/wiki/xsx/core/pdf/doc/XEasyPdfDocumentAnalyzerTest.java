@@ -49,4 +49,12 @@ public class XEasyPdfDocumentAnalyzerTest {
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
     }
+
+    @Test
+    public void analyzeBookmark() throws IOException {
+        long begin = System.currentTimeMillis();
+        XEasyPdfHandler.Document.load(FILE_PATH).analyzer().analyzeBookmark().finish();
+        long end = System.currentTimeMillis();
+        System.out.println("完成，耗时： " + (end-begin));
+    }
 }

@@ -82,6 +82,7 @@ public class XEasyPdfDocumentFormTest {
         XEasyPdfHandler.Document
                 .load(sourcePath)
                 .formFiller()
+                .enableReadOnly()
                 .fill(map)
                 .finish(filePath);
     }

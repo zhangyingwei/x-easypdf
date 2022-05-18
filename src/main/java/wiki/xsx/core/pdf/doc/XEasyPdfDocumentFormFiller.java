@@ -55,6 +55,10 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * 字体路径
      */
     private String fontPath;
+    /**
+     * 是否只读
+     */
+    private Boolean isReadOnly = false;
 
     /**
      * 构造方法
@@ -64,6 +68,15 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.build(true);
         this.form = this.document.getDocumentCatalog().getAcroForm();
+    }
+
+    /**
+     * 开启只读（填充后）
+     * @return 返回pdf表单填写器
+     */
+    public XEasyPdfDocumentFormFiller enableReadOnly() {
+        this.isReadOnly = true;
+        return this;
     }
 
     /**
@@ -124,10 +137,13 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
                         XEasyPdfFontUtil.addToSubset(font, entry.getValue());
                         // 设置值
                         field.setValue(entry.getValue());
+                        // 如果开启只读，则设置为只读
+                        if (this.isReadOnly) {
+                            // 设置为只读
+                            field.setReadOnly(true);
+                        }
                     }
                 }
-                // 重置为null
-                this.form = null;
             }
         }
         return this;
@@ -168,14 +184,10 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     public void finish(OutputStream outputStream) {
         // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
         this.pdfDocument.setBasicInfo(this.document);
-        // 设置表单为空（解决编辑器乱码问题）
-        this.document.getDocumentCatalog().setAcroForm(this.form);
         // 替换总页码占位符
         this.pdfDocument.replaceTotalPagePlaceholder(this.document, false);
         // 保存文档
         this.document.save(outputStream);
-        // 重置表单为空
-        this.form = null;
         // 关闭文档
         this.pdfDocument.close();
     }

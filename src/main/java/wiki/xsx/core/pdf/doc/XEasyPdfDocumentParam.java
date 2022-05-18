@@ -4,10 +4,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.io.MemoryUsageSetting;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentInformation;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageTree;
+import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
@@ -175,8 +172,6 @@ class XEasyPdfDocumentParam implements Serializable {
         }
         // 设置总页数
         this.initTotalPage(pages.getCount());
-        // 初始化文档权限
-        this.initPermission(document);
         // 初始化文档信息
         this.initInfo(document);
     }
@@ -196,8 +191,12 @@ class XEasyPdfDocumentParam implements Serializable {
         this.target = new PDDocument();
         // 如果源文档不为空，则设置文档表单
         if (this.source!=null) {
+            // 获取文档大纲
+            PDDocumentCatalog documentCatalog = this.target.getDocumentCatalog();
             // 设置文档表单
-            this.target.getDocumentCatalog().setAcroForm(this.source.getDocumentCatalog().getAcroForm());
+            documentCatalog.setAcroForm(this.source.getDocumentCatalog().getAcroForm());
+            // 设置文档目录
+            documentCatalog.setDocumentOutline(this.source.getDocumentCatalog().getDocumentOutline());
         }
         // 设置重置为false
         this.isReset = false;
@@ -279,13 +278,6 @@ class XEasyPdfDocumentParam implements Serializable {
             this.fontPath = this.defaultFontStyle.getPath();
         }
         this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath, true);
-    }
-
-    /**
-     * 初始化文档信息
-     */
-    private void initPermission(XEasyPdfDocument document) {
-        this.permission = new XEasyPdfDocumentPermission(document, this.source.getCurrentAccessPermission());
     }
 
     /**

@@ -40,7 +40,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
     /**
      * pdf访问权限
      */
-    private AccessPermission accessPermission = new AccessPermission();
+    private final AccessPermission accessPermission = new AccessPermission();
     /**
      * 公钥类型
      */
@@ -52,17 +52,6 @@ public class XEasyPdfDocumentPermission implements Serializable {
      */
     XEasyPdfDocumentPermission(XEasyPdfDocument document) {
         this.document = document;
-    }
-
-    /**
-     * 有参构造
-     * @param document pdf文档
-     * @param accessPermission pdf访问权限
-     */
-    XEasyPdfDocumentPermission(XEasyPdfDocument document, AccessPermission accessPermission) {
-        this.document = document;
-        this.accessPermission = accessPermission;
-        this.finish();
     }
 
     /**
@@ -159,10 +148,8 @@ public class XEasyPdfDocumentPermission implements Serializable {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
-        // 设置文档权限
-        this.document.setPermission(this);
         // 返回pdf文档
-        return this.document;
+        return this.finishWithStandardPolicy(false, PWLength.LENGTH_128, "", "");
     }
 
     /**

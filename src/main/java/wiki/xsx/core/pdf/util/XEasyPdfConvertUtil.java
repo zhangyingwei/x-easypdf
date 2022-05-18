@@ -54,6 +54,20 @@ public class XEasyPdfConvertUtil {
     }
 
     /**
+     * 转为列表
+     * @param iterable 迭代器
+     * @param <T> 数据类型
+     * @return 返回列表
+     */
+    public static <T> List<T> toList(Iterable<T> iterable) {
+        List<T> list = new ArrayList<>(16);
+        for (T t : iterable) {
+            list.add(t);
+        }
+        return list;
+    }
+
+    /**
      * 转为新对象（深拷贝）
      * @param object 源对象
      * @param <T> 对象类型

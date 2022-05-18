@@ -92,6 +92,15 @@ public class XEasyPdfDocumentExtractor implements Serializable {
     }
 
     /**
+     * 清理区域
+     * @return 返回pdf文档提取器
+     */
+    public XEasyPdfDocumentExtractor clearRegion() {
+        this.regionExtractor.clearRegion();
+        return this;
+    }
+
+    /**
      * 提取文本(全部)
      * @param textList 待接收文本列表
      * @param pageIndex 页面索引
@@ -147,9 +156,9 @@ public class XEasyPdfDocumentExtractor implements Serializable {
      */
     public XEasyPdfDocumentExtractor extractTextForSimpleTable(List<List<String>> textList, int pageIndex) {
         // 获取给定页面索引的页面尺寸
-        PDRectangle mediaBox = this.document.getPage(pageIndex).getMediaBox();
+        PDRectangle rectangle = this.document.getPage(pageIndex).getMediaBox();
         // 获取最大尺寸
-        int maxSize = Math.max((int) mediaBox.getWidth()+1, (int) mediaBox.getHeight()+1);
+        int maxSize = Math.max((int) rectangle.getWidth()+1, (int) rectangle.getHeight()+1);
         // 提取区域表格文本(单行单列)
         this.extractTextByRegionsForSimpleTable(textList, new Rectangle(maxSize, maxSize), pageIndex);
         return this;
@@ -244,9 +253,13 @@ public class XEasyPdfDocumentExtractor implements Serializable {
     public XEasyPdfDocumentExtractor extractForm(Map<String, String> formMap) {
         // 获取pdfBox表单
         PDAcroForm form = this.document.getDocumentCatalog().getAcroForm();
+        // 如果表单不为空，则提取表单内容
         if (form!=null) {
+            // 获取表单字段列表
             List<PDField> fields = form.getFields();
+            // 遍历表单字段列表
             for (PDField field : fields) {
+                // 提取表单内容
                 formMap.put(field.getFullyQualifiedName(), field.getValueAsString());
             }
         }
@@ -294,7 +307,9 @@ public class XEasyPdfDocumentExtractor implements Serializable {
                 // 添加到待接收图片列表
                 imageList.add(((PDImage) xObject).getImage());
             }
+            // 如果资源内容为表单，则递归调用
             else if (xObject instanceof PDFormXObject) {
+                // 添加图片
                 this.addImage(imageList, ((PDFormXObject) xObject).getResources());
             }
         }
@@ -379,15 +394,15 @@ public class XEasyPdfDocumentExtractor implements Serializable {
         /**
          * 区域字符列表
          */
-        private final Map<String, ArrayList<List<TextPosition>>> regionCharacterList = new HashMap<>();
+        private Map<String, ArrayList<List<TextPosition>>> regionCharacterList = new HashMap<>(32);
         /**
          * 区域文本字典
          */
-        private final Map<String, StringWriter> regionText = new HashMap<>(256);
+        private Map<String, StringWriter> regionText = new HashMap<>(32);
         /**
          * 区域
          */
-        private final Map<String, Rectangle> regionArea = new HashMap<>(32);
+        private Map<String, Rectangle> regionArea = new HashMap<>(32);
 
         /**
          * 无参构造
@@ -405,6 +420,15 @@ public class XEasyPdfDocumentExtractor implements Serializable {
          */
         void addRegion(String regionName, Rectangle rectangle) {
             this.regionArea.put(regionName, rectangle);
+        }
+
+        /**
+         * 清理区域
+         */
+        void clearRegion() {
+            this.regionCharacterList = new HashMap<>(32);
+            this.regionText = new HashMap<>(32);
+            this.regionArea = new HashMap<>(32);
         }
 
         /**
