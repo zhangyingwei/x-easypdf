@@ -389,4 +389,93 @@ public class XEasyPdfTableTest {
                 .setBookMark(2, "第3页")
                 .finish().save(filePath).close();
     }
+
+    @Test
+    public void testTable9(){
+        String filePath = OUTPUT_PATH + "testTable9.pdf";
+        // 构建文档
+        XEasyPdfHandler.Document.build(
+                // 构建页面
+                XEasyPdfHandler.Page.build(
+                        // 构建表格
+                        XEasyPdfHandler.Table.build(
+                                // 第一行
+                                XEasyPdfHandler.Table.Row.build(
+                                        // 第一列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("1")
+                                        ),
+                                        // 第二列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("2")
+                                        ),
+                                        // 第三列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("3")
+                                        ),
+                                        // 第四列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("4")
+                                        ),
+                                        // 第五列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("5")
+                                        )
+                                ),
+                                // 第二行
+                                XEasyPdfHandler.Table.Row.build(
+                                        // 第一列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("1")
+                                        ),
+                                        // 第二列，第三列合并，直接设置宽高
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F, 50F).addContent(
+                                                XEasyPdfHandler.Text.build("合并两行两列")
+                                        ),
+                                        // 第四列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("4")
+                                        ),
+                                        // 第五列合并，直接设置合并高度
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 75F).addContent(
+                                                XEasyPdfHandler.Text.build("合并三行")
+                                        )
+                                        // 合并行，设置平均行高
+                                ).setHeight(25F),
+                                // 第三行
+                                XEasyPdfHandler.Table.Row.build(
+                                        // 第一列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("1")
+                                        ),
+                                        // 第二列，第三列合并，并设置垂直合并（占位）
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F, 25F).enableVerticalMerge(),
+                                        // 第四列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("4")
+                                        ),
+                                        // 第五列设置垂直合并
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).enableVerticalMerge()
+                                ),
+                                // 第四行
+                                XEasyPdfHandler.Table.Row.build(
+                                        // 第一列，第二列合并，直接设置合并宽度
+                                        XEasyPdfHandler.Table.Row.Cell.build(100F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("合并两列")
+                                        ),
+                                        // 第三列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("3")
+                                        ),
+                                        // 第四列
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).addContent(
+                                                XEasyPdfHandler.Text.build("4")
+                                        ),
+                                        // 第五列设置垂直合并
+                                        XEasyPdfHandler.Table.Row.Cell.build(50F, 25F).enableVerticalMerge()
+                                )
+                        )
+                )
+        ).save(filePath).close();
+    }
 }

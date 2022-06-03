@@ -7,14 +7,17 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,6 +62,11 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * 是否只读
      */
     private Boolean isReadOnly = false;
+    /**
+     * 是否压缩
+     */
+    private Boolean isCompress = false;
+
 
     /**
      * 构造方法
@@ -67,7 +75,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.build(true);
-        this.form = this.document.getDocumentCatalog().getAcroForm();
+        this.form = this.document.getDocumentCatalog().getAcroForm(null);
     }
 
     /**
@@ -80,7 +88,25 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     }
 
     /**
-     * 设置字体路径
+     * 开启外观（将使用原有字体）
+     * @return 返回pdf表单填写器
+     */
+    public XEasyPdfDocumentFormFiller enableAppearance() {
+        this.form.setNeedAppearances(true);
+        return this;
+    }
+
+    /**
+     * 开启压缩
+     * @return 返回pdf表单填写器
+     */
+    public XEasyPdfDocumentFormFiller enableCompress() {
+        this.isCompress = true;
+        return this;
+    }
+
+    /**
+     * 设置字体路径（开启外观后失效）
      * @param fontPath 字体路径
      * @return 返回pdf表单填写器
      */
@@ -90,7 +116,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     }
 
     /**
-     * 设置默认字体样式
+     * 设置默认字体样式（开启外观后失效）
      * @param style 默认字体样式
      * @return 返回pdf表单填写器
      */
@@ -106,43 +132,20 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * @param formMap 表单字典
      * @return 返回pdf表单填写器
      */
-    @SneakyThrows
     public XEasyPdfDocumentFormFiller fill(Map<String, String> formMap) {
         // 如果表单字典有内容，则进行填充
         if (formMap!=null&&!formMap.isEmpty()) {
-            // 初始化字体
-            PDFont font = this.initFont();
-            // 定义pdfBox表单字段
-            PDField field;
             // 如果pdfBox表单不为空，则进行填充
             if (this.form !=null) {
-                // 获取表单默认资源
-                PDResources defaultResources = this.form.getDefaultResources();
-                // 获取默认资源字体名称
-                Iterable<COSName> fontNames = defaultResources.getFontNames();
-                // 遍历字体名称
-                for (COSName fontName : fontNames) {
-                    // 字体替换为当前文档字体
-                    defaultResources.put(fontName, font);
+                // 如果需要外观，则使用外观填充模式
+                if (this.form.getNeedAppearances()) {
+                    // 使用外观填充模式
+                    this.fillForAppearance(formMap);
                 }
-                // 获取表单字典键值集合
-                Set<Map.Entry<String, String>> entrySet = formMap.entrySet();
-                // 遍历表单字典
-                for (Map.Entry<String, String> entry : entrySet) {
-                    // 获取表单字典中对应的pdfBox表单字段
-                    field = this.form.getField(entry.getKey());
-                    // 如果pdfBox表单字段不为空，则填充值
-                    if (field!=null) {
-                        // 添加文本关联
-                        XEasyPdfFontUtil.addToSubset(font, entry.getValue());
-                        // 设置值
-                        field.setValue(entry.getValue());
-                        // 如果开启只读，则设置为只读
-                        if (this.isReadOnly) {
-                            // 设置为只读
-                            field.setReadOnly(true);
-                        }
-                    }
+                // 否则使用普通填充模式
+                else {
+                    // 使用普通填充模式
+                    this.fillForNormal(formMap);
                 }
             }
         }
@@ -182,6 +185,11 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      */
     @SneakyThrows
     public void finish(OutputStream outputStream) {
+        // 如果开启压缩，则重置表单为空（可以减少文件大小）
+        if (this.isCompress) {
+            // 重置表单为空
+            this.document.getDocumentCatalog().setAcroForm(null);
+        }
         // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
         this.pdfDocument.setBasicInfo(this.document);
         // 替换总页码占位符
@@ -212,6 +220,81 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     }
 
     /**
+     * 普通填充模式
+     * @param formMap 表单字典
+     */
+    @SneakyThrows
+    private void fillForNormal(Map<String, String> formMap) {
+        // 初始化字体
+        PDFont font = this.initFont();
+        // 获取表单默认资源
+        PDResources defaultResources = this.form.getDefaultResources();
+        // 添加自定义字体
+        defaultResources.put(COSName.getPDFName(font.getName()), font);
+        // 如果填充表单成功，则嵌入字体
+        if (this.fill(formMap, font)) {
+            // 嵌入字体
+            this.pdfDocument.getParam().embedFont(Collections.singleton(font));
+        }
+    }
+
+    /**
+     * 外观填充模式
+     * @param formMap 表单字典
+     */
+    private void fillForAppearance(Map<String, String> formMap) {
+        this.fill(formMap, null);
+    }
+
+    /**
+     * 填充表单
+     * @param formMap 表单字典
+     * @param font pdfbox字体
+     * @return 返回布尔值，是为true，否为false
+     */
+    @SneakyThrows
+    private boolean fill(Map<String, String> formMap, PDFont font) {
+        // 定义填充标记
+        boolean flag = false;
+        // 定义pdfBox表单字段
+        PDField field;
+        // 定义新值
+        String newValue;
+        // 获取表单字典键值集合
+        Set<Map.Entry<String, String>> entrySet = formMap.entrySet();
+        // 遍历表单字典
+        for (Map.Entry<String, String> entry : entrySet) {
+            // 获取表单字典中对应的pdfBox表单字段
+            field = this.form.getField(entry.getKey());
+            // 获取新值
+            newValue = entry.getValue();
+            // 如果pdfBox表单字段不为空，则填充值
+            if (field!=null) {
+                // 如果新值不为空，则设置新值
+                if (XEasyPdfTextUtil.isNotBlank(newValue)) {
+                    // 如果pdfbox字体不为空，则重置外观并添加文本关联
+                    if (font!=null) {
+                        // 重置外观
+                        this.resetAppearance(field, font);
+                        // 添加文本关联
+                        XEasyPdfFontUtil.addToSubset(font, newValue);
+                    }
+                    // 设置新值
+                    field.setValue(newValue);
+                    // 重置填充标记
+                    flag = true;
+                }
+                // 如果开启只读，则设置为只读
+                if (this.isReadOnly) {
+                    // 设置为只读
+                    field.setReadOnly(true);
+                }
+            }
+        }
+        return flag;
+    }
+
+    /**
      * 初始化字体
      * @return 返回pdfbox字体
      */
@@ -223,5 +306,30 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
         }
         // 读取字体
         return XEasyPdfFontUtil.loadFont(this.pdfDocument, this.fontPath, true);
+    }
+
+    /**
+     * 重置外观（字体）
+     * @param field pdfbox表单字段
+     * @param font pdfbox字体
+     */
+    private void resetAppearance(PDField field, PDFont font) {
+        // 如果表单字段为文本字段，则重置字体
+        if (field instanceof PDTextField) {
+            // 转换为文本字体
+            PDTextField textField = (PDTextField) field;
+            // 获取默认外观
+            String defaultAppearance = textField.getDefaultAppearance();
+            // 重置默认外观
+            textField.setDefaultAppearance(
+                    XEasyPdfTextUtil.join(
+                            "/",
+                            font.getName(),
+                            defaultAppearance.substring(defaultAppearance.indexOf(" "))
+                    )
+            );
+            // 重置外观
+            field.getWidgets().get(0).setAppearance(null);
+        }
     }
 }

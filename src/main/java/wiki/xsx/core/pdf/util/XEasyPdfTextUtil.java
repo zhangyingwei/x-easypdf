@@ -165,4 +165,38 @@ public class XEasyPdfTextUtil {
         }
         return builder.toString();
     }
+
+    /**
+     * 空白
+     * @param text 文本
+     * @return 返回布尔值，是为true，否为false
+     */
+    public static boolean isBlank(String text) {
+        return !isNotBlank(text);
+    }
+
+    /**
+     * 非空白
+     * @param text 文本
+     * @return 返回布尔值，是为true，否为false
+     */
+    public static boolean isNotBlank(String text) {
+        return text!=null&&text.trim().length()>0;
+    }
+
+    /**
+     * 拼接字符串
+     * @param texts 字符串列表
+     * @return 返回拼接后的字符串
+     */
+    public static String join(String ...texts) {
+        if (texts==null) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (String text : texts) {
+            builder.append(text);
+        }
+        return builder.toString();
+    }
 }
