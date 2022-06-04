@@ -40,6 +40,13 @@ public interface XEasyPdfHeader extends Serializable {
     XEasyPdfHeader addSplitLine(XEasyPdfLine ...splitLine);
 
     /**
+     * 添加自定义组件
+     * @param component pdf组件
+     * @return 返回页眉组件
+     */
+    XEasyPdfHeader addComponent(XEasyPdfComponent component);
+
+    /**
      * 设置边距（上左右）
      * @param margin 边距
      * @return 返回页眉组件

@@ -481,10 +481,10 @@ public class XEasyPdfCell implements Serializable {
             float borderWidth = this.param.getBorderWidth();
             // 绘制矩形填充背景色
             XEasyPdfRect rect = XEasyPdfHandler.Rect.build(
-                    this.param.getWidth(),
-                    this.param.getHeight() - borderWidth,
-                    row.getParam().getBeginX() + borderWidth / 2,
-                    row.getParam().getBeginY() - this.param.getHeight() - this.param.getMarginTop() + borderWidth / 2
+                    this.param.getWidth() - borderWidth * 2,
+                    this.param.getHeight() - borderWidth * 2,
+                    row.getParam().getBeginX() + borderWidth,
+                    row.getParam().getBeginY() - this.param.getHeight() - this.param.getMarginTop() + borderWidth
             );
             // 如果重置上下文，则开启重置上下文
             if (this.param.getIsResetContext()) {
@@ -652,12 +652,22 @@ public class XEasyPdfCell implements Serializable {
             // 重置为图片高度
             height = Float.valueOf(image.getHeight(document, page));
         }
+        // 如果为自定义尺寸，则使用最小值重置图片宽高
+        if (image.getIsCustomRectangle()) {
+            // 重置图片宽度与高度
+            image.setWidth(Math.min(image.getWidth(document, page), this.param.getWidth())-this.param.getBorderWidth())
+                    .setHeight(Math.min(image.getHeight(document, page), height)-this.param.getBorderWidth());
+        }
+        // 否则重置图片宽高为单元格宽高
+        else {
+            // 重置图片宽度与高度
+            image.setWidth(this.param.getWidth()-this.param.getBorderWidth())
+                    .setHeight(height-this.param.getBorderWidth());
+        }
         // 设置图片参数
         image.enableChildComponent()
-                .setWidth(Math.min(image.getWidth(document, page), this.param.getWidth()) - this.param.getBorderWidth())
-                .setHeight(Math.min(image.getHeight(document, page), height) - this.param.getBorderWidth())
-                .setMaxWidth(this.param.getWidth() - this.param.getBorderWidth())
-                .setMaxHeight(height - this.param.getBorderWidth())
+                .setMaxWidth(this.param.getWidth()-this.param.getBorderWidth())
+                .setMaxHeight(height-this.param.getBorderWidth())
                 .setContentMode(this.param.getContentMode())
                 .setHorizontalStyle(this.param.getHorizontalStyle())
                 .setVerticalStyle(this.param.getVerticalStyle());

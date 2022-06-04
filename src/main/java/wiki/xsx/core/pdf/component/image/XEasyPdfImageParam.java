@@ -128,6 +128,10 @@ class XEasyPdfImageParam implements Serializable {
      * 是否子组件
      */
     private Boolean isChildComponent = false;
+    /**
+     * 是否自定义尺寸
+     */
+    private Boolean isCustomRectangle = false;
 
     /**
      * 初始化
@@ -182,10 +186,20 @@ class XEasyPdfImageParam implements Serializable {
             // 自定义宽度设置为图片宽度
             this.width = imageWidth;
         }
+        // 否则重置自定义尺寸标识为true
+        else {
+            // 重置自定义尺寸标识为true
+            this.isCustomRectangle = true;
+        }
         // 如果自定义高度为空，则将自定义高度设置为图片高度
         if (this.height==null) {
             // 自定义高度设置为图片高度
             this.height = imageHeight;
+        }
+        // 否则重置自定义尺寸标识为true
+        else {
+            // 重置自定义尺寸标识为true
+            this.isCustomRectangle = true;
         }
         // 如果最大宽度未初始化，则进行初始化为页面宽度
         if (this.maxWidth==null) {

@@ -152,7 +152,6 @@ public class XEasyPdfDocumentReplacer implements Serializable {
     public XEasyPdfDocumentReplacer replaceText(int count, Map<String, String> replaceMap, int ...pageIndex) {
         // 替换字典不为空且替换次数大于0，则替换文本
         if (replaceMap!=null&&!replaceMap.isEmpty()&&count>0) {
-
             // 如果页面索引为空，则替换全部页面
             if (pageIndex==null||pageIndex.length==0) {
                 // 获取页面树

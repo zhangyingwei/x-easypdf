@@ -3,6 +3,7 @@ package wiki.xsx.core.pdf.header;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.line.XEasyPdfLine;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
@@ -48,6 +49,10 @@ class XEasyPdfHeaderParam implements Serializable {
      * 图片
      */
     private XEasyPdfImage image;
+    /**
+     * 自定义组件
+     */
+    private XEasyPdfComponent component;
     /**
      * 分割线列表
      */
@@ -104,19 +109,21 @@ class XEasyPdfHeaderParam implements Serializable {
         this.initHeight(document, page);
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
+        // 获取Y轴起始坐标
+        float beginY = rectangle.getHeight() - this.marginTop;
         // 如果图片不为空，则初始化图片坐标
         if (this.image!=null&&this.imageBeginX==null&&this.imageBeginY==null) {
             // 初始化图片X轴起始坐标
             this.imageBeginX = this.marginLeft;
             // 初始化图片Y轴起始坐标
-            this.imageBeginY = rectangle.getHeight() - this.marginTop;
+            this.imageBeginY = beginY;
         }
         // 如果文本不为空，则初始化文本坐标
         if (this.text!=null&&this.textBeginX==null&&this.textBeginY==null) {
             // 初始化文本X轴起始坐标
             this.textBeginX = this.marginLeft;
             // 初始化文本Y轴起始坐标
-            this.textBeginY = rectangle.getHeight() - this.marginTop;
+            this.textBeginY = beginY;
         }
     }
 

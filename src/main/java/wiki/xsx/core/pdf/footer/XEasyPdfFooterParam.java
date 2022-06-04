@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.footer;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImage;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
@@ -44,6 +45,10 @@ class XEasyPdfFooterParam implements Serializable {
      * 图片
      */
     private XEasyPdfImage image;
+    /**
+     * 自定义组件
+     */
+    private XEasyPdfComponent component;
     /**
      * 左边距
      */

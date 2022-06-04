@@ -114,6 +114,17 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
     }
 
     /**
+     * 添加自定义组件
+     * @param component pdf组件
+     * @return 返回页脚组件
+     */
+    @Override
+    public XEasyPdfDefaultFooter addComponent(XEasyPdfComponent component) {
+        this.param.setComponent(component);
+        return this;
+    }
+
+    /**
      * 获取页脚高度
      * @param document pdf文档
      * @param page     pdf页面
@@ -225,6 +236,11 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
             text.setPosition(
                     this.param.getBeginX(), this.initYForText(document, page, text)
             ).enableChildComponent().draw(document, page);
+        }
+        // 如果自定义组件不为空，则进行自定义组件绘制
+        if (this.param.getComponent()!=null) {
+            // 绘制自定义组件
+            this.param.getComponent().draw(document, page);
         }
         // 开启页面自动重置定位
         page.enablePosition();

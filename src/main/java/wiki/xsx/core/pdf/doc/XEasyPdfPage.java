@@ -54,9 +54,12 @@ public class XEasyPdfPage implements Serializable {
      * @param page pdfBox页面
      */
     public XEasyPdfPage(PDPage page) {
+        // 如果pdfbox页面不为空，则添加页面
         if (page!=null) {
             // 重置最新页面
             this.param.setLastPage(page);
+            // 重置页面尺寸
+            this.param.setPageSize(page.getMediaBox());
             // 添加pdfBox页面
             this.param.getPageList().add(page);
         }

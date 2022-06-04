@@ -267,8 +267,8 @@ class XEasyPdfRowParam implements Serializable {
                     // 拆分行
                     this.split(document, page, table, row, maxHeight);
                 }
-                // 否则直接分页
-                else {
+                // 如果需要分页，则进行分页
+                if (this.isPaging) {
                     // 分页
                     this.paging(document, page, table);
                     // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
@@ -290,6 +290,13 @@ class XEasyPdfRowParam implements Serializable {
                 float maxHeight = currentY - footerHeight - table.getParam().getMarginBottom();
                 // 拆分行
                 this.split(document, page, table, row, maxHeight);
+                // 如果需要分页，则进行分页
+                if (this.isPaging) {
+                    // 分页
+                    this.paging(document, page, table);
+                    // 获取当前Y轴起始坐标 = 当前页面Y轴起始坐标 - 上边距
+                    currentY = page.getPageY() - this.marginTop;
+                }
             }
         }
         return currentY;
@@ -360,9 +367,12 @@ class XEasyPdfRowParam implements Serializable {
         // 获取行高
         float originalHeight = this.height;
         // 拆分行
-        this.splitRow(document, page, table, splitMap, maxHeight);
-        // 设置拆分行
-        this.setSplitRow(row, splitMap, originalHeight, maxHeight);
+        boolean splitFlag = this.splitRow(document, page, splitMap, maxHeight);
+        // 如果拆分行成功，则设置拆分行
+        if (splitFlag) {
+            // 重置分页标记（设置拆分行）
+            this.isPaging = this.setSplitRow(document, page, row, splitMap, originalHeight, maxHeight);
+        }
     }
 
     /**
@@ -380,17 +390,26 @@ class XEasyPdfRowParam implements Serializable {
      * 拆分行
      * @param document pdf文档
      * @param page pdf页面
-     * @param table pdf表格
      * @param splitMap 拆分字典
      * @param maxHeight 最大高度
+     * @return 返回布尔值，是为true，否为false
      */
-    private void splitRow(
+    private boolean splitRow(
             XEasyPdfDocument document,
             XEasyPdfPage page,
-            XEasyPdfTable table,
             Map<Integer, List<String>> splitMap,
             float maxHeight
     ) {
+        // 遍历单元格列表（检测是否为全文本）
+        for (XEasyPdfCell cell : this.cells) {
+            // 获取单元格组件
+            XEasyPdfComponent component = cell.getParam().getComponent();
+            // 如果不为文本，则直接返回
+            if (!(component instanceof XEasyPdfText)) {
+                // 返回拆分标记为否
+                return false;
+            }
+        }
         // 遍历单元格列表
         for (int i = 0, count = this.cells.size(); i < count; i++) {
             // 获取单元格
@@ -415,23 +434,44 @@ class XEasyPdfRowParam implements Serializable {
                     // 获取待添加文本列表
                     List<String> splitTextList = text.getSplitTextList();
                     // 获取文本行数
-                    int textListSize = Math.min(Math.round(((maxHeight - text.getMarginTop()) / (text.getFontSize() + text.getLeading()))), splitTextList.size());
+                    int textListSize = Math.min(Math.round(((maxHeight-text.getMarginTop())/(text.getFontSize()+text.getLeading()))), splitTextList.size());
                     // 如果文本行数大于0，则重置待添加文本列表
                     if (textListSize>0) {
                         // 重置待添加文本列表
                         text.setSplitTextList(splitTextList.subList(0, textListSize));
                         // 重置文本高度
                         text.setMaxHeight(null);
-                        // 添加剩余文本列表
-                        splitMap.put(i, splitTextList.subList(textListSize, splitTextList.size()));
-                        // 重置行高
-                        this.height = Math.min(text.getHeight(document, page), maxHeight);
+                        // 如果文本高度大于最大高度，则重置剩余文本列表
+                        if (text.getHeight(document, page)>maxHeight) {
+                            // 如果文本行数等于1，则重置待添加文本列表
+                            if (textListSize==1) {
+                                // 重置待添加文本列表
+                                text.setSplitTextList(new ArrayList<>(0));
+                                // 重置剩余文本列表
+                                splitMap.put(i, splitTextList);
+                            }
+                            // 否则重置待添加文本列表
+                            else {
+                                // 重置待添加文本列表
+                                text.setSplitTextList(splitTextList.subList(0, textListSize-1));
+                                // 添加剩余文本列表
+                                splitMap.put(i, splitTextList.subList(textListSize-1, splitTextList.size()));
+                            }
+                            // 重置文本高度
+                            text.setMaxHeight(null);
+                        }
+                        // 否则添加剩余文本列表
+                        else {
+                            // 添加剩余文本列表
+                            splitMap.put(i, splitTextList.subList(textListSize, splitTextList.size()));
+                        }
+                        // 重置单元格高度为空
+                        cell.getParam().setHeight(null);
                     }
                 }
             }
-            // 重置单元格高度为空
-            cell.getParam().setHeight(null);
         }
+        return true;
     }
 
     /**
@@ -440,14 +480,26 @@ class XEasyPdfRowParam implements Serializable {
      * @param splitMap 拆分字典
      * @param originalHeight 原有行高
      * @param maxHeight 最大行高
+     * @return 返回布尔值，是为true，否为false
      */
-    private void setSplitRow(XEasyPdfRow row, Map<Integer, List<String>> splitMap, float originalHeight, float maxHeight) {
+    private boolean setSplitRow(
+            XEasyPdfDocument document,
+            XEasyPdfPage page,
+            XEasyPdfRow row,
+            Map<Integer, List<String>> splitMap,
+            float originalHeight,
+            float maxHeight
+    ) {
         // 如果拆分字典为空，则重置拆分行为空并返回
         if (splitMap.isEmpty()) {
             // 重置拆分行
             this.splitRow = null;
-            return;
+            return true;
         }
+        // 重置行高
+        this.height = maxHeight;
+        // 计算拆分行高
+        float rowHeight = originalHeight-maxHeight;
         // 获取拆分集合
         Set<Map.Entry<Integer, List<String>>> entrySet = splitMap.entrySet();
         // 创建拆分行
@@ -456,22 +508,31 @@ class XEasyPdfRowParam implements Serializable {
         XEasyPdfRowParam splitRowParam = splitRow.getParam();
         // 重置单元格高度
         splitRowParam.resetCellHeight();
-        // 重置行高为空
-        splitRowParam.setHeight(originalHeight-maxHeight);
         // 获取拆分行单元格列表
         List<XEasyPdfCell> cells = splitRowParam.getCells();
-        // 遍历拆分行单元格列表
-        for (XEasyPdfCell cell : cells) {
+        // 遍历单元格列表
+        for (int i = 0, count = this.cells.size(); i < count; i++) {
+            // 获取单元格
+            XEasyPdfCell cell = this.cells.get(i);
             // 获取单元格组件
             XEasyPdfComponent component = cell.getParam().getComponent();
             // 如果单元格组件为文本组件，则重置文本内容
             if (component instanceof XEasyPdfText) {
                 // 转换为文本组件
                 XEasyPdfText text = (XEasyPdfText) component;
-                // 重置文本内容
-                text.setSplitTextList(Collections.singletonList(""));
-                // 重置文本最大高度
-                text.setMaxHeight(null);
+                // 如果文本高度小于等于最大高度，则重置拆分行单元格内容
+                if (text.getHeight(document, page)<=maxHeight) {
+                    // 获取拆分行单元格
+                    cell = cells.get(i);
+                    // 获取拆分行单元格组件
+                    component = cell.getParam().getComponent();
+                    // 转换为文本组件
+                    text = (XEasyPdfText) component;
+                    // 重置文本内容
+                    text.setSplitTextList(new ArrayList<>(0));
+                    // 重置文本最大高度
+                    text.setMaxHeight(null);
+                }
             }
         }
         // 遍历拆分集合
@@ -484,8 +545,20 @@ class XEasyPdfRowParam implements Serializable {
             XEasyPdfText text = (XEasyPdfText) component;
             // 重置文本内容
             text.setSplitTextList(entry.getValue());
+            // 重置文本最大高度
+            text.setMaxHeight(null);
+            // 获取文本高度
+            float textHeight = text.getHeight(document, page);
+            // 如果文本高度大于拆分行高，则重置拆分行高为文本高度
+            if (textHeight>rowHeight) {
+                // 重置拆分行高为文本高度
+                rowHeight = textHeight;
+            }
         }
+        // 重置拆分行高
+        splitRowParam.setHeight(rowHeight);
         // 初始化拆分行
         this.splitRow = splitRow;
+        return false;
     }
 }

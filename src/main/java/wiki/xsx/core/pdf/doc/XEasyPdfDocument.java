@@ -930,7 +930,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
                 outline = new PDDocumentOutline();
             }
             // 获取书签项
-            List<PDOutlineItem> items = this.param.getBookmark().getItemList();
+            List<PDOutlineItem> items = this.param.getBookmark().getBookMark();
             // 遍历书签项
             for (PDOutlineItem item : items) {
                 // 添加书签项

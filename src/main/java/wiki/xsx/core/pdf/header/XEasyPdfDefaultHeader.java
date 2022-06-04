@@ -87,6 +87,16 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
     }
 
     /**
+     * 添加自定义组件
+     * @param component pdf组件
+     * @return 返回页眉组件
+     */
+    public XEasyPdfHeader addComponent(XEasyPdfComponent component) {
+        this.param.setComponent(component);
+        return this;
+    }
+
+    /**
      * 设置边距（上左右）
      * @param margin 边距
      * @return 返回页眉组件
@@ -241,6 +251,11 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
                             this.param.getImageBeginY()-this.param.getImage().getHeight(document, page)
                     ).draw(document, page);
         }
+        // 如果自定义组件不为空，则进行自定义组件绘制
+        if (this.param.getComponent()!=null) {
+            // 绘制自定义组件
+            this.param.getComponent().draw(document, page);
+        }
         // 如果分割线列表不为空，则进行分割线绘制
         if (!this.param.getLineList().isEmpty()) {
             // 获取分割线列表
@@ -273,13 +288,13 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
         // 定义Y轴起始坐标为页面Y轴起始坐标+行间距/2
         float y = this.param.getTextBeginY() + text.getLeading()/2;
         // 如果垂直样式为居上，则重置Y轴起始坐标为Y轴起始坐标-字体大小
-        if (text.getVerticalStyle()== XEasyPdfPositionStyle.TOP) {
+        if (text.getVerticalStyle()==XEasyPdfPositionStyle.TOP) {
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小
             y = y - text.getFontSize();
             return y;
         }
         // 如果垂直样式为居中，则重置Y轴起始坐标为Y轴起始坐标-字体大小-(页眉高度-文本高度)/2
-        if (text.getVerticalStyle()== XEasyPdfPositionStyle.CENTER) {
+        if (text.getVerticalStyle()==XEasyPdfPositionStyle.CENTER) {
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-(页眉高度-文本高度)/2
             y = y - text.getFontSize() - (height - textHeight) / 2;
             return y;

@@ -457,4 +457,12 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         return this.param.getUseSelfStyle();
     }
 
+    /**
+     * 是否自定义尺寸
+     * @return 回布尔值，是为true，否为false
+     */
+    public boolean getIsCustomRectangle() {
+        return this.param.getIsCustomRectangle();
+    }
+
 }

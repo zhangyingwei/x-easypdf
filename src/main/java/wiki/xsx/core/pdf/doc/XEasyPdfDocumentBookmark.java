@@ -1,6 +1,8 @@
 package wiki.xsx.core.pdf.doc;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageFitWidthDestination;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
 import java.awt.*;
@@ -45,6 +47,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
      */
     XEasyPdfDocumentBookmark(XEasyPdfDocument document) {
         this.document = document;
+        this.initOutlineItem();
     }
 
     /**
@@ -80,20 +83,20 @@ public class XEasyPdfDocumentBookmark implements Serializable {
     }
 
     /**
+     * 获取书签
+     * @return 返回pdfbox书签列表
+     */
+    public List<PDOutlineItem> getBookMark() {
+        return this.itemList;
+    }
+
+    /**
      * 完成书签设置
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
         this.document.setBookmark(this);
         return this.document;
-    }
-
-    /**
-     * 获取书签节点列表
-     * @return 返回书签节点列表
-     */
-    List<PDOutlineItem> getItemList() {
-        return this.itemList;
     }
 
     /**
@@ -202,6 +205,29 @@ public class XEasyPdfDocumentBookmark implements Serializable {
          */
         PDOutlineItem getItem() {
             return this.outlineItem;
+        }
+    }
+
+    /**
+     * 初始化书签
+     */
+    private void initOutlineItem() {
+        // 获取源文档
+        PDDocument source = this.document.getParam().getSource();
+        // 如果源文档不为空，则获取书签
+        if (source!=null) {
+            // 获取书签
+            PDDocumentOutline documentOutline = source.getDocumentCatalog().getDocumentOutline();
+            // 如果书签不为空，则获取书签节点
+            if (documentOutline!=null) {
+                // 获取书签节点
+                Iterable<PDOutlineItem> children = documentOutline.children();
+                // 遍历书签节点
+                for (PDOutlineItem outlineItem : children) {
+                    // 添加书签节点列表
+                    this.itemList.add(outlineItem);
+                }
+            }
         }
     }
 }
