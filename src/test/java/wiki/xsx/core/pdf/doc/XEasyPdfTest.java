@@ -258,9 +258,17 @@ public class XEasyPdfTest {
                                     .setBorderColor(Color.GRAY)
                                     // 开启自动表头（分页时，自动添加表头行）
                                     .enableAutoTitle()
+                                    // 关闭文本自动拆分
+                                    .disableAutoSplitRow()
                     )
                     // 开启总页数替换
             ).enableReplaceTotalPagePlaceholder()
+                    // 获取文档书签
+                    .bookmark()
+                    // 设置书签
+                    .setBookMark(0, "测试书签")
+                    // 完成操作
+                    .finish()
                     // 保存、关闭
                     .save(outputPath).close();
         }

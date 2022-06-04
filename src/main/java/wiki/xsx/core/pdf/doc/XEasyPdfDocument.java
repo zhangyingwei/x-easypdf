@@ -527,7 +527,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
-     * 文档替换器
+     * 获取文档替换器
      * @return 返回pdf文档替换器
      */
     public XEasyPdfDocumentReplacer replacer() {
@@ -535,7 +535,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
-     * 表单填充器
+     * 获取表单填充器
      * @return 返回pdf文档表单填写器
      */
     public XEasyPdfDocumentFormFiller formFiller() {
@@ -543,7 +543,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
-     * 文档图像器
+     * 获取文档图像器
      * @return 返回pdf文档图像器
      */
     public XEasyPdfDocumentImager imager() {
@@ -551,7 +551,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
-     * 文档拆分器
+     * 获取文档拆分器
      * @return 返回pdf文档拆分器
      */
     public XEasyPdfDocumentSplitter splitter() {
@@ -559,7 +559,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
-     * 文档提取器
+     * 获取文档提取器
      * @return 返回pdf文档提取器
      */
     public XEasyPdfDocumentExtractor extractor() {
@@ -567,7 +567,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
-     * 文档签名器
+     * 获取文档签名器
      * @return 返回pdf文档签名器
      */
     public XEasyPdfDocumentSigner signer() {
@@ -575,7 +575,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     }
 
     /**
-     * 文档分析器
+     * 获取文档分析器
      * @return 返回pdf文档分析器
      */
     public XEasyPdfDocumentAnalyzer analyzer() {
