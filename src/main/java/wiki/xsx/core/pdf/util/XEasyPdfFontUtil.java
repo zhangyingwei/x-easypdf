@@ -12,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 
@@ -131,82 +132,14 @@ public class XEasyPdfFontUtil {
                 }
             }
             String lowerPath = fontPath.toLowerCase(Locale.ROOT);
-            try {
-                if (lowerPath.endsWith(TTF)) {
-                    return loadTTF(
-                            document,
-                            fontPath,
-                            new BufferedInputStream(Files.newInputStream(Paths.get(fontPath))),
-                            isEmbedded
-                    );
-                }
-                if (lowerPath.contains(TTC)) {
-                    String[] fontPathSplit = fontPath.split(COLLECTION_FONT_SEPARATOR);
-                    if (fontPathSplit.length<2) {
-                        throw new IllegalArgumentException("the font path is error");
-                    }
-                    return loadTTC(
-                            document,
-                            fontPath,
-                            new BufferedInputStream(Files.newInputStream(Paths.get(fontPathSplit[0]))),
-                            isEmbedded,
-                            Integer.parseInt(fontPathSplit[1])
-                    );
-                }
-            }catch (Exception e) {
-                return loadFontForResource(document, fontPath, isEmbedded);
+            if (lowerPath.endsWith(TTF)) {
+                return loadTTF(document, fontPath, isEmbedded);
+            }
+            if (lowerPath.contains(TTC)) {
+                return loadTTC(document, fontPath, isEmbedded);
             }
         }
-        throw new IllegalArgumentException("the font can not be loaded");
-    }
-
-
-
-    /**
-     * 加载字体(资源路径)
-     * @param document pdf文档
-     * @param fontResourcePath 字体路径(资源路径)
-     * @param isEmbedded 是否嵌入
-     * @return 返回pdfBox字体
-     */
-    @SuppressWarnings("all")
-    public static PDFont loadFontForResource(XEasyPdfDocument document, String fontResourcePath, boolean isEmbedded) {
-        if (fontResourcePath!=null) {
-            PDFont font;
-            if (isEmbedded) {
-                font = document.getFont(fontResourcePath);
-                if (font!=null) {
-                    return font;
-                }
-            }
-            String lowerPath = fontResourcePath.toLowerCase(Locale.ROOT);
-            try {
-                if (lowerPath.endsWith(TTF)) {
-                    return loadTTF(
-                            document,
-                            fontResourcePath,
-                            new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontResourcePath)),
-                            isEmbedded
-                    );
-                }
-                if (lowerPath.contains(TTC)) {
-                    String[] fontPathSplit = fontResourcePath.split(COLLECTION_FONT_SEPARATOR);
-                    if (fontPathSplit.length<2) {
-                        throw new IllegalArgumentException("the font path is error");
-                    }
-                    return loadTTC(
-                            document,
-                            fontResourcePath,
-                            new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontPathSplit[0])),
-                            isEmbedded,
-                            Integer.parseInt(fontPathSplit[1])
-                    );
-                }
-            }catch (Exception e) {
-                throw new IllegalArgumentException("the font can not be loaded");
-            }
-        }
-        throw new IllegalArgumentException("the font can not be loaded");
+        throw new IllegalArgumentException("the font can not be loaded，the path['"+fontPath+"'] is error");
     }
 
     /**
@@ -233,23 +166,29 @@ public class XEasyPdfFontUtil {
      * 加载ttf字体
      * @param document pdf文档
      * @param fontPath 字体路径
-     * @param fontInputStream 字体输入流
      * @param isEmbedded 是否嵌入
      * @return 返回pdfBox字体
      */
     @SneakyThrows
-    private static PDFont loadTTF(XEasyPdfDocument document, String fontPath, InputStream fontInputStream, boolean isEmbedded) {
+    private static PDFont loadTTF(XEasyPdfDocument document, String fontPath, boolean isEmbedded) {
+        InputStream inputStream = null;
         try {
-            PDFont font = PDType0Font.load(document.getTarget(), fontInputStream, isEmbedded);
+            Path path = Paths.get(fontPath);
+            if (path.isAbsolute()) {
+                inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPath)));
+            }else {
+                inputStream = new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontPath));
+            }
+            PDFont font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
             if (isEmbedded) {
                 document.addFont(fontPath, font);
             }
             return font;
         }catch (Exception e) {
-            throw new IllegalArgumentException("the font can not be loaded");
+            throw new IllegalArgumentException("the font can not be loaded，the path['"+fontPath+"'] is error");
         }finally {
-            if (fontInputStream!=null) {
-                fontInputStream.close();
+            if (inputStream!=null) {
+                inputStream.close();
             }
         }
     }
@@ -258,27 +197,36 @@ public class XEasyPdfFontUtil {
      * 加载ttc字体
      * @param document pdf文档
      * @param fontPath 字体路径
-     * @param fontInputStream 字体输入流
      * @param isEmbedded 是否嵌入
-     * @param index 字体索引
      * @return 返回pdfBox字体
      */
     @SneakyThrows
-    private static PDFont loadTTC(XEasyPdfDocument document, String fontPath, InputStream fontInputStream, boolean isEmbedded, int index) {
+    private static PDFont loadTTC(XEasyPdfDocument document, String fontPath, boolean isEmbedded) {
+        String[] fontPathSplit = fontPath.split(COLLECTION_FONT_SEPARATOR);
+        if (fontPathSplit.length<2) {
+            throw new IllegalArgumentException("the font can not be loaded，the path['"+fontPath+"'] is error");
+        }
+        InputStream inputStream = null;
         try {
-            TrueTypeCollection trueTypeCollection = new TrueTypeCollection(fontInputStream);
+            Path path = Paths.get(fontPath);
+            if (path.isAbsolute()) {
+                inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPathSplit[0])));
+            }else {
+                inputStream = new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontPathSplit[0]));
+            }
+            TrueTypeCollection trueTypeCollection = new TrueTypeCollection(inputStream);
             Method method = trueTypeCollection.getClass().getDeclaredMethod("getFontAtIndex", int.class);
             method.setAccessible(true);
-            PDFont font = PDType0Font.load(document.getTarget(), (TrueTypeFont) method.invoke(trueTypeCollection, index), isEmbedded);
+            PDFont font = PDType0Font.load(document.getTarget(), (TrueTypeFont) method.invoke(trueTypeCollection, Integer.parseInt(fontPathSplit[1])), isEmbedded);
             if (isEmbedded) {
                 document.addFont(fontPath, font);
             }
             return font;
         }catch (Exception e) {
-            throw new IllegalArgumentException("the font can not be loaded");
+            throw new IllegalArgumentException("the font can not be loaded，the path['"+fontPath+"'] is error");
         }finally {
-            if (fontInputStream!=null) {
-                fontInputStream.close();
+            if (inputStream!=null) {
+                inputStream.close();
             }
         }
     }

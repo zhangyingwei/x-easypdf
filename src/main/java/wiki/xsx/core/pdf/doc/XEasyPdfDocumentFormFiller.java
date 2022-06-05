@@ -5,6 +5,7 @@ import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -186,7 +188,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     @SneakyThrows
     public void finish(OutputStream outputStream) {
         // 如果开启压缩，则重置表单为空（可以减少文件大小）
-        if (this.isCompress) {
+        if (this.isCompress&&!this.form.getNeedAppearances()) {
             // 重置表单为空
             this.document.getDocumentCatalog().setAcroForm(null);
         }
@@ -325,11 +327,16 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
                     XEasyPdfTextUtil.join(
                             "/",
                             font.getName(),
-                            defaultAppearance.substring(defaultAppearance.indexOf(" "))
+                            defaultAppearance.substring(defaultAppearance.indexOf(' '))
                     )
             );
-            // 重置外观
-            field.getWidgets().get(0).setAppearance(null);
+            // 获取部件列表
+            List<PDAnnotationWidget> widgets = field.getWidgets();
+            // 如果部件列表不为空，则重置外观
+            if (widgets!=null&&!widgets.isEmpty()) {
+                // 重置外观
+                widgets.get(0).setAppearance(null);
+            }
         }
     }
 }
