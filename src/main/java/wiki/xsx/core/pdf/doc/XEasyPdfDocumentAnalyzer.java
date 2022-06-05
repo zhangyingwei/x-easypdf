@@ -710,7 +710,7 @@ public class XEasyPdfDocumentAnalyzer implements Serializable {
             // 如果字体名称不为空，则返回实际字体名称
             if (fontName!=null) {
                 // 返回实际字体名称
-                return fontName.substring(fontName.indexOf("+")+1);
+                return fontName.substring(fontName.indexOf('+')+1);
             }
             return null;
         }

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.convertor.XEasyPdfConvertor;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
+import wiki.xsx.core.pdf.util.XEasyPdfClassUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,11 +37,11 @@ public class XEasyPdfDocumentReplacerTest {
 
     @Test
     public void testFill(){
-        String sourcePath = "C:\\Users\\Administrator\\Desktop\\test.pdf";
-        String filePath = "C:\\Users\\Administrator\\Desktop\\testFill.pdf";
+        String sourcePath = OUTPUT_PATH+"temp.pdf";
+        String filePath = OUTPUT_PATH+"testFill.pdf";
         String fontPath = "C:\\Windows\\Fonts\\simsun.ttc,0";
         Map<String, String> map = new HashMap<>(9);
-        map.put("title", "测试报告");
+        map.put("名称", "测试报告");
         map.put("date", "2022-04-10");
         map.put("depart", "呼吸外科");
         map.put("no", "0001");
@@ -65,13 +66,13 @@ public class XEasyPdfDocumentReplacerTest {
             //新建一个pdf文档
             String source = "C:\\Users\\Administrator\\Desktop\\test.doc";
             String dest = "C:\\Users\\Administrator\\Desktop\\test.pdf";
+            XEasyPdfClassUtil.resetField("com.aspose.words.zzYP3");
             XEasyPdfConvertor.toPdf(source, dest);
             long now = System.currentTimeMillis();
             //转化用时
             System.out.println("Word 转 Pdf 共耗时：" + ((now - old) / 1000.0) + "秒");
         } catch (Exception e) {
             System.out.println("Word 转 Pdf 失败...");
-            e.printStackTrace();
         }
     }
 }

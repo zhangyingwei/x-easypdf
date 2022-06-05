@@ -75,9 +75,9 @@ public class XEasyPdfDocumentFormTest {
         String sourcePath = OUTPUT_PATH + "template.pdf";
         String filePath = OUTPUT_PATH + "testFill.pdf";
         Map<String, String> map = new HashMap<>(5);
-        map.put("title", null);
-        map.put("Text1", "贵 州省南明区花果园");
-        map.put("Text2", "贵 阳2");
+        map.put("title", "贵阳市");
+        map.put("Text1", "贵州省南明区花果园");
+        map.put("Text2", "贵阳2");
         map.put("Text3", "可以的 2022-04-06");
         map.put("Text4", "2022-04-06 10:00:00");
         XEasyPdfHandler.Document
