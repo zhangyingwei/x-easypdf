@@ -51,7 +51,7 @@ public class XEasyPdfPageTest {
                         XEasyPdfHandler.Text.build("你好，世界！").setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT),
                         XEasyPdfHandler.Text.build("我是第一页").setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                 )
-        ).save(filePath).close();
+        ).save(filePath).setFontPath(FONT_PATH).close();
         System.out.println("finish");
     }
 

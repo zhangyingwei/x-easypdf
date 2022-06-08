@@ -172,12 +172,17 @@ public class XEasyPdfFontUtil {
     private static PDFont loadTTF(XEasyPdfDocument document, String fontPath, boolean isEmbedded) {
         InputStream inputStream = null;
         try {
+            PDFont font;
             try {
                 inputStream = new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontPath));
+                font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
             }catch (Exception e) {
+                if (inputStream!=null) {
+                    inputStream.close();
+                }
                 inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPath)));
+                font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
             }
-            PDFont font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
             if (isEmbedded) {
                 document.addFont(fontPath, font);
             }
@@ -207,15 +212,23 @@ public class XEasyPdfFontUtil {
         }
         InputStream inputStream = null;
         try {
+            PDFont font;
             try {
                 inputStream = new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontPathSplit[0]));
+                TrueTypeCollection trueTypeCollection = new TrueTypeCollection(inputStream);
+                Method method = trueTypeCollection.getClass().getDeclaredMethod("getFontAtIndex", int.class);
+                method.setAccessible(true);
+                font = PDType0Font.load(document.getTarget(), (TrueTypeFont) method.invoke(trueTypeCollection, Integer.parseInt(fontPathSplit[1])), isEmbedded);
             }catch (Exception e) {
+                if (inputStream!=null) {
+                    inputStream.close();
+                }
                 inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPathSplit[0])));
+                TrueTypeCollection trueTypeCollection = new TrueTypeCollection(inputStream);
+                Method method = trueTypeCollection.getClass().getDeclaredMethod("getFontAtIndex", int.class);
+                method.setAccessible(true);
+                font = PDType0Font.load(document.getTarget(), (TrueTypeFont) method.invoke(trueTypeCollection, Integer.parseInt(fontPathSplit[1])), isEmbedded);
             }
-            TrueTypeCollection trueTypeCollection = new TrueTypeCollection(inputStream);
-            Method method = trueTypeCollection.getClass().getDeclaredMethod("getFontAtIndex", int.class);
-            method.setAccessible(true);
-            PDFont font = PDType0Font.load(document.getTarget(), (TrueTypeFont) method.invoke(trueTypeCollection, Integer.parseInt(fontPathSplit[1])), isEmbedded);
             if (isEmbedded) {
                 document.addFont(fontPath, font);
             }
