@@ -211,6 +211,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      * 开启上下文重置
      * @return 返回基础线条组件
      */
+    @Override
     public XEasyPdfBaseLine enableResetContext() {
         this.param.setIsResetContext(true);
         return this;

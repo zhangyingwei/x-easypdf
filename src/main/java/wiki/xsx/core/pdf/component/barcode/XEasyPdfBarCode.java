@@ -187,7 +187,9 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setQrVersion(int version) {
-        if (version>0&&version<41) {
+        final int min = 0;
+        final int max = 41;
+        if (version>min&&version<max) {
             this.param.setEncodeHints(EncodeHintType.QR_VERSION, version);
         }else {
             throw new IllegalArgumentException("the version must be between 1 and 40");
@@ -342,6 +344,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
      * 开启上下文重置
      * @return 返回条形码组件
      */
+    @Override
     public XEasyPdfBarCode enableResetContext() {
         this.param.setIsResetContext(true);
         return this;

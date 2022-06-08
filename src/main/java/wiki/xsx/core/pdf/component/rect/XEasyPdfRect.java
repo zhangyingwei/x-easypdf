@@ -58,6 +58,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * 开启上下文重置
      * @return 返回矩形组件
      */
+    @Override
     public XEasyPdfRect enableResetContext() {
         this.param.setIsResetContext(true);
         return this;

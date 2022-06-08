@@ -157,6 +157,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * 开启上下文重置
      * @return 返回文本组件
      */
+    @Override
     public XEasyPdfText enableResetContext() {
         this.param.setIsResetContext(true);
         return this;
@@ -398,10 +399,12 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回页面水印组件
      */
     public XEasyPdfText setRadians(double radians) {
-        if (radians%360!=0) {
-            radians = radians%360;
-            if (radians<0) {
-                radians += 360;
+        final int min = 0;
+        final int max = 360;
+        if (radians%max!=min) {
+            radians = radians%max;
+            if (radians<min) {
+                radians += max;
             }
             this.param.setRadians(radians);
         }

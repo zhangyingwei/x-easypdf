@@ -191,14 +191,10 @@ public class XEasyPdfDocumentSigner implements Serializable {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(8192)) {
             // 创建任务文档
             PDDocument target = this.param.getDocument();
-            // 替换总页码占位符
-            this.param.getPdfDocument().replaceTotalPagePlaceholder(target, false);
-            // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
-            this.param.getPdfDocument().setBasicInfo(target);
             // 保存文档
             target.save(byteArrayOutputStream);
             // 添加签名
-            this.addSignature(target, outputStream);
+            this.addSignature(PDDocument.load(byteArrayOutputStream.toByteArray()), outputStream);
         }
         // 关闭文档
         this.param.getPdfDocument().close();
@@ -211,6 +207,12 @@ public class XEasyPdfDocumentSigner implements Serializable {
      */
     @SneakyThrows
     void addSignature(PDDocument target, OutputStream outputStream) {
+        // 获取pdf文档
+        XEasyPdfDocument pdfDocument = this.param.getPdfDocument();
+        // 替换总页码占位符
+        pdfDocument.replaceTotalPagePlaceholder(target, false);
+        // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+        pdfDocument.setBasicInfo(target);
         // 设置mdp权限
         this.setMdpPermission(target, this.param.getSignature(), this.param.getAccessPermissions());
         // 重置签名表单

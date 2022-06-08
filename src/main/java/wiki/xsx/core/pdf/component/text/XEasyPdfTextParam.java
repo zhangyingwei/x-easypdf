@@ -288,9 +288,10 @@ class XEasyPdfTextParam implements Serializable {
      * @param document pdf文档
      * @param page pdf页面
      * @param text 待添加文本
+     * @return 返回X轴起始坐标
      */
     @SneakyThrows
-    float initBeginX(XEasyPdfDocument document, XEasyPdfPage page, String text) {
+    Float initBeginX(XEasyPdfDocument document, XEasyPdfPage page, String text) {
         // 定义X轴坐标
         Float x = this.beginX;
         // 如果页面X轴起始坐标未初始化，则进行初始化

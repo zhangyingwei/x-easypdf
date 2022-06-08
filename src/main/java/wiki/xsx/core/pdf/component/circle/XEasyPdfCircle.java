@@ -77,6 +77,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
      * 开启上下文重置
      * @return 返回圆形组件
      */
+    @Override
     public XEasyPdfCircle enableResetContext() {
         this.param.setIsResetContext(true);
         return this;

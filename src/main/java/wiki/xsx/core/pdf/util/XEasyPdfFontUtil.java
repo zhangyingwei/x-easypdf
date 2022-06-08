@@ -12,7 +12,6 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 
@@ -173,11 +172,10 @@ public class XEasyPdfFontUtil {
     private static PDFont loadTTF(XEasyPdfDocument document, String fontPath, boolean isEmbedded) {
         InputStream inputStream = null;
         try {
-            Path path = Paths.get(fontPath);
-            if (path.isAbsolute()) {
-                inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPath)));
-            }else {
+            try {
                 inputStream = new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontPath));
+            }catch (Exception e) {
+                inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPath)));
             }
             PDFont font = PDType0Font.load(document.getTarget(), inputStream, isEmbedded);
             if (isEmbedded) {
@@ -202,17 +200,17 @@ public class XEasyPdfFontUtil {
      */
     @SneakyThrows
     private static PDFont loadTTC(XEasyPdfDocument document, String fontPath, boolean isEmbedded) {
+        final int length = 2;
         String[] fontPathSplit = fontPath.split(COLLECTION_FONT_SEPARATOR);
-        if (fontPathSplit.length<2) {
+        if (fontPathSplit.length<length) {
             throw new IllegalArgumentException("the font can not be loaded，the path['"+fontPath+"'] is error");
         }
         InputStream inputStream = null;
         try {
-            Path path = Paths.get(fontPath);
-            if (path.isAbsolute()) {
-                inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPathSplit[0])));
-            }else {
+            try {
                 inputStream = new BufferedInputStream(XEasyPdfFontUtil.class.getResourceAsStream(fontPathSplit[0]));
+            }catch (Exception e) {
+                inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fontPathSplit[0])));
             }
             TrueTypeCollection trueTypeCollection = new TrueTypeCollection(inputStream);
             Method method = trueTypeCollection.getClass().getDeclaredMethod("getFontAtIndex", int.class);

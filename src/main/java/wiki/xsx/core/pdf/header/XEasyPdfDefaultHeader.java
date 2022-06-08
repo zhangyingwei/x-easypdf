@@ -91,6 +91,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      * @param component pdf组件
      * @return 返回页眉组件
      */
+    @Override
     public XEasyPdfHeader addComponent(XEasyPdfComponent component) {
         this.param.setComponent(component);
         return this;

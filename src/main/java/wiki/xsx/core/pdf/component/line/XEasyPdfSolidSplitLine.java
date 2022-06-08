@@ -210,6 +210,7 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      * 开启上下文重置
      * @return 返回实线分割线组件
      */
+    @Override
     public XEasyPdfSolidSplitLine enableResetContext() {
         this.param.setIsResetContext(true);
         return this;

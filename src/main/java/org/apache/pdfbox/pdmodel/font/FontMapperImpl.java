@@ -33,7 +33,7 @@ import java.util.*;
 public class FontMapperImpl implements FontMapper {
     private static final Log LOG = LogFactory.getLog(FontMapperImpl.class);
 
-    private static final FontCache fontCache = new FontCache();
+    private static final FontCache FONT_CACHE = new FontCache();
     private FontProvider fontProvider;
     private Map<String, FontInfo> fontInfoByName;
     private final TrueTypeFont lastResortFont;
@@ -89,7 +89,7 @@ public class FontMapperImpl implements FontMapper {
      * lazy thread safe singleton
      */
     private static class DefaultFontProvider {
-        private static final FontProvider INSTANCE = new FileSystemFontProvider(fontCache);
+        private static final FontProvider INSTANCE = new FileSystemFontProvider(FONT_CACHE);
     }
 
     /**
@@ -115,7 +115,7 @@ public class FontMapperImpl implements FontMapper {
      * FontProvider subclasses.
      */
     public FontCache getFontCache() {
-        return fontCache;
+        return FONT_CACHE;
     }
 
     private Map<String, FontInfo> createFontInfoByName(List<? extends FontInfo> fontInfoList) {
@@ -569,20 +569,20 @@ public class FontMapperImpl implements FontMapper {
                 // PDFBOX-4793 and PDF.js 10699: This font has only Korean, but has bits 17-21 set.
                 codePageRange &= ~(JIS_JAPAN | CHINESE_SIMPLIFIED | CHINESE_TRADITIONAL);
             }
-            if (cidSystemInfo.getOrdering().equals("GB1") &&
+            if ("GB1".equals(cidSystemInfo.getOrdering()) &&
                     (codePageRange & CHINESE_SIMPLIFIED) == CHINESE_SIMPLIFIED) {
                 return true;
             }
-            else if (cidSystemInfo.getOrdering().equals("CNS1") &&
+            else if ("CNS1".equals(cidSystemInfo.getOrdering()) &&
                     (codePageRange & CHINESE_TRADITIONAL) == CHINESE_TRADITIONAL) {
                 return true;
             }
-            else if (cidSystemInfo.getOrdering().equals("Japan1") &&
+            else if ("Japan1".equals(cidSystemInfo.getOrdering()) &&
                     (codePageRange & JIS_JAPAN) == JIS_JAPAN) {
                 return true;
             }
             else {
-                return cidSystemInfo.getOrdering().equals("Korea1") &&
+                return "Korea1".equals(cidSystemInfo.getOrdering()) &&
                         ((codePageRange & KOREAN_WANSUNG) == KOREAN_WANSUNG ||
                                 (codePageRange & KOREAN_JOHAB) == KOREAN_JOHAB);
             }

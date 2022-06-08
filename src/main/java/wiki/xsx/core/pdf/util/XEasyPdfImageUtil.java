@@ -184,19 +184,20 @@ public class XEasyPdfImageUtil {
     private static Rectangle getRotateRectangle(int width, int height, double radians) {
         Rectangle src = new Rectangle(new Dimension(width, height));
         final int angle = 90;
+        final int num = 2;
         if (radians>=angle) {
-            if(radians/angle%2==1){
+            if(radians/angle%num==1){
                 return new Rectangle((int) src.getHeight(), (int) src.getWidth());
             }
             radians = radians%angle;
         }
-        double radius = Math.sqrt(src.getHeight()*src.getHeight()+src.getWidth()*src.getWidth())/2;
-        double len = 2*Math.sin(Math.toRadians(radians)/2)*radius;
-        double radiansAlpha = (Math.PI-Math.toRadians(radians))/2;
+        double radius = Math.sqrt(src.getHeight()*src.getHeight()+src.getWidth()*src.getWidth())/num;
+        double len = num*Math.sin(Math.toRadians(radians)/num)*radius;
+        double radiansAlpha = (Math.PI-Math.toRadians(radians))/num;
         double radiansWidth = Math.atan(src.getHeight()/src.getWidth());
         double radiansHeight = Math.atan(src.getWidth()/src.getHeight());
         int lenWidth = Math.abs((int) (len*Math.cos(Math.PI-radiansAlpha-radiansWidth)));
         int lenHeight = Math.abs((int) (len*Math.cos(Math.PI-radiansAlpha-radiansHeight)));
-        return new Rectangle((src.width+lenWidth*2), (src.height+lenHeight*2));
+        return new Rectangle((src.width+lenWidth*num), (src.height+lenHeight*num));
     }
 }

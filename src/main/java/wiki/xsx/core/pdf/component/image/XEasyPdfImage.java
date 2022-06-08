@@ -153,6 +153,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * 开启上下文重置
      * @return 返回图片组件
      */
+    @Override
     public XEasyPdfImage enableResetContext() {
         this.param.setIsResetContext(true);
         return this;

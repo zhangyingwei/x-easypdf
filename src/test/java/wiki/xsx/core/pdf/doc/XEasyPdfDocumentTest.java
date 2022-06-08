@@ -521,8 +521,8 @@ public class XEasyPdfDocumentTest {
         long begin = System.currentTimeMillis();
         // 定义保存路径
         final String outputPath = OUTPUT_PATH + "sign.pdf";
-        final String imagePath = "C:\\Users\\Administrator\\Desktop\\2022010115431859.gif";
-        final String certPath = "E:\\pdf\\file.p12";
+        final String imagePath = OUTPUT_PATH + "2022010115431859.gif";
+        final String certPath = OUTPUT_PATH + "file.p12";
         try (OutputStream outputStream = Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(outputPath)))) {
             XEasyPdfHandler.Document.build(
                     XEasyPdfHandler.Page.build(

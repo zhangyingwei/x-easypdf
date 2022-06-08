@@ -358,8 +358,8 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
                 // 文本数索引自增
                 index++;
             }
-            // 如果文本数索引大于等于指定文本数，则结束循环
-            while (!(index >= this.param.getWordCount()));
+            // 如果文本数索引小于指定文本数，则继续
+            while (index < this.param.getWordCount());
             // 重置X轴起始坐标为0
             this.param.setBeginX(0F);
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
@@ -382,8 +382,8 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
                 // 重置X轴起始坐标为X轴起始+文本间隔
                 this.param.setBeginX(this.param.getBeginX()+this.param.getWordSpace());
             }
-            // 如果X轴起始坐标大于等于页面宽度，则结束循环
-            while (!(this.param.getBeginX() >= mixWidth));
+            // 如果X轴起始坐标小于页面宽度，则继续
+            while (this.param.getBeginX() < mixWidth);
             // 重置X轴起始坐标为0
             this.param.setBeginX(0F);
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距

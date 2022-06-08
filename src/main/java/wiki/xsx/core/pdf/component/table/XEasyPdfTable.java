@@ -232,6 +232,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * 开启上下文重置
      * @return 返回表格组件
      */
+    @Override
     public XEasyPdfTable enableResetContext() {
         this.param.setIsResetContext(true);
         return this;

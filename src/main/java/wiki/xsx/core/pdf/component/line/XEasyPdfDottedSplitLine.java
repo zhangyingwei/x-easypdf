@@ -237,6 +237,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
      * 开启上下文重置
      * @return 返回虚线分割线组件
      */
+    @Override
     public XEasyPdfDottedSplitLine enableResetContext() {
         this.param.setIsResetContext(true);
         return this;
