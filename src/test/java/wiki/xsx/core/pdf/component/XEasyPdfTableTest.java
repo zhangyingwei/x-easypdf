@@ -11,10 +11,7 @@ import org.junit.Test;
 import wiki.xsx.core.pdf.component.table.XEasyPdfCell;
 import wiki.xsx.core.pdf.component.table.XEasyPdfRow;
 import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
-import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
+import wiki.xsx.core.pdf.doc.*;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.awt.*;
@@ -540,7 +537,7 @@ public class XEasyPdfTableTest {
                     components.add(component);
                 }
             }
-            XEasyPdfPage page = XEasyPdfHandler.Page.build(rectangle, components);
+            XEasyPdfPage page = XEasyPdfHandler.Page.build(new XEasyPdfPageRectangle(rectangle.getWidth(), rectangle.getHeight()), components);
             XEasyPdfDocument document = XEasyPdfHandler.Document.build(page);
             document.save(OUTPUT_PATH+"/table10.pdf").close();
         }

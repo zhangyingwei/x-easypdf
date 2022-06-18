@@ -533,6 +533,16 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 设置是否需要初始化
+     * @param needInitialize 是否需要初始化
+     * @return 返回文本组件
+     */
+    public XEasyPdfText setNeedInitialize(boolean needInitialize) {
+        this.param.setIsNeedInitialize(needInitialize);
+        return this;
+    }
+
+    /**
      * 替换占位符
      * @param placeholder 占位符
      * @param value 新字符串
@@ -686,6 +696,14 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
+     * 是否需要初始化
+     * @return 返回布尔值，是为true，否为false
+     */
+    public boolean isNeedInitialize() {
+        return this.param.getIsNeedInitialize();
+    }
+
+    /**
      * 初始化内容流
      * @param document pdf文档
      * @param page pdf页面
@@ -810,6 +828,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @SneakyThrows
     private PDPageContentStream checkPage(XEasyPdfDocument document, XEasyPdfPage page, PDPageContentStream stream) {
+        // 如果需要分页检查，则进行分页检查
         if (this.param.getCheckPage()) {
             // 定义页脚高度
             float footerHeight = 0F;

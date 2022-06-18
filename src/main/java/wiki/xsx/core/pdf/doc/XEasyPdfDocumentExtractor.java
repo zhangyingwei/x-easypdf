@@ -137,8 +137,9 @@ public class XEasyPdfDocumentExtractor implements Serializable {
                 // 添加数据
                 this.addText(dataList, index);
             }
-            // 如果页面索引没有内容，则提取全部页面中的区域文本
-        }else {
+        }
+        // 否则页面索引没有内容，则提取全部页面中的区域文本
+        else {
             // 遍历文档页面
             for (int index = 0, count = this.document.getNumberOfPages() - 1; index < count; index++) {
                 // 添加数据
@@ -307,7 +308,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
                 // 添加到待接收图片列表
                 imageList.add(((PDImage) xObject).getImage());
             }
-            // 如果资源内容为表单，则递归调用
+            // 否则资源内容为表单，则递归调用
             else if (xObject instanceof PDFormXObject) {
                 // 添加图片
                 this.addImage(imageList, ((PDFormXObject) xObject).getResources());

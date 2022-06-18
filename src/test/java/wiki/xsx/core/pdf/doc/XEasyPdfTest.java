@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.doc;
 
+import lombok.SneakyThrows;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
@@ -10,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 /**
@@ -274,5 +277,11 @@ public class XEasyPdfTest {
         }
         long end = System.currentTimeMillis();
         System.out.println("完成，耗时： " + (end-begin));
+    }
+
+    @SneakyThrows
+    public static void main(String[] args) {
+        String s = Files.probeContentType(Paths.get(OUTPUT_PATH + "allTest.pdf"));
+        System.out.println("s = " + s);
     }
 }

@@ -151,6 +151,11 @@ class XEasyPdfRowParam implements Serializable {
                     this.borderColor = tableParam.getBorderColor();
                 }
             }
+            // 否则重置边框宽度为0
+            else {
+                // 重置边框宽度为0
+                this.borderWidth = 0F;
+            }
             // 如果内容模式未初始化，则初始化为页面内容模式
             if (this.contentMode==null) {
                 // 初始化为页面内容模式
@@ -308,7 +313,7 @@ class XEasyPdfRowParam implements Serializable {
      * @param page pdf页面
      * @param table pdf表格
      */
-    void paging(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) {
+    private void paging(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) {
         // 获取页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 获取表格参数
@@ -361,7 +366,7 @@ class XEasyPdfRowParam implements Serializable {
      * @param row pdf表格行
      * @param maxHeight 最大高度
      */
-    void split(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table, XEasyPdfRow row, float maxHeight) {
+    private void split(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table, XEasyPdfRow row, float maxHeight) {
         // 定义拆分字典
         Map<Integer, List<String>> splitMap = new HashMap<>(this.cells.size());
         // 获取行高
@@ -494,6 +499,7 @@ class XEasyPdfRowParam implements Serializable {
         if (splitMap.isEmpty()) {
             // 重置拆分行
             this.splitRow = null;
+            // 返回需要分页
             return true;
         }
         // 重置行高
@@ -559,6 +565,7 @@ class XEasyPdfRowParam implements Serializable {
         splitRowParam.setHeight(rowHeight);
         // 初始化拆分行
         this.splitRow = splitRow;
+        // 返回不需要分页
         return false;
     }
 }

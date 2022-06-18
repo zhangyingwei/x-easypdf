@@ -132,6 +132,10 @@ class XEasyPdfImageParam implements Serializable {
      * 是否自定义尺寸
      */
     private Boolean isCustomRectangle = false;
+    /**
+     * 是否需要初始化
+     */
+    private Boolean isNeedInitialize = true;
 
     /**
      * 初始化

@@ -143,7 +143,7 @@ public class XEasyPdfTextUtil {
             return "";
         }
         // 定义待转义字符数组
-        final char[] escapeChars = {'$', '(', ')', '*', '+', '.', '[', '?', '\\', '^', '{', '|'};
+        final char[] escapeChars = {'$', '(', ')', '*', '+', '.', '[', ']', '?', '\\', '^', '{', '}', '|'};
         // 定义字符串构建器
         StringBuilder builder = new StringBuilder();
         // 获取转义文本字符数组
@@ -190,13 +190,19 @@ public class XEasyPdfTextUtil {
      * @return 返回拼接后的字符串
      */
     public static String join(String ...texts) {
+        // 如果字符串列表为空，则返回空串
         if (texts==null) {
+            // 返回空串
             return "";
         }
+        // 定义字符串构建器
         StringBuilder builder = new StringBuilder();
+        // 遍历字符串列表
         for (String text : texts) {
+            // 添加字符串
             builder.append(text);
         }
+        // 返回拼接后的字符串
         return builder.toString();
     }
 }

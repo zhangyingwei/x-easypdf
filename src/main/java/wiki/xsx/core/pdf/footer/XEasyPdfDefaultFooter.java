@@ -36,6 +36,14 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
 
     /**
      * 有参构造
+     * @param component 自定义组件
+     */
+    public XEasyPdfDefaultFooter(XEasyPdfComponent component) {
+        this.param.setComponent(component);
+    }
+
+    /**
+     * 有参构造
      * @param image pdf图片
      */
     public XEasyPdfDefaultFooter(XEasyPdfImage image) {

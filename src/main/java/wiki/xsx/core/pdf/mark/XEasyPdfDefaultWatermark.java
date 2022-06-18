@@ -250,7 +250,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         List<PDPage> pageList = page.getPageList();
         // 遍历pdfBox页面列表
         for (PDPage pdPage : pageList) {
-            // 执行画水印
+            // 执行绘制水印
             this.doDraw(target, pdPage, font);
             // 重置X轴起始坐标
             this.param.setBeginX(beginX);
@@ -298,7 +298,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         state.setNonStrokingAlphaConstant(this.param.getAlpha());
         // 设置透明度标记
         state.setAlphaSourceFlag(true);
-        // 设置融合模式
+        // 设置混合模式
         state.setBlendMode(BlendMode.MULTIPLY);
         // 初始化内容流
         PDPageContentStream cs = new PDPageContentStream(
@@ -391,6 +391,10 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         }
     }
 
+    /**
+     * 写入文本
+     * @param cs 内容流
+     */
     @SneakyThrows
     private void writeText(PDPageContentStream cs) {
         // 开启文本输入

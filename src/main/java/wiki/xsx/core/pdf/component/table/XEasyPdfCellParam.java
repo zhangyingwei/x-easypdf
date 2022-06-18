@@ -146,6 +146,24 @@ class XEasyPdfCellParam implements Serializable {
             // 初始化边框标记
             this.hasBorder = rowParam.getHasBorder();
         }
+        // 如果开启边框，则初始化边框宽度
+        if (this.hasBorder) {
+            // 如果边框宽度未初始化，则进行初始化
+            if (this.borderWidth==null) {
+                // 初始化边框宽度
+                this.borderWidth = rowParam.getBorderWidth();
+            }
+            // 如果边框颜色未初始化，则进行初始化
+            if (this.borderColor==null) {
+                // 初始化边框颜色
+                this.borderColor = rowParam.getBorderColor();
+            }
+        }
+        // 否则初始化边框宽度为0
+        else {
+            // 初始化边框宽度
+            this.borderWidth = 0F;
+        }
         // 如果内容模式未初始化，则初始化为页面内容模式
         if (this.contentMode==null) {
             // 初始化为页面内容模式
@@ -170,16 +188,6 @@ class XEasyPdfCellParam implements Serializable {
         if (this.fontColor==null) {
             // 初始化字体颜色
             this.fontColor = rowParam.getFontColor();
-        }
-        // 如果边框宽度未初始化，则进行初始化
-        if (this.borderWidth==null) {
-            // 初始化边框宽度
-            this.borderWidth = rowParam.getBorderWidth();
-        }
-        // 如果边框颜色未初始化，则进行初始化
-        if (this.borderColor==null) {
-            // 初始化边框颜色
-            this.borderColor = rowParam.getBorderColor();
         }
         // 如果背景颜色未初始化，则进行初始化
         if (this.backgroundColor==null) {

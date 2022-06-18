@@ -1,9 +1,9 @@
 package wiki.xsx.core.pdf.component;
 
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPageRectangle;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
@@ -48,7 +48,7 @@ public class XEasyPdfTextTest {
         String filePath = OUTPUT_PATH + "testText.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        PDRectangle.A4,
+                        XEasyPdfPageRectangle.A4,
                         XEasyPdfHandler.Text.build(20F, "贵阳（贵州省省会）").setCharacterSpacing(10F).setHorizontalStyle(XEasyPdfPositionStyle.CENTER),
                         XEasyPdfHandler.Text.build(
                                 "贵阳，简称“筑”，别称林城、筑城，是贵州省省会，国务院批复确定的中国西南地区重要的区域创新中心、中国重要的生态休闲度假旅游城市 [1]  。" +
@@ -173,7 +173,7 @@ public class XEasyPdfTextTest {
         }
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        PDRectangle.A4,
+                        XEasyPdfPageRectangle.A4,
                         XEasyPdfHandler.Text.build(builder.toString()).setAutoIndent(9)
                 )
         ).setGlobalWatermark(
@@ -189,7 +189,7 @@ public class XEasyPdfTextTest {
         String filePath = OUTPUT_PATH + "testText6.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        PDRectangle.A4,
+                        XEasyPdfPageRectangle.A4,
                         XEasyPdfHandler.Text.build("2022心想事成10")
                                 .setRadians(10D).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(30).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)
@@ -274,7 +274,7 @@ public class XEasyPdfTextTest {
         String filePath = OUTPUT_PATH + "testText7.pdf";
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build(
-                        PDRectangle.A4,
+                        XEasyPdfPageRectangle.A4,
                         XEasyPdfHandler.Text.build("2022心想事成")
                                 .setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginTop(10F)
                                 .setFontSize(12F).setFontColor(Color.BLACK).setUnderlineColor(Color.RED)

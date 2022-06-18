@@ -1,11 +1,11 @@
 package wiki.xsx.core.pdf.component;
 
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.image.XEasyPdfImageType;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPageRectangle;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
@@ -146,7 +146,7 @@ public class XEasyPdfImageTest {
         try (InputStream inputStream = new URL("https://images.gitee.com/uploads/images/2021/0527/104627_bc14225e_668748.png").openStream()) {
             XEasyPdfHandler.Document.build().addPage(
                     XEasyPdfHandler.Page.build(
-                            PDRectangle.A4,
+                            XEasyPdfPageRectangle.A4,
                             XEasyPdfHandler.Image.build(inputStream, XEasyPdfImageType.PNG)
                     )
             ).save(filePath).close();
@@ -180,7 +180,7 @@ public class XEasyPdfImageTest {
             inputStream.close();
         }
         XEasyPdfHandler.Document.build().addPage(
-                XEasyPdfHandler.Page.build(PDRectangle.A4, list)
+                XEasyPdfHandler.Page.build(XEasyPdfPageRectangle.A4, list)
         ).save(filePath).close();
         System.out.println("finish");
     }

@@ -78,25 +78,25 @@ class XEasyPdfBarCodeParam implements Serializable {
     /**
      * 条形码文字大小
      */
-    private Integer wordsSize = 12;
+    private Integer wordsSize = 20;
     /**
      * 最大宽度
      */
     private Float maxWidth;
     /**
-     * 图像宽度
+     * 图像宽度（显示宽度）
      */
     private Integer imageWidth;
     /**
-     * 图像高度
+     * 图像高度（显示高度）
      */
     private Integer imageHeight;
     /**
-     * 图像宽度
+     * 图像最大宽度（真实宽度）
      */
     private Integer imageMaxWidth;
     /**
-     * 图像高度
+     * 图像最大高度（真实高度）
      */
     private Integer imageMaxHeight;
     /**
@@ -301,12 +301,12 @@ class XEasyPdfBarCodeParam implements Serializable {
         // 如果最大宽度未初始化或小于宽度，则初始化最大宽度
         if (this.imageMaxWidth==null||this.imageMaxWidth<this.imageWidth) {
             // 初始化最大宽度为图像宽度
-            this.imageMaxWidth = this.imageWidth;
+            this.imageMaxWidth = this.imageWidth*3;
         }
         // 如果最大高度未初始化或小于高度，则初始化最大高度
         if (this.imageMaxHeight==null||this.imageMaxHeight<this.imageHeight) {
             // 初始化最大高度为图像高度
-            this.imageMaxHeight = this.imageHeight;
+            this.imageMaxHeight = this.imageHeight*3;
         }
     }
 

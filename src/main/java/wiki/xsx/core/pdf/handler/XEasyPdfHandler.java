@@ -1,7 +1,6 @@
 package wiki.xsx.core.pdf.handler;
 
 import lombok.SneakyThrows;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 import wiki.xsx.core.pdf.component.barcode.XEasyPdfBarCode;
 import wiki.xsx.core.pdf.component.circle.XEasyPdfCircle;
@@ -20,6 +19,7 @@ import wiki.xsx.core.pdf.component.table.XEasyPdfTable;
 import wiki.xsx.core.pdf.component.text.XEasyPdfText;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
+import wiki.xsx.core.pdf.doc.XEasyPdfPageRectangle;
 import wiki.xsx.core.pdf.footer.XEasyPdfDefaultFooter;
 import wiki.xsx.core.pdf.footer.XEasyPdfFooter;
 import wiki.xsx.core.pdf.header.XEasyPdfDefaultHeader;
@@ -150,43 +150,43 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面
-         * @param pageSize pdfBox页面尺寸
+         * @param pageSize pdf页面尺寸
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, XEasyPdfComponent...components) {
             return new XEasyPdfPage(pageSize).addComponent(components);
         }
 
         /**
          * 构建页面
-         * @param pageSize pdfBox页面尺寸
+         * @param pageSize pdf页面尺寸
          * @param components 组件列表
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(PDRectangle pageSize, List<XEasyPdfComponent> components) {
+        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, List<XEasyPdfComponent> components) {
             return new XEasyPdfPage(pageSize).addComponent(components);
         }
 
         /**
          * 构建页面
-         * @param pageSize pdfBox页面尺寸
+         * @param pageSize pdf页面尺寸
          * @param watermark 页面水印组件
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
             return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
         }
 
         /**
          * 构建页面
-         * @param pageSize pdfBox页面尺寸
+         * @param pageSize pdf页面尺寸
          * @param watermark 页面水印组件
          * @param components 组件列表
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(PDRectangle pageSize, XEasyPdfDefaultWatermark watermark, List<XEasyPdfComponent> components) {
+        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, XEasyPdfDefaultWatermark watermark, List<XEasyPdfComponent> components) {
             return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
         }
 
@@ -545,6 +545,16 @@ public class XEasyPdfHandler {
      * pdf页眉组件
      */
     public static class Header {
+
+        /**
+         * 构建页眉
+         * @param component 自定义组件
+         * @return 返回pdf页眉组件
+         */
+        public static XEasyPdfHeader build(XEasyPdfComponent component) {
+            return new XEasyPdfDefaultHeader(component);
+        }
+
         /**
          * 构建页眉
          * @param text 文本组件
@@ -588,6 +598,16 @@ public class XEasyPdfHandler {
      * pdf页脚组件
      */
     public static class Footer {
+
+        /**
+         * 构建页脚
+         * @param component 自定义组件
+         * @return 返回pdf页脚组件
+         */
+        public static XEasyPdfFooter build(XEasyPdfComponent component) {
+            return new XEasyPdfDefaultFooter(component);
+        }
+
         /**
          * 构建页脚
          * @param text 文本组件

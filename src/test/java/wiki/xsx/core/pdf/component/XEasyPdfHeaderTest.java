@@ -29,7 +29,7 @@ import java.util.Arrays;
 public class XEasyPdfHeaderTest {
 
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
-    private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\component\\header\\";
+    private static final String OUTPUT_PATH = "E:\\pdf\\test\\component\\header\\";
 
     @Before
     public void setup() {
@@ -41,11 +41,28 @@ public class XEasyPdfHeaderTest {
 
     @Test
     public void testGlobalHeader() throws IOException {
-        String filePath = OUTPUT_PATH + "testGlobalHeader.pdf";
+        String filePath = OUTPUT_PATH + "testGlobalHeader2.pdf";
         XEasyPdfHandler.Document.build().addPage(
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
+                XEasyPdfHandler.Page.build(),
                 XEasyPdfHandler.Page.build()
         ).setFontPath(FONT_PATH).setGlobalHeader(
-                XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("Hello World"))
+                XEasyPdfHandler.Header.build(XEasyPdfHandler.Text.build("")).addComponent(
+                        XEasyPdfHandler.Table.build(
+                                XEasyPdfHandler.Table.Row.build(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100, 100).addContent(
+                                                XEasyPdfHandler.Image.build(new File(OUTPUT_PATH+"222.jpg"))
+                                        )
+                                )
+                        )
+                )
         ).save(filePath).close();
         System.out.println("finish");
     }

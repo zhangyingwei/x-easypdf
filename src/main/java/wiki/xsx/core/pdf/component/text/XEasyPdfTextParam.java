@@ -202,6 +202,10 @@ class XEasyPdfTextParam implements Serializable {
      * 是否整行旋转
      */
     private Boolean isRotateLine = false;
+    /**
+     * 是否需要初始化
+     */
+    private Boolean isNeedInitialize = true;
 
     /**
      * 获取宽度

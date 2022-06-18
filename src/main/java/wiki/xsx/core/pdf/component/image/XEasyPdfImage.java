@@ -118,7 +118,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     public XEasyPdfImage disableSelfAdaption() {
         this.param.setEnableSelfAdaption(false);
-        this.param.setImageXObject(null);
         return this;
     }
 
@@ -156,6 +155,16 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @Override
     public XEasyPdfImage enableResetContext() {
         this.param.setIsResetContext(true);
+        return this;
+    }
+
+    /**
+     * 设置是否需要初始化
+     * @param needInitialize 是否需要初始化
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage setNeedInitialize(boolean needInitialize) {
+        this.param.setIsNeedInitialize(needInitialize);
         return this;
     }
 
@@ -297,7 +306,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @Override
     public XEasyPdfImage setWidth(float width) {
         this.param.setWidth((int) Math.abs(width));
-        this.param.setImageXObject(null);
         return this;
     }
 
@@ -309,7 +317,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @Override
     public XEasyPdfImage setHeight(float height) {
         this.param.setHeight((int) Math.abs(height));
-        this.param.setImageXObject(null);
         return this;
     }
 
@@ -359,8 +366,6 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         this.param.setBeginX(0F).setBeginY(null);
         // 如果待添加图片不为空，则释放图片资源
         if (this.param.getImage()!=null) {
-            // 释放待添加图片资源
-            this.param.getImage().getGraphics().dispose();
             // 设置待添加图片为空
             this.param.setImage(null);
         }
@@ -460,10 +465,17 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 是否自定义尺寸
-     * @return 回布尔值，是为true，否为false
+     * @return 返回布尔值，是为true，否为false
      */
-    public boolean getIsCustomRectangle() {
+    public boolean isCustomRectangle() {
         return this.param.getIsCustomRectangle();
     }
 
+    /**
+     * 是否需要初始化
+     * @return 返回布尔值，是为true，否为false
+     */
+    public boolean isNeedInitialize() {
+        return this.param.getIsNeedInitialize();
+    }
 }

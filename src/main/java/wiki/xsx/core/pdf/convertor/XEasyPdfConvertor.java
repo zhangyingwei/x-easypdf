@@ -1,5 +1,7 @@
 package wiki.xsx.core.pdf.convertor;
 
+import com.aspose.words.Document;
+import com.aspose.words.SaveFormat;
 import lombok.SneakyThrows;
 import wiki.xsx.core.pdf.util.XEasyPdfFileUtil;
 
@@ -77,6 +79,6 @@ public class XEasyPdfConvertor {
      */
     @SneakyThrows
     public static void toPdf(InputStream inputStream, OutputStream outputStream) {
-        new com.aspose.words.Document(inputStream).save(outputStream, com.aspose.words.SaveFormat.PDF);
+        new Document(inputStream).save(outputStream, SaveFormat.PDF);
     }
 }

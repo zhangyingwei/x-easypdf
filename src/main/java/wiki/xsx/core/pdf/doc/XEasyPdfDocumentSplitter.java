@@ -107,8 +107,9 @@ public class XEasyPdfDocumentSplitter implements Serializable {
                     this.split(outputStream, XEasyPdfConvertUtil.toInt(this.documentList.get(i)));
                 }
             }
-            //  按单页面拆分
-        }else {
+        }
+        //  按单页面拆分
+        else {
             // 定义拆分文档列表索引
             int index = 1;
             // 获取pdfbox页面树

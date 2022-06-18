@@ -608,22 +608,26 @@ public class XEasyPdfCell implements Serializable {
      * @param text pdf文本
      */
     private void initText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfText text) {
-        // 设置文本为子组件并设置宽度
-        text.enableChildComponent().setWidth(this.param.getWidth());
-        // 如果开启组件样式，则使用文本自身样式
-        if (this.param.getIsComponentSelfStyle()) {
-            // 设置文本自身样式
-            this.param.setContentMode(text.getContentMode())
-                    .setVerticalStyle(text.getVerticalStyle())
-                    .setHorizontalStyle(text.getHorizontalStyle());
+        // 如果需要初始化，则进行初始化
+        if (text.isNeedInitialize()) {
+            // 设置文本为子组件并设置宽度
+            text.enableChildComponent().setWidth(this.param.getWidth());
+            // 如果开启组件样式，则使用文本自身样式
+            if (this.param.getIsComponentSelfStyle()) {
+                // 设置文本自身样式
+                this.param.setContentMode(text.getContentMode())
+                        .setVerticalStyle(text.getVerticalStyle())
+                        .setHorizontalStyle(text.getHorizontalStyle());
+            }
+            // 设置文本为子组件并设置宽度
+            text.setNeedInitialize(false)
+                    .setContentMode(this.param.getContentMode())
+                    .setFontPath(this.param.getFontPath())
+                    .setFontSize(this.param.getFontSize())
+                    .setFontColor(this.param.getFontColor())
+                    .setHorizontalStyle(this.param.getHorizontalStyle())
+                    .setVerticalStyle(this.param.getVerticalStyle());
         }
-        // 设置文本为子组件并设置宽度
-        text.setContentMode(this.param.getContentMode())
-                .setFontPath(this.param.getFontPath())
-                .setFontSize(this.param.getFontSize())
-                .setFontColor(this.param.getFontColor())
-                .setHorizontalStyle(this.param.getHorizontalStyle())
-                .setVerticalStyle(this.param.getVerticalStyle());
     }
 
     /**
@@ -633,44 +637,48 @@ public class XEasyPdfCell implements Serializable {
      * @param image pdf图片
      */
     private void initImage(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfImage image) {
-        // 如果开启组件样式，则使用图片自身样式
-        if (this.param.getIsComponentSelfStyle()) {
-            // 设置图片自身样式
-            this.param.setContentMode(image.getContentMode())
-                    .setVerticalStyle(image.getVerticalStyle())
-                    .setHorizontalStyle(image.getHorizontalStyle());
+        // 如果需要初始化，则进行初始化
+        if (image.isNeedInitialize()) {
+            // 如果开启组件样式，则使用图片自身样式
+            if (this.param.getIsComponentSelfStyle()) {
+                // 设置图片自身样式
+                this.param.setContentMode(image.getContentMode())
+                        .setVerticalStyle(image.getVerticalStyle())
+                        .setHorizontalStyle(image.getHorizontalStyle());
+            }
+            // 获取单元格高度
+            Float height = this.param.getHeight();
+            // 如果高度为空，则重置为行高
+            if (height==null) {
+                // 重置为行高
+                height = row.getParam().getHeight();
+            }
+            // 如果仍然为空，则重置为图片高度
+            if (height==null) {
+                // 重置为图片高度
+                height = Float.valueOf(image.getHeight(document, page));
+            }
+            // 如果为自定义尺寸，则使用最小值重置图片宽高
+            if (image.isCustomRectangle()) {
+                // 重置图片宽度与高度
+                image.setWidth(Math.min(image.getWidth(document, page), this.param.getWidth())-this.param.getBorderWidth())
+                        .setHeight(Math.min(image.getHeight(document, page), height)-this.param.getBorderWidth());
+            }
+            // 否则重置图片宽高为单元格宽高
+            else {
+                // 重置图片宽度与高度
+                image.setWidth(this.param.getWidth()-this.param.getBorderWidth())
+                        .setHeight(height-this.param.getBorderWidth());
+            }
+            // 设置图片参数
+            image.setNeedInitialize(false)
+                    .enableChildComponent()
+                    .setMaxWidth(this.param.getWidth()-this.param.getBorderWidth())
+                    .setMaxHeight(height-this.param.getBorderWidth())
+                    .setContentMode(this.param.getContentMode())
+                    .setHorizontalStyle(this.param.getHorizontalStyle())
+                    .setVerticalStyle(this.param.getVerticalStyle());
         }
-        // 获取单元格高度
-        Float height = this.param.getHeight();
-        // 如果高度为空，则重置为行高
-        if (height==null) {
-            // 重置为行高
-            height = row.getParam().getHeight();
-        }
-        // 如果仍然为空，则重置为图片高度
-        if (height==null) {
-            // 重置为图片高度
-            height = Float.valueOf(image.getHeight(document, page));
-        }
-        // 如果为自定义尺寸，则使用最小值重置图片宽高
-        if (image.getIsCustomRectangle()) {
-            // 重置图片宽度与高度
-            image.setWidth(Math.min(image.getWidth(document, page), this.param.getWidth())-this.param.getBorderWidth())
-                    .setHeight(Math.min(image.getHeight(document, page), height)-this.param.getBorderWidth());
-        }
-        // 否则重置图片宽高为单元格宽高
-        else {
-            // 重置图片宽度与高度
-            image.setWidth(this.param.getWidth()-this.param.getBorderWidth())
-                    .setHeight(height-this.param.getBorderWidth());
-        }
-        // 设置图片参数
-        image.enableChildComponent()
-                .setMaxWidth(this.param.getWidth()-this.param.getBorderWidth())
-                .setMaxHeight(height-this.param.getBorderWidth())
-                .setContentMode(this.param.getContentMode())
-                .setHorizontalStyle(this.param.getHorizontalStyle())
-                .setVerticalStyle(this.param.getVerticalStyle());
     }
 
     /**

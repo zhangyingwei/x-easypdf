@@ -40,6 +40,14 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 有参构造
+     * @param component 自定义组件
+     */
+    public XEasyPdfDefaultHeader(XEasyPdfComponent component) {
+        this.param.setComponent(component);
+    }
+
+    /**
+     * 有参构造
      * @param image pdf图片
      */
     public XEasyPdfDefaultHeader(XEasyPdfImage image) {

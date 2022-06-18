@@ -46,7 +46,7 @@ public class XEasyPdfPage implements Serializable {
      * 无参构造
      */
     public XEasyPdfPage() {
-        this.param.setLastPage(new PDPage(PDRectangle.A4));
+        this.param.setLastPage(new PDPage(XEasyPdfPageRectangle.A4.getSize()));
     }
 
     /**
@@ -58,8 +58,10 @@ public class XEasyPdfPage implements Serializable {
         if (page!=null) {
             // 重置最新页面
             this.param.setLastPage(page);
-            // 重置页面尺寸
-            this.param.setPageSize(page.getMediaBox());
+            // 重置页面尺寸（原有尺寸）
+            this.param.setOriginalPageSize(new XEasyPdfPageRectangle(page.getMediaBox()));
+            // 重置页面尺寸（当前尺寸）
+            this.param.setCurrentPageSize(new XEasyPdfPageRectangle(page.getTrimBox()));
             // 添加pdfBox页面
             this.param.getPageList().add(page);
         }
@@ -67,15 +69,15 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 有参构造
-     * @param pageSize pdfBox页面尺寸
+     * @param pageSize pdf页面尺寸
      */
-    public XEasyPdfPage(PDRectangle pageSize) {
+    public XEasyPdfPage(XEasyPdfPageRectangle pageSize) {
         // 如果pdfBox页面尺寸不为空，则设置pdfBox页面尺寸
         if (pageSize!=null) {
             // 重置最新页面
-            this.param.setLastPage(new PDPage(pageSize));
+            this.param.setLastPage(new PDPage(pageSize.getSize()));
             // 设置pdfBox页面尺寸
-            this.param.setPageSize(pageSize);
+            this.param.setOriginalPageSize(pageSize);
         }
     }
 
@@ -278,31 +280,119 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回每毫米像素点
      */
     public float getUnit() {
-        return XEasyPdfPageParam.getUnit();
+        return XEasyPdfPageRectangle.getUnit();
     }
 
     /**
-     * 获取页面宽度
-     * @return 返回页面宽度
+     * 获取当前页面宽度
+     * @return 返回当前页面宽度
      */
     public float getWidth() {
-        return this.param.getPageSize().getWidth();
+        return this.param.getCurrentPageSize().getWidth();
     }
 
     /**
-     * 获取页面高度
-     * @return 返回页面高度
+     * 获取当前页面高度
+     * @return 返回当前页面高度
      */
     public float getHeight() {
-        return this.param.getPageSize().getHeight();
+        return this.param.getCurrentPageSize().getHeight();
     }
 
     /**
-     * 获取页面尺寸
-     * @return 返回页面尺寸
+     * 获取当前页面尺寸
+     * @return 返回当前页面尺寸
      */
-    public PDRectangle getRectangle() {
-        return this.param.getPageSize();
+    public XEasyPdfPageRectangle getRectangle() {
+        return this.param.getCurrentPageSize();
+    }
+
+    /**
+     * 获取当前页面尺寸X轴左坐标
+     * @return 返回当前页面尺寸X轴左坐标
+     */
+    public float getRectangleLeftX() {
+        return this.param.getCurrentPageSize().getLeftX();
+    }
+
+    /**
+     * 获取当前页面尺寸X轴右坐标
+     * @return 返回当前页面尺寸X轴右坐标
+     */
+    public float getRectangleRightX() {
+        return this.param.getCurrentPageSize().getRightX();
+    }
+
+    /**
+     * 获取当前页面尺寸Y轴下坐标
+     * @return 返回当前页面尺寸Y轴下坐标
+     */
+    public float getRectangleBottomY() {
+        return this.param.getCurrentPageSize().getBottomY();
+    }
+
+    /**
+     * 获取当前页面尺寸Y轴上坐标
+     * @return 返回当前页面尺寸Y轴上坐标
+     */
+    public float getRectangleTopY() {
+        return this.param.getCurrentPageSize().getTopY();
+    }
+
+    /**
+     * 获取原有页面宽度
+     * @return 返回原有页面宽度
+     */
+    public float getOriginalWidth() {
+        return this.param.getOriginalPageSize().getWidth();
+    }
+
+    /**
+     * 获取原有页面高度
+     * @return 返回原有页面高度
+     */
+    public float getOriginalHeight() {
+        return this.param.getOriginalPageSize().getHeight();
+    }
+
+    /**
+     * 获取原有页面尺寸
+     * @return 返回原有页面尺寸
+     */
+    public XEasyPdfPageRectangle getOriginalRectangle() {
+        return this.param.getOriginalPageSize();
+    }
+
+    /**
+     * 获取原有页面尺寸X轴左坐标
+     * @return 返回当前页面尺寸X轴左坐标
+     */
+    public float getOriginalRectangleLeftX() {
+        return this.param.getOriginalPageSize().getLeftX();
+    }
+
+    /**
+     * 获取原有页面尺寸X轴右坐标
+     * @return 返回当前页面尺寸X轴右坐标
+     */
+    public float getOriginalRectangleRightX() {
+        return this.param.getOriginalPageSize().getRightX();
+    }
+
+    /**
+     * 获取原有页面尺寸Y轴下坐标
+     * @return 返回当前页面尺寸Y轴下坐标
+     */
+    public float getOriginalRectangleBottomY() {
+        return this.param.getOriginalPageSize().getBottomY();
+    }
+
+    /**
+     * 获取原有页面尺寸Y轴上坐标
+     * @return 返回当前页面尺寸Y轴上坐标
+     */
+    public float getOriginalRectangleTopY() {
+        return this.param.getOriginalPageSize().getTopY();
     }
 
     /**
@@ -490,7 +580,7 @@ public class XEasyPdfPage implements Serializable {
      */
     public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) {
         // 定义pdfBox页面
-        PDPage page = pageSize==null?new PDPage(this.param.getPageSize()):new PDPage(pageSize);
+        PDPage page = pageSize==null?new PDPage(this.param.getOriginalPageSize().getSize()):new PDPage(pageSize);
         // 如果旋转角度不为空，则设置旋转角度
         if (this.param.getRotation()!=null) {
             // 设置旋转角度
@@ -543,16 +633,16 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 修改页面尺寸
-     * @param pageSize pdfbox页面尺寸
+     * @param pageSize pdf页面尺寸
      * @return 返回pdf页面
      */
-    public XEasyPdfPage modifyPageSize(PDRectangle pageSize) {
+    public XEasyPdfPage modifyPageSize(XEasyPdfPageRectangle pageSize) {
         // 如果页面尺寸不为空，则修改页面尺寸
         if (pageSize!=null) {
             // 设置新增页面尺寸
-            this.param.setPageSize(pageSize);
+            this.param.setOriginalPageSize(pageSize);
             // 设置原有页面尺寸
-            this.param.setModifyPageSize(pageSize);
+            this.param.setModifyPageSize(pageSize.getSize());
         }
         return this;
     }
@@ -562,7 +652,7 @@ public class XEasyPdfPage implements Serializable {
      * @param document pdf文档
      */
     void build(XEasyPdfDocument document) {
-        this.build(document, this.param.getPageSize());
+        this.build(document, this.param.getOriginalPageSize());
     }
 
     /**
@@ -570,13 +660,13 @@ public class XEasyPdfPage implements Serializable {
      * @param document pdf文档
      * @param pageSize 页面尺寸
      */
-    void build(XEasyPdfDocument document, PDRectangle pageSize) {
+    void build(XEasyPdfDocument document, XEasyPdfPageRectangle pageSize) {
         // 初始化参数
         this.param.init(document, this);
         // 如果原有pdfbox页面列表为空，则添加新页面，否则设置页面尺寸
         if (this.param.getPageList().isEmpty()) {
             // 添加新页面
-            this.addNewPage(document, pageSize);
+            this.addNewPage(document, pageSize.getSize());
             // 如果原有pdfbox页面列表不为空，则设置页面尺寸
         }else {
             // 获取原有pdfbox页面列表

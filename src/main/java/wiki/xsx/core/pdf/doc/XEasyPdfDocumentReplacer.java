@@ -464,7 +464,9 @@ public class XEasyPdfDocumentReplacer implements Serializable {
                 // 重置处理标记为已处理
                 flag = true;
             }
-        }else {
+        }
+        // 否则遍历cos数组
+        else {
             // 遍历cos数组
             for (COSBase cosBase : array) {
                 // 如果为cos字符串，则进行处理

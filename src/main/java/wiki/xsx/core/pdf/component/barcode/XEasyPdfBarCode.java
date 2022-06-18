@@ -468,12 +468,16 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         BufferedImage out = new BufferedImage(width, height+this.param.getWordsSize()+1, BufferedImage.TYPE_4BYTE_ABGR);
         // 创建图像图形
         Graphics2D graphics = out.createGraphics();
-        // 设置保真参数
+        // 设置插值
+        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        // 设置图像抗锯齿
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // 设置文本抗锯齿
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         // 设置笔划规范化控制参数
-        graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_DEFAULT);
+        graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
         // 设置笔划
-        graphics.setStroke(new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));
+        graphics.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
         // 设置条形码背景色
         graphics.setColor(this.param.getOffColor());
         // 填充矩形
@@ -492,7 +496,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         int beginY = height + this.param.getWordsSize();
         // 设置文字
         graphics.drawString(this.param.getWords(), beginX, beginY);
-        // 图形处理
+        // 资源释放
         graphics.dispose();
         // 刷新图像
         out.flush();

@@ -8,7 +8,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
@@ -295,9 +294,12 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setTempDir(String tempDir) {
+        // 如果路径不是目录，则提示错误信息
         if (!Files.isDirectory(Paths.get(tempDir))) {
+            // 提示错误信息
             throw new IllegalArgumentException("the url must be directory");
         }
+        // 设置临时目录
         this.param.setTempDir(tempDir);
         return this;
     }
@@ -310,6 +312,16 @@ public class XEasyPdfDocument implements Closeable, Serializable {
     public void addFont(String fontPath, PDFont font) {
         // 添加字体缓存
         this.param.getFontCache().put(fontPath, font);
+    }
+
+    /**
+     * 添加文档otf字体
+     * @param fontPath 字体路径
+     * @param font pdfbox字体
+     */
+    public void addOtfFont(String fontPath, PDFont font) {
+        // 添加字体缓存
+        this.param.getOtfFontCache().put(fontPath, font);
     }
 
     /**
@@ -327,6 +339,15 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public PDFont getFont(String fontPath) {
         return this.param.getFontCache().get(fontPath);
+    }
+
+    /**
+     * 获取文档otf字体
+     * @param fontPath 字体路径
+     * @return 返回pdfbox字体
+     */
+    public PDFont getOtfFont(String fontPath) {
+        return this.param.getOtfFontCache().get(fontPath);
     }
 
     /**
@@ -402,14 +423,16 @@ public class XEasyPdfDocument implements Closeable, Serializable {
         this.param.setIsReset(true);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
-        // 如果pdf页面列表数量大于索引，则插入页面，否则添加页面
+        // 如果pdf页面列表数量大于索引，则插入页面
         if (pageList.size()>=pageIndex) {
             // 遍历pdf页面
             for (XEasyPdfPage page : pages) {
                 // 插入页面
                 pageList.add(Math.max(pageIndex, 0), page);
             }
-        }else {
+        }
+        // 否则添加页面
+        else {
             // 添加页面
             this.addPage(pages);
         }
@@ -431,11 +454,11 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 修改页面尺寸
-     * @param pageSize pdfbox页面尺寸
+     * @param pageSize pdf页面尺寸
      * @param pageIndex 页面索引
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument modifyPageSize(PDRectangle pageSize, int ...pageIndex) {
+    public XEasyPdfDocument modifyPageSize(XEasyPdfPageRectangle pageSize, int ...pageIndex) {
         // 设置重置
         this.param.setIsReset(true);
         // 获取pdf页面列表
@@ -711,6 +734,8 @@ public class XEasyPdfDocument implements Closeable, Serializable {
             this.param.getTarget().close();
             // 清空字体
             this.param.getFontCache().clear();
+            // 清空otf字体
+            this.param.getOtfFontCache().clear();
         }
         // 重置字体为空
         this.param.setFont(null);

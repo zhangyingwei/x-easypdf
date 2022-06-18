@@ -78,6 +78,10 @@ class XEasyPdfDocumentParam implements Serializable {
      */
     private final Map<String, PDFont> fontCache = new ConcurrentHashMap<>(8);
     /**
+     * otf字体缓存
+     */
+    private final Map<String, PDFont> otfFontCache = new ConcurrentHashMap<>(8);
+    /**
      * pdfBox文档（源文档）
      */
     private PDDocument source;

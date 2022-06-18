@@ -1,11 +1,10 @@
 package wiki.xsx.core.pdf.component;
 
-import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.barcode.XEasyPdfBarCode;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
-import java.io.File;
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -29,14 +28,6 @@ public class XEasyPdfBarCodeTest {
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
     private static final String OUTPUT_PATH = "E:\\pdf\\test\\component\\barcode\\";
 
-    @Before
-    public void setup() {
-        File dir = new File(OUTPUT_PATH);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-    }
-
     @Test
     public void testBarcode() throws IOException {
         String filePath = OUTPUT_PATH + "testbarcode.pdf";
@@ -45,11 +36,11 @@ public class XEasyPdfBarCodeTest {
                         XEasyPdfHandler.BarCode.build(
                                 XEasyPdfBarCode.CodeType.EAN_13,
                                 "6922454332930"
-                        ).setWords("EAN-13").setMarginLeft(200F).setMarginTop(100F),
+                        ).setWords("EAN-13").enableShowWords().setMarginLeft(200F).setMarginTop(100F),
                         XEasyPdfHandler.BarCode.build(
                                 XEasyPdfBarCode.CodeType.QR_CODE,
                                 "https://www.xsx.wiki"
-                        ).setWords("QR-CODE").enableShowWords().setWidth(120).setMarginLeft(230F).setMarginTop(50F)
+                        ).setWords("QR-CODE").enableShowWords().setWordsSize(30).setWordsColor(Color.BLUE).setWidth(120).setMarginLeft(230F).setMarginTop(50F)
                 )
         ).setFontPath(FONT_PATH).save(filePath).close();
         System.out.println("finish");

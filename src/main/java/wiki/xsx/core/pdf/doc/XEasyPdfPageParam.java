@@ -41,14 +41,6 @@ class XEasyPdfPageParam implements Serializable {
     private static final long serialVersionUID = 3226308238459966086L;
 
     /**
-     * 每英寸像素点
-     */
-    private static final float POINTS_PER_INCH = 72;
-    /**
-     * 每毫米像素点
-     */
-    private static final float POINTS_PER_MM = 1 / 25.4f * POINTS_PER_INCH;
-    /**
      * 内容模式
      */
     private XEasyPdfComponent.ContentMode contentMode;
@@ -73,9 +65,13 @@ class XEasyPdfPageParam implements Serializable {
      */
     private Float pageY;
     /**
-     * pdfBox页面尺寸
+     * pdfBox页面尺寸（原有尺寸）
      */
-    private PDRectangle pageSize = PDRectangle.A4;
+    private XEasyPdfPageRectangle originalPageSize = XEasyPdfPageRectangle.A4;
+    /**
+     * pdfBox页面尺寸（当前尺寸）
+     */
+    private XEasyPdfPageRectangle currentPageSize = XEasyPdfPageRectangle.A4;
     /**
      * pdfBox页面尺寸（手动修改）
      */
@@ -148,13 +144,6 @@ class XEasyPdfPageParam implements Serializable {
      * 是否允许旋转固有页面
      */
     private Boolean allowRotateInherentPage = true;
-
-    /**
-     * 获取每毫米像素点
-     */
-    public static Float getUnit() {
-        return POINTS_PER_MM;
-    }
 
     /**
      * 初始化
