@@ -43,17 +43,10 @@ public class XEasyPdfPage implements Serializable {
     private final XEasyPdfPageParam param = new XEasyPdfPageParam();
 
     /**
-     * 无参构造
-     */
-    public XEasyPdfPage() {
-        this.param.setLastPage(new PDPage(XEasyPdfPageRectangle.A4.getSize()));
-    }
-
-    /**
      * 有参构造
      * @param page pdfBox页面
      */
-    public XEasyPdfPage(PDPage page) {
+    XEasyPdfPage(PDPage page) {
         // 如果pdfbox页面不为空，则添加页面
         if (page!=null) {
             // 重置最新页面
@@ -76,8 +69,15 @@ public class XEasyPdfPage implements Serializable {
         if (pageSize!=null) {
             // 重置最新页面
             this.param.setLastPage(new PDPage(pageSize.getSize()));
-            // 设置pdfBox页面尺寸
+            // 重置页面尺寸（原有尺寸）
             this.param.setOriginalPageSize(pageSize);
+            // 重置页面尺寸（当前尺寸）
+            this.param.setCurrentPageSize(pageSize);
+        }
+        // 否则使用A4尺寸重置最新页面
+        else {
+            // 使用A4尺寸重置最新页面
+            this.param.setLastPage(new PDPage(XEasyPdfPageRectangle.A4.getSize()));
         }
     }
 
@@ -639,8 +639,8 @@ public class XEasyPdfPage implements Serializable {
     public XEasyPdfPage modifyPageSize(XEasyPdfPageRectangle pageSize) {
         // 如果页面尺寸不为空，则修改页面尺寸
         if (pageSize!=null) {
-            // 设置新增页面尺寸
-            this.param.setOriginalPageSize(pageSize);
+            // 设置当前页面尺寸
+            this.param.setCurrentPageSize(pageSize);
             // 设置原有页面尺寸
             this.param.setModifyPageSize(pageSize.getSize());
         }
@@ -669,12 +669,12 @@ public class XEasyPdfPage implements Serializable {
             this.addNewPage(document, pageSize.getSize());
             // 如果原有pdfbox页面列表不为空，则设置页面尺寸
         }else {
-            // 获取原有pdfbox页面列表
-            List<PDPage> pageList = this.param.getPageList();
+            // 获取页面尺寸
+            PDRectangle modifyPageSize = this.param.getModifyPageSize();
             // 如果页面尺寸不为空，则进行设置
-            if (this.param.getModifyPageSize()!=null) {
-                // 获取页面尺寸
-                PDRectangle modifyPageSize = this.param.getModifyPageSize();
+            if (modifyPageSize!=null) {
+                // 获取原有pdfbox页面列表
+                List<PDPage> pageList = this.param.getPageList();
                 // 遍历pdfbox页面列表
                 for (PDPage page : pageList) {
                     // 修改页面尺寸
@@ -706,15 +706,7 @@ public class XEasyPdfPage implements Serializable {
      */
     private void modifyPageSize(PDPage page, PDRectangle pageSize) {
         // 设置页面尺寸
-        page.setArtBox(pageSize);
-        // 设置页面尺寸
-        page.setBleedBox(pageSize);
-        // 设置页面尺寸
         page.setCropBox(pageSize);
-        // 设置页面尺寸
-        page.setMediaBox(pageSize);
-        // 设置页面尺寸
-        page.setTrimBox(pageSize);
         // 如果允许旋转固有页面且旋转角度不为空，则设置旋转角度
         if (this.param.getAllowRotateInherentPage()&&this.param.getRotation()!=null) {
             // 设置旋转角度

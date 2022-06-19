@@ -1,5 +1,6 @@
 package wiki.xsx.core.pdf.doc;
 
+import org.apache.fontbox.util.BoundingBox;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 /**
@@ -122,23 +123,58 @@ public class XEasyPdfPageRectangle {
 
     /**
      * 有参构造
-     * @param width 宽度
-     * @param height 高度
-     */
-    public XEasyPdfPageRectangle(float width, float height) {
-        this.width = width;
-        this.height = height;
-        this.size = new PDRectangle(width, height);
-    }
-
-    /**
-     * 有参构造
      * @param size pdfbox页面尺寸
      */
     XEasyPdfPageRectangle(PDRectangle size) {
         this.width = size.getWidth();
         this.height = size.getHeight();
         this.size = size;
+    }
+
+    /**
+     * 有参构造
+     * @param width 宽度
+     * @param height 高度
+     */
+    private XEasyPdfPageRectangle(float width, float height) {
+        this.width = Math.abs(width);
+        this.height = Math.abs(height);
+        this.size = new PDRectangle(this.width, this.height);
+    }
+
+    /**
+     * 有参构造
+     * @param leftX 宽度
+     * @param rightX 高度
+     * @param bottomY 高度
+     * @param topY 高度
+     */
+    private XEasyPdfPageRectangle(float leftX, float rightX, float bottomY, float topY) {
+        this.width = Math.abs(rightX-leftX);
+        this.height = Math.abs(topY-bottomY);
+        this.size = new PDRectangle(new BoundingBox(leftX, bottomY, rightX, topY));
+    }
+
+    /**
+     * 创建页面尺寸
+     * @param width 宽度
+     * @param height 高度
+     * @return 返回页面尺寸
+     */
+    public static XEasyPdfPageRectangle create(float width, float height) {
+        return new XEasyPdfPageRectangle(width, height);
+    }
+
+    /**
+     * 创建页面尺寸
+     * @param leftX X轴左坐标
+     * @param rightX X轴右坐标
+     * @param bottomY Y轴下坐标
+     * @param topY Y轴上坐标
+     * @return 返回页面尺寸
+     */
+    public static XEasyPdfPageRectangle create(float leftX, float rightX, float bottomY, float topY) {
+        return new XEasyPdfPageRectangle(leftX, rightX, bottomY, topY);
     }
 
     /**

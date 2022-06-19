@@ -3,10 +3,7 @@ package wiki.xsx.core.pdf.page;
 import org.junit.Before;
 import org.junit.Test;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
-import wiki.xsx.core.pdf.doc.XEasyPdfDefaultFontStyle;
-import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
-import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
+import wiki.xsx.core.pdf.doc.*;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 
 import java.io.File;
@@ -32,7 +29,7 @@ import java.util.List;
 public class XEasyPdfPageTest {
 
     private static final String FONT_PATH = "C:\\Windows\\Fonts\\simfang.ttf";
-    private static final String OUTPUT_PATH = "C:\\Users\\xsx\\Desktop\\pdf\\test\\page\\";
+    private static final String OUTPUT_PATH = "E:\\pdf\\test\\page\\";
 
     @Before
     public void setup() {
@@ -52,6 +49,13 @@ public class XEasyPdfPageTest {
                         XEasyPdfHandler.Text.build("我是第一页").setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                 )
         ).save(filePath).setFontPath(FONT_PATH).close();
+        System.out.println("finish");
+
+        XEasyPdfHandler.Document
+                .load(OUTPUT_PATH + "testAddComponent.pdf")
+                .modifyPageSize(XEasyPdfPageRectangle.create(0, 300, 0, 900))
+                .save(OUTPUT_PATH + "testAddComponent2.pdf")
+                .close();
         System.out.println("finish");
     }
 

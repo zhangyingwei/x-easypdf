@@ -116,7 +116,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf页面组件
          */
         public static XEasyPdfPage build(List<XEasyPdfComponent> components) {
-            return new XEasyPdfPage().addComponent(components);
+            return new XEasyPdfPage(null).addComponent(components);
         }
 
         /**
@@ -125,7 +125,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf页面组件
          */
         public static XEasyPdfPage build(XEasyPdfComponent...components) {
-            return new XEasyPdfPage().addComponent(components);
+            return new XEasyPdfPage(null).addComponent(components);
         }
 
         /**
@@ -135,7 +135,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf页面组件
          */
         public static XEasyPdfPage build(XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
-            return new XEasyPdfPage().setWatermark(watermark).addComponent(components);
+            return new XEasyPdfPage(null).setWatermark(watermark).addComponent(components);
         }
 
         /**
@@ -145,7 +145,7 @@ public class XEasyPdfHandler {
          * @return 返回pdf页面组件
          */
         public static XEasyPdfPage build(XEasyPdfDefaultWatermark watermark, List<XEasyPdfComponent> components) {
-            return new XEasyPdfPage().setWatermark(watermark).addComponent(components);
+            return new XEasyPdfPage(null).setWatermark(watermark).addComponent(components);
         }
 
         /**
@@ -205,7 +205,6 @@ public class XEasyPdfHandler {
         public static String getCurrentPagePlaceholder() {
             return CURRENT_PAGE_PLACEHOLDER;
         }
-
     }
 
     /**

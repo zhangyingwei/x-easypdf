@@ -537,7 +537,7 @@ public class XEasyPdfTableTest {
                     components.add(component);
                 }
             }
-            XEasyPdfPage page = XEasyPdfHandler.Page.build(new XEasyPdfPageRectangle(rectangle.getWidth(), rectangle.getHeight()), components);
+            XEasyPdfPage page = XEasyPdfHandler.Page.build(XEasyPdfPageRectangle.create(rectangle.getWidth(), rectangle.getHeight()), components);
             XEasyPdfDocument document = XEasyPdfHandler.Document.build(page);
             document.save(OUTPUT_PATH+"/table10.pdf").close();
         }
