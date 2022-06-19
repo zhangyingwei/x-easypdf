@@ -293,6 +293,8 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
             // 设置pdf页面Y轴起始坐标，起始坐标 = 起始坐标 - 线宽 / 2
             page.setPageY(this.param.getBeginY() - this.param.getLineWidth() / 2);
         }
+        // 重置页面X轴与Y轴起始坐标
+        this.param.setBeginX(null).setBeginY(null);
     }
 
     /**
