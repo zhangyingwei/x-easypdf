@@ -88,7 +88,7 @@ public class XEasyPdfHeaderTest {
         XEasyPdfHandler.Document.build().addPage(
                 XEasyPdfHandler.Page.build().setHeader(
                         XEasyPdfHandler.Header.build(
-                                XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(100F).setWidth(100F),
+//                                XEasyPdfHandler.Image.build(new File(imagePath)).setHeight(100F).setWidth(100F),
                                 XEasyPdfHandler.Text.build(
                                         "Hello XSX!!!Hello XSX!!!Hello XSX!!!Hello XSX!!!"
                                 ).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setFontSize(30F)

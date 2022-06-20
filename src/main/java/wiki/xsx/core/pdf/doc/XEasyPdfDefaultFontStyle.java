@@ -21,15 +21,15 @@ public enum XEasyPdfDefaultFontStyle {
     /**
      * 细体
      */
-    LIGHT("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Light.ttf"),
+    LIGHT("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Light.ttf", "SourceHanSansCN-Light"),
     /**
      * 正常
      */
-    NORMAL("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Normal.ttf"),
+    NORMAL("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Normal.ttf", "SourceHanSansCN-Regular"),
     /**
      * 粗体
      */
-    BOLD("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Bold.ttf");
+    BOLD("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Bold.ttf", "SourceHanSansCN-Bold");
 
     /**
      * 字体路径
@@ -37,11 +37,18 @@ public enum XEasyPdfDefaultFontStyle {
     private final String path;
 
     /**
+     * 字体名称
+     */
+    private final String name;
+
+    /**
      * 有参构造
      * @param path 字体路径
+     * @param name 字体名称
      */
-    XEasyPdfDefaultFontStyle(String path) {
+    XEasyPdfDefaultFontStyle(String path, String name) {
         this.path = path;
+        this.name = name;
     }
 
     /**
@@ -49,6 +56,14 @@ public enum XEasyPdfDefaultFontStyle {
      * @return 返回字体路径
      */
     public String getPath() {
-        return path;
+        return this.path;
+    }
+
+    /**
+     * 获取字体名称
+     * @return 返回字体名称
+     */
+    public String getName() {
+        return this.name;
     }
 }
