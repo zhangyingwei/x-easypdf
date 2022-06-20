@@ -14,9 +14,9 @@ import java.io.InputStream;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 重写字体映射实现
+ * pdf字体映射助手
  * @author xsx
- * @date 2021/9/25
+ * @date 2022/6/20
  * @since 1.8
  * <p>
  * Copyright (c) 2020-2022 xsx All Rights Reserved.
@@ -30,25 +30,25 @@ import java.util.concurrent.ConcurrentHashMap;
  * See the Mulan PSL v1 for more details.
  * </p>
  */
-public class FontMapperHandler implements FontMapper {
+public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 字体名称映射字典
      */
-    private static final ConcurrentHashMap<String, FontBoxFont> FONT_MAPPING = new ConcurrentHashMap<>(16);
+    private static final ConcurrentHashMap<String, FontBoxFont> FONT_NAME_MAPPING = new ConcurrentHashMap<>(16);
     /**
      * 字体路径映射字典
      */
     private static final ConcurrentHashMap<String, FontBoxFont> FONT_PATH_MAPPING = new ConcurrentHashMap<>(16);
     /**
-     * 字体映射实例
+     * 字体映射助手实例
      */
-    private static final FontMapperHandler INSTANCE = new FontMapperHandler();
+    private static final XEasyPdfFontMapperHandler INSTANCE = new XEasyPdfFontMapperHandler();
 
     /**
      * 有参构造
      */
-    private FontMapperHandler() {
+    private XEasyPdfFontMapperHandler() {
         // 初始化
         this.init(XEasyPdfDefaultFontStyle.LIGHT, XEasyPdfDefaultFontStyle.NORMAL, XEasyPdfDefaultFontStyle.BOLD);
         // 设置字体映射
@@ -59,7 +59,7 @@ public class FontMapperHandler implements FontMapper {
      * 获取字体映射实例
      * @return 返回字体映射实例
      */
-    public static FontMapperHandler getInstance() {
+    public static XEasyPdfFontMapperHandler getInstance() {
         return INSTANCE;
     }
 
@@ -70,7 +70,7 @@ public class FontMapperHandler implements FontMapper {
      */
     @SneakyThrows
     public void addFont(String fontPath, FontBoxFont font) {
-        FONT_MAPPING.putIfAbsent(font.getName(), font);
+        FONT_NAME_MAPPING.putIfAbsent(font.getName(), font);
         FONT_PATH_MAPPING.putIfAbsent(fontPath, font);
     }
 
@@ -95,7 +95,7 @@ public class FontMapperHandler implements FontMapper {
         // 查找字体
         TrueTypeFont ttf = (TrueTypeFont)this.findFont(baseFont);
         // 如果字体不为空，则返回字体
-        if (ttf != null) {
+        if (ttf!=null) {
             // 返回字体
             return new FontMapping<>(ttf, false);
         }
@@ -114,7 +114,7 @@ public class FontMapperHandler implements FontMapper {
         // 查找字体
         FontBoxFont font = this.findFont(baseFont);
         // 如果字体不为空，则返回字体
-        if (font != null) {
+        if (font!=null) {
             // 返回字体
             return new FontMapping<>(font, false);
         }
@@ -144,7 +144,7 @@ public class FontMapperHandler implements FontMapper {
             return new CIDFontMapping(null, font, false);
         }
         // 返回默认字体类型信息
-        return new CIDFontMapping(null, FONT_MAPPING.get(XEasyPdfDefaultFontStyle.NORMAL.getName()), false);
+        return new CIDFontMapping(null, FONT_NAME_MAPPING.get(XEasyPdfDefaultFontStyle.NORMAL.getName()), false);
     }
 
     /**
@@ -155,7 +155,7 @@ public class FontMapperHandler implements FontMapper {
         // 遍历字体样式
         for (XEasyPdfDefaultFontStyle style : styles) {
             // 初始化输入流（从资源路径读取）
-            try(InputStream inputStream = new BufferedInputStream(FontMapperHandler.class.getResourceAsStream(style.getPath()))) {
+            try(InputStream inputStream = new BufferedInputStream(XEasyPdfFontMapperHandler.class.getResourceAsStream(style.getPath()))) {
                 // 添加字体
                 addFont(style.getPath(), new TTFParser(true, true).parse(inputStream));
             } catch (IOException e) {
@@ -179,21 +179,21 @@ public class FontMapperHandler implements FontMapper {
         // 获取字体
         FontBoxFont info = this.getFont(postScriptName);
         // 如果字体不为空，则返回字体
-        if (info != null) {
+        if (info!=null) {
             // 返回字体
             return info;
         }
         // 重新获取字体（替换字体名称，移除“-”）
         info = this.getFont(postScriptName.replace("-", ""));
         // 如果字体不为空，则返回字体
-        if (info != null) {
+        if (info!=null) {
             // 返回字体
             return info;
         }
         // 重新获取字体（替换字体名称，替换“,”为“-”）
         info = this.getFont(postScriptName.replace(",", "-"));
         // 如果字体不为空，则返回字体
-        if (info != null) {
+        if (info!=null) {
             // 返回字体
             return info;
         }
@@ -213,6 +213,6 @@ public class FontMapperHandler implements FontMapper {
             postScriptName = postScriptName.substring(postScriptName.indexOf('+') + 1);
         }
         // 获取字体
-        return FONT_MAPPING.get(postScriptName);
+        return FONT_NAME_MAPPING.get(postScriptName);
     }
 }

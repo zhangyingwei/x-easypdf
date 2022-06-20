@@ -8,7 +8,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import wiki.xsx.core.pdf.doc.XEasyPdfDocument;
 import wiki.xsx.core.pdf.doc.XEasyPdfPage;
-import wiki.xsx.core.pdf.handler.FontMapperHandler;
+import wiki.xsx.core.pdf.handler.XEasyPdfFontMapperHandler;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -207,13 +207,13 @@ public class XEasyPdfFontUtil {
     private static PDFont loadTTF(XEasyPdfDocument document, String fontPath, boolean isEmbedded) {
         try {
             // 从缓存中获取字体
-            TrueTypeFont trueTypeFont = (TrueTypeFont) FontMapperHandler.getInstance().getFontByPath(fontPath);
+            TrueTypeFont trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
             // 如果字体为空，则读取字体
             if (trueTypeFont==null) {
                 // 加锁
                 synchronized (TTF) {
                     // 再次从缓存中获取字体
-                    trueTypeFont = (TrueTypeFont) FontMapperHandler.getInstance().getFontByPath(fontPath);
+                    trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
                     // 如果仍然为空，则读取字体文件
                     if (trueTypeFont==null) {
                         // 初始化输入流（从资源路径读取）
@@ -228,7 +228,7 @@ public class XEasyPdfFontUtil {
                             }
                         }
                         // 添加字体缓存
-                        FontMapperHandler.getInstance().addFont(fontPath, trueTypeFont);
+                        XEasyPdfFontMapperHandler.getInstance().addFont(fontPath, trueTypeFont);
                     }
                 }
             }
@@ -266,13 +266,13 @@ public class XEasyPdfFontUtil {
                 throw new IllegalArgumentException();
             }
             // 从缓存中获取字体
-            TrueTypeFont trueTypeFont = (TrueTypeFont) FontMapperHandler.getInstance().getFontByPath(fontPath);
+            TrueTypeFont trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
             // 如果字体为空，则读取字体
             if (trueTypeFont==null) {
                 // 加锁
                 synchronized (TTC) {
                     // 再次从缓存中获取字体
-                    trueTypeFont = (TrueTypeFont) FontMapperHandler.getInstance().getFontByPath(fontPath);
+                    trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
                     // 如果仍然为空，则读取字体文件
                     if (trueTypeFont==null) {
                         // 初始化输入流（从资源路径读取）
@@ -299,7 +299,7 @@ public class XEasyPdfFontUtil {
                             }
                         }
                         // 添加字体缓存
-                        FontMapperHandler.getInstance().addFont(fontPath, trueTypeFont);
+                        XEasyPdfFontMapperHandler.getInstance().addFont(fontPath, trueTypeFont);
                     }
                 }
             }
@@ -334,13 +334,13 @@ public class XEasyPdfFontUtil {
                 return font;
             }
             // 从缓存中获取字体
-            TrueTypeFont trueTypeFont = (TrueTypeFont) FontMapperHandler.getInstance().getFontByPath(fontPath);
+            TrueTypeFont trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
             // 如果字体为空，则读取字体
             if (trueTypeFont==null) {
                 // 加锁
                 synchronized (OTF) {
                     // 再次从缓存中获取字体
-                    trueTypeFont = (TrueTypeFont) FontMapperHandler.getInstance().getFontByPath(fontPath);
+                    trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
                     // 如果仍然为空，则读取字体文件
                     if (trueTypeFont==null) {
                         // 初始化输入流（从资源路径读取）
@@ -355,7 +355,7 @@ public class XEasyPdfFontUtil {
                             }
                         }
                         // 添加字体缓存
-                        FontMapperHandler.getInstance().addFont(fontPath, trueTypeFont);
+                        XEasyPdfFontMapperHandler.getInstance().addFont(fontPath, trueTypeFont);
                     }
                 }
             }
