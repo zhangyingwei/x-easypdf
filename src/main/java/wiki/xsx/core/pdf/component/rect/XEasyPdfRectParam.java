@@ -76,7 +76,7 @@ class XEasyPdfRectParam implements Serializable {
     /**
      * 是否有边框
      */
-    private Boolean hasBorder = false;
+    private Boolean hasBorder = Boolean.FALSE;
     /**
      * 边框宽度
      */
@@ -92,11 +92,11 @@ class XEasyPdfRectParam implements Serializable {
     /**
      * 页面检查
      */
-    private Boolean checkPage = true;
+    private Boolean checkPage = Boolean.TRUE;
     /**
      * 是否自动换行
      */
-    private Boolean isNewLine = true;
+    private Boolean isNewLine = Boolean.TRUE;
 
     /**
      * 初始化

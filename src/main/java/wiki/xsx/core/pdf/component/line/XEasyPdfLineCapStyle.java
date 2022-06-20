@@ -33,7 +33,7 @@ public enum XEasyPdfLineCapStyle {
     /**
      * 类型
      */
-    private int type;
+    private final int type;
 
     /**
      * 有参构造

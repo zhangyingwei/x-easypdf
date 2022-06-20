@@ -52,6 +52,18 @@ public class XEasyPdfFontUtil {
      * 字体集合分隔符
      */
     private static final String COLLECTION_FONT_SEPARATOR = ",";
+    /**
+     * ttf字体锁
+     */
+    private static final Object TTF_LOCK = new Object();
+    /**
+     * ttc字体集合锁
+     */
+    private static final Object TTC_LOCK = new Object();
+    /**
+     * otf字体锁
+     */
+    private static final Object OTF_LOCK = new Object();
 
     /**
      * 获取字体高度
@@ -211,7 +223,7 @@ public class XEasyPdfFontUtil {
             // 如果字体为空，则读取字体
             if (trueTypeFont==null) {
                 // 加锁
-                synchronized (TTF) {
+                synchronized (TTF_LOCK) {
                     // 再次从缓存中获取字体
                     trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
                     // 如果仍然为空，则读取字体文件
@@ -270,7 +282,7 @@ public class XEasyPdfFontUtil {
             // 如果字体为空，则读取字体
             if (trueTypeFont==null) {
                 // 加锁
-                synchronized (TTC) {
+                synchronized (TTC_LOCK) {
                     // 再次从缓存中获取字体
                     trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
                     // 如果仍然为空，则读取字体文件
@@ -338,7 +350,7 @@ public class XEasyPdfFontUtil {
             // 如果字体为空，则读取字体
             if (trueTypeFont==null) {
                 // 加锁
-                synchronized (OTF) {
+                synchronized (OTF_LOCK) {
                     // 再次从缓存中获取字体
                     trueTypeFont = (TrueTypeFont) XEasyPdfFontMapperHandler.getInstance().getFontByPath(fontPath);
                     // 如果仍然为空，则读取字体文件

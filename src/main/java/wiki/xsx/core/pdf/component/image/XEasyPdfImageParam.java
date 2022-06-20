@@ -99,15 +99,15 @@ class XEasyPdfImageParam implements Serializable {
     /**
      * 是否使用自身样式
      */
-    private Boolean useSelfStyle = false;
+    private Boolean useSelfStyle = Boolean.FALSE;
     /**
      * 自适应图片大小
      */
-    private Boolean enableSelfAdaption = true;
+    private Boolean enableSelfAdaption = Boolean.TRUE;
     /**
      * 垂直居中样式
      */
-    private Boolean enableVerticalCenterStyle = false;
+    private Boolean enableVerticalCenterStyle = Boolean.FALSE;
     /**
      * 水平样式（居左、居中、居右）
      */
@@ -127,15 +127,15 @@ class XEasyPdfImageParam implements Serializable {
     /**
      * 是否子组件
      */
-    private Boolean isChildComponent = false;
+    private Boolean isChildComponent = Boolean.FALSE;
     /**
      * 是否自定义尺寸
      */
-    private Boolean isCustomRectangle = false;
+    private Boolean isCustomRectangle = Boolean.FALSE;
     /**
      * 是否需要初始化
      */
-    private Boolean isNeedInitialize = true;
+    private Boolean isNeedInitialize = Boolean.TRUE;
 
     /**
      * 初始化
@@ -193,7 +193,7 @@ class XEasyPdfImageParam implements Serializable {
         // 否则重置自定义尺寸标识为true
         else {
             // 重置自定义尺寸标识为true
-            this.isCustomRectangle = true;
+            this.isCustomRectangle = Boolean.TRUE;
         }
         // 如果自定义高度为空，则将自定义高度设置为图片高度
         if (this.height==null) {
@@ -203,7 +203,7 @@ class XEasyPdfImageParam implements Serializable {
         // 否则重置自定义尺寸标识为true
         else {
             // 重置自定义尺寸标识为true
-            this.isCustomRectangle = true;
+            this.isCustomRectangle = Boolean.TRUE;
         }
         // 如果最大宽度未初始化，则进行初始化为页面宽度
         if (this.maxWidth==null) {

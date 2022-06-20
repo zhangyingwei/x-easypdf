@@ -100,7 +100,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 
@@ -109,7 +109,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      * @return 返回pdf文档
      */
     public XEasyPdfDocument enableReplaceTotalPagePlaceholder() {
-        this.param.setIsReplaceTotalPagePlaceholder(true);
+        this.param.setIsReplaceTotalPagePlaceholder(Boolean.TRUE);
         return this;
     }
 
@@ -141,7 +141,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
         // 如果背景色不为空，则设置
         if (globalBackgroundColor!=null) {
             // 设置重置
-            this.param.setIsReset(true);
+            this.param.setIsReset(Boolean.TRUE);
             // 设置文档背景色
             this.param.setGlobalBackgroundColor(globalBackgroundColor);
         }
@@ -163,7 +163,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument setGlobalBackgroundImage(XEasyPdfImage globalBackgroundImage) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 设置背景图片
         this.param.setGlobalBackgroundImage(globalBackgroundImage);
         return this;
@@ -184,7 +184,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument setGlobalWatermark(XEasyPdfWatermark globalWatermark) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 设置文档水印
         this.param.setGlobalWatermark(globalWatermark);
         return this;
@@ -205,7 +205,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument setGlobalHeader(XEasyPdfHeader globalHeader) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 设置文档页眉
         this.param.setGlobalHeader(globalHeader);
         return this;
@@ -226,7 +226,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument setGlobalFooter(XEasyPdfFooter globalFooter) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 设置文档页脚
         this.param.setGlobalFooter(globalFooter);
         return this;
@@ -247,7 +247,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument setFontPath(String fontPath) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 设置字体路径
         this.param.setFontPath(fontPath);
         return this;
@@ -260,7 +260,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 设置字体样式
         this.param.setDefaultFontStyle(style);
         return this;
@@ -394,7 +394,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument addPage(XEasyPdfPage...pages) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 添加页面
         Collections.addAll(this.param.getPageList(), pages);
         return this;
@@ -420,7 +420,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument insertPage(int pageIndex, XEasyPdfPage...pages) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果pdf页面列表数量大于索引，则插入页面
@@ -460,7 +460,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument modifyPageSize(XEasyPdfPageRectangle pageSize, int ...pageIndex) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果页面索引不为空，则根据给定索引设置，否则全部页面进行设置
@@ -489,7 +489,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument removePage(int ...pageIndex) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 遍历页面索引
@@ -511,7 +511,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      */
     public XEasyPdfDocument merge(XEasyPdfDocument ...documents) {
         // 设置重置
-        this.param.setIsReset(true);
+        this.param.setIsReset(Boolean.TRUE);
         // 遍历待合并文档
         for (XEasyPdfDocument document : documents) {
             // 添加合并源pdf文档

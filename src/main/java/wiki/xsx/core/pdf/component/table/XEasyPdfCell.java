@@ -149,7 +149,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableBorder() {
-        this.param.setHasBorder(true);
+        this.param.setHasBorder(Boolean.TRUE);
         return this;
     }
 
@@ -158,7 +158,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableBorder() {
-        this.param.setHasBorder(false);
+        this.param.setHasBorder(Boolean.FALSE);
         return this;
     }
 
@@ -252,7 +252,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableVerticalMerge() {
-        this.param.setIsVerticalMerge(true);
+        this.param.setIsVerticalMerge(Boolean.TRUE);
         return this;
     }
 
@@ -261,7 +261,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableNewLine() {
-        this.param.setIsNewLine(true);
+        this.param.setIsNewLine(Boolean.TRUE);
         return this;
     }
 
@@ -270,7 +270,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableNewLine() {
-        this.param.setIsNewLine(false);
+        this.param.setIsNewLine(Boolean.FALSE);
         return this;
     }
 
@@ -279,7 +279,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableComponentSelfStyle() {
-        this.param.setIsComponentSelfStyle(true);
+        this.param.setIsComponentSelfStyle(Boolean.TRUE);
         return this;
     }
 
@@ -288,7 +288,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableTopBorder() {
-        this.param.setHasTopBorder(false);
+        this.param.setHasTopBorder(Boolean.FALSE);
         return this;
     }
 
@@ -297,7 +297,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableBottomBorder() {
-        this.param.setHasBottomBorder(false);
+        this.param.setHasBottomBorder(Boolean.FALSE);
         return this;
     }
 
@@ -306,7 +306,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableLeftBorder() {
-        this.param.setHasLeftBorder(false);
+        this.param.setHasLeftBorder(Boolean.FALSE);
         return this;
     }
 
@@ -315,7 +315,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableRightBorder() {
-        this.param.setHasRightBorder(false);
+        this.param.setHasRightBorder(Boolean.FALSE);
         return this;
     }
 
@@ -324,7 +324,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableTopBottomBorder() {
-        this.param.setHasTopBorder(false).setHasBottomBorder(false);
+        this.param.setHasTopBorder(Boolean.FALSE).setHasBottomBorder(Boolean.FALSE);
         return this;
     }
 
@@ -333,7 +333,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableLeftRightBorder() {
-        this.param.setHasLeftBorder(false).setHasRightBorder(false);
+        this.param.setHasLeftBorder(Boolean.FALSE).setHasRightBorder(Boolean.FALSE);
         return this;
     }
 
@@ -342,7 +342,7 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 
@@ -580,6 +580,7 @@ public class XEasyPdfCell implements Serializable {
      * @param line pdf线条
      */
     private void writeLine(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row, XEasyPdfLine line) {
+        // 设置定位并绘制
         line.setContentMode(this.param.getContentMode())
                 .setWidth(this.param.getWidth())
                 .setPosition(

@@ -212,7 +212,7 @@ public class XEasyPdfSolidSplitLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfSolidSplitLine enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

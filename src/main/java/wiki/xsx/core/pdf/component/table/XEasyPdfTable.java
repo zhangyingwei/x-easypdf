@@ -206,7 +206,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable disableAutoSplitRow() {
-        this.param.setIsAutoSplit(false);
+        this.param.setIsAutoSplit(Boolean.FALSE);
         return this;
     }
 
@@ -215,7 +215,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable disableBorder() {
-        this.param.setHasBorder(false);
+        this.param.setHasBorder(Boolean.FALSE);
         return this;
     }
 
@@ -224,7 +224,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @return 返回表格组件
      */
     public XEasyPdfTable enableAutoTitle() {
-        this.param.setIsAutoTitle(true);
+        this.param.setIsAutoTitle(Boolean.TRUE);
         return this;
     }
 
@@ -234,7 +234,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfTable enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

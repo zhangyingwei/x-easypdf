@@ -223,7 +223,7 @@ public class XEasyPdfRow implements Serializable {
      * @return 返回表格行组件
      */
     public XEasyPdfRow enableBorder() {
-        this.param.setHasBorder(true);
+        this.param.setHasBorder(Boolean.TRUE);
         return this;
     }
 
@@ -232,7 +232,7 @@ public class XEasyPdfRow implements Serializable {
      * @return 返回表格行组件
      */
     public XEasyPdfRow disableBorder() {
-        this.param.setHasBorder(false);
+        this.param.setHasBorder(Boolean.FALSE);
         return this;
     }
 
@@ -241,7 +241,7 @@ public class XEasyPdfRow implements Serializable {
      * @return 返回表格行组件
      */
     public XEasyPdfRow enablePaging() {
-        this.param.setIsPaging(true);
+        this.param.setIsPaging(Boolean.TRUE);
         return this;
     }
 
@@ -250,7 +250,7 @@ public class XEasyPdfRow implements Serializable {
      * @return 返回表格行组件
      */
     public XEasyPdfRow enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

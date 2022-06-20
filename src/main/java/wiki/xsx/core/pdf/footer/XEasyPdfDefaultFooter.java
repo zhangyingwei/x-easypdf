@@ -73,7 +73,7 @@ public class XEasyPdfDefaultFooter implements XEasyPdfFooter {
      */
     @Override
     public XEasyPdfDefaultFooter enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

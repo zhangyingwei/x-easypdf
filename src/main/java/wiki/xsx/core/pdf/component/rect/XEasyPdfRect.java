@@ -60,7 +60,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfRect enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @return 返回矩形组件
      */
     public XEasyPdfRect enableCheckPage() {
-        this.param.setCheckPage(true);
+        this.param.setCheckPage(Boolean.TRUE);
         return this;
     }
 
@@ -78,7 +78,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
      * @return 返回矩形组件
      */
     public XEasyPdfRect disableCheckPage() {
-        this.param.setCheckPage(false);
+        this.param.setCheckPage(Boolean.FALSE);
         return this;
     }
 

@@ -213,7 +213,7 @@ public class XEasyPdfBaseLine implements XEasyPdfLine {
      */
     @Override
     public XEasyPdfBaseLine enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

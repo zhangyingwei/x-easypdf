@@ -56,11 +56,11 @@ class XEasyPdfDocumentParam implements Serializable {
     /**
      * 是否重置上下文
      */
-    private Boolean isResetContext = false;
+    private Boolean isResetContext = Boolean.FALSE;
     /**
      * 是否替换总页码占位符
      */
-    private Boolean isReplaceTotalPagePlaceholder = false;
+    private Boolean isReplaceTotalPagePlaceholder = Boolean.FALSE;
     /**
      * 默认字体样式
      */
@@ -148,7 +148,7 @@ class XEasyPdfDocumentParam implements Serializable {
     /**
      * 是否重置
      */
-    private Boolean isReset = false;
+    private Boolean isReset = Boolean.FALSE;
 
     /**
      * 获取临时存放路径
@@ -203,7 +203,7 @@ class XEasyPdfDocumentParam implements Serializable {
             documentCatalog.setDocumentOutline(this.source.getDocumentCatalog().getDocumentOutline());
         }
         // 设置重置为false
-        this.isReset = false;
+        this.isReset = Boolean.FALSE;
         // 初始化字体
         this.initFont(document);
     }

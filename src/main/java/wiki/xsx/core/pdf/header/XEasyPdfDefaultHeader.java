@@ -77,7 +77,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
      */
     @Override
     public XEasyPdfDefaultHeader enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

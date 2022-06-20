@@ -336,7 +336,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode enableShowWords() {
-        this.param.setIsShowWords(true);
+        this.param.setIsShowWords(Boolean.TRUE);
         return this;
     }
 
@@ -346,7 +346,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfBarCode enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

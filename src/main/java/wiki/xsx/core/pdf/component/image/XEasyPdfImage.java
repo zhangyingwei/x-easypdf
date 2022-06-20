@@ -117,7 +117,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage disableSelfAdaption() {
-        this.param.setEnableSelfAdaption(false);
+        this.param.setEnableSelfAdaption(Boolean.FALSE);
         return this;
     }
 
@@ -126,7 +126,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage enableSelfStyle() {
-        this.param.setUseSelfStyle(true);
+        this.param.setUseSelfStyle(Boolean.TRUE);
         return this;
     }
 
@@ -144,7 +144,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      * @return 返回图片组件
      */
     public XEasyPdfImage enableChildComponent() {
-        this.param.setIsChildComponent(true);
+        this.param.setIsChildComponent(Boolean.TRUE);
         return this;
     }
 
@@ -154,7 +154,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfImage enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

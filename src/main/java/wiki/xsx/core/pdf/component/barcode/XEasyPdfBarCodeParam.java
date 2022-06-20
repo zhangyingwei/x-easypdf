@@ -130,7 +130,7 @@ class XEasyPdfBarCodeParam implements Serializable {
     /**
      * 是否显示文字
      */
-    private Boolean isShowWords = false;
+    private Boolean isShowWords = Boolean.FALSE;
     /**
      * 编码设置
      */
@@ -289,12 +289,12 @@ class XEasyPdfBarCodeParam implements Serializable {
      */
     private void initWidthAndHeight() {
         // 如果宽度未初始化，则初始化宽度
-        if (this.imageWidth ==null) {
+        if (this.imageWidth==null) {
             // 初始化宽度
             this.imageWidth = this.codeType.isQrType()?100:180;
         }
         // 如果高度未初始化，则初始化高度
-        if (this.imageHeight ==null) {
+        if (this.imageHeight==null) {
             // 初始化高度
             this.imageHeight = this.codeType.isQrType()?this.imageWidth :60;
         }

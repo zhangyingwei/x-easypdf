@@ -64,7 +64,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
     /**
      * 是否允许替换cos数组
      */
-    private Boolean isAllowReplaceCOSArray = false;
+    private Boolean isAllowReplaceCOSArray = Boolean.FALSE;
     /**
      * 字体路径
      */
@@ -181,7 +181,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
             }
         }
         // 重置允许替换cos数组为否
-        this.isAllowReplaceCOSArray = false;
+        this.isAllowReplaceCOSArray = Boolean.FALSE;
         return this;
     }
 

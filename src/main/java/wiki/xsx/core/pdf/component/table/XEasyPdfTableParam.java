@@ -50,11 +50,11 @@ class XEasyPdfTableParam implements Serializable {
     /**
      * 自动拆分行
      */
-    private Boolean isAutoSplit = true;
+    private Boolean isAutoSplit = Boolean.TRUE;
     /**
      * 是否自动表头
      */
-    private Boolean isAutoTitle = false;
+    private Boolean isAutoTitle = Boolean.FALSE;
     /**
      * 表头行
      */
@@ -66,7 +66,7 @@ class XEasyPdfTableParam implements Serializable {
     /**
      * 是否带有边框
      */
-    private Boolean hasBorder = true;
+    private Boolean hasBorder = Boolean.TRUE;
     /**
      * 背景颜色
      */

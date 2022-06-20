@@ -5,6 +5,7 @@ import org.junit.Test;
 import wiki.xsx.core.pdf.convertor.XEasyPdfConvertor;
 import wiki.xsx.core.pdf.handler.XEasyPdfHandler;
 import wiki.xsx.core.pdf.util.XEasyPdfClassUtil;
+import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +42,9 @@ public class XEasyPdfDocumentReplacerTest {
         String filePath = OUTPUT_PATH+"testFill.pdf";
         String fontPath = "C:\\Windows\\Fonts\\simsun.ttc,0";
         Map<String, String> map = new HashMap<>(9);
-        map.put("名称", "测试报告");
-        map.put("date", "2022-04-10");
-        map.put("depart", "呼吸外科");
+        map.put("名称1", "测试报告");
+        map.put(XEasyPdfTextUtil.escapeForRegex("{xxx-xx-xx}"), "2022-04-10");
+        map.put("采购合同", "呼吸外科");
         map.put("no", "0001");
         map.put("name", "张三");
         map.put("sex", "男");

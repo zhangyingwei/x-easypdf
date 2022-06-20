@@ -95,7 +95,7 @@ class XEasyPdfWatermarkParam implements Serializable {
     /**
      * 是否需要初始化
      */
-    private Boolean isNeedInit = true;
+    private Boolean isNeedInit = Boolean.TRUE;
 
     /**
      * 初始化
@@ -129,6 +129,6 @@ class XEasyPdfWatermarkParam implements Serializable {
             this.leading = this.fontSize * 2;
         }
         // 是否需要初始化为false
-        this.isNeedInit = false;
+        this.isNeedInit = Boolean.FALSE;
     }
 }

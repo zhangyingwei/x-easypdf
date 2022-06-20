@@ -119,31 +119,31 @@ class XEasyPdfPageParam implements Serializable {
     /**
      * 是否允许添加水印
      */
-    private Boolean allowWatermark = true;
+    private Boolean allowWatermark = Boolean.TRUE;
     /**
      * 是否允许添加背景图片
      */
-    private Boolean allowBackgroundImage = true;
+    private Boolean allowBackgroundImage = Boolean.TRUE;
     /**
      * 是否允许添加背景色
      */
-    private Boolean allowBackgroundColor = true;
+    private Boolean allowBackgroundColor = Boolean.TRUE;
     /**
      * 是否允许添加页眉
      */
-    private Boolean allowHeader = true;
+    private Boolean allowHeader = Boolean.TRUE;
     /**
      * 是否允许添加页脚
      */
-    private Boolean allowFooter = true;
+    private Boolean allowFooter = Boolean.TRUE;
     /**
      * 是否允许重置定位
      */
-    private Boolean allowResetPosition = true;
+    private Boolean allowResetPosition = Boolean.TRUE;
     /**
      * 是否允许旋转固有页面
      */
-    private Boolean allowRotateInherentPage = true;
+    private Boolean allowRotateInherentPage = Boolean.TRUE;
 
     /**
      * 初始化

@@ -432,7 +432,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableBackgroundColor() {
-        this.param.setAllowBackgroundColor(false);
+        this.param.setAllowBackgroundColor(Boolean.FALSE);
         return this;
     }
 
@@ -441,7 +441,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableBackgroundImage() {
-        this.param.setAllowBackgroundImage(false);
+        this.param.setAllowBackgroundImage(Boolean.FALSE);
         return this;
     }
 
@@ -450,7 +450,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableWatermark() {
-        this.param.setAllowWatermark(false);
+        this.param.setAllowWatermark(Boolean.FALSE);
         return this;
     }
 
@@ -459,7 +459,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableHeader() {
-        this.param.setAllowHeader(false);
+        this.param.setAllowHeader(Boolean.FALSE);
         return this;
     }
 
@@ -468,7 +468,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableFooter() {
-        this.param.setAllowFooter(false);
+        this.param.setAllowFooter(Boolean.FALSE);
         return this;
     }
 
@@ -477,7 +477,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableRotateInherentPage() {
-        this.param.setAllowRotateInherentPage(false);
+        this.param.setAllowRotateInherentPage(Boolean.FALSE);
         return this;
     }
 
@@ -486,7 +486,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage enablePosition() {
-        this.param.setAllowResetPosition(true);
+        this.param.setAllowResetPosition(Boolean.TRUE);
         return this;
     }
 
@@ -495,7 +495,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage disablePosition() {
-        this.param.setAllowResetPosition(false);
+        this.param.setAllowResetPosition(Boolean.FALSE);
         return this;
     }
 
@@ -504,7 +504,7 @@ public class XEasyPdfPage implements Serializable {
      * @return 返回pdf页面
      */
     public XEasyPdfPage enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

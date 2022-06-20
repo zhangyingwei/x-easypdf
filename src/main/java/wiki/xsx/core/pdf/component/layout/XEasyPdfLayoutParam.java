@@ -31,7 +31,7 @@ class XEasyPdfLayoutParam implements Serializable {
     /**
      * 是否包含表格边框
      */
-    private Boolean hasTableBorder = false;
+    private Boolean hasTableBorder = Boolean.FALSE;
     /**
      * pdf表格
      */

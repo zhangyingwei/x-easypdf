@@ -95,7 +95,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableTextAppend() {
-        this.param.setIsTextAppend(true);
+        this.param.setIsTextAppend(Boolean.TRUE);
         return this;
     }
 
@@ -113,7 +113,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableChildComponent() {
-        this.param.setIsChildComponent(true);
+        this.param.setIsChildComponent(Boolean.TRUE);
         return this;
     }
 
@@ -122,7 +122,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableUnderline() {
-        this.param.setIsUnderline(true);
+        this.param.setIsUnderline(Boolean.TRUE);
         return this;
     }
 
@@ -131,7 +131,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableDeleteLine() {
-        this.param.setIsDeleteLine(true);
+        this.param.setIsDeleteLine(Boolean.TRUE);
         return this;
     }
 
@@ -140,7 +140,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableHighlight() {
-        this.param.setIsHighlight(true);
+        this.param.setIsHighlight(Boolean.TRUE);
         return this;
     }
 
@@ -149,7 +149,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableRotateLine() {
-        this.param.setIsRotateLine(true);
+        this.param.setIsRotateLine(Boolean.TRUE);
         return this;
     }
 
@@ -159,7 +159,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfText enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 
@@ -168,7 +168,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText enableSelfStyle() {
-        this.param.setUseSelfStyle(true);
+        this.param.setUseSelfStyle(Boolean.TRUE);
         return this;
     }
 
@@ -177,7 +177,7 @@ public class XEasyPdfText implements XEasyPdfComponent {
      * @return 返回文本组件
      */
     public XEasyPdfText disableSelfStyle() {
-        this.param.setUseSelfStyle(false);
+        this.param.setUseSelfStyle(Boolean.FALSE);
         return this;
     }
 

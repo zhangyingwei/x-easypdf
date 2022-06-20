@@ -113,7 +113,7 @@ public class XEasyPdfVerticalLayout implements XEasyPdfLayout {
      */
     @Override
     public XEasyPdfVerticalLayout enableBorder() {
-        this.param.setHasTableBorder(true);
+        this.param.setHasTableBorder(Boolean.TRUE);
         return this;
     }
 

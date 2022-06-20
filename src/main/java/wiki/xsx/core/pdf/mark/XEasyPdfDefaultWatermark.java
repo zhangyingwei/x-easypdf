@@ -222,7 +222,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
      */
     @Override
     public XEasyPdfDefaultWatermark enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 

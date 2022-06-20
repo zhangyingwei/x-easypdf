@@ -169,43 +169,43 @@ class XEasyPdfTextParam implements Serializable {
     /**
      * 是否使用自身样式
      */
-    private Boolean useSelfStyle = false;
+    private Boolean useSelfStyle = Boolean.FALSE;
     /**
      * 是否换行
      */
-    private Boolean isNewLine = true;
+    private Boolean isNewLine = Boolean.TRUE;
     /**
      * 是否分页检查
      */
-    private Boolean checkPage = true;
+    private Boolean checkPage = Boolean.TRUE;
     /**
      * 是否文本追加
      */
-    private Boolean isTextAppend = false;
+    private Boolean isTextAppend = Boolean.FALSE;
     /**
      * 是否子组件
      */
-    private Boolean isChildComponent = false;
+    private Boolean isChildComponent = Boolean.FALSE;
     /**
      * 是否添加下划线
      */
-    private Boolean isUnderline = false;
+    private Boolean isUnderline = Boolean.FALSE;
     /**
      * 是否添加删除线
      */
-    private Boolean isDeleteLine = false;
+    private Boolean isDeleteLine = Boolean.FALSE;
     /**
      * 是否高亮显示
      */
-    private Boolean isHighlight = false;
+    private Boolean isHighlight = Boolean.FALSE;
     /**
      * 是否整行旋转
      */
-    private Boolean isRotateLine = false;
+    private Boolean isRotateLine = Boolean.FALSE;
     /**
      * 是否需要初始化
      */
-    private Boolean isNeedInitialize = true;
+    private Boolean isNeedInitialize = Boolean.TRUE;
 
     /**
      * 获取宽度

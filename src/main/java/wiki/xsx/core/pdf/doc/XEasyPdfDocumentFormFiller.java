@@ -63,15 +63,15 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     /**
      * 是否只读
      */
-    private Boolean isReadOnly = false;
+    private Boolean isReadOnly = Boolean.FALSE;
     /**
      * 是否需要外观
      */
-    private Boolean isNeedAppearance = false;
+    private Boolean isNeedAppearance = Boolean.FALSE;
     /**
      * 是否压缩
      */
-    private Boolean isCompress = false;
+    private Boolean isCompress = Boolean.FALSE;
 
     /**
      * 构造方法
@@ -88,7 +88,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableReadOnly() {
-        this.isReadOnly = true;
+        this.isReadOnly = Boolean.TRUE;
         return this;
     }
 
@@ -106,8 +106,8 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableAppearance() {
-        this.isNeedAppearance = true;
-        this.form.setNeedAppearances(true);
+        this.isNeedAppearance = Boolean.TRUE;
+        this.form.setNeedAppearances(Boolean.TRUE);
         return this;
     }
 
@@ -116,7 +116,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableCompress() {
-        this.isCompress = true;
+        this.isCompress = Boolean.TRUE;
         return this;
     }
 

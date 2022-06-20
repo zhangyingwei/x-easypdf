@@ -60,7 +60,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
      * @return 返回圆形组件
      */
     public XEasyPdfCircle enableCheckPage() {
-        this.param.setCheckPage(true);
+        this.param.setCheckPage(Boolean.TRUE);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
      * @return 返回圆形组件
      */
     public XEasyPdfCircle disableCheckPage() {
-        this.param.setCheckPage(false);
+        this.param.setCheckPage(Boolean.FALSE);
         return this;
     }
 
@@ -79,7 +79,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfCircle enableResetContext() {
-        this.param.setIsResetContext(true);
+        this.param.setIsResetContext(Boolean.TRUE);
         return this;
     }
 
