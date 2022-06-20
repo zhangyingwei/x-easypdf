@@ -3,9 +3,10 @@ package wiki.xsx.core.pdf.doc;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.fixup.AcroFormDefaultFixup;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
@@ -19,7 +20,6 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,10 +65,13 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      */
     private Boolean isReadOnly = false;
     /**
+     * 是否需要外观
+     */
+    private Boolean isNeedAppearance = false;
+    /**
      * 是否压缩
      */
     private Boolean isCompress = false;
-
 
     /**
      * 构造方法
@@ -77,7 +80,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
         this.pdfDocument = pdfDocument;
         this.document = this.pdfDocument.build(true);
-        this.form = this.document.getDocumentCatalog().getAcroForm(null);
+        this.form = this.initAcroForm(this.document, false);
     }
 
     /**
@@ -90,10 +93,20 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     }
 
     /**
+     * 开启表单修复（可能会更改原始内容）
+     * @return 返回pdf表单填写器
+     */
+    public XEasyPdfDocumentFormFiller enableFixForm() {
+        this.form = this.initAcroForm(this.document, true);
+        return this;
+    }
+
+    /**
      * 开启外观（将使用原有字体）
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableAppearance() {
+        this.isNeedAppearance = true;
         this.form.setNeedAppearances(true);
         return this;
     }
@@ -138,7 +151,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
         // 如果表单字典有内容，则进行填充
         if (formMap!=null&&!formMap.isEmpty()) {
             // 如果pdfBox表单不为空，则进行填充
-            if (this.form !=null) {
+            if (this.form!=null) {
                 // 如果需要外观，则使用外观填充模式
                 if (this.form.getNeedAppearances()) {
                     // 使用外观填充模式
@@ -219,6 +232,38 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
             this.form = new PDAcroForm(this.document);
         }
         return this.form;
+    }
+
+    /**
+     * 初始化表单
+     * @param document pdfbox文档
+     * @param isFixForm 是否修复表单
+     * @return 返回pdfbox表单
+     */
+    private PDAcroForm initAcroForm(PDDocument document, boolean isFixForm) {
+        // 获取pdfbox文档大纲
+        PDDocumentCatalog documentCatalog = document.getDocumentCatalog();
+        // 定义pdfbox表单
+        PDAcroForm acroForm;
+        // 如果开启修复表单，则初始化修复后的表单
+        if (isFixForm) {
+            // 初始化修复后的表单
+            acroForm = documentCatalog.getAcroForm(new AcroFormDefaultFixup(document));
+        }
+        // 否则初始化原始表单
+        else {
+            // 初始化原始表单
+            acroForm = documentCatalog.getAcroForm(null);
+        }
+        // 如果表单依然为空，则初始化空表单
+        if (acroForm==null) {
+            // 初始化空表单
+            acroForm = new PDAcroForm(document);
+        }
+        // 设置外观
+        acroForm.setNeedAppearances(this.isNeedAppearance);
+        // 返回表单
+        return acroForm;
     }
 
     /**
@@ -330,13 +375,6 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
                             defaultAppearance.substring(defaultAppearance.indexOf(' '))
                     )
             );
-            // 获取部件列表
-            List<PDAnnotationWidget> widgets = field.getWidgets();
-            // 如果部件列表不为空，则重置外观
-            if (widgets!=null&&!widgets.isEmpty()) {
-                // 重置外观
-                widgets.get(0).setAppearance(null);
-            }
         }
     }
 }

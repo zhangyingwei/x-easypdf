@@ -84,10 +84,10 @@ public class XEasyPdfDocumentFormTest {
                 .load(sourcePath)
 //                .setDefaultFontStyle(XEasyPdfDefaultFontStyle.BOLD)
                 .formFiller()
-                .setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT)
+//                .setDefaultFontStyle(XEasyPdfDefaultFontStyle.LIGHT)
                 .enableReadOnly()
                 .enableAppearance()
-                .enableCompress()
+//                .enableCompress()
                 .fill(map)
                 .finish(filePath);
         long end = System.currentTimeMillis();
