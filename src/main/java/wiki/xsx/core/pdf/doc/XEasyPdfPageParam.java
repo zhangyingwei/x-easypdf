@@ -75,7 +75,7 @@ class XEasyPdfPageParam implements Serializable {
     /**
      * pdfBox页面尺寸（手动修改）
      */
-    private PDRectangle modifyPageSize;
+    private transient PDRectangle modifyPageSize;
     /**
      * 旋转角度
      */
@@ -91,11 +91,11 @@ class XEasyPdfPageParam implements Serializable {
     /**
      * 最新页面
      */
-    private PDPage lastPage;
+    private transient PDPage lastPage;
     /**
      * pdf组件列表
      */
-    private List<XEasyPdfComponent> componentList = new ArrayList<>(64);
+    private transient List<XEasyPdfComponent> componentList = new ArrayList<>(64);
     /**
      * 页面水印
      */

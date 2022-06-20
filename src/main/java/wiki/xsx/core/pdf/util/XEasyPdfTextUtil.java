@@ -155,7 +155,7 @@ public class XEasyPdfTextUtil {
                 // 如果字符为待转义字符，则添加转义字符
                 if (escapeChar==c) {
                     // 添加转义字符
-                    builder.append("\\");
+                    builder.append('\\');
                     // 结束遍历
                     break;
                 }

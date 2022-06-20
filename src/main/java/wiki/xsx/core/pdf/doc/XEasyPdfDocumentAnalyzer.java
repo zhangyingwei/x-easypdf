@@ -63,7 +63,7 @@ public class XEasyPdfDocumentAnalyzer implements Serializable {
     /**
      * pdfbox文档
      */
-    private final PDDocument document;
+    private transient final PDDocument document;
     /**
      * pdf文档
      */
@@ -71,15 +71,15 @@ public class XEasyPdfDocumentAnalyzer implements Serializable {
     /**
      * 文本信息列表
      */
-    private List<TextInfo> textInfoList;
+    private transient List<TextInfo> textInfoList;
     /**
      * 图像信息列表
      */
-    private List<ImageInfo> imageInfoList;
+    private transient List<ImageInfo> imageInfoList;
     /**
      * 图像信息列表
      */
-    private List<BookmarkInfo> bookmarkInfoList;
+    private transient List<BookmarkInfo> bookmarkInfoList;
 
     /**
      * 有参构造

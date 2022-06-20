@@ -39,7 +39,7 @@ class XEasyPdfLayoutParam implements Serializable {
     /**
      * 组件列表
      */
-    private List<XEasyPdfLayoutComponent> components = new ArrayList<>(10);
+    private transient List<XEasyPdfLayoutComponent> components = new ArrayList<>(10);
     /**
      * 宽度
      */

@@ -46,7 +46,7 @@ class XEasyPdfTableParam implements Serializable {
     /**
      * 单元格边框列表
      */
-    private List<XEasyPdfCellBorder> cellBorderList = new ArrayList<>(256);
+    private transient List<XEasyPdfCellBorder> cellBorderList = new ArrayList<>(256);
     /**
      * 自动拆分行
      */
@@ -62,7 +62,7 @@ class XEasyPdfTableParam implements Serializable {
     /**
      * 行列表
      */
-    private List<XEasyPdfRow> rows = new ArrayList<>(256);
+    private transient List<XEasyPdfRow> rows = new ArrayList<>(256);
     /**
      * 是否带有边框
      */

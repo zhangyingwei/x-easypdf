@@ -51,11 +51,11 @@ class XEasyPdfImageParam implements Serializable {
     /**
      * pdfbox图片对象
      */
-    private PDImageXObject imageXObject;
+    private transient PDImageXObject imageXObject;
     /**
      * 待添加图片
      */
-    private BufferedImage image;
+    private transient BufferedImage image;
     /**
      * 待添加图片类型
      */

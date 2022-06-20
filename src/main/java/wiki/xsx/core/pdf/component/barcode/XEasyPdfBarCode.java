@@ -7,6 +7,7 @@ import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.SneakyThrows;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import wiki.xsx.core.pdf.component.XEasyPdfComponent;
@@ -368,17 +369,19 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
                 this.param.getImageMaxHeight(),
                 this.param.getEncodeHints()
         );
+        // 获取任务文档
+        PDDocument target = document.getTarget();
         // 获取条形码图片
         BufferedImage bufferedImage = this.getBarCodeImage(bitMatrix);
         // 创建pdfBox图片
         PDImageXObject pdImage = PDImageXObject.createFromByteArray(
-                document.getTarget(),
+                target,
                 XEasyPdfImageUtil.toBytes(bufferedImage, XEasyPdfImageType.PNG.name()),
                 XEasyPdfImageType.PNG.name()
         );
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(
-                document.getTarget(),
+                target,
                 page.getLastPage(),
                 this.param.getContentMode().getMode(),
                 true,

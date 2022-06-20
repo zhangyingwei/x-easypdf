@@ -94,7 +94,7 @@ public class XEasyPdfDocumentReplacer implements Serializable {
      * @return 返回pdf文档替换器
      */
     public XEasyPdfDocumentReplacer enableReplaceCOSArray() {
-        this.isAllowReplaceCOSArray = true;
+        this.isAllowReplaceCOSArray = Boolean.TRUE;
         return this;
     }
 

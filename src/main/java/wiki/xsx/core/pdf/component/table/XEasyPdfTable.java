@@ -300,7 +300,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param rows pdf表格行
      * @return 返回表格组件
      */
-    public XEasyPdfTable addRow(XEasyPdfRow...rows) {
+    public final XEasyPdfTable addRow(XEasyPdfRow...rows) {
         // 如果待添加表格行不为空，则添加
         if (rows!=null) {
             // 添加表格行
@@ -314,7 +314,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
      * @param rowList pdf表格行列表
      * @return 返回表格组件
      */
-    public XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
+    public final XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
         // 如果待添加表格行不为空，则添加
         if (rowList!=null) {
             // 添加表格行

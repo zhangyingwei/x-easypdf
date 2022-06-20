@@ -42,7 +42,7 @@ class XEasyPdfDocumentSignerParam implements Serializable {
     /**
      * pdfbox文档
      */
-    private PDDocument document;
+    private transient PDDocument document;
     /**
      * pdf文档
      */
@@ -50,7 +50,7 @@ class XEasyPdfDocumentSignerParam implements Serializable {
     /**
      * 密钥库类型
      */
-    private XEasyPdfDocumentSigner.KeyStoreType keyStoreType;
+    private transient XEasyPdfDocumentSigner.KeyStoreType keyStoreType;
     /**
      * 证书文件
      */
@@ -62,27 +62,27 @@ class XEasyPdfDocumentSignerParam implements Serializable {
     /**
      * pdfbox签名
      */
-    private final PDSignature signature = new PDSignature();
+    private transient final PDSignature signature = new PDSignature();
     /**
      * pdfbox签名选项
      */
-    private final SignatureOptions signatureOptions = new SignatureOptions();
+    private transient final SignatureOptions signatureOptions = new SignatureOptions();
     /**
      * 签名算法
      */
-    private XEasyPdfDocumentSigner.SignAlgorithm signAlgorithm;
+    private transient XEasyPdfDocumentSigner.SignAlgorithm signAlgorithm;
     /**
      * 签名过滤器
      */
-    private XEasyPdfDocumentSigner.SignFilter.Filter filter = XEasyPdfDocumentSigner.SignFilter.Filter.FILTER_ADOBE_PPKLITE;
+    private transient XEasyPdfDocumentSigner.SignFilter.Filter filter = XEasyPdfDocumentSigner.SignFilter.Filter.FILTER_ADOBE_PPKLITE;
     /**
      * 签名子过滤器
      */
-    private XEasyPdfDocumentSigner.SignFilter.SubFilter subFilter = XEasyPdfDocumentSigner.SignFilter.SubFilter.SUBFILTER_ADBE_PKCS7_DETACHED;
+    private transient XEasyPdfDocumentSigner.SignFilter.SubFilter subFilter = XEasyPdfDocumentSigner.SignFilter.SubFilter.SUBFILTER_ADBE_PKCS7_DETACHED;
     /**
      * pdfbox签名接口
      */
-    private SignatureInterface customSignature;
+    private transient SignatureInterface customSignature;
     /**
      * pdf访问权限
      */
@@ -90,7 +90,7 @@ class XEasyPdfDocumentSignerParam implements Serializable {
     /**
      * 签名图片
      */
-    private BufferedImage image;
+    private transient BufferedImage image;
     /**
      * 签名图片左边距
      */

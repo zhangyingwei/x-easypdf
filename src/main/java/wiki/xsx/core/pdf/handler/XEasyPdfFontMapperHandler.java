@@ -191,7 +191,7 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
             return info;
         }
         // 重新获取字体（替换字体名称，替换“,”为“-”）
-        info = this.getFont(postScriptName.replace(",", "-"));
+        info = this.getFont(postScriptName.replace(',', '-'));
         // 如果字体不为空，则返回字体
         if (info!=null) {
             // 返回字体

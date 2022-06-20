@@ -3,6 +3,8 @@ package wiki.xsx.core.pdf.doc;
 import org.apache.fontbox.util.BoundingBox;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
+import java.io.Serializable;
+
 /**
  * pdf页面尺寸
  * @author xsx
@@ -20,7 +22,9 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfPageRectangle {
+public class XEasyPdfPageRectangle implements Serializable {
+
+    private static final long serialVersionUID = 3832021109368673135L;
 
     /**
      * 每英寸像素点
