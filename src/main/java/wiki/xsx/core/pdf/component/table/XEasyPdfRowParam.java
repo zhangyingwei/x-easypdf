@@ -83,6 +83,10 @@ class XEasyPdfRowParam implements Serializable {
      */
     private Float height;
     /**
+     * 最小行高
+     */
+    private Float minHeight;
+    /**
      * X轴起始坐标
      */
     private Float beginX;
@@ -209,6 +213,10 @@ class XEasyPdfRowParam implements Serializable {
                 }
                 // 初始化行高
                 rowHeight = Math.max(rowHeight, cell.init(document, page, row));
+            }
+            // 不能低于最小行高
+            if (this.minHeight!=null) {
+                rowHeight = Math.max(rowHeight, this.minHeight);
             }
             // 如果行高未初始化，则进行初始化
             if (this.height==null) {

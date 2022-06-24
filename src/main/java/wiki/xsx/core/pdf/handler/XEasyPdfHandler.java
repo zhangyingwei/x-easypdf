@@ -29,9 +29,11 @@ import wiki.xsx.core.pdf.mark.XEasyPdfDefaultWatermark;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * pdf助手
+ *
  * @author xsx
  * @date 2020/4/1
  * @since 1.8
@@ -62,14 +64,16 @@ public class XEasyPdfHandler {
 
         /**
          * 构建pdf
+         *
          * @param pages 页面
          */
-        public static XEasyPdfDocument build(XEasyPdfPage...pages) {
+        public static XEasyPdfDocument build(XEasyPdfPage... pages) {
             return new XEasyPdfDocument().addPage(pages);
         }
 
         /**
          * 构建pdf
+         *
          * @param pages 页面列表
          */
         public static XEasyPdfDocument build(List<XEasyPdfPage> pages) {
@@ -78,6 +82,7 @@ public class XEasyPdfHandler {
 
         /**
          * 加载pdf
+         *
          * @param sourcePath 源文件路径
          */
         @SneakyThrows
@@ -87,6 +92,7 @@ public class XEasyPdfHandler {
 
         /**
          * 加载pdf
+         *
          * @param sourceInputStream 源文件数据流
          */
         @SneakyThrows
@@ -112,6 +118,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面
+         *
          * @param components 组件列表
          * @return 返回pdf页面组件
          */
@@ -121,26 +128,29 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面
+         *
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(XEasyPdfComponent... components) {
             return new XEasyPdfPage(null).addComponent(components);
         }
 
         /**
          * 构建页面
-         * @param watermark 页面水印组件
+         *
+         * @param watermark  页面水印组件
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(XEasyPdfDefaultWatermark watermark, XEasyPdfComponent... components) {
             return new XEasyPdfPage(null).setWatermark(watermark).addComponent(components);
         }
 
         /**
          * 构建页面
-         * @param watermark 页面水印组件
+         *
+         * @param watermark  页面水印组件
          * @param components 组件列表
          * @return 返回pdf页面组件
          */
@@ -150,17 +160,19 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面
-         * @param pageSize pdf页面尺寸
+         *
+         * @param pageSize   pdf页面尺寸
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, XEasyPdfComponent... components) {
             return new XEasyPdfPage(pageSize).addComponent(components);
         }
 
         /**
          * 构建页面
-         * @param pageSize pdf页面尺寸
+         *
+         * @param pageSize   pdf页面尺寸
          * @param components 组件列表
          * @return 返回pdf页面组件
          */
@@ -170,19 +182,21 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面
-         * @param pageSize pdf页面尺寸
-         * @param watermark 页面水印组件
+         *
+         * @param pageSize   pdf页面尺寸
+         * @param watermark  页面水印组件
          * @param components 组件
          * @return 返回pdf页面组件
          */
-        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, XEasyPdfDefaultWatermark watermark, XEasyPdfComponent...components) {
+        public static XEasyPdfPage build(XEasyPdfPageRectangle pageSize, XEasyPdfDefaultWatermark watermark, XEasyPdfComponent... components) {
             return new XEasyPdfPage(pageSize).setWatermark(watermark).addComponent(components);
         }
 
         /**
          * 构建页面
-         * @param pageSize pdf页面尺寸
-         * @param watermark 页面水印组件
+         *
+         * @param pageSize   pdf页面尺寸
+         * @param watermark  页面水印组件
          * @param components 组件列表
          * @return 返回pdf页面组件
          */
@@ -192,6 +206,7 @@ public class XEasyPdfHandler {
 
         /**
          * 获取总页码占位符
+         *
          * @return 返回总页码占位符
          */
         public static String getTotalPagePlaceholder() {
@@ -200,6 +215,7 @@ public class XEasyPdfHandler {
 
         /**
          * 获取当前页码占位符
+         *
          * @return 返回当前页码占位符
          */
         public static String getCurrentPagePlaceholder() {
@@ -213,6 +229,7 @@ public class XEasyPdfHandler {
     public static class Watermark {
         /**
          * 构建页面水印
+         *
          * @param text 水印文本
          * @return 返回pdf页面水印组件
          */
@@ -222,8 +239,9 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页面水印
+         *
          * @param fontSize 字体大小
-         * @param text 水印文本
+         * @param text     水印文本
          * @return 返回pdf页面水印组件
          */
         public static XEasyPdfDefaultWatermark build(float fontSize, String text) {
@@ -237,37 +255,146 @@ public class XEasyPdfHandler {
     public static class Text {
         /**
          * 构建文本
+         *
          * @param text 待写入文本
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(String text) {
             return new XEasyPdfText(text);
         }
+
+        /**
+         * 构建文本 根据 {replaceEscapeCharacter} 参数替换文本中的转义字符
+         * <p>
+         * 若 {text} 中包含\r \n \r ，将替换为空字符
+         *
+         * @param text                   待写入文本
+         * @param replaceEscapeCharacter 是否替换转义字符
+         * @return wiki.xsx.core.pdf.component.text.XEasyPdfText
+         * @author tangyh
+         * @date 2022/6/23 3:55 PM
+         * @create [2022/6/23 3:55 PM ] [tangyh] [初始创建]
+         */
+        public static XEasyPdfText build(String text, boolean replaceEscapeCharacter) {
+            return new XEasyPdfText(text, replaceEscapeCharacter);
+        }
+
+        /**
+         * 构建文本 并将{replace}参数中的key替换为value
+         * <p>
+         * 若 {text} 中包含\r \n \r ，将替换为空字符
+         *
+         * @param text    待写入文本
+         * @param replace 需要替换的字符 replace 为空则不替换
+         * @return wiki.xsx.core.pdf.component.text.XEasyPdfText
+         * @author tangyh
+         * @date 2022/6/23 3:55 PM
+         * @create [2022/6/23 3:55 PM ] [tangyh] [初始创建]
+         */
+        public static XEasyPdfText build(String text, Map<String, String> replace) {
+            return new XEasyPdfText(text, replace);
+        }
+
         /**
          * 构建文本
+         *
          * @param textList 待写入文本列表
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(List<String> textList) {
             return new XEasyPdfText(textList);
         }
+
         /**
          * 构建文本
+         *
+         * @param textList               待写入文本列表
+         * @param replaceEscapeCharacter 是否替换转义字符
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(List<String> textList, boolean replaceEscapeCharacter) {
+            return new XEasyPdfText(textList, replaceEscapeCharacter);
+        }
+
+        /**
+         * 构建文本
+         *
+         * @param textList 待写入文本列表
+         * @param replace  需要替换的字符 replace 为空则不替换
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(List<String> textList, Map<String, String> replace) {
+            return new XEasyPdfText(textList, replace);
+        }
+
+        /**
+         * 构建文本
+         *
          * @param fontSize 字体大小
-         * @param text 待写入文本
+         * @param text     待写入文本
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(float fontSize, String text) {
             return new XEasyPdfText(fontSize, text);
         }
+
         /**
          * 构建文本
+         *
+         * @param fontSize               字体大小
+         * @param text                   待写入文本
+         * @param replaceEscapeCharacter 是否替换转义字符
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(float fontSize, String text, boolean replaceEscapeCharacter) {
+            return new XEasyPdfText(fontSize, text, replaceEscapeCharacter);
+        }
+
+        /**
+         * 构建文本
+         *
+         * @param fontSize 字体大小
+         * @param text     待写入文本
+         * @param replace  需要替换的字符 replace 为空则不替换
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(float fontSize, String text, Map<String, String> replace) {
+            return new XEasyPdfText(fontSize, text, replace);
+        }
+
+        /**
+         * 构建文本
+         *
          * @param fontSize 字体大小
          * @param textList 待写入文本列表
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(float fontSize, List<String> textList) {
             return new XEasyPdfText(fontSize, textList);
+        }
+
+        /**
+         * 构建文本
+         *
+         * @param fontSize               字体大小
+         * @param textList               待写入文本列表
+         * @param replaceEscapeCharacter 是否替换转义字符
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(float fontSize, List<String> textList, boolean replaceEscapeCharacter) {
+            return new XEasyPdfText(fontSize, textList, replaceEscapeCharacter);
+        }
+
+        /**
+         * 构建文本
+         *
+         * @param fontSize 字体大小
+         * @param textList 待写入文本列表
+         * @param replace  需要替换的字符 replace 为空则不替换
+         * @return 返回pdf文本组件
+         */
+        public static XEasyPdfText build(float fontSize, List<String> textList, Map<String, String> replace) {
+            return new XEasyPdfText(fontSize, textList, replace);
         }
     }
 
@@ -277,10 +404,11 @@ public class XEasyPdfHandler {
     public static class Line {
         /**
          * 构建线条
+         *
          * @param beginX 当前页面X轴起始坐标
          * @param beginY 当前页面Y轴起始坐标
-         * @param endX 当前页面X轴结束坐标
-         * @param endY 当前页面Y轴结束坐标
+         * @param endX   当前页面X轴结束坐标
+         * @param endY   当前页面Y轴结束坐标
          * @return 返回pdf线条组件
          */
         public static XEasyPdfBaseLine build(float beginX, float beginY, float endX, float endY) {
@@ -298,6 +426,7 @@ public class XEasyPdfHandler {
         public static class SolidLine {
             /**
              * 构建实线分割线
+             *
              * @return 返回pdf实线分割线组件
              */
             public static XEasyPdfSolidSplitLine build() {
@@ -311,6 +440,7 @@ public class XEasyPdfHandler {
         public static class DottedLine {
             /**
              * 构建虚线分割线
+             *
              * @return 返回pdf虚线分割线组件
              */
             public static XEasyPdfDottedSplitLine build() {
@@ -325,6 +455,7 @@ public class XEasyPdfHandler {
     public static class Image {
         /**
          * 构建图片
+         *
          * @param image 待添加图片
          * @return 返回pdf图片组件
          */
@@ -334,8 +465,9 @@ public class XEasyPdfHandler {
 
         /**
          * 构建图片
+         *
          * @param imageInputStream 待添加图片数据流
-         * @param imageType 待添加图片类型（扩展名）
+         * @param imageType        待添加图片类型（扩展名）
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, XEasyPdfImageType imageType) {
@@ -344,8 +476,9 @@ public class XEasyPdfHandler {
 
         /**
          * 构建图片
-         * @param image 待添加图片
-         * @param width 图片宽度
+         *
+         * @param image  待添加图片
+         * @param width  图片宽度
          * @param height 图片高度
          * @return 返回pdf图片组件
          */
@@ -355,10 +488,11 @@ public class XEasyPdfHandler {
 
         /**
          * 构建图片
+         *
          * @param imageInputStream 待添加图片数据流
-         * @param imageType 待添加图片类型（扩展名）
-         * @param width 图片宽度
-         * @param height 图片高度
+         * @param imageType        待添加图片类型（扩展名）
+         * @param width            图片宽度
+         * @param height           图片高度
          * @return 返回pdf图片组件
          */
         public static XEasyPdfImage build(InputStream imageInputStream, XEasyPdfImageType imageType, int width, int height) {
@@ -372,8 +506,9 @@ public class XEasyPdfHandler {
     public static class BarCode {
         /**
          * 构建条形码
+         *
          * @param codeType 条形码类型
-         * @param content 条形码内容
+         * @param content  条形码内容
          * @return 返回pdf条形码组件
          */
         public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content) {
@@ -382,9 +517,10 @@ public class XEasyPdfHandler {
 
         /**
          * 构建条形码
+         *
          * @param codeType 条形码类型
-         * @param content 条形码内容
-         * @param words 条形码文字
+         * @param content  条形码内容
+         * @param words    条形码文字
          * @return 返回pdf条形码组件
          */
         public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content, String words) {
@@ -393,10 +529,11 @@ public class XEasyPdfHandler {
 
         /**
          * 构建条形码
+         *
          * @param codeType 条形码类型
-         * @param content 条形码内容
-         * @param beginX X轴起始坐标
-         * @param beginY Y轴起始坐标
+         * @param content  条形码内容
+         * @param beginX   X轴起始坐标
+         * @param beginY   Y轴起始坐标
          * @return 返回pdf条形码组件
          */
         public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content, float beginX, float beginY) {
@@ -405,11 +542,12 @@ public class XEasyPdfHandler {
 
         /**
          * 构建条形码
+         *
          * @param codeType 条形码类型
-         * @param content 条形码内容
-         * @param words 条形码文字
-         * @param beginX X轴起始坐标
-         * @param beginY Y轴起始坐标
+         * @param content  条形码内容
+         * @param words    条形码文字
+         * @param beginX   X轴起始坐标
+         * @param beginY   Y轴起始坐标
          * @return 返回pdf条形码组件
          */
         public static XEasyPdfBarCode build(XEasyPdfBarCode.CodeType codeType, String content, String words, float beginX, float beginY) {
@@ -423,7 +561,8 @@ public class XEasyPdfHandler {
     public static class Rect {
         /**
          * 构建矩形
-         * @param width 宽度
+         *
+         * @param width  宽度
          * @param height 高度
          * @return 返回pdf矩形组件
          */
@@ -433,7 +572,8 @@ public class XEasyPdfHandler {
 
         /**
          * 构建矩形
-         * @param width 宽度
+         *
+         * @param width  宽度
          * @param height 高度
          * @param beginX X轴起始坐标
          * @param beginY Y轴起始坐标
@@ -450,6 +590,7 @@ public class XEasyPdfHandler {
     public static class Circle {
         /**
          * 构建圆形
+         *
          * @param radius 半径
          * @return 返回pdf圆形组件
          */
@@ -459,6 +600,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建圆形
+         *
          * @param radius 半径
          * @param beginX X轴起始坐标
          * @param beginY Y轴起始坐标
@@ -484,6 +626,7 @@ public class XEasyPdfHandler {
 
                 /**
                  * 构建单元格
+                 *
                  * @param width 宽度
                  * @return 返回pdf单元格组件
                  */
@@ -493,7 +636,8 @@ public class XEasyPdfHandler {
 
                 /**
                  * 构建单元格
-                 * @param width 宽度
+                 *
+                 * @param width  宽度
                  * @param height 高度
                  * @return 返回pdf单元格组件
                  */
@@ -504,15 +648,17 @@ public class XEasyPdfHandler {
 
             /**
              * 构建表格行
+             *
              * @param cells 单元格
              * @return 返回pdf表格行组件
              */
-            public static XEasyPdfRow build(XEasyPdfCell...cells) {
+            public static XEasyPdfRow build(XEasyPdfCell... cells) {
                 return new XEasyPdfRow(cells);
             }
 
             /**
              * 构建表格行
+             *
              * @param cellList 单元格列表
              * @return 返回pdf表格行组件
              */
@@ -523,15 +669,17 @@ public class XEasyPdfHandler {
 
         /**
          * 构建表格
+         *
          * @param rows 表格行
          * @return 返回pdf表格组件
          */
-        public static XEasyPdfTable build(XEasyPdfRow ...rows) {
+        public static XEasyPdfTable build(XEasyPdfRow... rows) {
             return new XEasyPdfTable(rows);
         }
 
         /**
          * 构建表格
+         *
          * @param rowList 表格行列表
          * @return 返回pdf表格组件
          */
@@ -547,6 +695,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页眉
+         *
          * @param component 自定义组件
          * @return 返回pdf页眉组件
          */
@@ -556,6 +705,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页眉
+         *
          * @param text 文本组件
          * @return 返回pdf页眉组件
          */
@@ -565,6 +715,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页眉
+         *
          * @param image 图片组件
          * @return 返回pdf页眉组件
          */
@@ -574,8 +725,9 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页眉
+         *
          * @param image 图片组件
-         * @param text 文本组件
+         * @param text  文本组件
          * @return 返回pdf页眉组件
          */
         public static XEasyPdfHeader build(XEasyPdfImage image, XEasyPdfText text) {
@@ -584,7 +736,8 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页眉
-         * @param text 文本组件
+         *
+         * @param text  文本组件
          * @param image 图片组件
          * @return 返回pdf页眉组件
          */
@@ -600,6 +753,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页脚
+         *
          * @param component 自定义组件
          * @return 返回pdf页脚组件
          */
@@ -609,6 +763,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页脚
+         *
          * @param text 文本组件
          * @return 返回pdf页脚组件
          */
@@ -618,6 +773,7 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页脚
+         *
          * @param image 图片组件
          * @return 返回pdf页脚组件
          */
@@ -627,8 +783,9 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页脚
+         *
          * @param image 图片组件
-         * @param text 文本组件
+         * @param text  文本组件
          * @return 返回pdf页脚组件
          */
         public static XEasyPdfFooter build(XEasyPdfImage image, XEasyPdfText text) {
@@ -637,7 +794,8 @@ public class XEasyPdfHandler {
 
         /**
          * 构建页脚
-         * @param text 文本组件
+         *
+         * @param text  文本组件
          * @param image 图片组件
          * @return 返回pdf页脚组件
          */
@@ -656,6 +814,7 @@ public class XEasyPdfHandler {
         public static class Horizontal {
             /**
              * 构建水平布局
+             *
              * @return 返回pdf水平布局组件
              */
             public static XEasyPdfHorizontalLayout build() {
@@ -669,6 +828,7 @@ public class XEasyPdfHandler {
         public static class Vertical {
             /**
              * 构建水平布局
+             *
              * @return 返回pdf水平布局组件
              */
             public static XEasyPdfVerticalLayout build() {
@@ -682,7 +842,8 @@ public class XEasyPdfHandler {
         public static class Component {
             /**
              * 构建布局组件中的组件
-             * @param width 宽度
+             *
+             * @param width  宽度
              * @param height 高度
              * @return 返回pdf布局组件中的组件
              */
@@ -692,8 +853,9 @@ public class XEasyPdfHandler {
 
             /**
              * 构建布局组件中的组件
-             * @param width 宽度
-             * @param height 高度
+             *
+             * @param width     宽度
+             * @param height    高度
              * @param component pdf组件
              * @return 返回pdf布局组件中的组件
              */

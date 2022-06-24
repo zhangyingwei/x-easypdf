@@ -156,6 +156,16 @@ public class XEasyPdfRow implements Serializable {
         this.param.setHeight(Math.abs(height));
         return this;
     }
+    /**
+     * 设置最小行高
+     *
+     * @param minHeight 行高
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setMinHeight(float minHeight) {
+        this.param.setMinHeight(Math.abs(minHeight));
+        return this;
+    }
 
     /**
      * 设置左边距
