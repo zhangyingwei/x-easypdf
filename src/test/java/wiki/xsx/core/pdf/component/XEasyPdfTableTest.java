@@ -114,10 +114,10 @@ public class XEasyPdfTableTest {
                 cellList.add(
                         i % 2 == 0 ?
                                 XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
-                                        XEasyPdfHandler.Text.build("row" + i + "-cell" + j + "中文中文中文中文中文中文中 \r \n \t  文中文中文中文中文中文", replace)
+                                        XEasyPdfHandler.Text.build("row" + i + "-cell" + j + "中文中文中文中文中文中文中 \r \n \t  文中文中文中文中文中文")
                                 ) :
                                 XEasyPdfHandler.Table.Row.Cell.build(100F, 90F).addContent(
-                                        XEasyPdfHandler.Text.build(10F, "row" + i + "-cell" + j + "中文中文中文中文中文中文中 \r \n \t 文中文中文中文中文中文", true)
+                                        XEasyPdfHandler.Text.build(10F, "row" + i + "-cell" + j + "中文中文中文中文中文中文中 \r \n \t 文中文中文中文中文中文")
                                 ).setBackgroundColor(new Color(0, 191, 255))
                 );
             }
@@ -133,14 +133,14 @@ public class XEasyPdfTableTest {
         ).addPage(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Text.build("title 我无特殊字符"),
-                        XEasyPdfHandler.Text.build("title \r \n \t 我有特殊字符", true),
-                        XEasyPdfHandler.Text.build("title \r \n \t 我有特殊字符", replace),
-                        XEasyPdfHandler.Text.build(Arrays.asList("title \r \n \t 我有特殊字符", "中国"), true),
-                        XEasyPdfHandler.Text.build(Arrays.asList("title \r \n \t 我有特殊字符", "中国"), replace),
-                        XEasyPdfHandler.Text.build(10, "title \r \n \t 我有特殊字符", true),
-                        XEasyPdfHandler.Text.build(10, "title \r \n \t 我有特殊字符", replace),
-                        XEasyPdfHandler.Text.build(10, Arrays.asList("title \r \n \t 我有特殊字符", "中国"), true),
-                        XEasyPdfHandler.Text.build(10, Arrays.asList("title \r \n \t 我有特殊字符", "中国"), replace),
+                        XEasyPdfHandler.Text.build("title \r \n \t 我有特殊字符"),
+                        XEasyPdfHandler.Text.build("title \r \n \t 我有特殊字符"),
+                        XEasyPdfHandler.Text.build(Arrays.asList("title \r \n \t 我有特殊字符", "中国")),
+                        XEasyPdfHandler.Text.build(Arrays.asList("title \r \n \t 我有特殊字符", "中国")),
+                        XEasyPdfHandler.Text.build(10, "title \r \n \t 我有特殊字符"),
+                        XEasyPdfHandler.Text.build(10, "title \r \n \t 我有特殊字符"),
+                        XEasyPdfHandler.Text.build(10, Arrays.asList("title \r \n \t 我有特殊字符", "中国")),
+                        XEasyPdfHandler.Text.build(10, Arrays.asList("title \r \n \t 我有特殊字符", "中国")),
                         XEasyPdfHandler.Table.build(rowList).setHorizontalStyle(XEasyPdfPositionStyle.CENTER).setMarginLeft(50F).setMarginBottom(50F)
                 )
         ).save(filePath).close();

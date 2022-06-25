@@ -19,12 +19,8 @@ import wiki.xsx.core.pdf.util.XEasyPdfFontUtil;
 import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * pdf文本组件
@@ -48,59 +44,6 @@ import java.util.UUID;
 public class XEasyPdfText implements XEasyPdfComponent {
 
     private static final long serialVersionUID = -4199419015054023227L;
-    private static Map<String, String> DEF_REPLACE_MAP = new HashMap(8) {
-        {
-            put("\r", "");
-            put("\n", "");
-            put("\t", "");
-        }
-    };
-
-    /**
-     * 替换文本
-     *
-     * @param text    待输入文本
-     * @param replace 需要替换的字符
-     * @return 替换特殊字符后的文本
-     * @author tangyh
-     * @date 2022/6/23 4:22 PM
-     * @create [2022/6/23 4:22 PM ] [tangyh] [初始创建]
-     */
-    private String replaceText(String text, Map<String, String> replace) {
-        if (text != null && replace != null && !replace.isEmpty()) {
-            String newText = text;
-            for (Map.Entry<String, String> entry : replace.entrySet()) {
-                newText = newText.replace(entry.getKey(), entry.getValue());
-            }
-            return newText;
-        }
-        return text;
-    }
-
-    /**
-     * 替换文本
-     *
-     * @param textList 待输入文本
-     * @param replace  需要替换的字符
-     * @return 替换特殊字符后的文本
-     * @author tangyh
-     * @date 2022/6/23 4:22 PM
-     * @create [2022/6/23 4:22 PM ] [tangyh] [初始创建]
-     */
-    private List<String> replaceText(List<String> textList, Map<String, String> replace) {
-        if (textList != null && replace != null && !replace.isEmpty()) {
-            List<String> newTextList = new ArrayList();
-            for (String text : textList) {
-                String newText = text;
-                for (Map.Entry<String, String> entry : replace.entrySet()) {
-                    newText = newText.replace(entry.getKey(), entry.getValue());
-                }
-                newTextList.add(newText);
-            }
-            return newTextList;
-        }
-        return new ArrayList(textList);
-    }
 
     /**
      * 文本参数
@@ -119,63 +62,12 @@ public class XEasyPdfText implements XEasyPdfComponent {
     /**
      * 有参构造
      *
-     * @param text                   待输入文本
-     * @param replaceEscapeCharacter 是否替换转义字符
-     */
-    public XEasyPdfText(String text, boolean replaceEscapeCharacter) {
-        this.param.setText(replaceEscapeCharacter ? replaceText(text, new HashMap(DEF_REPLACE_MAP)) : text);
-    }
-
-
-    /**
-     * 有参构造
-     *
-     * @param text    待输入文本
-     * @param replace 需要替换的字符
-     *                replace 为空则不替换
-     */
-    public XEasyPdfText(String text, Map<String, String> replace) {
-        this.param.setText(replaceText(text, replace));
-    }
-
-    /**
-     * 有参构造
-     *
      * @param textList 待输入文本列表
      */
     public XEasyPdfText(List<String> textList) {
         if (textList != null) {
             this.param.setSplitTextList(new ArrayList<>(textList)).setSplitTemplateTextList(new ArrayList<>(textList));
         }
-    }
-
-    /**
-     * 有参构造
-     *
-     * @param textList               待输入文本列表
-     * @param replaceEscapeCharacter 是否替换转义字符
-     */
-    public XEasyPdfText(List<String> textList, boolean replaceEscapeCharacter) {
-        if (textList != null) {
-            if (replaceEscapeCharacter) {
-                List<String> newTextList = replaceText(textList, new HashMap(DEF_REPLACE_MAP));
-                this.param.setSplitTextList(newTextList).setSplitTemplateTextList(newTextList);
-            } else {
-                this.param.setSplitTextList(new ArrayList<>(textList)).setSplitTemplateTextList(new ArrayList<>(textList));
-            }
-        }
-    }
-
-    /**
-     * 有参构造
-     *
-     * @param textList 待输入文本列表
-     * @param replace  需要替换的字符
-     *                 replace 为空则不替换
-     */
-    public XEasyPdfText(List<String> textList, Map<String, String> replace) {
-        List<String> newTextList = replaceText(textList, replace);
-        this.param.setSplitTextList(newTextList).setSplitTemplateTextList(newTextList);
     }
 
     /**
@@ -191,33 +83,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
     /**
      * 有参构造
      *
-     * @param fontSize               字体大小
-     * @param text                   待输入文本
-     * @param replaceEscapeCharacter 是否替换转义字符
-     */
-    public XEasyPdfText(float fontSize, String text, boolean replaceEscapeCharacter) {
-        if (replaceEscapeCharacter) {
-            this.param.setFontSize(Math.abs(fontSize)).setText(replaceText(text, DEF_REPLACE_MAP));
-        } else {
-            this.param.setFontSize(Math.abs(fontSize)).setText(text);
-        }
-    }
-
-    /**
-     * 有参构造
-     *
-     * @param fontSize 字体大小
-     * @param text     待输入文本
-     * @param replace  需要替换的字符
-     *                 replace 为空则不替换
-     */
-    public XEasyPdfText(float fontSize, String text, Map<String, String> replace) {
-        this.param.setFontSize(Math.abs(fontSize)).setText(replaceText(text, replace));
-    }
-
-    /**
-     * 有参构造
-     *
      * @param fontSize 字体大小
      * @param textList 待输入文本列表
      */
@@ -225,40 +90,6 @@ public class XEasyPdfText implements XEasyPdfComponent {
         this.param.setFontSize(Math.abs(fontSize));
         if (textList != null) {
             this.param.setSplitTextList(new ArrayList<>(textList)).setSplitTemplateTextList(new ArrayList<>(textList));
-        }
-    }
-
-    /**
-     * 有参构造
-     *
-     * @param fontSize 字体大小
-     * @param textList 待输入文本列表
-     * @param replace  需要替换的字符
-     *                 replace 为空则不替换
-     */
-    public XEasyPdfText(float fontSize, List<String> textList, Map<String, String> replace) {
-        this.param.setFontSize(Math.abs(fontSize));
-        if (textList != null) {
-            List<String> newTextList = replaceText(textList, replace);
-            this.param.setSplitTextList(newTextList).setSplitTemplateTextList(newTextList);
-        }
-    }
-
-    /**
-     * 有参构造
-     *
-     * @param fontSize               字体大小
-     * @param textList               待输入文本列表
-     * @param replaceEscapeCharacter 是否替换转义字符
-     */
-    public XEasyPdfText(float fontSize, List<String> textList, boolean replaceEscapeCharacter) {
-        this.param.setFontSize(Math.abs(fontSize));
-        if (textList != null) {
-            if (replaceEscapeCharacter) {
-                this.param.setSplitTextList(replaceText(textList, DEF_REPLACE_MAP)).setSplitTemplateTextList(replaceText(textList, DEF_REPLACE_MAP));
-            } else {
-                this.param.setSplitTextList(new ArrayList<>(textList)).setSplitTemplateTextList(new ArrayList<>(textList));
-            }
         }
     }
 
@@ -662,7 +493,34 @@ public class XEasyPdfText implements XEasyPdfComponent {
     }
 
     /**
-     * 设置是否换行（影响下一组件是否换行）
+     * 设置替换字符
+     *
+     * @param oldValue    待替换字符串
+     * @param replacement 替换字符串
+     * @return 返回返回文本组件
+     */
+    public XEasyPdfText setReplaceCharacters(String oldValue, String replacement) {
+        if (oldValue != null && replacement != null) {
+            this.param.getReplaceCharacterMap().put(oldValue, replacement);
+        }
+        return this;
+    }
+
+    /**
+     * 设置替换字符
+     *
+     * @param replaceMap 待替换字典
+     * @return 返回返回文本组件
+     */
+    public XEasyPdfText setReplaceCharacters(Map<String, String> replaceMap) {
+        if (replaceMap != null && !replaceMap.isEmpty()) {
+            this.param.getReplaceCharacterMap().putAll(replaceMap);
+        }
+        return this;
+    }
+
+    /**
+     * 设置是否换行（影响下一个组件是否换行）
      *
      * @param isNewLine 是否换行
      * @return 返回文本组件

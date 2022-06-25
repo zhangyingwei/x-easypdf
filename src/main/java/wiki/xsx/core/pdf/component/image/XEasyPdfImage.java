@@ -10,6 +10,7 @@ import wiki.xsx.core.pdf.doc.XEasyPdfPage;
 import wiki.xsx.core.pdf.doc.XEasyPdfPositionStyle;
 import wiki.xsx.core.pdf.util.XEasyPdfImageUtil;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
 
@@ -61,6 +62,16 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     * @param image 待添加图片
+     * @param imageType 待添加图片类型（扩展名）
+     */
+    @SneakyThrows
+    public XEasyPdfImage(BufferedImage image, XEasyPdfImageType imageType) {
+        this.param.setImageType(imageType.name().toLowerCase()).setImage(image);
+    }
+
+    /**
+     * 有参构造
      * @param imageFile 待添加图片
      * @param width 图片宽度
      * @param height 图片高度
@@ -89,6 +100,21 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     }
 
     /**
+     * 有参构造
+     * @param image 待添加图片
+     * @param imageType 待添加图片类型（扩展名）
+     * @param width 图片宽度
+     * @param height 图片高度
+     */
+    @SneakyThrows
+    public XEasyPdfImage(BufferedImage image, XEasyPdfImageType imageType, int width, int height) {
+        this.param.setImageType(imageType.name().toLowerCase())
+                .setImage(image)
+                .setWidth(Math.abs(width))
+                .setHeight(Math.abs(height));
+    }
+
+    /**
      * 设置图片
      * @param imageFile 待添加图片
      * @return 返回图片组件
@@ -96,6 +122,18 @@ public class XEasyPdfImage implements XEasyPdfComponent {
     @SneakyThrows
     public XEasyPdfImage setImage(File imageFile) {
         this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile)).setImage(XEasyPdfImageUtil.read(imageFile));
+        this.param.setImageXObject(null);
+        return this;
+    }
+
+    /**
+     * 设置图片
+     * @param image 待添加图片
+     * @param imageType 待添加图片类型
+     * @return 返回图片组件
+     */
+    public XEasyPdfImage setImage(BufferedImage image, XEasyPdfImageType imageType) {
+        this.param.setImageType(imageType.name().toLowerCase()).setImage(image);
         this.param.setImageXObject(null);
         return this;
     }

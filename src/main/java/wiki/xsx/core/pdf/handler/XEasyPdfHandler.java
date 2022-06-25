@@ -29,7 +29,6 @@ import wiki.xsx.core.pdf.mark.XEasyPdfDefaultWatermark;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
 /**
  * pdf助手
@@ -264,38 +263,6 @@ public class XEasyPdfHandler {
         }
 
         /**
-         * 构建文本 根据 {replaceEscapeCharacter} 参数替换文本中的转义字符
-         * <p>
-         * 若 {text} 中包含\r \n \r ，将替换为空字符
-         *
-         * @param text                   待写入文本
-         * @param replaceEscapeCharacter 是否替换转义字符
-         * @return wiki.xsx.core.pdf.component.text.XEasyPdfText
-         * @author tangyh
-         * @date 2022/6/23 3:55 PM
-         * @create [2022/6/23 3:55 PM ] [tangyh] [初始创建]
-         */
-        public static XEasyPdfText build(String text, boolean replaceEscapeCharacter) {
-            return new XEasyPdfText(text, replaceEscapeCharacter);
-        }
-
-        /**
-         * 构建文本 并将{replace}参数中的key替换为value
-         * <p>
-         * 若 {text} 中包含\r \n \r ，将替换为空字符
-         *
-         * @param text    待写入文本
-         * @param replace 需要替换的字符 replace 为空则不替换
-         * @return wiki.xsx.core.pdf.component.text.XEasyPdfText
-         * @author tangyh
-         * @date 2022/6/23 3:55 PM
-         * @create [2022/6/23 3:55 PM ] [tangyh] [初始创建]
-         */
-        public static XEasyPdfText build(String text, Map<String, String> replace) {
-            return new XEasyPdfText(text, replace);
-        }
-
-        /**
          * 构建文本
          *
          * @param textList 待写入文本列表
@@ -303,28 +270,6 @@ public class XEasyPdfHandler {
          */
         public static XEasyPdfText build(List<String> textList) {
             return new XEasyPdfText(textList);
-        }
-
-        /**
-         * 构建文本
-         *
-         * @param textList               待写入文本列表
-         * @param replaceEscapeCharacter 是否替换转义字符
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(List<String> textList, boolean replaceEscapeCharacter) {
-            return new XEasyPdfText(textList, replaceEscapeCharacter);
-        }
-
-        /**
-         * 构建文本
-         *
-         * @param textList 待写入文本列表
-         * @param replace  需要替换的字符 replace 为空则不替换
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(List<String> textList, Map<String, String> replace) {
-            return new XEasyPdfText(textList, replace);
         }
 
         /**
@@ -341,60 +286,12 @@ public class XEasyPdfHandler {
         /**
          * 构建文本
          *
-         * @param fontSize               字体大小
-         * @param text                   待写入文本
-         * @param replaceEscapeCharacter 是否替换转义字符
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(float fontSize, String text, boolean replaceEscapeCharacter) {
-            return new XEasyPdfText(fontSize, text, replaceEscapeCharacter);
-        }
-
-        /**
-         * 构建文本
-         *
-         * @param fontSize 字体大小
-         * @param text     待写入文本
-         * @param replace  需要替换的字符 replace 为空则不替换
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(float fontSize, String text, Map<String, String> replace) {
-            return new XEasyPdfText(fontSize, text, replace);
-        }
-
-        /**
-         * 构建文本
-         *
          * @param fontSize 字体大小
          * @param textList 待写入文本列表
          * @return 返回pdf文本组件
          */
         public static XEasyPdfText build(float fontSize, List<String> textList) {
             return new XEasyPdfText(fontSize, textList);
-        }
-
-        /**
-         * 构建文本
-         *
-         * @param fontSize               字体大小
-         * @param textList               待写入文本列表
-         * @param replaceEscapeCharacter 是否替换转义字符
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(float fontSize, List<String> textList, boolean replaceEscapeCharacter) {
-            return new XEasyPdfText(fontSize, textList, replaceEscapeCharacter);
-        }
-
-        /**
-         * 构建文本
-         *
-         * @param fontSize 字体大小
-         * @param textList 待写入文本列表
-         * @param replace  需要替换的字符 replace 为空则不替换
-         * @return 返回pdf文本组件
-         */
-        public static XEasyPdfText build(float fontSize, List<String> textList, Map<String, String> replace) {
-            return new XEasyPdfText(fontSize, textList, replace);
         }
     }
 

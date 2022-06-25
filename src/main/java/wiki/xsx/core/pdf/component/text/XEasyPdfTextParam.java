@@ -16,10 +16,13 @@ import wiki.xsx.core.pdf.util.XEasyPdfTextUtil;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * pdf文本参数
+ *
  * @author xsx
  * @date 2020/3/9
  * @since 1.8
@@ -110,6 +113,10 @@ class XEasyPdfTextParam implements Serializable {
      * 拆分后的待添加文本列表(模板)
      */
     private List<String> splitTemplateTextList;
+    /**
+     * 替换字符字典
+     */
+    private Map<String, String> replaceCharacterMap = this.initReplaceCharacterMap();
     /**
      * 水平样式（居左、居中、居右）
      */
@@ -209,12 +216,13 @@ class XEasyPdfTextParam implements Serializable {
 
     /**
      * 获取宽度
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      * @return 返回文本宽度
      */
     float getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (this.maxWidth!=null) {
+        if (this.maxWidth != null) {
             return this.maxWidth;
         }
         this.init(document, page);
@@ -223,12 +231,13 @@ class XEasyPdfTextParam implements Serializable {
 
     /**
      * 获取高度
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      * @return 返回文本高度
      */
     float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (this.maxHeight!=null) {
+        if (this.maxHeight != null) {
             return this.maxHeight;
         }
         this.init(document, page);
@@ -237,29 +246,30 @@ class XEasyPdfTextParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 获取pdfBox最新页面尺寸
         PDRectangle rectangle = page.getLastPage().getMediaBox();
         // 如果最大宽度未初始化，则进行初始化
-        if (this.maxWidth==null) {
+        if (this.maxWidth == null) {
             // 初始化最大宽度，最大宽度 = 页面宽度
             this.maxWidth = rectangle.getWidth();
         }
         // 如果内容模式未初始化，则初始化为页面内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = page.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
         // 如果字体路径未初始化，则初始化为页面字体路径
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化为页面字体路径
             this.fontPath = page.getFontPath();
         }
@@ -267,19 +277,19 @@ class XEasyPdfTextParam implements Serializable {
         // 初始化字体高度
         this.fontHeight = this.fontSize;
         // 如果下划线颜色为空，则重置为字体颜色
-        if (this.underlineColor==null) {
+        if (this.underlineColor == null) {
             // 重置下划线颜色为字体颜色
             this.underlineColor = this.fontColor;
         }
         // 如果删除线颜色为空，则重置为字体颜色
-        if (this.deleteLineColor==null) {
+        if (this.deleteLineColor == null) {
             // 重置下划线颜色为字体颜色
             this.deleteLineColor = this.fontColor;
         }
         // 初始化待添加文本列表
         this.initTextList(document, page);
         // 如果最大高度未初始化，则进行初始化
-        if (this.maxHeight==null) {
+        if (this.maxHeight == null) {
             // 初始化最大高度 = (字体高度+行间距) * 文本行数 - 上边距 - 下边距
             this.maxHeight = (this.fontHeight + this.leading) * this.splitTextList.size() - this.marginTop - this.marginBottom;
         }
@@ -289,9 +299,10 @@ class XEasyPdfTextParam implements Serializable {
 
     /**
      * 初始化X轴起始坐标
+     *
      * @param document pdf文档
-     * @param page pdf页面
-     * @param text 待添加文本
+     * @param page     pdf页面
+     * @param text     待添加文本
      * @return 返回X轴起始坐标
      */
     @SneakyThrows
@@ -299,11 +310,11 @@ class XEasyPdfTextParam implements Serializable {
         // 定义X轴坐标
         Float x = this.beginX;
         // 如果页面X轴起始坐标未初始化，则进行初始化
-        if (x==null) {
+        if (x == null) {
             // 如果为文本追加，则初始化为左边距+页面X轴起始坐标
             if (this.isTextAppend) {
                 // 初始化为左边距+页面X轴起始坐标
-                x = this.marginLeft + (page.getPageX()==null?0F:page.getPageX());
+                x = this.marginLeft + (page.getPageX() == null ? 0F : page.getPageX());
             }
             // 否则判断文本样式
             else {
@@ -321,20 +332,21 @@ class XEasyPdfTextParam implements Serializable {
 
     /**
      * 初始化X轴起始坐标样式
+     *
      * @param text 待添加文本
      * @return 返回X轴起始坐标
      */
     @SneakyThrows
     float initBeginXForStyle(XEasyPdfDocument document, XEasyPdfPage page, String text) {
         // 如果为居左，则初始化为左边距
-        if (this.horizontalStyle==XEasyPdfPositionStyle.LEFT) {
+        if (this.horizontalStyle == XEasyPdfPositionStyle.LEFT) {
             // 初始化为左边距
             return this.marginLeft;
         }
         // 获取字体
         PDFont font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
         // 如果为居中，则初始化为(最大宽度-左边距-右边距-文本宽度)/2
-        if (this.horizontalStyle==XEasyPdfPositionStyle.CENTER) {
+        if (this.horizontalStyle == XEasyPdfPositionStyle.CENTER) {
             // 初始化为(最大宽度-文本宽度)/2
             return (this.maxWidth - ((this.fontSize * font.getStringWidth(text) / 1000) + this.characterSpacing * text.length())) / 2 + this.marginLeft - this.marginRight;
         }
@@ -343,13 +355,36 @@ class XEasyPdfTextParam implements Serializable {
     }
 
     /**
+     * 初始化替换字符字典
+     *
+     * @return 返回替换字符字典
+     */
+    private Map<String, String> initReplaceCharacterMap() {
+        // 创建字典
+        Map<String, String> map = new HashMap<>(8);
+        // 添加替换字符(换行符(LF))
+        map.put("\n", "");
+        // 添加替换字符(回车符(CR))
+        map.put("\r", "");
+        // 添加替换字符(水平制表符(HT))
+        map.put("\t", "");
+        // 添加替换字符(退格符(BS))
+        map.put("\b", "");
+        // 添加替换字符(换页符(FF))
+        map.put("\f", "");
+        // 返回字典
+        return map;
+    }
+
+    /**
      * 初始化Y轴起始坐标
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     private void initBeginY(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果Y轴起始坐标不为空，则重置Y轴起始坐标为Y轴起始坐标-上边距+下边距
-        if (this.beginY!=null) {
+        if (this.beginY != null) {
             // 重置Y轴起始坐标为Y轴起始坐标-上边距+下边距
             this.beginY = this.beginY - this.marginTop + this.marginBottom;
             return;
@@ -357,7 +392,7 @@ class XEasyPdfTextParam implements Serializable {
         // 获取页面Y轴坐标
         Float pageY = page.getPageY();
         // 如果页面Y轴坐标为空，则获取最新页面高度
-        if (pageY==null) {
+        if (pageY == null) {
             // 重置页面Y轴坐标为最新页面高度
             pageY = page.getLastPage().getMediaBox().getHeight();
         }
@@ -368,23 +403,23 @@ class XEasyPdfTextParam implements Serializable {
             return;
         }
         // 如果为居上样式，则重置Y轴起始坐标为页面Y轴坐标-字体高度-行间距-上边距+下边距
-        if (this.verticalStyle==XEasyPdfPositionStyle.TOP) {
+        if (this.verticalStyle == XEasyPdfPositionStyle.TOP) {
             // 重置Y轴起始坐标为页面Y轴坐标-字体高度-行间距-上边距+下边距
             this.beginY = pageY - this.fontHeight - this.leading - this.marginTop + this.marginBottom;
             return;
         }
         // 如果为居中样式，则重置Y轴起始坐标为页面Y轴坐标-(页面Y轴坐标-最大高度)/2-行间距-上边距+下边距
-        if (this.verticalStyle==XEasyPdfPositionStyle.CENTER) {
+        if (this.verticalStyle == XEasyPdfPositionStyle.CENTER) {
             // 重置Y轴起始坐标为页面Y轴坐标-(页面Y轴坐标-最大高度)/2-行间距-上边距+下边距
             this.beginY = pageY - (pageY - this.maxHeight) / 2 - this.leading - this.marginTop + this.marginBottom;
             return;
         }
         // 如果为居下样式，则判断是否包含页脚
-        if (this.verticalStyle==XEasyPdfPositionStyle.BOTTOM) {
+        if (this.verticalStyle == XEasyPdfPositionStyle.BOTTOM) {
             // 定义页脚高度
             float footerHeight = 0F;
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.isAllowFooter()&&page.getFooter()!=null) {
+            if (page.isAllowFooter() && page.getFooter() != null) {
                 // 初始化页脚高度
                 footerHeight = page.getFooter().getHeight(document, page);
             }
@@ -401,39 +436,54 @@ class XEasyPdfTextParam implements Serializable {
     }
 
     /**
+     * 初始化文本X轴坐标
+     *
+     * @param page pdf页面
+     * @return 返回文本X轴坐标
+     */
+    private float initTextX(XEasyPdfPage page) {
+        // 定义X轴坐标
+        float x = 0F;
+        // 如果缩进值不为空，则重置X轴起始坐标
+        if (this.indent != null) {
+            // 重置X轴起始坐标 = X轴起始坐标 + 缩进值 * (字体大小 + 文本间隔)
+            x = x + this.indent * (this.fontSize + this.characterSpacing);
+        }
+        // 开启文本追加
+        if (this.isTextAppend) {
+            // 如果X轴起始坐标为空，则初始化X轴坐标为页面X轴坐标
+            if (this.beginX == null) {
+                // 初始化X轴坐标为页面X轴坐标+左边距
+                x = x + (page.getPageX() == null ? this.marginLeft : page.getPageX() + this.marginLeft);
+            }
+            // 否则初始化为X轴起始坐标
+            else {
+                // 初始化X轴坐标 = X轴坐标 + X轴起始坐标
+                x = x + this.beginX;
+            }
+        }
+        // 未开启文本追加
+        else {
+            // 初始化X轴坐标 = X轴坐标 + 左边距
+            x = x + this.marginLeft;
+        }
+        return x;
+    }
+
+    /**
      * 初始化待添加文本列表
+     *
      * @param page pdf页面
      */
     private void initTextList(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果拆分后的待添加文本列表未初始化，则进行初始化
-        if (this.splitTextList==null) {
+        if (this.splitTextList == null) {
+            // 处理待添加文本
+            this.text = this.processText(this.text);
+            // 初始化X轴坐标
+            float x = this.initTextX(page);
             // 获取字体
             PDFont font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
-            // 定义X轴坐标
-            float x = 0F;
-            // 如果缩进值不为空，则重置X轴起始坐标
-            if (this.indent!=null) {
-                // 重置X轴起始坐标 = X轴起始坐标 + 缩进值 * (字体大小 + 文本间隔)
-                x = x + this.indent * (this.fontSize + this.characterSpacing);
-            }
-            // 开启文本追加
-            if (this.isTextAppend) {
-                // 如果X轴起始坐标为空，则初始化X轴坐标为页面X轴坐标
-                if (this.beginX == null) {
-                    // 初始化X轴坐标为页面X轴坐标+左边距
-                    x = x + (page.getPageX() == null ? this.marginLeft : page.getPageX() + this.marginLeft);
-                }
-                // 否则初始化为X轴起始坐标
-                else {
-                    // 初始化X轴坐标 = X轴坐标 + X轴起始坐标
-                    x = x + this.beginX;
-                }
-            }
-            // 未开启文本追加
-            else {
-                // 初始化X轴坐标 = X轴坐标 + 左边距
-                x = x + this.marginLeft;
-            }
             // 获取第一行文本
             String firstLineText = XEasyPdfTextUtil.splitText(
                     // 待输入文本
@@ -447,56 +497,111 @@ class XEasyPdfTextParam implements Serializable {
                     // 文本间隔
                     this.characterSpacing
             );
-            // 如果第一行文本不为空，则添加文本列表
-            if (firstLineText!=null) {
-                // 初始化待添加文本列表
-                this.splitTextList = new ArrayList<>(128);
-                // 添加第一行文本
-                this.splitTextList.add(firstLineText);
-                // 第一行文本长度小于待输入文本，则继续拆分剩余文本
-                if (firstLineText.length()<this.text.length()) {
-                    // 添加剩余文本
-                    this.splitTextList.addAll(
-                            XEasyPdfTextUtil.splitLines(
-                                    // 截取剩余待输入文本
-                                    this.text.substring(firstLineText.length()),
-                                    // 行宽度 = 最大宽度 - 左边距 - 右边距
-                                    this.maxWidth - this.marginLeft - this.marginRight,
-                                    // 字体
-                                    font,
-                                    // 字体大小
-                                    this.fontSize,
-                                    // 文本间隔
-                                    this.characterSpacing
-                            )
-                    );
-                }
-            }
-            // 否则进行文本全拆分（换行）
-            else {
-                // 初始化待添加文本列表
-                this.splitTextList = XEasyPdfTextUtil.splitLines(
-                        // 待输入文本
-                        this.text,
-                        // 行宽度 = 最大宽度 - 左边距 - 右边距
-                        this.maxWidth - this.marginLeft - this.marginRight,
-                        // 字体
-                        font,
-                        // 字体大小
-                        this.fontSize,
-                        // 文本间隔
-                        this.characterSpacing
-                );
-                // 重置页面X轴起始坐标（换行）
-                this.beginX = this.marginLeft;
-                // 重置页面X轴
-                page.setPageX(null);
-            }
+            // 初始待添加文本列表
+            this.initTextList(page, font, firstLineText);
+        }
+        // 否则处理待添加文本列表
+        else {
+            // 处理待添加文本列表
+            this.splitTextList = this.processTextList(this.splitTextList);
         }
         // 如果模板列表未初始化，则进行初始化
-        if (this.splitTemplateTextList==null) {
+        if (this.splitTemplateTextList == null) {
             // 模板列表重置为待添加文本列表
-            this.splitTemplateTextList =  new ArrayList<>(this.splitTextList);
+            this.splitTemplateTextList = new ArrayList<>(this.splitTextList);
         }
+    }
+
+    /**
+     * 初始化待添加文本列表
+     *
+     * @param page          pdf页面
+     * @param font          pdfbox字体
+     * @param firstLineText 第一行文本
+     */
+    private void initTextList(XEasyPdfPage page, PDFont font, String firstLineText) {
+        // 如果第一行文本不为空，则添加文本列表
+        if (firstLineText != null) {
+            // 初始化待添加文本列表
+            this.splitTextList = new ArrayList<>(128);
+            // 添加第一行文本
+            this.splitTextList.add(firstLineText);
+            // 第一行文本长度小于待输入文本，则继续拆分剩余文本
+            if (firstLineText.length() < this.text.length()) {
+                // 添加剩余文本
+                this.splitTextList.addAll(
+                        XEasyPdfTextUtil.splitLines(
+                                // 截取剩余待输入文本
+                                this.text.substring(firstLineText.length()),
+                                // 行宽度 = 最大宽度 - 左边距 - 右边距
+                                this.maxWidth - this.marginLeft - this.marginRight,
+                                // 字体
+                                font,
+                                // 字体大小
+                                this.fontSize,
+                                // 文本间隔
+                                this.characterSpacing
+                        )
+                );
+            }
+        }
+        // 否则进行文本全拆分（换行）
+        else {
+            // 初始化待添加文本列表
+            this.splitTextList = XEasyPdfTextUtil.splitLines(
+                    // 待输入文本
+                    this.text,
+                    // 行宽度 = 最大宽度 - 左边距 - 右边距
+                    this.maxWidth - this.marginLeft - this.marginRight,
+                    // 字体
+                    font,
+                    // 字体大小
+                    this.fontSize,
+                    // 文本间隔
+                    this.characterSpacing
+            );
+            // 重置页面X轴起始坐标（换行）
+            this.beginX = this.marginLeft;
+            // 重置页面X轴
+            page.setPageX(null);
+        }
+    }
+
+    /**
+     * 处理文本
+     *
+     * @param text 待处理文本
+     * @return 返回处理后文本
+     */
+    private String processText(String text) {
+        // 如果待处理文本不为空，则进行处理
+        if (XEasyPdfTextUtil.isNotBlank(text)) {
+            // 替换文本
+            return XEasyPdfTextUtil.replaceAll(text, this.replaceCharacterMap);
+        }
+        return text;
+    }
+
+    /**
+     * 处理文本列表
+     *
+     * @param list 待处理文本列表
+     * @return 返回处理后文本列表
+     */
+    private List<String> processTextList(List<String> list) {
+        // 如果待处理文本列表为空，则返回待处理文本列表
+        if (list == null || list.isEmpty()) {
+            // 返回待处理文本列表
+            return list;
+        }
+        // 创建替换文本列表
+        List<String> replaceList = new ArrayList<>(this.splitTextList.size());
+        // 遍历待处理文本列表
+        for (String text : list) {
+            // 添加替换文本
+            replaceList.add(this.processText(text));
+        }
+        // 返回替换文本列表
+        return replaceList;
     }
 }
