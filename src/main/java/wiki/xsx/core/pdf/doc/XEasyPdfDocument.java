@@ -695,7 +695,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
         // 设置打印方向
         pageFormat.setOrientation(style.getOrientation());
         // 设置打印纸张
-        book.append(new PDFPrintable(this.getTarget(), scaling), pageFormat);
+        book.append(new PDFPrintable(this.build(true), scaling), pageFormat);
         // 设置打印任务
         job.setPageable(book);
         // 设置打印数量
