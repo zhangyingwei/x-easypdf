@@ -730,8 +730,8 @@ public class XEasyPdfCell implements Serializable {
         float y = page.getPageY();
         // 如果图片高度等于单元格高度-边框宽度或垂直样式为居上，则重置Y轴起始坐标为Y轴起始坐标-图片高度-边框宽度/2-行上边距
         if (height==this.param.getHeight()-this.param.getBorderWidth()||this.param.getVerticalStyle()==XEasyPdfPositionStyle.TOP) {
-            // 重置Y轴起始坐标为Y轴起始坐标-图片高度-边框宽度/2-行上边距
-            y = y - height - this.param.getBorderWidth() / 2 - row.getParam().getMarginTop();
+            // 重置Y轴起始坐标为Y轴起始坐标-图片高度-边框宽度-行上边距
+            y = y - height - this.param.getBorderWidth()/2 - row.getParam().getMarginTop();
             return y;
         }
         // 如果垂直样式为居中，则重置Y轴起始坐标为Y轴起始坐标-图片高度-(单元格高度-图片高度)/2-行上边距
@@ -743,7 +743,7 @@ public class XEasyPdfCell implements Serializable {
         // 如果垂直样式为居下，则重置Y轴起始坐标为Y轴起始坐标-单元格高度+边框宽度/2-行上边距
         if (this.param.getVerticalStyle()==XEasyPdfPositionStyle.BOTTOM) {
             // 重置Y轴起始坐标为Y轴起始坐标-单元格高度+边框宽度/2-行上边距
-            y = y - this.param.getHeight() + this.param.getBorderWidth() / 2 - row.getParam().getMarginTop();
+            y = y - this.param.getHeight() + this.param.getBorderWidth()/2 - row.getParam().getMarginTop();
         }
         return y;
     }

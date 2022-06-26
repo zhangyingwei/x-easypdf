@@ -283,14 +283,24 @@ public class XEasyPdfTest {
                                                         XEasyPdfHandler.Text.build("分页测试1")
                                                 ).setBorderColor(Color.ORANGE).setFontColor(Color.PINK)
                                         )
-                                        // 设置表头行
-                                ).setTileRow(
-                                        // 构建行
-                                        XEasyPdfHandler.Table.Row.build(
-                                                // 构建单元格，并设置边框颜色为黑色，字体大小为30，字体颜色为紫色
-                                                XEasyPdfHandler.Table.Row.Cell.build(500F, 100F).addContent(
-                                                        XEasyPdfHandler.Text.build("表头")
-                                                ).setBorderColor(Color.BLACK).setFontSize(30F).setFontColor(Color.MAGENTA)
+                                        // 设置表头（分页时，自动添加表头）
+                                ).setTitle(
+                                        // 构建表头
+                                        XEasyPdfHandler.Table.build(
+                                                // 构建行
+                                                XEasyPdfHandler.Table.Row.build(
+                                                        // 构建单元格，并设置边框颜色为黑色，字体大小为30，字体颜色为紫色
+                                                        XEasyPdfHandler.Table.Row.Cell.build(500F, 50F).addContent(
+                                                                XEasyPdfHandler.Text.build("表头1")
+                                                        ).setBorderColor(Color.BLACK).setFontSize(30F).setFontColor(Color.MAGENTA)
+                                                ),
+                                                // 构建行
+                                                XEasyPdfHandler.Table.Row.build(
+                                                    // 构建单元格，并设置边框颜色为黑色，字体大小为30，字体颜色为紫色
+                                                    XEasyPdfHandler.Table.Row.Cell.build(500F, 50F).addContent(
+                                                            XEasyPdfHandler.Text.build("表头2")
+                                                    ).setBorderColor(Color.BLACK).setFontSize(30F).setFontColor(Color.BLUE)
+                                                )
                                         )
                                         // 开启表格内容上下左右居中
                                 ).enableCenterStyle()
@@ -300,8 +310,6 @@ public class XEasyPdfTest {
                                         .setMarginTop(10F)
                                         // 设置边框颜色为灰色
                                         .setBorderColor(Color.GRAY)
-                                        // 开启自动表头（分页时，自动添加表头行）
-                                        .enableAutoTitle()
                                         // 关闭文本自动拆分
                                         .disableAutoSplitRow()
                         )

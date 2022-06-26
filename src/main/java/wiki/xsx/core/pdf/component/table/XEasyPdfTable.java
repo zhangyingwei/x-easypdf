@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * pdf表格组件
+ *
  * @author xsx
  * @date 2020/6/6
  * @since 1.8
@@ -38,14 +39,16 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param rows pdf表格行
      */
-    public XEasyPdfTable(XEasyPdfRow...rows) {
+    public XEasyPdfTable(XEasyPdfRow... rows) {
         this.addRow(rows);
     }
 
     /**
      * 有参构造
+     *
      * @param rowList pdf表格行列表
      */
     public XEasyPdfTable(List<XEasyPdfRow> rowList) {
@@ -54,6 +57,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置字体路径
+     *
      * @param fontPath 字体路径
      * @return 返回表格组件
      */
@@ -64,11 +68,12 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置默认字体样式
+     *
      * @param style 默认字体样式
      * @return 返回表格组件
      */
     public XEasyPdfTable setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        if (style!=null) {
+        if (style != null) {
             this.param.setFontPath(style.getPath());
         }
         return this;
@@ -76,6 +81,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置字体大小
+     *
      * @param fontSize 字体大小
      * @return 返回表格组件
      */
@@ -86,11 +92,12 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置字体颜色
+     *
      * @param fontColor 字体颜色
      * @return 返回表格组件
      */
     public XEasyPdfTable setFontColor(Color fontColor) {
-        if (fontColor!=null) {
+        if (fontColor != null) {
             this.param.setFontColor(fontColor);
         }
         return this;
@@ -98,6 +105,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 边框宽度
+     *
      * @param lineWidth 宽度
      * @return 返回表格组件
      */
@@ -108,11 +116,12 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置边框颜色（开启边框时生效）
+     *
      * @param borderColor 边框颜色
      * @return 返回表格组件
      */
     public XEasyPdfTable setBorderColor(Color borderColor) {
-        if (borderColor!=null) {
+        if (borderColor != null) {
             this.param.setBorderColor(borderColor);
         }
         return this;
@@ -120,11 +129,12 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置背景颜色
+     *
      * @param backgroundColor 背景颜色
      * @return 返回表格组件
      */
     public XEasyPdfTable setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor!=null) {
+        if (backgroundColor != null) {
             this.param.setBackgroundColor(backgroundColor);
         }
         return this;
@@ -132,6 +142,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回表格组件
      */
@@ -142,6 +153,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置上边距
+     *
      * @param margin 边距
      * @return 返回表格组件
      */
@@ -152,6 +164,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置下边距
+     *
      * @param margin 边距
      * @return 返回表格组件
      */
@@ -162,14 +175,15 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置水平样式（居左、居中、居右）
+     *
      * @param style 样式
      * @return 返回表格组件
      */
     public XEasyPdfTable setHorizontalStyle(XEasyPdfPositionStyle style) {
-        if (style!=null) {
-            if (style==XEasyPdfPositionStyle.LEFT||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.RIGHT) {
+        if (style != null) {
+            if (style == XEasyPdfPositionStyle.LEFT || style == XEasyPdfPositionStyle.CENTER || style == XEasyPdfPositionStyle.RIGHT) {
                 this.param.setHorizontalStyle(style);
-            }else {
+            } else {
                 throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
             }
         }
@@ -178,14 +192,15 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置垂直样式（居上、居中、居下）
+     *
      * @param style 样式
      * @return 返回表格组件
      */
     public XEasyPdfTable setVerticalStyle(XEasyPdfPositionStyle style) {
-        if (style!=null) {
-            if (style==XEasyPdfPositionStyle.TOP||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.BOTTOM) {
+        if (style != null) {
+            if (style == XEasyPdfPositionStyle.TOP || style == XEasyPdfPositionStyle.CENTER || style == XEasyPdfPositionStyle.BOTTOM) {
                 this.param.setVerticalStyle(style);
-            }else {
+            } else {
                 throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
             }
         }
@@ -194,6 +209,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 开启上下左右居中
+     *
      * @return 返回表格组件
      */
     public XEasyPdfTable enableCenterStyle() {
@@ -203,6 +219,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 关闭自动拆分行（分页时，自动拆分行数据）
+     *
      * @return 返回表格组件
      */
     public XEasyPdfTable disableAutoSplitRow() {
@@ -212,6 +229,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 关闭边框
+     *
      * @return 返回表格组件
      */
     public XEasyPdfTable disableBorder() {
@@ -220,16 +238,8 @@ public class XEasyPdfTable implements XEasyPdfComponent {
     }
 
     /**
-     * 开启自动表头（分页自动添加表头）
-     * @return 返回表格组件
-     */
-    public XEasyPdfTable enableAutoTitle() {
-        this.param.setIsAutoTitle(Boolean.TRUE);
-        return this;
-    }
-
-    /**
      * 开启上下文重置
+     *
      * @return 返回表格组件
      */
     @Override
@@ -240,6 +250,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置坐标
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回表格组件
@@ -252,6 +263,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置宽度（无效）
+     *
      * @param width 宽度
      * @return 返回表格组件
      */
@@ -263,6 +275,7 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置高度（无效）
+     *
      * @param height 高度
      * @return 返回表格组件
      */
@@ -274,35 +287,49 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回表格组件
      */
     @Override
     public XEasyPdfTable setContentMode(ContentMode mode) {
-        if (mode!=null) {
+        if (mode != null) {
             this.param.setContentMode(mode);
         }
         return this;
     }
 
     /**
-     * 设置表头行
-     * @param row pdf表格行
+     * 设置最小行高
+     *
+     * @param height 高度
      * @return 返回表格组件
      */
-    public XEasyPdfTable setTileRow(XEasyPdfRow row) {
-        this.param.setTitleRow(row);
+    public XEasyPdfTable setMinRowHeight(float height) {
+        this.param.setMinRowHeight(Math.abs(height));
+        return this;
+    }
+
+    /**
+     * 设置表头
+     *
+     * @param title pdf表格
+     * @return 返回表格组件
+     */
+    public XEasyPdfTable setTitle(XEasyPdfTable title) {
+        this.param.setTitle(title);
         return this;
     }
 
     /**
      * 添加表格行
+     *
      * @param rows pdf表格行
      * @return 返回表格组件
      */
-    public final XEasyPdfTable addRow(XEasyPdfRow...rows) {
+    public final XEasyPdfTable addRow(XEasyPdfRow... rows) {
         // 如果待添加表格行不为空，则添加
-        if (rows!=null) {
+        if (rows != null) {
             // 添加表格行
             this.addRow(Arrays.asList(rows));
         }
@@ -311,12 +338,13 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 添加表格行
+     *
      * @param rowList pdf表格行列表
      * @return 返回表格组件
      */
     public final XEasyPdfTable addRow(List<XEasyPdfRow> rowList) {
         // 如果待添加表格行不为空，则添加
-        if (rowList!=null) {
+        if (rowList != null) {
             // 添加表格行
             this.param.getRows().addAll(rowList);
         }
@@ -325,11 +353,12 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 插入表格行
+     *
      * @param row pdf表格行
      * @return 返回表格组件
      */
     public XEasyPdfTable insertRow(int rowIndex, XEasyPdfRow row) {
-        if (row!=null) {
+        if (row != null) {
             // 添加表格行
             this.param.getRows().add(rowIndex, row);
         }
@@ -338,8 +367,9 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) {
@@ -348,24 +378,26 @@ public class XEasyPdfTable implements XEasyPdfComponent {
         // 初始化参数
         this.param.init(document, page);
         // 如果X轴起始坐标不为空，则设置页面X轴起始坐标
-        if (this.param.getBeginX()!=null) {
+        if (this.param.getBeginX() != null) {
             // 设置页面X轴起始坐标 = 表格X轴起始坐标
             page.setPageX(this.param.getBeginX());
         }
         // 如果Y轴起始坐标不为空，则设置页面Y轴起始坐标
-        if (this.param.getBeginY()!=null) {
+        if (this.param.getBeginY() != null) {
             // 设置页面Y轴起始坐标 = 表格Y轴起始坐标 - 上边距
             page.setPageY(this.param.getBeginY() - this.param.getMarginTop());
-        }else {
+        } else {
             // 设置页面Y轴起始坐标 = 页面Y轴起始坐标 - 上边距
-            page.setPageY(page.getPageY()==null?page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() : page.getPageY() - this.param.getMarginTop());
+            page.setPageY(page.getPageY() == null ? page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() : page.getPageY() - this.param.getMarginTop());
         }
-        // 获取表头行
-        XEasyPdfRow titleRow = this.param.getTitleRow();
-        // 如果表头行不为空，则绘制表头行
-        if (titleRow!=null) {
-            // 绘制表头行
-            titleRow.doDraw(document, page, this);
+        // 获取表头
+        XEasyPdfTable title = this.param.getTitle();
+        // 如果表头不为空，则绘制表头
+        if (title != null) {
+            // 初始化
+            title.init(this.param);
+            // 绘制表头
+            title.draw(document, page);
         }
         // 获取表格行列表
         List<XEasyPdfRow> rows = this.param.getRows();
@@ -392,9 +424,19 @@ public class XEasyPdfTable implements XEasyPdfComponent {
 
     /**
      * 获取pdf表格参数
+     *
      * @return 返回表格参数
      */
     XEasyPdfTableParam getParam() {
         return this.param;
+    }
+
+    /**
+     * 初始化
+     *
+     * @param param 表格参数
+     */
+    void init(XEasyPdfTableParam param) {
+        this.param.init(param);
     }
 }

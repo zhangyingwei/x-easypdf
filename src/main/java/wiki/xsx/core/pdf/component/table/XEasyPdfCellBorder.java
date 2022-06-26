@@ -97,6 +97,8 @@ final class XEasyPdfCellBorder {
         contentStream.setStrokingColor(this.borderColor);
         // 设置线宽
         contentStream.setLineWidth(this.borderWidth);
+        // 设置线帽样式
+        contentStream.setLineCapStyle(2);
         // 连线
         this.line(contentStream);
         // 设置颜色
