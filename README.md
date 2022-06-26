@@ -81,7 +81,6 @@ mvn clean install
 ```
 
 #### 快速体验
-仅需一行代码，便能构建出一个简单的pdf文档
 ```java
 XEasyPdfHandler.Document.build(XEasyPdfHandler.Page.build(XEasyPdfHandler.Text.build("Hello World"))).save("E:\\pdf\\hello-world.pdf").close();
 ```
