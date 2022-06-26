@@ -202,23 +202,28 @@ public class XEasyPdfImageTest {
     @Test
     public void testImage7() throws IOException {
         String filePath = OUTPUT_PATH + "testImage7.pdf";
-        String imagePath = OUTPUT_PATH + "91h687506p0.jpg";
+        String imagePath = OUTPUT_PATH + "222.jpg";
         File image = new File(imagePath);
         XEasyPdfHandler.Document.build(
                 XEasyPdfHandler.Page.build(
                         XEasyPdfHandler.Table.build(
                                 XEasyPdfHandler.Table.Row.build(
-                                        XEasyPdfHandler.Table.Row.Cell.build(100, 100).addContent(
-                                                XEasyPdfHandler.Image.build(image)
-                                        ),
-                                        XEasyPdfHandler.Table.Row.Cell.build(50, 50).addContent(
-                                                XEasyPdfHandler.Image.build(image)
-                                        ).setMarginTop(50),
-                                        XEasyPdfHandler.Table.Row.Cell.build(100, 100).addContent(
-                                                XEasyPdfHandler.Image.build(image)
-                                        )
+                                        XEasyPdfHandler.Table.Row.Cell.build(100, 100)
+                                                .addContent(
+                                                        XEasyPdfHandler.Image.build(image)
+                                                ),
+                                        XEasyPdfHandler.Table.Row.Cell.build(50, 50).setMarginTop(50)
+                                                .addContent(
+                                                        XEasyPdfHandler.Image.build(image)
+                                                ),
+                                        XEasyPdfHandler.Table.Row.Cell.build(100, 100)
+                                                .addContent(
+                                                        XEasyPdfHandler.Image.build(image)
+                                                        .setWidth(50).setHeight(2000)
+                                                )
                                 )
-                        ).disableBorder()
+                        ).setMarginLeft(100f).enableCenterStyle()
+//                                .disableBorder()
                 )
         ).save(filePath).close();
         System.out.println("finish");

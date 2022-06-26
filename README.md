@@ -302,8 +302,8 @@ public class XpdfTest {
                                                     XEasyPdfHandler.Text.build("分页测试1")
                                             ).setBorderColor(Color.ORANGE).setFontColor(Color.PINK)
                                     )
-                                    // 设置表头行
-                            ).setTileRow(
+                                    // 设置表头（分页时，自动添加表头）
+                            ).setTile(
                                     // 构建行
                                     XEasyPdfHandler.Table.Row.build(
                                             // 构建单元格，并设置边框颜色为黑色，字体大小为30，字体颜色为紫色
@@ -319,8 +319,6 @@ public class XpdfTest {
                                     .setMarginTop(10F)
                                     // 设置边框颜色为灰色
                                     .setBorderColor(Color.GRAY)
-                                    // 开启自动表头（分页时，自动添加表头行）
-                                    .enableAutoTitle()
                     )
                     // 保存、关闭
             ).save(outputPath).close();

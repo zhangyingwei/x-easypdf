@@ -81,7 +81,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         this.param.setImageType(XEasyPdfImageUtil.parseType(imageFile))
                 .setImage(XEasyPdfImageUtil.read(imageFile))
                 .setWidth(Math.abs(width))
-                .setHeight(Math.abs(height));
+                .setHeight(Math.abs(height))
+                .setIsCustomRectangle(Boolean.TRUE);
     }
 
     /**
@@ -96,7 +97,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         this.param.setImageType(imageType.name().toLowerCase())
                 .setImage(XEasyPdfImageUtil.read(imageStream))
                 .setWidth(Math.abs(width))
-                .setHeight(Math.abs(height));
+                .setHeight(Math.abs(height))
+                .setIsCustomRectangle(Boolean.TRUE);
     }
 
     /**
@@ -111,7 +113,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         this.param.setImageType(imageType.name().toLowerCase())
                 .setImage(image)
                 .setWidth(Math.abs(width))
-                .setHeight(Math.abs(height));
+                .setHeight(Math.abs(height))
+                .setIsCustomRectangle(Boolean.TRUE);
     }
 
     /**
@@ -343,7 +346,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfImage setWidth(float width) {
-        this.param.setWidth((int) Math.abs(width));
+        this.param.setWidth((int) Math.abs(width)).setIsCustomRectangle(Boolean.TRUE);
         return this;
     }
 
@@ -354,7 +357,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
      */
     @Override
     public XEasyPdfImage setHeight(float height) {
-        this.param.setHeight((int) Math.abs(height));
+        this.param.setHeight((int) Math.abs(height)).setIsCustomRectangle(Boolean.TRUE);
         return this;
     }
 
