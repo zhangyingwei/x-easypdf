@@ -81,7 +81,7 @@ mvn clean install
 ```
 
 #### 快速体验
-```java
+```
 XEasyPdfHandler.Document.build(XEasyPdfHandler.Page.build(XEasyPdfHandler.Text.build("Hello World"))).save("E:\\pdf\\hello-world.pdf").close();
 ```
 
