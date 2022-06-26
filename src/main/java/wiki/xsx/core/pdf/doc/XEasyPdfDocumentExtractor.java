@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 /**
  * pdf文档提取器
+ *
  * @author xsx
  * @date 2020/11/15
  * @since 1.8
@@ -70,6 +71,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 构造方法
+     *
      * @param pdfDocument pdf文档
      */
     @SneakyThrows
@@ -82,8 +84,9 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 添加区域
+     *
      * @param regionName 区域名称
-     * @param rectangle 区域图形
+     * @param rectangle  区域图形
      * @return 返回pdf文档提取器
      */
     public XEasyPdfDocumentExtractor addRegion(String regionName, Rectangle rectangle) {
@@ -93,6 +96,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 清理区域
+     *
      * @return 返回pdf文档提取器
      */
     public XEasyPdfDocumentExtractor clearRegion() {
@@ -102,36 +106,39 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 提取文本(全部)
-     * @param textList 待接收文本列表
+     *
+     * @param textList  待接收文本列表
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
      */
-    public XEasyPdfDocumentExtractor extractText(List<String> textList, int ...pageIndex) {
+    public XEasyPdfDocumentExtractor extractText(List<String> textList, int... pageIndex) {
         this.extractText(textList, null, pageIndex);
         return this;
     }
 
     /**
      * 提取文本
-     * @param textList 待接收文本列表
-     * @param regex 正则表达式
+     *
+     * @param textList  待接收文本列表
+     * @param regex     正则表达式
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
      */
-    public XEasyPdfDocumentExtractor extractText(List<String> textList, String regex, int ...pageIndex) {
+    public XEasyPdfDocumentExtractor extractText(List<String> textList, String regex, int... pageIndex) {
         this.simpleExtractor.extract(textList, regex, pageIndex);
         return this;
     }
 
     /**
      * 根据区域提取文本
-     * @param dataList 待接收文本字典列表(key=区域名称，value=提取文本)
+     *
+     * @param dataList  待接收文本字典列表(key=区域名称，value=提取文本)
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
      */
-    public XEasyPdfDocumentExtractor extractTextByRegions(List<Map<String, String>> dataList, int ...pageIndex) {
+    public XEasyPdfDocumentExtractor extractTextByRegions(List<Map<String, String>> dataList, int... pageIndex) {
         // 如果页面索引有内容，则根据页面索引进行区域文本提取
-        if (pageIndex!=null&&pageIndex.length>0) {
+        if (pageIndex != null && pageIndex.length > 0) {
             // 遍历页面索引
             for (int index : pageIndex) {
                 // 添加数据
@@ -151,7 +158,8 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 提取表格文本(单行单列)
-     * @param textList 待接收文本列表（第一层为行，第二层为列）
+     *
+     * @param textList  待接收文本列表（第一层为行，第二层为列）
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
      */
@@ -159,7 +167,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
         // 获取给定页面索引的页面尺寸
         PDRectangle rectangle = this.document.getPage(pageIndex).getMediaBox();
         // 获取最大尺寸
-        int maxSize = Math.max((int) rectangle.getWidth()+1, (int) rectangle.getHeight()+1);
+        int maxSize = Math.max((int) rectangle.getWidth() + 1, (int) rectangle.getHeight() + 1);
         // 提取区域表格文本(单行单列)
         this.extractTextByRegionsForSimpleTable(textList, new Rectangle(maxSize, maxSize), pageIndex);
         return this;
@@ -167,7 +175,8 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 提取区域表格文本(单行单列)
-     * @param textList 待接收文本列表（第一层为行，第二层为列）
+     *
+     * @param textList  待接收文本列表（第一层为行，第二层为列）
      * @param rectangle 区域图形
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
@@ -185,7 +194,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
         // 提取文本
         String text = regionExtractor.extract(this.document.getPage(pageIndex), wordSeparator).get(key);
         // 如果文本有内容，则进行文本拆分
-        if (text!=null&&text.length()>0) {
+        if (text != null && text.length() > 0) {
             // 定义源文本列表
             List<String> sourceList = new ArrayList<>(textList.size());
             // 获取正则匹配器
@@ -206,6 +215,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 提取图片(全部)
+     *
      * @param imageList 待接收图片列表
      * @return 返回pdf文档提取器
      */
@@ -223,19 +233,20 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 提取图片
+     *
      * @param imageList 待接收图片列表
      * @param pageIndex 页面索引
      * @return 返回pdf文档提取器
      */
-    public XEasyPdfDocumentExtractor extractImage(List<BufferedImage> imageList, int ...pageIndex) {
+    public XEasyPdfDocumentExtractor extractImage(List<BufferedImage> imageList, int... pageIndex) {
         // 如果页面索引不为空，则添加图片
-        if (pageIndex!=null&&pageIndex.length>0) {
+        if (pageIndex != null && pageIndex.length > 0) {
             // 获取pdfbox文档页面树
             PDPageTree pages = this.document.getPages();
             // 遍历页面索引
             for (int index : pageIndex) {
                 // 如果页面索引小于0，则跳过
-                if (index<0) {
+                if (index < 0) {
                     // 跳过该页面索引
                     continue;
                 }
@@ -248,6 +259,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 提取表单
+     *
      * @param formMap 待接收表单字典
      * @return 返回pdf文档提取器
      */
@@ -255,7 +267,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
         // 获取pdfBox表单
         PDAcroForm form = this.document.getDocumentCatalog().getAcroForm();
         // 如果表单不为空，则提取表单内容
-        if (form!=null) {
+        if (form != null) {
             // 获取表单字段列表
             List<PDField> fields = form.getFields();
             // 遍历表单字段列表
@@ -269,6 +281,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 完成操作
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
@@ -277,7 +290,8 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 添加文本
-     * @param dataList 待接收文本字典列表(key=区域名称，value=提取文本)
+     *
+     * @param dataList  待接收文本字典列表(key=区域名称，value=提取文本)
      * @param pageIndex 页面索引
      */
     private void addText(List<Map<String, String>> dataList, int pageIndex) {
@@ -292,6 +306,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
     /**
      * 添加图片
+     *
      * @param imageList 待接收图片列表
      * @param resources pdfbox页面资源
      */
@@ -328,6 +343,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 有参构造
+         *
          * @param document pdfbox文档
          * @throws IOException IO异常
          */
@@ -337,24 +353,25 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 提取文本
-         * @param textList 待接收文本列表
-         * @param regex 正则表达式
+         *
+         * @param textList  待接收文本列表
+         * @param regex     正则表达式
          * @param pageIndex 页面索引
          */
-        void extract(List<String> textList, String regex, int ...pageIndex) {
+        void extract(List<String> textList, String regex, int... pageIndex) {
             // 如果页面索引有内容，则根据页面索引提取文本
-            if (pageIndex!=null&&pageIndex.length>0) {
+            if (pageIndex != null && pageIndex.length > 0) {
                 // 遍历页面索引
                 for (int index : pageIndex) {
                     // 设置起始页面
-                    this.setStartPage(index+1);
+                    this.setStartPage(index + 1);
                     // 设置结束页面
-                    this.setEndPage(index+1);
+                    this.setEndPage(index + 1);
                     // 提取文本
                     this.extract(textList, regex);
                 }
                 // 如果页面索引没有内容，则提取全部文本
-            }else {
+            } else {
                 // 提取全部文本
                 this.extract(textList, regex);
             }
@@ -363,15 +380,16 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 提取文本
+         *
          * @param textList 待接收文本列表
-         * @param regex 正则表达式
+         * @param regex    正则表达式
          */
         @SneakyThrows
         private void extract(List<String> textList, String regex) {
             // 获取文本
             String text = this.getText(this.document);
             // 如果正则表达式有内容，则进行匹配
-            if (regex!=null&&regex.trim().length()>0) {
+            if (regex != null && regex.trim().length() > 0) {
                 // 获取正则匹配器
                 Matcher matcher = Pattern.compile(regex).matcher(text);
                 // 循环匹配
@@ -380,7 +398,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
                     textList.add(matcher.group());
                 }
                 // 如果正则表达式没有内容，则直接添加到文本列表
-            }else {
+            } else {
                 // 添加文本列表
                 textList.add(text);
             }
@@ -407,6 +425,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 无参构造
+         *
          * @throws IOException IO异常
          */
         RegionExtractor() throws IOException {
@@ -416,8 +435,9 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 添加区域
+         *
          * @param regionName 区域名称
-         * @param rectangle 区域图形
+         * @param rectangle  区域图形
          */
         void addRegion(String regionName, Rectangle rectangle) {
             this.regionArea.put(regionName, rectangle);
@@ -434,8 +454,9 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 提取文本
+         *
          * @param page pdfbox页面
-         * @return 返回文本字典(key=区域名称，value=提取文本)
+         * @return 返回文本字典(key = 区域名称 ， value = 提取文本)
          */
         Map<String, String> extract(PDPage page) {
             return this.extract(page, " ");
@@ -443,9 +464,10 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 提取文本
-         * @param page pdfbox页面
+         *
+         * @param page          pdfbox页面
          * @param wordSeparator 单词分隔符
-         * @return 返回文本字典(key=区域名称，value=提取文本)
+         * @return 返回文本字典(key = 区域名称 ， value = 提取文本)
          */
         @SneakyThrows
         Map<String, String> extract(PDPage page, String wordSeparator) {
@@ -479,7 +501,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
                     this.regionText.put(region, new StringWriter());
                 }
                 // 如果页面有内容，则处理页面
-                if(page.hasContents()) {
+                if (page.hasContents()) {
                     // 处理页面
                     this.processPage(page);
                 }
@@ -494,6 +516,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 处理文本定位
+         *
          * @param text 文本
          */
         @Override
@@ -516,6 +539,7 @@ public class XEasyPdfDocumentExtractor implements Serializable {
 
         /**
          * 写入页面
+         *
          * @throws IOException IO异常
          */
         @Override

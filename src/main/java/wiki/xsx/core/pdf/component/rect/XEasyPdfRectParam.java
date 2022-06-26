@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 /**
  * pdf矩形参数
+ *
  * @author xsx
  * @date 2020/5/23
  * @since 1.8
@@ -100,25 +101,26 @@ class XEasyPdfRectParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果宽度未设置，则抛异常
-        if (this.width==null) {
+        if (this.width == null) {
             throw new RuntimeException("the width can not be null");
         }
         // 如果高度未设置，则抛异常
-        if (this.height==null) {
+        if (this.height == null) {
             throw new RuntimeException("the height can not be null");
         }
         // 如果内容模式未初始化，则初始化为页面内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = page.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
@@ -127,16 +129,16 @@ class XEasyPdfRectParam implements Serializable {
         // 定义页脚高度
         float footerHeight = 0F;
         // 如果页面Y轴起始坐标未初始化，则进行初始化
-        if (this.beginY==null) {
+        if (this.beginY == null) {
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.isAllowFooter()&&page.getFooter()!=null) {
+            if (page.isAllowFooter() && page.getFooter() != null) {
                 // 初始化页脚高度
                 footerHeight = page.getFooter().getHeight(document, page);
             }
             // 获取当前页面Y轴起始坐标
             Float pageY = page.getPageY();
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 矩形高度，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 矩形高度
-            this.beginY = pageY == null?
+            this.beginY = pageY == null ?
                     rectangle.getHeight() - this.marginTop - this.height :
                     pageY - this.marginTop - this.height;
         }
@@ -147,16 +149,16 @@ class XEasyPdfRectParam implements Serializable {
             // 获取当前页面Y轴起始坐标
             Float pageY = page.getPageY();
             // 初始化页面Y轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 最大高度 - 上边距 - 矩形高度，否则起始坐标 = 当前页面Y轴起始坐标 - 上边距 - 矩形高度
-            this.beginY = pageY == null?
-                    rectangle.getHeight() - this.marginTop - this.height:
+            this.beginY = pageY == null ?
+                    rectangle.getHeight() - this.marginTop - this.height :
                     pageY - this.marginTop - this.height;
         }
         // 如果页面Y轴起始坐标未初始化，则进行初始化
-        if (this.beginX==null) {
+        if (this.beginX == null) {
             // 获取当前页面X轴起始坐标
             Float pageX = page.getPageX();
             // 初始化页面X轴起始坐标，如果当前页面Y轴坐标为空，则起始坐标 = 左边距，否则起始坐标 = 当前页面X轴起始坐标 + 左边距
-            this.beginX = pageX == null?
+            this.beginX = pageX == null ?
                     this.marginLeft :
                     pageX + this.marginLeft;
         }

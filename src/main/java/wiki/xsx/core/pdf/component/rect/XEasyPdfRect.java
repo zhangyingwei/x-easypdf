@@ -10,6 +10,7 @@ import java.awt.*;
 
 /**
  * pdf矩形组件
+ *
  * @author xsx
  * @date 2020/5/23
  * @since 1.8
@@ -36,7 +37,8 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 有参构造
-     * @param width 宽度
+     *
+     * @param width  宽度
      * @param height 高度
      */
     public XEasyPdfRect(float width, float height) {
@@ -45,7 +47,8 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 有参构造
-     * @param width 宽度
+     *
+     * @param width  宽度
      * @param height 高度
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
@@ -56,6 +59,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回矩形组件
      */
     @Override
@@ -66,6 +70,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 开启检查页面（自动分页）
+     *
      * @return 返回矩形组件
      */
     public XEasyPdfRect enableCheckPage() {
@@ -75,6 +80,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 关闭检查页面（自动分页）
+     *
      * @return 返回矩形组件
      */
     public XEasyPdfRect disableCheckPage() {
@@ -84,6 +90,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置边距（上下左右）
+     *
      * @param margin 边距
      * @return 返回矩形组件
      */
@@ -94,6 +101,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回矩形组件
      */
@@ -104,6 +112,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置右边距
+     *
      * @param margin 边距
      * @return 返回矩形组件
      */
@@ -114,6 +123,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置上边距
+     *
      * @param margin 边距
      * @return 返回矩形组件
      */
@@ -124,6 +134,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置下边距
+     *
      * @param margin 边距
      * @return 返回矩形组件
      */
@@ -134,6 +145,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置是否有边框
+     *
      * @param hasBorder 是否有边框
      * @return 返回矩形组件
      */
@@ -144,6 +156,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置边框宽度
+     *
      * @param borderWidth 边框宽度
      * @return 返回矩形组件
      */
@@ -154,11 +167,12 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置背景颜色
+     *
      * @param backgroundColor 背景颜色
      * @return 返回矩形组件
      */
     public XEasyPdfRect setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor!=null) {
+        if (backgroundColor != null) {
             this.param.setBackgroundColor(backgroundColor);
         }
         return this;
@@ -166,11 +180,12 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置边框颜色（设置是否有边框为true时生效）
+     *
      * @param borderColor 边框颜色
      * @return 返回矩形组件
      */
     public XEasyPdfRect setBorderColor(Color borderColor) {
-        if (borderColor!=null) {
+        if (borderColor != null) {
             this.param.setBorderColor(borderColor);
         }
         return this;
@@ -178,6 +193,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置是否换行
+     *
      * @param newLine 是否换行
      * @return 返回矩形组件
      */
@@ -188,6 +204,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置坐标
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回矩形组件
@@ -200,6 +217,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置宽度
+     *
      * @param width 宽度
      * @return 返回矩形组件
      */
@@ -211,6 +229,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置高度
+     *
      * @param height 高度
      * @return 返回矩形组件
      */
@@ -222,12 +241,13 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回矩形组件
      */
     @Override
     public XEasyPdfRect setContentMode(ContentMode mode) {
-        if (mode!=null) {
+        if (mode != null) {
             this.param.setContentMode(mode);
         }
         return this;
@@ -235,6 +255,7 @@ public class XEasyPdfRect implements XEasyPdfComponent {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */
@@ -268,14 +289,14 @@ public class XEasyPdfRect implements XEasyPdfComponent {
             contentStream.addRect(
                     this.param.getBeginX() + this.param.getBorderWidth(),
                     this.param.getBeginY() + this.param.getBorderWidth(),
-                    this.param.getWidth() - this.param.getBorderWidth()*2,
-                    this.param.getHeight() - this.param.getBorderWidth()*2
+                    this.param.getWidth() - this.param.getBorderWidth() * 2,
+                    this.param.getHeight() - this.param.getBorderWidth() * 2
             );
             // 设置矩形颜色（背景颜色）
             contentStream.setNonStrokingColor(this.param.getBackgroundColor());
             // 填充矩形（背景矩形）
             contentStream.fill();
-        }else {
+        } else {
             // 绘制矩形（背景矩形）
             contentStream.addRect(
                     this.param.getBeginX(),
@@ -300,9 +321,9 @@ public class XEasyPdfRect implements XEasyPdfComponent {
                 page.setPageX(null);
                 // 重置页面Y轴起始坐标
                 page.setPageY(this.param.getBeginY());
-            }else {
+            } else {
                 // 重置页面X轴起始坐标
-                page.setPageX(this.param.getBeginX()+this.param.getWidth());
+                page.setPageX(this.param.getBeginX() + this.param.getWidth());
             }
         }
     }

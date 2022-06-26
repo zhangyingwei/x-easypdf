@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * pdf条形码参数
+ *
  * @author xsx
  * @date 2021/12/20
  * @since 1.8
@@ -138,7 +139,8 @@ class XEasyPdfBarCodeParam implements Serializable {
 
     /**
      * 设置编码设置
-     * @param type 编码设置类型
+     *
+     * @param type  编码设置类型
      * @param value 编码设置内容
      */
     void setEncodeHints(EncodeHintType type, Object value) {
@@ -147,8 +149,9 @@ class XEasyPdfBarCodeParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 获取页面尺寸
@@ -160,22 +163,22 @@ class XEasyPdfBarCodeParam implements Serializable {
         // 初始化Y轴坐标
         this.initBeginY(document, page, rectangle);
         // 如果内容模式未初始化，则初始化为页面内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = page.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
         // 如果最大宽度未初始化，则初始化为页面宽度
-        if (this.maxWidth==null) {
+        if (this.maxWidth == null) {
             // 初始化最大宽度 = 页面宽度
             this.maxWidth = rectangle.getWidth();
         }
         // 如果右边距不为空，则初始化页面X轴起始坐标 += 最大宽度 - 自定义宽度 - 右边距
-        if (this.marginRight!=null) {
+        if (this.marginRight != null) {
             // 页面X轴起始坐标 += 最大宽度 - 自定义宽度 - 右边距
             this.beginX += this.maxWidth - this.imageWidth - this.marginRight;
         }
@@ -187,7 +190,7 @@ class XEasyPdfBarCodeParam implements Serializable {
         // 如果显示文字，则重置高度
         if (this.isShowWords) {
             // 如果文字为空，则重置为条形码内容
-            if (this.words==null||this.words.trim().length()==0) {
+            if (this.words == null || this.words.trim().length() == 0) {
                 // 重置为条形码内容
                 this.words = this.content;
             }
@@ -198,10 +201,11 @@ class XEasyPdfBarCodeParam implements Serializable {
 
     /**
      * 是否旋转
+     *
      * @return 返回布尔值，是为true，否为false
      */
     boolean isRotate() {
-        return this.radians!=null&&this.radians%360!=0;
+        return this.radians != null && this.radians % 360 != 0;
     }
 
     /**
@@ -223,11 +227,11 @@ class XEasyPdfBarCodeParam implements Serializable {
         // 获取纠错级别
         Object errorLevel = this.encodeHints.get(EncodeHintType.ERROR_CORRECTION);
         // 如果纠错级别不为空，则检查条形码格式化类型并重置
-        if (errorLevel!=null) {
+        if (errorLevel != null) {
             // 类型转换
             ErrorCorrectionLevel level = (ErrorCorrectionLevel) errorLevel;
             // 如果条形码格式化类型为阿兹特克码或PDF-417码，则重置纠错级别
-            if(BarcodeFormat.AZTEC==this.codeType.codeFormat||BarcodeFormat.PDF_417==this.codeType.codeFormat){
+            if (BarcodeFormat.AZTEC == this.codeType.codeFormat || BarcodeFormat.PDF_417 == this.codeType.codeFormat) {
                 // 重置纠错级别
                 this.encodeHints.put(EncodeHintType.ERROR_CORRECTION, level.getBits());
             }
@@ -235,11 +239,10 @@ class XEasyPdfBarCodeParam implements Serializable {
         // 否则重置纠错级别
         else {
             // 如果条形码格式化类型为阿兹特克码或PDF-417码，则重置纠错级别
-            if(BarcodeFormat.AZTEC==this.codeType.codeFormat||BarcodeFormat.PDF_417==this.codeType.codeFormat){
+            if (BarcodeFormat.AZTEC == this.codeType.codeFormat || BarcodeFormat.PDF_417 == this.codeType.codeFormat) {
                 // 重置纠错级别
                 this.encodeHints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M.getBits());
-            }
-            else {
+            } else {
                 // 重置纠错级别
                 this.encodeHints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
             }
@@ -248,24 +251,25 @@ class XEasyPdfBarCodeParam implements Serializable {
 
     /**
      * 初始化Y轴坐标
-     * @param document pdf文档
-     * @param page pdf页面
+     *
+     * @param document  pdf文档
+     * @param page      pdf页面
      * @param rectangle 页面尺寸
      */
     private void initBeginY(XEasyPdfDocument document, XEasyPdfPage page, PDRectangle rectangle) {
         // 如果页面Y轴起始坐标为空，则初始化
-        if (this.beginY==null) {
+        if (this.beginY == null) {
             // 定义页脚高度
             float footerHeight = 0F;
             // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-            if (page.isAllowFooter()&&page.getFooter()!=null) {
+            if (page.isAllowFooter() && page.getFooter() != null) {
                 // 初始化页脚高度
                 footerHeight = page.getFooter().getHeight(document, page);
             }
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
-            if (page.getPageY()!=null) {
+            if (page.getPageY() != null) {
                 // 定义Y轴坐标
-                float initY = page.getPageY()!=null?page.getPageY():rectangle.getHeight();
+                float initY = page.getPageY() != null ? page.getPageY() : rectangle.getHeight();
                 // 页面Y轴起始坐标 = pdfBox最新页面当前Y轴坐标 - 上边距 - 自定义高度
                 this.beginY = initY - this.marginTop - this.imageHeight;
                 // 如果页面Y轴起始坐标-页脚高度小于等于下边距，则分页
@@ -289,29 +293,30 @@ class XEasyPdfBarCodeParam implements Serializable {
      */
     private void initWidthAndHeight() {
         // 如果宽度未初始化，则初始化宽度
-        if (this.imageWidth==null) {
+        if (this.imageWidth == null) {
             // 初始化宽度
-            this.imageWidth = this.codeType.isQrType()?100:180;
+            this.imageWidth = this.codeType.isQrType() ? 100 : 180;
         }
         // 如果高度未初始化，则初始化高度
-        if (this.imageHeight==null) {
+        if (this.imageHeight == null) {
             // 初始化高度
-            this.imageHeight = this.codeType.isQrType()?this.imageWidth :60;
+            this.imageHeight = this.codeType.isQrType() ? this.imageWidth : 60;
         }
         // 如果最大宽度未初始化或小于宽度，则初始化最大宽度
-        if (this.imageMaxWidth==null||this.imageMaxWidth<this.imageWidth) {
+        if (this.imageMaxWidth == null || this.imageMaxWidth < this.imageWidth) {
             // 初始化最大宽度为图像宽度
-            this.imageMaxWidth = this.imageWidth*3;
+            this.imageMaxWidth = this.imageWidth * 3;
         }
         // 如果最大高度未初始化或小于高度，则初始化最大高度
-        if (this.imageMaxHeight==null||this.imageMaxHeight<this.imageHeight) {
+        if (this.imageMaxHeight == null || this.imageMaxHeight < this.imageHeight) {
             // 初始化最大高度为图像高度
-            this.imageMaxHeight = this.imageHeight*3;
+            this.imageMaxHeight = this.imageHeight * 3;
         }
     }
 
     /**
      * 重置页面Y轴起始坐标
+     *
      * @param height 给定高度
      */
     void resetBeginY(int height) {

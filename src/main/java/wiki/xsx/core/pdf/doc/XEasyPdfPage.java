@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * pdf页面
+ *
  * @author xsx
  * @date 2020/3/9
  * @since 1.8
@@ -44,11 +45,12 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param page pdfBox页面
      */
     XEasyPdfPage(PDPage page) {
         // 如果pdfbox页面不为空，则添加页面
-        if (page!=null) {
+        if (page != null) {
             // 重置最新页面
             this.param.setLastPage(page);
             // 重置页面尺寸（原有尺寸）
@@ -62,11 +64,12 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param pageSize pdf页面尺寸
      */
     public XEasyPdfPage(XEasyPdfPageRectangle pageSize) {
         // 如果pdfBox页面尺寸不为空，则设置pdfBox页面尺寸
-        if (pageSize!=null) {
+        if (pageSize != null) {
             // 重置最新页面
             this.param.setLastPage(new PDPage(pageSize.getSize()));
             // 重置页面尺寸（原有尺寸）
@@ -83,6 +86,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置旋转角度
+     *
      * @param rotation 旋转角度
      * @return 返回pdf页面
      */
@@ -93,6 +97,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置字体路径
+     *
      * @param fontPath 字体路径
      * @return 返回pdf页面
      */
@@ -103,6 +108,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页面字体路径
+     *
      * @return 返回页面字体路径
      */
     public String getFontPath() {
@@ -111,6 +117,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页面字体
+     *
      * @return 返回pdfBox字体
      */
     public PDFont getFont() {
@@ -119,11 +126,12 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置默认字体样式
+     *
      * @param style 默认字体样式
      * @return 返回pdf页面
      */
     public XEasyPdfPage setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        if (style!=null) {
+        if (style != null) {
             this.param.setFontPath(style.getPath());
         }
         return this;
@@ -131,6 +139,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置页面X轴坐标
+     *
      * @param pageX X轴坐标
      * @return 返回pdf页面
      */
@@ -141,6 +150,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页面X轴坐标
+     *
      * @return 返回页面X轴坐标
      */
     public Float getPageX() {
@@ -149,6 +159,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置页面X轴坐标
+     *
      * @param pageY Y轴坐标
      * @return 返回pdf页面
      */
@@ -159,6 +170,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页面Y轴坐标
+     *
      * @return 返回页面Y轴坐标
      */
     public Float getPageY() {
@@ -167,11 +179,12 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置内容模式
+     *
      * @param contentMode 内容模式
      * @return 返回返回pdf页面
      */
     public XEasyPdfPage setContentMode(XEasyPdfComponent.ContentMode contentMode) {
-        if (contentMode!=null) {
+        if (contentMode != null) {
             this.param.setContentMode(contentMode);
         }
         return this;
@@ -179,6 +192,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取内容模式
+     *
      * @return 返回内容模式
      */
     public XEasyPdfComponent.ContentMode getContentMode() {
@@ -187,6 +201,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置页面背景图片
+     *
      * @param backgroundImage 背景图片
      * @return 返回pdf页面
      */
@@ -197,6 +212,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页面背景图片
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfImage getBackgroundImage() {
@@ -205,6 +221,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置页面背景色
+     *
      * @param backgroundColor 背景色
      * @return 返回pdf页面
      */
@@ -215,6 +232,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页面背景色
+     *
      * @return 返回页面背景色
      */
     public Color getBackgroundColor() {
@@ -223,6 +241,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置水印
+     *
      * @param watermark pdf水印
      * @return 返回pdf页面
      */
@@ -233,6 +252,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取水印
+     *
      * @return 返回pdf水印
      */
     public XEasyPdfWatermark getWatermark() {
@@ -241,6 +261,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置页眉
+     *
      * @param header pdf页眉
      * @return 返回pdf页面
      */
@@ -251,6 +272,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页眉
+     *
      * @return 返回pdf页眉
      */
     public XEasyPdfHeader getHeader() {
@@ -259,6 +281,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置页脚
+     *
      * @param footer pdf页脚
      * @return 返回pdf页面
      */
@@ -269,6 +292,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取页脚
+     *
      * @return 返回pdf页脚
      */
     public XEasyPdfFooter getFooter() {
@@ -277,6 +301,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取每毫米像素点
+     *
      * @return 返回每毫米像素点
      */
     public float getUnit() {
@@ -285,6 +310,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面宽度
+     *
      * @return 返回当前页面宽度
      */
     public float getWidth() {
@@ -293,6 +319,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面高度
+     *
      * @return 返回当前页面高度
      */
     public float getHeight() {
@@ -301,6 +328,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面尺寸
+     *
      * @return 返回当前页面尺寸
      */
     public XEasyPdfPageRectangle getRectangle() {
@@ -309,6 +337,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面尺寸X轴左坐标
+     *
      * @return 返回当前页面尺寸X轴左坐标
      */
     public float getRectangleLeftX() {
@@ -317,6 +346,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面尺寸X轴右坐标
+     *
      * @return 返回当前页面尺寸X轴右坐标
      */
     public float getRectangleRightX() {
@@ -325,6 +355,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面尺寸Y轴下坐标
+     *
      * @return 返回当前页面尺寸Y轴下坐标
      */
     public float getRectangleBottomY() {
@@ -333,6 +364,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面尺寸Y轴上坐标
+     *
      * @return 返回当前页面尺寸Y轴上坐标
      */
     public float getRectangleTopY() {
@@ -341,6 +373,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取原有页面宽度
+     *
      * @return 返回原有页面宽度
      */
     public float getOriginalWidth() {
@@ -349,6 +382,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取原有页面高度
+     *
      * @return 返回原有页面高度
      */
     public float getOriginalHeight() {
@@ -357,6 +391,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取原有页面尺寸
+     *
      * @return 返回原有页面尺寸
      */
     public XEasyPdfPageRectangle getOriginalRectangle() {
@@ -365,6 +400,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取原有页面尺寸X轴左坐标
+     *
      * @return 返回当前页面尺寸X轴左坐标
      */
     public float getOriginalRectangleLeftX() {
@@ -373,6 +409,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取原有页面尺寸X轴右坐标
+     *
      * @return 返回当前页面尺寸X轴右坐标
      */
     public float getOriginalRectangleRightX() {
@@ -381,6 +418,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取原有页面尺寸Y轴下坐标
+     *
      * @return 返回当前页面尺寸Y轴下坐标
      */
     public float getOriginalRectangleBottomY() {
@@ -389,6 +427,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取原有页面尺寸Y轴上坐标
+     *
      * @return 返回当前页面尺寸Y轴上坐标
      */
     public float getOriginalRectangleTopY() {
@@ -397,6 +436,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取pdfBox最新页面
+     *
      * @return 返回pdfBox最新页面
      */
     public PDPage getLastPage() {
@@ -405,6 +445,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取当前页面索引
+     *
      * @return 返回当前页面索引
      */
     public int getCurrentIndex(XEasyPdfDocument document) {
@@ -413,6 +454,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取包含的pdfBox页面列表
+     *
      * @return 返回包含的pdfBox页面列表
      */
     public List<PDPage> getPageList() {
@@ -421,6 +463,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 获取新增的pdfBox页面列表
+     *
      * @return 返回新增的pdfBox页面列表
      */
     public List<PDPage> getNewPageList() {
@@ -429,6 +472,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 关闭背景色
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableBackgroundColor() {
@@ -438,6 +482,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 关闭背景图片
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableBackgroundImage() {
@@ -447,6 +492,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 关闭水印
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableWatermark() {
@@ -456,6 +502,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 关闭页眉
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableHeader() {
@@ -465,6 +512,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 关闭页脚
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableFooter() {
@@ -474,6 +522,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 关闭旋转固有页面
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage disableRotateInherentPage() {
@@ -483,6 +532,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 开启页面自动重置定位
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage enablePosition() {
@@ -492,6 +542,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 关闭页面自动重置定位
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage disablePosition() {
@@ -501,6 +552,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 开启重置上下文
+     *
      * @return 返回pdf页面
      */
     public XEasyPdfPage enableResetContext() {
@@ -510,6 +562,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否允许重置定位
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowResetPosition() {
@@ -518,6 +571,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否允许添加页眉
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowHeader() {
@@ -526,6 +580,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否允许添加页脚
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowFooter() {
@@ -534,6 +589,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否允许添加水印
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowWatermark() {
@@ -542,6 +598,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否允许添加背景图片
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowBackgroundImage() {
@@ -550,6 +607,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否允许添加背景色
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowBackgroundColor() {
@@ -558,6 +616,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否允许旋转固有页面
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isAllowRotateInherentPage() {
@@ -566,6 +625,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 是否重置上下文
+     *
      * @return 返回布尔值，true为是，false为否
      */
     public boolean isResetContext() {
@@ -574,15 +634,16 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 添加新页面
+     *
      * @param pageSize 页面尺寸
      * @param document pdf文档
      * @return 返回pdf页面
      */
     public XEasyPdfPage addNewPage(XEasyPdfDocument document, PDRectangle pageSize) {
         // 定义pdfBox页面
-        PDPage page = pageSize==null?new PDPage(this.param.getOriginalPageSize().getSize()):new PDPage(pageSize);
+        PDPage page = pageSize == null ? new PDPage(this.param.getOriginalPageSize().getSize()) : new PDPage(pageSize);
         // 如果旋转角度不为空，则设置旋转角度
-        if (this.param.getRotation()!=null) {
+        if (this.param.getRotation() != null) {
             // 设置旋转角度
             page.setRotation(this.param.getRotation());
         }
@@ -605,12 +666,13 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 添加pdf组件
+     *
      * @param components pdf组件
      * @return 返回pdf页面
      */
-    public XEasyPdfPage addComponent(XEasyPdfComponent ...components) {
+    public XEasyPdfPage addComponent(XEasyPdfComponent... components) {
         // 如果组件不为空，则添加组件
-        if (components!=null) {
+        if (components != null) {
             // 添加组件
             Collections.addAll(this.param.getComponentList(), components);
         }
@@ -619,12 +681,13 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 添加pdf组件
+     *
      * @param components pdf组件列表
      * @return 返回pdf页面
      */
     public XEasyPdfPage addComponent(List<XEasyPdfComponent> components) {
         // 如果组件不为空，则添加组件
-        if (components!=null&&!components.isEmpty()) {
+        if (components != null && !components.isEmpty()) {
             // 添加组件
             this.param.getComponentList().addAll(components);
         }
@@ -633,12 +696,13 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 修改页面尺寸
+     *
      * @param pageSize pdf页面尺寸
      * @return 返回pdf页面
      */
     public XEasyPdfPage modifyPageSize(XEasyPdfPageRectangle pageSize) {
         // 如果页面尺寸不为空，则修改页面尺寸
-        if (pageSize!=null) {
+        if (pageSize != null) {
             // 设置当前页面尺寸
             this.param.setCurrentPageSize(pageSize);
             // 设置原有页面尺寸
@@ -649,6 +713,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 构建pdf页面
+     *
      * @param document pdf文档
      */
     void build(XEasyPdfDocument document) {
@@ -657,6 +722,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 构建pdf页面
+     *
      * @param document pdf文档
      * @param pageSize 页面尺寸
      */
@@ -668,11 +734,11 @@ public class XEasyPdfPage implements Serializable {
             // 添加新页面
             this.addNewPage(document, pageSize.getSize());
             // 如果原有pdfbox页面列表不为空，则设置页面尺寸
-        }else {
+        } else {
             // 获取页面尺寸
             PDRectangle modifyPageSize = this.param.getModifyPageSize();
             // 如果页面尺寸不为空，则进行设置
-            if (modifyPageSize!=null) {
+            if (modifyPageSize != null) {
                 // 获取原有pdfbox页面列表
                 List<PDPage> pageList = this.param.getPageList();
                 // 遍历pdfbox页面列表
@@ -689,7 +755,7 @@ public class XEasyPdfPage implements Serializable {
             // 遍历组件列表
             for (XEasyPdfComponent component : componentList) {
                 // 组件不为空，则进行绘制
-                if (component!=null) {
+                if (component != null) {
                     // 组件绘制
                     component.draw(document, this);
                 }
@@ -701,14 +767,15 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 修改页面尺寸
-     * @param page pdfbox页面
+     *
+     * @param page     pdfbox页面
      * @param pageSize pdfbox页面尺寸
      */
     private void modifyPageSize(PDPage page, PDRectangle pageSize) {
         // 设置页面尺寸
         page.setCropBox(pageSize);
         // 如果允许旋转固有页面且旋转角度不为空，则设置旋转角度
-        if (this.param.getAllowRotateInherentPage()&&this.param.getRotation()!=null) {
+        if (this.param.getAllowRotateInherentPage() && this.param.getRotation() != null) {
             // 设置旋转角度
             page.setRotation(this.param.getRotation());
         }
@@ -716,6 +783,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 设置最新页面背景颜色
+     *
      * @param document pdf文档
      */
     @SneakyThrows
@@ -723,7 +791,7 @@ public class XEasyPdfPage implements Serializable {
         // 如果当前pdf页面允许添加页面背景色，则进行页面背景色绘制
         if (this.param.getAllowBackgroundColor()) {
             // 如果页面背景色未初始化，则设置全局页面背景色
-            if (this.param.getBackgroundColor()==null) {
+            if (this.param.getBackgroundColor() == null) {
                 // 设置全局页面背景色
                 this.param.setBackgroundColor(document.getGlobalBackgroundColor());
             }
@@ -732,7 +800,7 @@ public class XEasyPdfPage implements Serializable {
                 // 获取pdfBox最新页面
                 PDPage lastPage = this.getLastPage();
                 // 如果最新页面不为空，则进行背景颜色设置
-                if (lastPage!=null) {
+                if (lastPage != null) {
                     // 获取页面尺寸
                     PDRectangle rectangle = lastPage.getMediaBox();
                     // 新建内容流
@@ -765,18 +833,19 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 绘制背景图片
+     *
      * @param document pdf文档
      */
     private void drawBackgroundImage(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页面背景图片，则进行页面背景图片绘制
         if (this.param.getAllowBackgroundImage()) {
             // 如果页面背景图片未初始化，则设置全局页面背景图片
-            if (this.param.getBackgroundImage()==null) {
+            if (this.param.getBackgroundImage() == null) {
                 // 设置全局页面背景图片
                 this.param.setBackgroundImage(document.getGlobalBackgroundImage());
             }
             // 如果页面背景图片不为空，则进行绘制
-            if (this.param.getBackgroundImage()!=null) {
+            if (this.param.getBackgroundImage() != null) {
                 // 获取页面X轴坐标
                 Float pageX = this.param.getPageX();
                 // 获取页面Y轴坐标
@@ -797,6 +866,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 绘制页眉与页脚
+     *
      * @param document pdf文档
      */
     private void drawHeaderAndFooter(XEasyPdfDocument document) {
@@ -808,18 +878,19 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 绘制页眉
+     *
      * @param document pdf文档
      */
     private void drawHeader(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页眉，则进行页眉绘制
         if (this.param.getAllowHeader()) {
             // 如果页眉未初始化，则设置全局页眉
-            if (this.param.getHeader()==null) {
+            if (this.param.getHeader() == null) {
                 // 设置全局页眉
                 this.param.setHeader(document.getGlobalHeader());
             }
             // 如果页眉不为空，则进行绘制
-            if (this.param.getHeader()!=null) {
+            if (this.param.getHeader() != null) {
                 // 绘制页眉
                 this.param.getHeader().draw(document, this);
             }
@@ -828,18 +899,19 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 绘制页脚
+     *
      * @param document pdf文档
      */
     private void drawFooter(XEasyPdfDocument document) {
         // 如果当前pdf页面允许添加页脚，则进行页脚绘制
         if (this.param.getAllowFooter()) {
             // 如果页脚未初始化，则设置全局页脚
-            if (this.param.getFooter()==null) {
+            if (this.param.getFooter() == null) {
                 // 设置全局页脚
                 this.param.setFooter(document.getGlobalFooter());
             }
             // 如果页脚不为空，则进行绘制
-            if (this.param.getFooter()!=null) {
+            if (this.param.getFooter() != null) {
                 // 绘制页脚
                 this.param.getFooter().draw(document, this);
             }
@@ -848,6 +920,7 @@ public class XEasyPdfPage implements Serializable {
 
     /**
      * 绘制水印
+     *
      * @param document pdf文档
      */
     private void drawWatermark(XEasyPdfDocument document) {
@@ -856,12 +929,12 @@ public class XEasyPdfPage implements Serializable {
             // 获取页面水印
             XEasyPdfWatermark watermark = this.param.getWatermark();
             // 如果页面水印未初始化，则重置为全局页面水印
-            if (watermark==null) {
+            if (watermark == null) {
                 // 重置为全局页面水印
                 watermark = document.getGlobalWatermark();
             }
             // 如果页面水印不为空，则进行绘制
-            if (watermark!=null) {
+            if (watermark != null) {
                 // 绘制水印
                 watermark.draw(document, this);
             }
@@ -896,6 +969,7 @@ public class XEasyPdfPage implements Serializable {
 
         /**
          * 有参构造
+         *
          * @param rotation 旋转角度
          */
         Rotation(int rotation) {

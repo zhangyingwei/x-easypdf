@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * pdf水平布局
+ *
  * @author xsx
  * @date 2022/3/17
  * @since 1.8
@@ -44,6 +45,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 设置位置
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回水平布局组件
@@ -56,6 +58,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 设置宽度
+     *
      * @param width 宽度
      * @return 返回水平布局组件
      */
@@ -67,6 +70,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 设置高度
+     *
      * @param height 高度
      * @return 返回水平布局组件
      */
@@ -78,6 +82,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回水平布局组件
      */
@@ -89,6 +94,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 设置左边距
+     *
      * @param marginLeft 左边距
      * @return 返回水平布局组件
      */
@@ -99,6 +105,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 设置上边距
+     *
      * @param marginTop 上边距
      * @return 返回水平布局组件
      */
@@ -109,6 +116,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 开启边框
+     *
      * @return 返回水平布局组件
      */
     @Override
@@ -119,6 +127,7 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 开启重置上下文
+     *
      * @return 返回水平布局组件
      */
     @Override
@@ -129,12 +138,13 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 添加组件
+     *
      * @param components 组件列表
      * @return 返回水平布局组件
      */
     @Override
-    public XEasyPdfHorizontalLayout addLayoutComponent(XEasyPdfLayoutComponent ...components) {
-        if (components!=null) {
+    public XEasyPdfHorizontalLayout addLayoutComponent(XEasyPdfLayoutComponent... components) {
+        if (components != null) {
             Collections.addAll(this.param.getComponents(), components);
         }
         return this;
@@ -142,12 +152,13 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 添加组件
+     *
      * @param components 组件列表
      * @return 返回水平布局组件
      */
     @Override
     public XEasyPdfHorizontalLayout addLayoutComponent(List<XEasyPdfLayoutComponent> components) {
-        if (components!=null) {
+        if (components != null) {
             this.param.getComponents().addAll(components);
         }
         return this;
@@ -155,8 +166,9 @@ public class XEasyPdfHorizontalLayout implements XEasyPdfLayout {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     @Override
     public void draw(XEasyPdfDocument document, XEasyPdfPage page) {

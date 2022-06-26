@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * pdf页眉组件参数
+ *
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -92,12 +93,13 @@ class XEasyPdfHeaderParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果重置上下文未初始化，则初始化为文档重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为文档重置上下文
             this.isResetContext = page.isResetContext();
         }
@@ -108,14 +110,14 @@ class XEasyPdfHeaderParam implements Serializable {
         // 获取Y轴起始坐标
         float beginY = rectangle.getHeight() - this.marginTop;
         // 如果图片不为空，则初始化图片坐标
-        if (this.image!=null&&this.imageBeginX==null&&this.imageBeginY==null) {
+        if (this.image != null && this.imageBeginX == null && this.imageBeginY == null) {
             // 初始化图片X轴起始坐标
             this.imageBeginX = this.marginLeft;
             // 初始化图片Y轴起始坐标
             this.imageBeginY = beginY;
         }
         // 如果文本不为空，则初始化文本坐标
-        if (this.text!=null&&this.textBeginX==null&&this.textBeginY==null) {
+        if (this.text != null && this.textBeginX == null && this.textBeginY == null) {
             // 初始化文本X轴起始坐标
             this.textBeginX = this.marginLeft;
             // 初始化文本Y轴起始坐标
@@ -125,27 +127,28 @@ class XEasyPdfHeaderParam implements Serializable {
 
     /**
      * 初始化高度
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     private void initHeight(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果高度未初始化，则进行初始化
-        if (this.height==null) {
+        if (this.height == null) {
             // 定义文本高度
             float textHeight = 0F;
             // 如果文本不为空，则获取文本高度
-            if (this.text!=null) {
+            if (this.text != null) {
                 // 获取文本高度
                 textHeight = this.text.getHeight(document, page);
             }
             // 定义图片高度
             float imageHeight = 0F;
             // 如果图片不为空，则获取图片高度
-            if (this.image!=null) {
+            if (this.image != null) {
                 // 关闭图片自适应
                 this.image.disableSelfAdaption();
                 // 如果自定义图片宽度为空，则设置为页面宽度
-                if (this.image.getWidth(document, page)==null) {
+                if (this.image.getWidth(document, page) == null) {
                     // 设置为页面宽度
                     this.image.setWidth(page.getLastPage().getMediaBox().getWidth());
                 }

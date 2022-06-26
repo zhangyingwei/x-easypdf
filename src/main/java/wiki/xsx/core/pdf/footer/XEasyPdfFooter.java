@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 /**
  * pdf页脚组件接口
+ *
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -28,12 +29,14 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回页脚组件
      */
     XEasyPdfFooter enableResetContext();
 
     /**
      * 设置边距（左右下）
+     *
      * @param margin 边距
      * @return 返回页脚组件
      */
@@ -41,6 +44,7 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回页脚组件
      */
@@ -48,6 +52,7 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 设置右边距
+     *
      * @param margin 边距
      * @return 返回页脚组件
      */
@@ -55,6 +60,7 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 设置下边距
+     *
      * @param margin 边距
      * @return 返回页脚组件
      */
@@ -62,6 +68,7 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 添加自定义组件
+     *
      * @param component pdf组件
      * @return 返回页脚组件
      */
@@ -69,6 +76,7 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 获取页脚高度
+     *
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回页脚高度
@@ -77,24 +85,28 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 获取总页码占位符
+     *
      * @return 返回总页码占位符
      */
     String getTotalPagePlaceholder();
 
     /**
      * 获取当前页码占位符
+     *
      * @return 返回当前页码占位符
      */
     String getCurrentPagePlaceholder();
 
     /**
      * 获取文本字体路径
+     *
      * @return 返回文本字体路径
      */
     String getTextFontPath();
 
     /**
      * 检查组件
+     *
      * @param component 组件
      * @return 返回布尔值，true为是，false为否
      */
@@ -102,6 +114,7 @@ public interface XEasyPdfFooter extends Serializable {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */

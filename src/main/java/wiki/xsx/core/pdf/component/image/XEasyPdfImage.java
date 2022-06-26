@@ -16,6 +16,7 @@ import java.io.InputStream;
 
 /**
  * pdf图片组件
+ *
  * @author xsx
  * @date 2020/3/30
  * @since 1.8
@@ -43,6 +44,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param imageFile 待添加图片
      */
     @SneakyThrows
@@ -52,8 +54,9 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型（扩展名）
+     * @param imageType   待添加图片类型（扩展名）
      */
     @SneakyThrows
     public XEasyPdfImage(InputStream imageStream, XEasyPdfImageType imageType) {
@@ -62,7 +65,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 有参构造
-     * @param image 待添加图片
+     *
+     * @param image     待添加图片
      * @param imageType 待添加图片类型（扩展名）
      */
     @SneakyThrows
@@ -72,9 +76,10 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param imageFile 待添加图片
-     * @param width 图片宽度
-     * @param height 图片高度
+     * @param width     图片宽度
+     * @param height    图片高度
      */
     @SneakyThrows
     public XEasyPdfImage(File imageFile, int width, int height) {
@@ -87,10 +92,11 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型（扩展名）
-     * @param width 图片宽度
-     * @param height 图片高度
+     * @param imageType   待添加图片类型（扩展名）
+     * @param width       图片宽度
+     * @param height      图片高度
      */
     @SneakyThrows
     public XEasyPdfImage(InputStream imageStream, XEasyPdfImageType imageType, int width, int height) {
@@ -103,10 +109,11 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 有参构造
-     * @param image 待添加图片
+     *
+     * @param image     待添加图片
      * @param imageType 待添加图片类型（扩展名）
-     * @param width 图片宽度
-     * @param height 图片高度
+     * @param width     图片宽度
+     * @param height    图片高度
      */
     @SneakyThrows
     public XEasyPdfImage(BufferedImage image, XEasyPdfImageType imageType, int width, int height) {
@@ -119,6 +126,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置图片
+     *
      * @param imageFile 待添加图片
      * @return 返回图片组件
      */
@@ -131,7 +139,8 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置图片
-     * @param image 待添加图片
+     *
+     * @param image     待添加图片
      * @param imageType 待添加图片类型
      * @return 返回图片组件
      */
@@ -143,8 +152,9 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置图片
+     *
      * @param imageStream 待添加图片数据流
-     * @param imageType 待添加图片类型
+     * @param imageType   待添加图片类型
      * @return 返回图片组件
      */
     public XEasyPdfImage setImage(InputStream imageStream, XEasyPdfImageType imageType) {
@@ -155,6 +165,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 关闭图片大小自适应
+     *
      * @return 返回图片组件
      */
     public XEasyPdfImage disableSelfAdaption() {
@@ -164,6 +175,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 开启自身样式
+     *
      * @return 返回图片组件
      */
     public XEasyPdfImage enableSelfStyle() {
@@ -173,6 +185,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 开启居中样式（水平居中，垂直居中）
+     *
      * @return 返回图片组件
      */
     public XEasyPdfImage enableCenterStyle() {
@@ -182,6 +195,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 开启子组件
+     *
      * @return 返回图片组件
      */
     public XEasyPdfImage enableChildComponent() {
@@ -191,6 +205,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回图片组件
      */
     @Override
@@ -201,6 +216,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置是否需要初始化
+     *
      * @param needInitialize 是否需要初始化
      * @return 返回图片组件
      */
@@ -211,13 +227,14 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置旋转弧度
+     *
      * @param radians 图片弧度
      * @return 返回图片组件
      */
     public XEasyPdfImage setRadians(double radians) {
-        radians = radians%360;
-        if (radians!=0) {
-            if (radians<0) {
+        radians = radians % 360;
+        if (radians != 0) {
+            if (radians < 0) {
                 radians += 360;
             }
             this.param.setRadians(radians);
@@ -227,6 +244,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置最大宽度
+     *
      * @param maxWidth 最大宽度
      * @return 返回图片组件
      */
@@ -237,6 +255,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置最大高度
+     *
      * @param maxHeight 最大高度
      * @return 返回图片组件
      */
@@ -247,6 +266,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置边距（上下左右）
+     *
      * @param margin 边距
      * @return 返回图片组件
      */
@@ -257,6 +277,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回图片组件
      */
@@ -267,6 +288,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置右边距
+     *
      * @param margin 边距
      * @return 返回图片组件
      */
@@ -277,6 +299,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置上边距
+     *
      * @param margin 边距
      * @return 返回图片组件
      */
@@ -287,6 +310,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置下边距
+     *
      * @param margin 边距
      * @return 返回图片组件
      */
@@ -297,14 +321,15 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置水平样式（居左、居中、居右）
+     *
      * @param style 样式
      * @return 返回图片组件
      */
     public XEasyPdfImage setHorizontalStyle(XEasyPdfPositionStyle style) {
-        if (style!=null) {
-            if (style==XEasyPdfPositionStyle.LEFT||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.RIGHT) {
+        if (style != null) {
+            if (style == XEasyPdfPositionStyle.LEFT || style == XEasyPdfPositionStyle.CENTER || style == XEasyPdfPositionStyle.RIGHT) {
                 this.param.setHorizontalStyle(style);
-            }else {
+            } else {
                 throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
             }
         }
@@ -313,14 +338,15 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置垂直样式（居上、居中、居下）
+     *
      * @param style 样式
      * @return 返回图片组件
      */
     public XEasyPdfImage setVerticalStyle(XEasyPdfPositionStyle style) {
-        if (style!=null) {
-            if (style==XEasyPdfPositionStyle.TOP||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.BOTTOM) {
+        if (style != null) {
+            if (style == XEasyPdfPositionStyle.TOP || style == XEasyPdfPositionStyle.CENTER || style == XEasyPdfPositionStyle.BOTTOM) {
                 this.param.setVerticalStyle(style);
-            }else {
+            } else {
                 throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
             }
         }
@@ -329,6 +355,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置定位
+     *
      * @param beginX 当前页面X轴坐标
      * @param beginY 当前页面Y轴坐标
      * @return 返回图片组件
@@ -341,6 +368,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置宽度
+     *
      * @param width 宽度
      * @return 返回图片组件
      */
@@ -352,6 +380,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置高度
+     *
      * @param height 高度
      * @return 返回图片组件
      */
@@ -363,12 +392,13 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回图片组件
      */
     @Override
     public XEasyPdfImage setContentMode(ContentMode mode) {
-        if (mode!=null) {
+        if (mode != null) {
             this.param.setContentMode(mode);
         }
         return this;
@@ -376,6 +406,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */
@@ -406,7 +437,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
         // 设置X轴Y轴坐标为初始值
         this.param.setBeginX(0F).setBeginY(null);
         // 如果待添加图片不为空，则释放图片资源
-        if (this.param.getImage()!=null) {
+        if (this.param.getImage() != null) {
             // 设置待添加图片为空
             this.param.setImage(null);
         }
@@ -414,6 +445,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取内容模式
+     *
      * @return 返回内容模式
      */
     public XEasyPdfComponent.ContentMode getContentMode() {
@@ -422,12 +454,13 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取图片宽度
+     *
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回图片宽度
      */
     public Integer getWidth(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (this.param.getWidth()!=null) {
+        if (this.param.getWidth() != null) {
             return this.param.getWidth();
         }
         this.param.init(document, page, this);
@@ -436,12 +469,13 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取图片高度
+     *
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回图片高度
      */
     public Integer getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (this.param.getHeight()!=null) {
+        if (this.param.getHeight() != null) {
             return this.param.getHeight();
         }
         this.param.init(document, page, this);
@@ -450,6 +484,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取上边距
+     *
      * @return 返回上边距
      */
     public float getMarginTop() {
@@ -458,6 +493,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取下边距
+     *
      * @return 返回下边距
      */
     public float getMarginBottom() {
@@ -466,6 +502,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取左边距
+     *
      * @return 返回左边距
      */
     public float getMarginLeft() {
@@ -474,6 +511,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取右边距
+     *
      * @return 返回右边距
      */
     public float getMarginRight() {
@@ -482,6 +520,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取水平样式
+     *
      * @return 返回图片样式
      */
     public XEasyPdfPositionStyle getHorizontalStyle() {
@@ -490,6 +529,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 获取垂直样式
+     *
      * @return 返回图片样式
      */
     public XEasyPdfPositionStyle getVerticalStyle() {
@@ -498,6 +538,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 是否使用自身样式
+     *
      * @return 返回布尔值，是为true，否为false
      */
     public boolean isUseSelfStyle() {
@@ -506,6 +547,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 是否自定义尺寸
+     *
      * @return 返回布尔值，是为true，否为false
      */
     public boolean isCustomRectangle() {
@@ -514,6 +556,7 @@ public class XEasyPdfImage implements XEasyPdfComponent {
 
     /**
      * 是否需要初始化
+     *
      * @return 返回布尔值，是为true，否为false
      */
     public boolean isNeedInitialize() {

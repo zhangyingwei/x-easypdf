@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 
 /**
  * pdf转换器
+ *
  * @author xsx
  * @date 2022/4/10
  * @since 1.8
@@ -31,6 +32,7 @@ public class XEasyPdfConvertor {
     /**
      * 转pdf
      * <p>支持格式：doc/docx/jpg/tiff/markdown/html/mhtml/rtf/odt/txt/mobi</p>
+     *
      * @param sourcePath 源文件路径
      * @param outputPath 输出文件路径
      */
@@ -44,8 +46,9 @@ public class XEasyPdfConvertor {
     /**
      * 转pdf
      * <p>支持格式：doc/docx/jpg/tiff/markdown/html/mhtml/rtf/odt/txt/mobi</p>
+     *
      * @param inputStream 输入流
-     * @param outputPath 输出文件路径
+     * @param outputPath  输出文件路径
      */
     @SneakyThrows
     public static void toPdf(InputStream inputStream, String outputPath) {
@@ -61,7 +64,8 @@ public class XEasyPdfConvertor {
     /**
      * 转pdf
      * <p>支持格式：doc/docx/jpg/tiff/markdown/html/mhtml/rtf/odt/txt/mobi</p>
-     * @param sourcePath 源文件路径
+     *
+     * @param sourcePath   源文件路径
      * @param outputStream 输出流
      */
     @SneakyThrows
@@ -74,7 +78,8 @@ public class XEasyPdfConvertor {
     /**
      * 转pdf
      * <p>支持格式：doc/docx/jpg/tiff/markdown/html/mhtml/rtf/odt/txt/mobi</p>
-     * @param inputStream 输入流
+     *
+     * @param inputStream  输入流
      * @param outputStream 输出流
      */
     @SneakyThrows

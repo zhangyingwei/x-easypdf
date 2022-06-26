@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * pdf圆形组件
+ *
  * @author xsx
  * @date 2022/1/26
  * @since 1.8
@@ -39,6 +40,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param radius 半径
      */
     public XEasyPdfCircle(float radius) {
@@ -47,6 +49,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param radius 半径
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
@@ -57,6 +60,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 开启检查页面（自动分页）
+     *
      * @return 返回圆形组件
      */
     public XEasyPdfCircle enableCheckPage() {
@@ -66,6 +70,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 关闭检查页面（自动分页）
+     *
      * @return 返回圆形组件
      */
     public XEasyPdfCircle disableCheckPage() {
@@ -75,6 +80,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回圆形组件
      */
     @Override
@@ -85,6 +91,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置边距（上下左右）
+     *
      * @param margin 边距
      * @return 返回圆形组件
      */
@@ -95,6 +102,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回圆形组件
      */
@@ -105,6 +113,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置右边距
+     *
      * @param margin 边距
      * @return 返回圆形组件
      */
@@ -115,6 +124,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置上边距
+     *
      * @param margin 边距
      * @return 返回圆形组件
      */
@@ -125,6 +135,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置下边距
+     *
      * @param margin 边距
      * @return 返回圆形组件
      */
@@ -135,6 +146,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置半径
+     *
      * @param radius 半径
      * @return 返回圆形组件
      */
@@ -145,6 +157,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置是否有边框
+     *
      * @param hasBorder 是否有边框
      * @return 返回圆形组件
      */
@@ -155,6 +168,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置边框宽度
+     *
      * @param borderWidth 边框宽度
      * @return 返回圆形组件
      */
@@ -165,11 +179,12 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置背景颜色
+     *
      * @param backgroundColor 背景颜色
      * @return 返回圆形组件
      */
     public XEasyPdfCircle setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor!=null) {
+        if (backgroundColor != null) {
             this.param.setBackgroundColor(backgroundColor);
         }
         return this;
@@ -177,11 +192,12 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置边框颜色（设置是否有边框为true时生效）
+     *
      * @param borderColor 边框颜色
      * @return 返回圆形组件
      */
     public XEasyPdfCircle setBorderColor(Color borderColor) {
-        if (borderColor!=null) {
+        if (borderColor != null) {
             this.param.setBorderColor(borderColor);
         }
         return this;
@@ -189,6 +205,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置坐标
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回矩形组件
@@ -201,6 +218,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置宽度（半径）
+     *
      * @param width 宽度（半径）
      * @return 返回矩形组件
      */
@@ -212,6 +230,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置高度（半径）
+     *
      * @param height 高度（半径）
      * @return 返回矩形组件
      */
@@ -223,12 +242,13 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回矩形组件
      */
     @Override
     public XEasyPdfCircle setContentMode(ContentMode mode) {
-        if (mode!=null) {
+        if (mode != null) {
             this.param.setContentMode(mode);
         }
         return this;
@@ -236,6 +256,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */
@@ -258,7 +279,7 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
             // 绘制边框圆形
             this.drawCircle(contentStream, this.param.getBorderColor());
             // 重置半径
-            this.param.setRadius(this.param.getRadius()-this.param.getBorderWidth());
+            this.param.setRadius(this.param.getRadius() - this.param.getBorderWidth());
             // 绘制背景圆形
             this.drawCircle(contentStream, this.param.getBackgroundColor());
         }
@@ -279,17 +300,18 @@ public class XEasyPdfCircle implements XEasyPdfComponent {
                 page.setPageX(null);
                 // 重置页面Y轴起始坐标
                 page.setPageY(this.param.getBeginY());
-            }else {
+            } else {
                 // 重置页面X轴起始坐标
-                page.setPageX(this.param.getBeginX()+this.param.getRadius());
+                page.setPageX(this.param.getBeginX() + this.param.getRadius());
             }
         }
     }
 
     /**
      * 绘制圆形
+     *
      * @param contentStream 内容流
-     * @param color 颜色
+     * @param color         颜色
      */
     @SneakyThrows
     private void drawCircle(PDPageContentStream contentStream, Color color) {

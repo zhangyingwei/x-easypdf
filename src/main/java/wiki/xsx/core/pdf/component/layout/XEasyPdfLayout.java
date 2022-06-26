@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * pdf布局组件
+ *
  * @author xsx
  * @date 2022/3/21
  * @since 1.8
@@ -25,19 +26,22 @@ public interface XEasyPdfLayout extends XEasyPdfComponent {
 
     /**
      * 开启边框
+     *
      * @return 返回pdf布局
      */
     XEasyPdfLayout enableBorder();
 
     /**
      * 添加组件
+     *
      * @param components 组件列表
      * @return 返回pdf布局
      */
-    XEasyPdfLayout addLayoutComponent(XEasyPdfLayoutComponent ...components);
+    XEasyPdfLayout addLayoutComponent(XEasyPdfLayoutComponent... components);
 
     /**
      * 添加组件
+     *
      * @param components 组件列表
      * @return 返回pdf布局
      */

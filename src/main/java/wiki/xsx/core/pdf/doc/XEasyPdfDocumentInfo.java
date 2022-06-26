@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 
-
 /**
  * pdf文档信息
+ *
  * @author xsx
  * @date 2020/5/19
  * @since 1.8
@@ -63,6 +63,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param document pdf文档
      */
     XEasyPdfDocumentInfo(XEasyPdfDocument document) {
@@ -71,6 +72,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 设置标题
+     *
      * @param title 标题
      * @return 返回pdf文档信息
      */
@@ -81,6 +83,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取标题
+     *
      * @return 返回标题
      */
     public String getTitle() {
@@ -89,6 +92,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 设置作者
+     *
      * @param author 作者
      * @return 返回pdf文档信息
      */
@@ -99,6 +103,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取作者
+     *
      * @return 返回作者
      */
     public String getAuthor() {
@@ -107,6 +112,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 设置主题
+     *
      * @param subject 主题
      * @return 返回pdf文档信息
      */
@@ -117,6 +123,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取主题
+     *
      * @return 返回主题
      */
     public String getSubject() {
@@ -125,6 +132,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 设置关键词
+     *
      * @param keywords 关键词
      * @return 返回pdf文档信息
      */
@@ -135,6 +143,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取关键词
+     *
      * @return 返回关键词
      */
     public String getKeywords() {
@@ -143,6 +152,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 设置创建者
+     *
      * @param creator 创建者
      * @return 返回pdf文档信息
      */
@@ -153,6 +163,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取创建者
+     *
      * @return 返回创建者
      */
     public String getCreator() {
@@ -161,6 +172,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 设置创建时间
+     *
      * @param createTime 创建时间
      * @return 返回pdf文档信息
      */
@@ -171,6 +183,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取创建时间
+     *
      * @return 返回创建时间
      */
     public Calendar getCreationDate() {
@@ -179,6 +192,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 设置修改时间
+     *
      * @param updateTime 修改时间
      * @return 返回pdf文档信息
      */
@@ -189,6 +203,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取修改时间
+     *
      * @return 返回修改时间
      */
     public Calendar getModificationDate() {
@@ -197,6 +212,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 完成信息设置
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
@@ -206,6 +222,7 @@ public class XEasyPdfDocumentInfo implements Serializable {
 
     /**
      * 获取pdfBox文档信息
+     *
      * @return 返回pdfBox文档信息
      */
     PDDocumentInformation getInfo() {

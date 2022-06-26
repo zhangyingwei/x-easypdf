@@ -8,6 +8,7 @@ import java.awt.*;
 
 /**
  * 虚线分割线组件
+ *
  * @author xsx
  * @date 2020/3/4
  * @since 1.8
@@ -43,10 +44,12 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
     /**
      * 无参构造
      */
-    public XEasyPdfDottedSplitLine() {}
+    public XEasyPdfDottedSplitLine() {
+    }
 
     /**
      * 设置字体路径
+     *
      * @param fontPath 字体路径
      * @return 返回虚线分割线组件
      */
@@ -58,12 +61,13 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置默认字体样式
+     *
      * @param style 默认字体样式
      * @return 返回虚线分割线组件
      */
     @Override
     public XEasyPdfDottedSplitLine setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        if (style!=null) {
+        if (style != null) {
             this.param.setFontPath(style.getPath());
         }
         return this;
@@ -71,6 +75,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置边距（上下左右）
+     *
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
@@ -81,6 +86,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
@@ -92,6 +98,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置右边距
+     *
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
@@ -103,6 +110,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置上边距
+     *
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
@@ -113,6 +121,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置下边距
+     *
      * @param margin 边距
      * @return 返回虚线分割线组件
      */
@@ -123,6 +132,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置分割线宽度
+     *
      * @param lineWidth 分割线宽度
      * @return 返回虚线分割线组件
      */
@@ -134,12 +144,13 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置分割线颜色
+     *
      * @param color 分割线颜色
      * @return 返回虚线分割线组件
      */
     @Override
     public XEasyPdfDottedSplitLine setColor(Color color) {
-        if (color!=null) {
+        if (color != null) {
             this.param.setColor(color);
         }
         return this;
@@ -147,12 +158,13 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置分割线线型
+     *
      * @param lineCapStyle 分割线线型
      * @return 返回虚线分割线组件
      */
     @Override
     public XEasyPdfDottedSplitLine setLineCapStyle(XEasyPdfLineCapStyle lineCapStyle) {
-        if (lineCapStyle!=null) {
+        if (lineCapStyle != null) {
             this.param.setStyle(lineCapStyle);
         }
         return this;
@@ -160,6 +172,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置点线长度
+     *
      * @param lineLength 点线长度
      * @return 返回虚线分割线组件
      */
@@ -170,6 +183,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置点线间隔
+     *
      * @param lineSpace 点线间隔
      * @return 返回虚线分割线组件
      */
@@ -180,6 +194,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置坐标
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回虚线分割线组件
@@ -192,6 +207,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置宽度(线长)
+     *
      * @param width 宽度(线长)
      * @return 返回虚线分割线组件
      */
@@ -203,6 +219,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置高度
+     *
      * @param height 高度
      * @return 返回虚线分割线组件
      */
@@ -213,12 +230,13 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回虚线分割线组件
      */
     @Override
     public XEasyPdfDottedSplitLine setContentMode(ContentMode mode) {
-        if (mode!=null) {
+        if (mode != null) {
             this.param.setContentMode(mode);
         }
         return this;
@@ -226,6 +244,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 获取线条宽度
+     *
      * @return 返回线条宽度
      */
     @Override
@@ -235,6 +254,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回虚线分割线组件
      */
     @Override
@@ -245,6 +265,7 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */
@@ -261,18 +282,18 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
         // 定义点线数量
         int count;
         // 如果宽度未初始化，则计算点线数量为(pdfBox最新页面宽度 - 左边距 - 右边距) / (点线长度 + 点线间隔)
-        if (this.param.getWidth()==null) {
+        if (this.param.getWidth() == null) {
             // 点线数量 = (pdfBox最新页面宽度-左边距-右边距)/(点线长度+点线间隔)
             count = (int) Math.floor(
-                    (page.getLastPage().getMediaBox().getWidth()-this.param.getMarginLeft()-this.param.getMarginRight())
+                    (page.getLastPage().getMediaBox().getWidth() - this.param.getMarginLeft() - this.param.getMarginRight())
                             /
-                            (this.lineLength+this.lineSpace)
+                            (this.lineLength + this.lineSpace)
             );
         }
         // 否则计算点线数量为(宽度-左边距-右边距)/(点线长度+点线间隔)
         else {
             // 点线数量 = (宽度-左边距-右边距)/(点线长度+点线间隔)
-            count = (int) Math.floor((this.param.getWidth()-this.param.getMarginLeft()-this.param.getMarginRight())/(this.lineLength + this.lineSpace));
+            count = (int) Math.floor((this.param.getWidth() - this.param.getMarginLeft() - this.param.getMarginRight()) / (this.lineLength + this.lineSpace));
         }
         // 循环点线数量进行画图
         for (int j = 1; j <= count; j++) {
@@ -299,8 +320,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
 
     /**
      * 初始化参数
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     private void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 分页检查
@@ -308,9 +330,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
         // 初始化参数
         this.param.init(document, page);
         // 如果X轴起始坐标已初始化且Y轴起始坐标已初始化，则设置X轴结束坐标与Y轴结束坐标
-        if (this.param.getBeginX()!=null&&this.param.getBeginY()!=null) {
+        if (this.param.getBeginX() != null && this.param.getBeginY() != null) {
             // 设置X轴结束坐标与Y轴结束坐标
-            this.param.setEndX(this.param.getBeginX()+this.lineLength).setEndY(this.param.getBeginY());
+            this.param.setEndX(this.param.getBeginX() + this.lineLength).setEndY(this.param.getBeginY());
             // 返回
             return;
         }
@@ -322,9 +344,9 @@ public class XEasyPdfDottedSplitLine implements XEasyPdfLine {
                 this.param.getMarginLeft()
         ).setBeginY(
                 // 如果当前页面Y轴坐标为空，则起始坐标 = pdfBox最新页面高度 - 上边距 - 线宽，否则起始坐标 = 当前页面Y轴坐标 - 上边距 - 线宽
-                page.getPageY()==null?
+                page.getPageY() == null ?
                         // pdfBox最新页面高度 - 上边距 - 线宽
-                        page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() - lineWidth:
+                        page.getLastPage().getMediaBox().getHeight() - this.param.getMarginTop() - lineWidth :
                         // 当前页面Y轴坐标 - 上边距 - 线宽
                         page.getPageY() - this.param.getMarginTop() - lineWidth
         ).setEndX(

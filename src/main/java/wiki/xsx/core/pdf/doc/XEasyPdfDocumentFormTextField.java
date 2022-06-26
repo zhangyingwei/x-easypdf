@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 /**
  * pdf文档表单文本属性
+ *
  * @author xsx
  * @date 2022/4/2
  * @since 1.8
@@ -66,6 +67,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param form pdf文档表单
      */
     XEasyPdfDocumentFormTextField(XEasyPdfDocumentForm form) {
@@ -75,6 +77,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置映射名称
+     *
      * @param mappingName 映射名称
      * @return 返回pdf文档表单文本属性
      */
@@ -85,6 +88,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置替代名称（工具提示）
+     *
      * @param alternateName 替代名称（工具提示）
      * @return 返回pdf文档表单文本属性
      */
@@ -95,6 +99,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置位置
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回pdf文档表单文本属性
@@ -107,6 +112,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置宽度
+     *
      * @param width 宽度
      * @return 返回pdf文档表单文本属性
      */
@@ -117,6 +123,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置高度
+     *
      * @param height 高度
      * @return 返回pdf文档表单文本属性
      */
@@ -127,6 +134,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置页面索引
+     *
      * @param pageIndex 页面索引
      * @return 返回pdf文档表单文本属性
      */
@@ -137,12 +145,13 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置默认值
+     *
      * @param defaultValue 默认值
      * @return 返回pdf文档表单文本属性
      */
     @SneakyThrows
     public XEasyPdfDocumentFormTextField setDefaultValue(String defaultValue) {
-        if (defaultValue!=null) {
+        if (defaultValue != null) {
             this.textField.setDefaultValue(defaultValue);
         }
         return this;
@@ -150,11 +159,12 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置富文本值
+     *
      * @param richTextValue 富文本值
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField setRichTextValue(String richTextValue) {
-        if (richTextValue!=null) {
+        if (richTextValue != null) {
             this.textField.setRichTextValue(richTextValue);
         }
         return this;
@@ -162,6 +172,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置最大字符数
+     *
      * @param maxLength 最大字符数
      * @return 返回pdf文档表单文本属性
      */
@@ -172,6 +183,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 设置文本样式（居左、居中、居右）
+     *
      * @param style 文本样式
      * @return 返回pdf文档表单文本属性
      */
@@ -182,6 +194,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 开启只读
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField enableReadOnly() {
@@ -191,6 +204,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 开启必须
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField enableRequired() {
@@ -200,6 +214,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 开启打印
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField enablePrint() {
@@ -209,6 +224,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 开启富文本（RTF格式）
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField enableRichText() {
@@ -218,6 +234,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 开启多行
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField enableMultiline() {
@@ -227,6 +244,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 开启密码
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField enablePassword() {
@@ -236,6 +254,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 开启组合
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField enableCombo() {
@@ -245,6 +264,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 关闭拼写检查
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField disableSpellCheck() {
@@ -254,6 +274,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 关闭滚动
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField disableScroll() {
@@ -263,6 +284,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 关闭导出
+     *
      * @return 返回pdf文档表单文本属性
      */
     public XEasyPdfDocumentFormTextField disableExport() {
@@ -272,6 +294,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
     /**
      * 完成操作
+     *
      * @return 返回pdf文档表单
      */
     @SneakyThrows
@@ -316,6 +339,7 @@ public class XEasyPdfDocumentFormTextField implements Serializable {
 
         /**
          * 有参构造
+         *
          * @param style 样式
          */
         TextStyle(Integer style) {

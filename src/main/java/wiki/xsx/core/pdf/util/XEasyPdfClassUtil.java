@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 
 /**
  * 类工具
+ *
  * @author xsx
  * @date 2022/5/19
  * @since 1.8
@@ -26,6 +27,7 @@ public class XEasyPdfClassUtil {
 
     /**
      * 重置属性
+     *
      * @param className 全类名
      */
     @SneakyThrows
@@ -38,7 +40,7 @@ public class XEasyPdfClassUtil {
         field2.setAccessible(true);
         Field modifiersField = Field.class.getDeclaredField("modifiers");
         modifiersField.setAccessible(true);
-        modifiersField.setInt(field1, field2.getModifiers()&~Modifier.FINAL);
+        modifiersField.setInt(field1, field2.getModifiers() & ~Modifier.FINAL);
         field1.set(null, field2.get(null));
     }
 }

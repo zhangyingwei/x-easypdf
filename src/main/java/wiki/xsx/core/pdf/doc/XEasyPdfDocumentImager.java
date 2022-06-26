@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 
 /**
  * pdf文档图像器
+ *
  * @author xsx
  * @date 2020/12/21
  * @since 1.8
@@ -51,6 +52,7 @@ public class XEasyPdfDocumentImager implements Serializable {
 
     /**
      * 构造方法
+     *
      * @param pdfDocument pdf文档
      */
     XEasyPdfDocumentImager(XEasyPdfDocument pdfDocument) {
@@ -60,6 +62,7 @@ public class XEasyPdfDocumentImager implements Serializable {
 
     /**
      * 设置图像DPI
+     *
      * @param dpi 图像DPI
      * @return 返回pdf文档图像器
      */
@@ -70,8 +73,9 @@ public class XEasyPdfDocumentImager implements Serializable {
 
     /**
      * 转为图片（整个文档）
+     *
      * @param outputPath 输出路径（目录）
-     * @param imageType 图片类型
+     * @param imageType  图片类型
      * @return 返回pdf文档图像器
      */
 
@@ -82,15 +86,16 @@ public class XEasyPdfDocumentImager implements Serializable {
 
     /**
      * 转为图片（整个文档）
+     *
      * @param outputPath 输出路径（目录）
-     * @param imageType 图片类型
-     * @param prefix 图片名称前缀
+     * @param imageType  图片类型
+     * @param prefix     图片名称前缀
      * @return 返回pdf文档图像器
      */
     @SneakyThrows
     public XEasyPdfDocumentImager image(String outputPath, XEasyPdfImageType imageType, String prefix) {
         // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
-        if (prefix==null) {
+        if (prefix == null) {
             // 初始化文档名称前缀
             prefix = "x-easypdf";
         }
@@ -121,15 +126,16 @@ public class XEasyPdfDocumentImager implements Serializable {
 
     /**
      * 转为图片（根据页面索引）
+     *
      * @param outputStream 输出流
-     * @param imageType 图片类型
-     * @param pageIndex 页面索引
+     * @param imageType    图片类型
+     * @param pageIndex    页面索引
      * @return 返回pdf文档图像器
      */
     @SneakyThrows
     public XEasyPdfDocumentImager image(OutputStream outputStream, XEasyPdfImageType imageType, int pageIndex) {
         // 重置页面索引（0至文档总页面索引）
-        pageIndex = Math.min(Math.max(pageIndex, 0), this.document.getNumberOfPages()-1);
+        pageIndex = Math.min(Math.max(pageIndex, 0), this.document.getNumberOfPages() - 1);
         // 初始化pdfBox文档渲染器
         PDFRenderer renderer = new PDFRenderer(this.document);
         // 渲染图片
@@ -141,6 +147,7 @@ public class XEasyPdfDocumentImager implements Serializable {
 
     /**
      * 完成操作
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {

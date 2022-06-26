@@ -38,6 +38,7 @@ import java.util.*;
 
 /**
  * pdf文档
+ *
  * @author xsx
  * @date 2020/3/3
  * @since 1.8
@@ -77,6 +78,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 有参构造
+     *
      * @param filePath pdf文件路径
      */
     @SneakyThrows
@@ -89,6 +91,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 有参构造
+     *
      * @param inputStream 数据流
      */
     public XEasyPdfDocument(InputStream inputStream) {
@@ -97,6 +100,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 开启重置上下文
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument enableResetContext() {
@@ -106,6 +110,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 开启总页码占位符替换
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument enableReplaceTotalPagePlaceholder() {
@@ -115,10 +120,11 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档内容模式（每个页面都将设置该模式）
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setGlobalContentMode(XEasyPdfComponent.ContentMode contentMode) {
-        if (contentMode!=null) {
+        if (contentMode != null) {
             this.param.setContentMode(contentMode);
         }
         return this;
@@ -126,6 +132,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档内容模式
+     *
      * @return 返回文档内容模式
      */
     public XEasyPdfComponent.ContentMode getGlobalContentMode() {
@@ -134,12 +141,13 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档背景色（每个页面都将添加背景色）
+     *
      * @param globalBackgroundColor 背景色
      * @return 返回pdf文档
      */
     public XEasyPdfDocument setGlobalBackgroundColor(Color globalBackgroundColor) {
         // 如果背景色不为空，则设置
-        if (globalBackgroundColor!=null) {
+        if (globalBackgroundColor != null) {
             // 设置重置
             this.param.setIsReset(Boolean.TRUE);
             // 设置文档背景色
@@ -150,6 +158,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档背景色
+     *
      * @return 返回文档背景色
      */
     public Color getGlobalBackgroundColor() {
@@ -158,6 +167,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档背景图片（每个页面都将添加背景图片）
+     *
      * @param globalBackgroundImage 背景图片
      * @return 返回pdf文档
      */
@@ -171,6 +181,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档背景图片
+     *
      * @return 返回pdf图片
      */
     public XEasyPdfImage getGlobalBackgroundImage() {
@@ -179,6 +190,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档水印（每个页面都将添加水印）
+     *
      * @param globalWatermark 页面水印
      * @return 返回pdf文档
      */
@@ -192,6 +204,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取全局水印
+     *
      * @return 返回pdf水印
      */
     public XEasyPdfWatermark getGlobalWatermark() {
@@ -200,6 +213,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档页眉（每个页面都将添加页眉）
+     *
      * @param globalHeader 页眉
      * @return 返回pdf文档
      */
@@ -213,6 +227,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取全局页眉
+     *
      * @return 返回pdf页眉
      */
     public XEasyPdfHeader getGlobalHeader() {
@@ -221,6 +236,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档页脚（每个页面都将添加页脚）
+     *
      * @param globalFooter 页脚
      * @return 返回pdf文档
      */
@@ -234,6 +250,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取全局页脚
+     *
      * @return 返回pdf页脚
      */
     public XEasyPdfFooter getGlobalFooter() {
@@ -242,6 +259,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置字体路径
+     *
      * @param fontPath 字体路径
      * @return 返回pdf文档
      */
@@ -255,6 +273,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置默认字体样式
+     *
      * @param style 默认字体样式
      * @return 返回pdf文档
      */
@@ -268,6 +287,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置版本
+     *
      * @param version 版本
      * @return 返回pdf文档
      */
@@ -277,7 +297,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
         // 最小版本
         float minVersion = 1.0F;
         // 如果版本小于1.0且大于1.7，则提示错误
-        if (version<minVersion||version>maxVersion) {
+        if (version < minVersion || version > maxVersion) {
             // 提示错误
             throw new IllegalArgumentException("the version must be between 1.0 and 1.7");
         }
@@ -290,6 +310,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
      * 设置临时目录（用于flush操作），需读写权限
      * <p>默认在项目路径的根目录</p>
      * <p>eg：当前项目在“D:\test\pdf”目录下，临时文件存放目录则为“D:\”</p>
+     *
      * @param tempDir 临时目录
      * @return 返回pdf文档
      */
@@ -306,8 +327,9 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 添加文档字体
+     *
      * @param fontPath 字体路径
-     * @param font pdfbox字体
+     * @param font     pdfbox字体
      */
     public void addFont(String fontPath, PDFont font) {
         // 添加字体缓存
@@ -316,8 +338,9 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 添加文档otf字体
+     *
      * @param fontPath 字体路径
-     * @param font pdfbox字体
+     * @param font     pdfbox字体
      */
     public void addOtfFont(String fontPath, PDFont font) {
         // 添加字体缓存
@@ -326,6 +349,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档字体
+     *
      * @return 返回pdfBox字体
      */
     public PDFont getFont() {
@@ -334,6 +358,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档字体
+     *
      * @param fontPath 字体路径
      * @return 返回pdfbox字体
      */
@@ -343,6 +368,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档otf字体
+     *
      * @param fontPath 字体路径
      * @return 返回pdfbox字体
      */
@@ -352,6 +378,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档字体路径
+     *
      * @return 返回文档字体路径
      */
     public String getFontPath() {
@@ -360,11 +387,12 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取任务文档
+     *
      * @return 返回任务文档
      */
     public PDDocument getTarget() {
         // 如果任务文档未初始化或文档被重置，则进行新任务创建
-        if (this.param.getTarget()==null||this.param.getIsReset()) {
+        if (this.param.getTarget() == null || this.param.getIsReset()) {
             // 初始化
             this.param.initTarget(this);
         }
@@ -373,6 +401,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取pdf页面列表
+     *
      * @return 返回pdf页面列表
      */
     public List<XEasyPdfPage> getPageList() {
@@ -381,6 +410,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档总页数
+     *
      * @return 返回文档总页数
      */
     public int getTotalPage() {
@@ -389,10 +419,11 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 添加pdf页面
+     *
      * @param pages pdf页面
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument addPage(XEasyPdfPage...pages) {
+    public XEasyPdfDocument addPage(XEasyPdfPage... pages) {
         // 设置重置
         this.param.setIsReset(Boolean.TRUE);
         // 添加页面
@@ -402,11 +433,12 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 添加pdf页面
+     *
      * @param pages pdf页面
      * @return 返回pdf文档
      */
     public XEasyPdfDocument addPage(List<XEasyPdfPage> pages) {
-        if (pages!=null) {
+        if (pages != null) {
             return this.addPage(pages.toArray(new XEasyPdfPage[0]));
         }
         return this;
@@ -414,17 +446,18 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 插入pdf页面
+     *
      * @param pageIndex 页面索引
-     * @param pages pdf页面
+     * @param pages     pdf页面
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument insertPage(int pageIndex, XEasyPdfPage...pages) {
+    public XEasyPdfDocument insertPage(int pageIndex, XEasyPdfPage... pages) {
         // 设置重置
         this.param.setIsReset(Boolean.TRUE);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果pdf页面列表数量大于索引，则插入页面
-        if (pageList.size()>=pageIndex) {
+        if (pageList.size() >= pageIndex) {
             // 遍历pdf页面
             for (XEasyPdfPage page : pages) {
                 // 插入页面
@@ -441,12 +474,13 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 插入pdf页面
+     *
      * @param pageIndex 页面索引
-     * @param pages pdf页面列表
+     * @param pages     pdf页面列表
      * @return 返回pdf文档
      */
     public XEasyPdfDocument insertPage(int pageIndex, List<XEasyPdfPage> pages) {
-        if (pages!=null) {
+        if (pages != null) {
             return this.insertPage(pageIndex, pages.toArray(new XEasyPdfPage[0]));
         }
         return this;
@@ -454,17 +488,18 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 修改页面尺寸
-     * @param pageSize pdf页面尺寸
+     *
+     * @param pageSize  pdf页面尺寸
      * @param pageIndex 页面索引
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument modifyPageSize(XEasyPdfPageRectangle pageSize, int ...pageIndex) {
+    public XEasyPdfDocument modifyPageSize(XEasyPdfPageRectangle pageSize, int... pageIndex) {
         // 设置重置
         this.param.setIsReset(Boolean.TRUE);
         // 获取pdf页面列表
         List<XEasyPdfPage> pageList = this.param.getPageList();
         // 如果页面索引不为空，则根据给定索引设置，否则全部页面进行设置
-        if (pageIndex!=null&&pageIndex.length>0) {
+        if (pageIndex != null && pageIndex.length > 0) {
             // 遍历页面索引
             for (int index : pageIndex) {
                 // 修改页面尺寸
@@ -484,10 +519,11 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 移除pdf页面
+     *
      * @param pageIndex 页面索引
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument removePage(int ...pageIndex) {
+    public XEasyPdfDocument removePage(int... pageIndex) {
         // 设置重置
         this.param.setIsReset(Boolean.TRUE);
         // 获取pdf页面列表
@@ -497,7 +533,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
             // 获取对应pdf页面
             XEasyPdfPage page = pageList.get(index);
             // 初始化总页数
-            this.param.initTotalPage(-(page.getPageList().size()+page.getNewPageList().size()));
+            this.param.initTotalPage(-(page.getPageList().size() + page.getNewPageList().size()));
             // 移除页面
             pageList.remove(index);
         }
@@ -506,10 +542,11 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 合并文档
+     *
      * @param documents pdf文档
      * @return 返回pdf文档
      */
-    public XEasyPdfDocument merge(XEasyPdfDocument ...documents) {
+    public XEasyPdfDocument merge(XEasyPdfDocument... documents) {
         // 设置重置
         this.param.setIsReset(Boolean.TRUE);
         // 遍历待合并文档
@@ -524,33 +561,37 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档信息
+     *
      * @return 返回pdf文档信息
      */
     public XEasyPdfDocumentInfo information() {
         // 返回文档信息
-        return this.param.getDocumentInfo()!=null?this.param.getDocumentInfo():new XEasyPdfDocumentInfo(this);
+        return this.param.getDocumentInfo() != null ? this.param.getDocumentInfo() : new XEasyPdfDocumentInfo(this);
     }
 
     /**
      * 获取文档权限
+     *
      * @return 返回pdf文档权限
      */
     public XEasyPdfDocumentPermission permission() {
         // 返回文档权限
-        return this.param.getPermission()!=null?this.param.getPermission():new XEasyPdfDocumentPermission(this);
+        return this.param.getPermission() != null ? this.param.getPermission() : new XEasyPdfDocumentPermission(this);
     }
 
     /**
      * 获取文档书签
+     *
      * @return 返回pdf文档书签
      */
     public XEasyPdfDocumentBookmark bookmark() {
         // 返回文档书签
-        return this.param.getBookmark()!=null?this.param.getBookmark():new XEasyPdfDocumentBookmark(this);
+        return this.param.getBookmark() != null ? this.param.getBookmark() : new XEasyPdfDocumentBookmark(this);
     }
 
     /**
      * 获取文档替换器
+     *
      * @return 返回pdf文档替换器
      */
     public XEasyPdfDocumentReplacer replacer() {
@@ -559,6 +600,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取表单填充器
+     *
      * @return 返回pdf文档表单填写器
      */
     public XEasyPdfDocumentFormFiller formFiller() {
@@ -567,6 +609,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档图像器
+     *
      * @return 返回pdf文档图像器
      */
     public XEasyPdfDocumentImager imager() {
@@ -575,6 +618,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档拆分器
+     *
      * @return 返回pdf文档拆分器
      */
     public XEasyPdfDocumentSplitter splitter() {
@@ -583,6 +627,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档提取器
+     *
      * @return 返回pdf文档提取器
      */
     public XEasyPdfDocumentExtractor extractor() {
@@ -591,6 +636,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档签名器
+     *
      * @return 返回pdf文档签名器
      */
     public XEasyPdfDocumentSigner signer() {
@@ -599,6 +645,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取文档分析器
+     *
      * @return 返回pdf文档分析器
      */
     public XEasyPdfDocumentAnalyzer analyzer() {
@@ -607,6 +654,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 刷新（临时保存）
+     *
      * @return 返回pdf文档
      */
     @SneakyThrows
@@ -631,6 +679,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 保存（页面构建）
+     *
      * @param outputPath 文件输出路径
      * @return 返回pdf文档
      */
@@ -643,6 +692,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 保存（页面构建）
+     *
      * @param outputStream 文件输出流
      * @return 返回pdf文档
      */
@@ -670,6 +720,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 打印文档（默认打印机）
+     *
      * @param count 打印数量
      */
     public XEasyPdfDocument print(int count) {
@@ -678,8 +729,9 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 打印文档（默认打印机）
-     * @param count 打印数量
-     * @param style 打印形式（横向、纵向、反向横向）
+     *
+     * @param count   打印数量
+     * @param style   打印形式（横向、纵向、反向横向）
      * @param scaling 缩放比例
      */
     @SneakyThrows
@@ -724,12 +776,12 @@ public class XEasyPdfDocument implements Closeable, Serializable {
             mergeSourceList.clear();
         }
         // 如果源文档不为空，则关闭
-        if (this.param.getSource()!=null) {
+        if (this.param.getSource() != null) {
             // 关闭源文档
             this.param.getSource().close();
         }
         // 如果任务文档不为空且非刷新，则关闭
-        if (this.param.getTarget()!=null) {
+        if (this.param.getTarget() != null) {
             // 关闭任务文档
             this.param.getTarget().close();
             // 清空字体
@@ -747,6 +799,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 构建文档
+     *
      * @return 返回pdfbox文档
      */
     PDDocument build() {
@@ -755,6 +808,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 构建文档
+     *
      * @param isReplaceTotalPagePlaceholder 是否替换总页码占位符
      * @return 返回pdfbox文档
      */
@@ -773,6 +827,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档信息
+     *
      * @param info pdf文档信息
      */
     void setInfo(XEasyPdfDocumentInfo info) {
@@ -781,6 +836,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档权限
+     *
      * @param permission pdf文档权限
      */
     void setPermission(XEasyPdfDocumentPermission permission) {
@@ -789,6 +845,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置文档书签
+     *
      * @param bookmark pdf文档书签
      */
     void setBookmark(XEasyPdfDocumentBookmark bookmark) {
@@ -797,17 +854,18 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
+     *
      * @param target 任务文档
      */
     @SneakyThrows
     void setBasicInfo(PDDocument target) {
         // 如果文档信息不为空，则进行设置
-        if (this.param.getDocumentInfo()!=null) {
+        if (this.param.getDocumentInfo() != null) {
             // 设置文档信息
             target.setDocumentInformation(this.param.getDocumentInfo().getInfo());
         }
         // 如果pdfBox保护策略不为空，则进行设置
-        if (this.param.getPermission()!=null) {
+        if (this.param.getPermission() != null) {
             // 设置pdfBox保护策略
             target.protect(this.param.getPermission().getPolicy());
         }
@@ -821,6 +879,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 替换总页码占位符
+     *
      * @param target 任务文档
      */
     void replaceTotalPagePlaceholder(PDDocument target, boolean isMultiDocument) {
@@ -829,7 +888,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
             // 获取文档总页码
             int totalPage = target.getNumberOfPages();
             // 如果页码大于0，则进行替换
-            if (totalPage>0) {
+            if (totalPage > 0) {
                 // 创建pdf文本替换器
                 XEasyPdfDocumentReplacer replacer = new XEasyPdfDocumentReplacer(this, target);
                 // 开启替换cos数组
@@ -856,6 +915,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 获取pdf文档参数
+     *
      * @return 返回pdf文档参数
      */
     XEasyPdfDocumentParam getParam() {
@@ -864,6 +924,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 保存临时任务
+     *
      * @param outputStream 文件输出流
      */
     @SneakyThrows
@@ -913,6 +974,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 初始化文档书签
+     *
      * @param target 任务文档
      */
     @SneakyThrows
@@ -942,15 +1004,16 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 初始化文档书签
+     *
      * @param target 任务文档
      */
     private void initBookmark(PDDocument target) {
         // 获取pdfbox书签
         PDDocumentOutline outline = target.getDocumentCatalog().getDocumentOutline();
         // 如果书签不为空，则设置书签信息
-        if (this.param.getBookmark()!=null) {
+        if (this.param.getBookmark() != null) {
             // 如果书签为空，则创建书签
-            if (outline==null) {
+            if (outline == null) {
                 // 创建书签
                 outline = new PDDocumentOutline();
             }
@@ -968,8 +1031,9 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 替换总页码占位符（多文档）
-     * @param target 任务文档
-     * @param replacer pdf文本替换器
+     *
+     * @param target     任务文档
+     * @param replacer   pdf文本替换器
      * @param replaceMap 待替换文本字典
      */
     private void replaceTotalPagePlaceholder(
@@ -990,9 +1054,10 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 替换总页码占位符（单文档）
-     * @param replacer pdf文本替换器
+     *
+     * @param replacer   pdf文本替换器
      * @param replaceMap 待替换文本字典
-     * @param pageList 待替换pdf页面列表
+     * @param pageList   待替换pdf页面列表
      */
     private void replaceTotalPagePlaceholder(
             XEasyPdfDocumentReplacer replacer,
@@ -1004,14 +1069,14 @@ public class XEasyPdfDocument implements Closeable, Serializable {
             // 获取pdf页眉
             XEasyPdfHeader header = page.getHeader();
             // 如果页眉不为空，则替换
-            if (header!=null) {
+            if (header != null) {
                 // 替换总页码占位符
                 this.replaceTotalPagePlaceholder(header.getTextFontPath(), replacer, replaceMap, page);
             }
             // 获取pdf页脚
             XEasyPdfFooter footer = page.getFooter();
             // 如果页脚不为空，则替换
-            if (footer!=null) {
+            if (footer != null) {
                 // 替换总页码占位符
                 this.replaceTotalPagePlaceholder(footer.getTextFontPath(), replacer, replaceMap, page);
             }
@@ -1020,10 +1085,11 @@ public class XEasyPdfDocument implements Closeable, Serializable {
 
     /**
      * 替换总页码占位符
-     * @param fontPath 字体路径
-     * @param replacer pdf文档替换器
+     *
+     * @param fontPath   字体路径
+     * @param replacer   pdf文档替换器
      * @param replaceMap 代替换字典
-     * @param page pdf页面
+     * @param page       pdf页面
      */
     private void replaceTotalPagePlaceholder(
             String fontPath,
@@ -1032,7 +1098,7 @@ public class XEasyPdfDocument implements Closeable, Serializable {
             XEasyPdfPage page
     ) {
         // 如果字体路径不为空，则替换
-        if (fontPath!=null) {
+        if (fontPath != null) {
             // 设置字体路径
             replacer.setFontPath(fontPath);
             // 获取原有pdfBox页面列表

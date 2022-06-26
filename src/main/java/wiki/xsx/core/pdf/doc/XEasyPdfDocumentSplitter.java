@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * pdf文档拆分器
+ *
  * @author xsx
  * @date 2020/5/24
  * @since 1.8
@@ -60,16 +61,18 @@ public class XEasyPdfDocumentSplitter implements Serializable {
 
     /**
      * 添加拆分文档
+     *
      * @param pageIndex 拆分页面索引
      * @return 返回pdf文档拆分器
      */
-    public XEasyPdfDocumentSplitter addDocument(int ...pageIndex) {
+    public XEasyPdfDocumentSplitter addDocument(int... pageIndex) {
         this.documentList.add(XEasyPdfConvertUtil.toInteger(pageIndex));
         return this;
     }
 
     /**
      * 拆分文档
+     *
      * @param outputPath 输出路径（目录）
      * @return 返回pdf文档
      */
@@ -80,14 +83,15 @@ public class XEasyPdfDocumentSplitter implements Serializable {
 
     /**
      * 拆分文档
+     *
      * @param outputPath 输出路径（目录）
-     * @param prefix 文档名称前缀
+     * @param prefix     文档名称前缀
      * @return 返回pdf文档
      */
     @SneakyThrows
     public XEasyPdfDocumentSplitter split(String outputPath, String prefix) {
         // 如果文档名称前缀为空，则设置默认值为"x-easypdf"
-        if (prefix==null) {
+        if (prefix == null) {
             // 初始化文档名称前缀
             prefix = "x-easypdf";
         }
@@ -102,7 +106,7 @@ public class XEasyPdfDocumentSplitter implements Serializable {
                 // 构建文件名称
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(i + 1).append(".pdf");
                 // 获取输出流
-                try(OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
+                try (OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
                     // 拆分文档
                     this.split(outputStream, XEasyPdfConvertUtil.toInt(this.documentList.get(i)));
                 }
@@ -127,7 +131,7 @@ public class XEasyPdfDocumentSplitter implements Serializable {
                 // 构建文件名称
                 fileNameBuilder.append(outputPath).append(File.separator).append(prefix).append(index).append(".pdf");
                 // 获取输出流
-                try(OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
+                try (OutputStream outputStream = new BufferedOutputStream(Files.newOutputStream(XEasyPdfFileUtil.createDirectories(Paths.get(fileNameBuilder.toString()))))) {
                     // 替换总页码占位符
                     this.pdfDocument.replaceTotalPagePlaceholder(target, false);
                     // 设置基础信息（文档信息、保护策略、版本、xmp信息及书签）
@@ -146,14 +150,15 @@ public class XEasyPdfDocumentSplitter implements Serializable {
 
     /**
      * 拆分文档
+     *
      * @param outputStream 输出流
-     * @param pageIndex 页面索引
+     * @param pageIndex    页面索引
      * @return 返回pdf文档
      */
     @SneakyThrows
-    public XEasyPdfDocumentSplitter split(OutputStream outputStream, int ...pageIndex) {
+    public XEasyPdfDocumentSplitter split(OutputStream outputStream, int... pageIndex) {
         // 新建任务文档
-        try(PDDocument target = new PDDocument()) {
+        try (PDDocument target = new PDDocument()) {
             // 获取源文档页面树
             PDPageTree sourcePages = this.document.getPages();
             // 遍历页面索引
@@ -178,6 +183,7 @@ public class XEasyPdfDocumentSplitter implements Serializable {
 
     /**
      * 完成操作
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {

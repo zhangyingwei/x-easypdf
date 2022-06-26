@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * pdf页眉组件
+ *
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -29,7 +30,7 @@ import java.util.List;
  * See the Mulan PSL v2 for more details.
  * </p>
  */
-public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
+public class XEasyPdfDefaultHeader implements XEasyPdfHeader {
 
     private static final long serialVersionUID = -7390695218795028439L;
 
@@ -40,6 +41,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 有参构造
+     *
      * @param component 自定义组件
      */
     public XEasyPdfDefaultHeader(XEasyPdfComponent component) {
@@ -48,6 +50,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 有参构造
+     *
      * @param image pdf图片
      */
     public XEasyPdfDefaultHeader(XEasyPdfImage image) {
@@ -56,6 +59,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 有参构造
+     *
      * @param text pdf文本
      */
     public XEasyPdfDefaultHeader(XEasyPdfText text) {
@@ -64,8 +68,9 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 有参构造
+     *
      * @param image pdf图片
-     * @param text pdf文本
+     * @param text  pdf文本
      */
     public XEasyPdfDefaultHeader(XEasyPdfImage image, XEasyPdfText text) {
         this.param.setImage(image).setText(text);
@@ -73,6 +78,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 开启上下文重置
+     *
      * @return 返回页眉组件
      */
     @Override
@@ -83,12 +89,13 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 添加分割线
+     *
      * @param splitLine pdf分割线
      * @return 返回页眉组件
      */
     @Override
-    public XEasyPdfDefaultHeader addSplitLine(XEasyPdfLine ...splitLine) {
-        if (splitLine!=null) {
+    public XEasyPdfDefaultHeader addSplitLine(XEasyPdfLine... splitLine) {
+        if (splitLine != null) {
             this.param.getLineList().addAll(Arrays.asList(splitLine));
         }
         return this;
@@ -96,6 +103,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 添加自定义组件
+     *
      * @param component pdf组件
      * @return 返回页眉组件
      */
@@ -107,6 +115,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 设置边距（上左右）
+     *
      * @param margin 边距
      * @return 返回页眉组件
      */
@@ -118,6 +127,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回页眉组件
      */
@@ -129,6 +139,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 设置右边距
+     *
      * @param margin 边距
      * @return 返回页眉组件
      */
@@ -140,6 +151,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 设置上边距
+     *
      * @param margin 边距
      * @return 返回页眉组件
      */
@@ -151,13 +163,14 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 获取页眉高度
+     *
      * @param document pdf文档
      * @param page     pdf页面
      * @return 返回页眉高度
      */
     @Override
     public float getHeight(XEasyPdfDocument document, XEasyPdfPage page) {
-        if (this.param.getHeight()==null) {
+        if (this.param.getHeight() == null) {
             // 初始化参数
             this.param.init(document, page);
         }
@@ -166,6 +179,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 获取总页码占位符
+     *
      * @return 返回总页码占位符
      */
     @Override
@@ -175,6 +189,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 获取当前页码占位符
+     *
      * @return 返回当前页码占位符
      */
     @Override
@@ -184,11 +199,12 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 获取文本字体路径
+     *
      * @return 返回文本字体路径
      */
     @Override
     public String getTextFontPath() {
-        if (this.param.getText()!=null) {
+        if (this.param.getText() != null) {
             return this.param.getText().getFontPath();
         }
         return null;
@@ -196,22 +212,23 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 检查组件
+     *
      * @param component 组件
      * @return 返回布尔值，true为是，false为否
      */
     @Override
     public boolean check(XEasyPdfComponent component) {
         // 如果组件不为空，则判断对应组件
-        if (component!=null) {
+        if (component != null) {
             // 如果组件为图片，则判断图片是否相同
             if (component instanceof XEasyPdfImage) {
                 // 判断是否相同
-                return this.param.getImage()!=null&&this.param.getImage().equals(component);
+                return this.param.getImage() != null && this.param.getImage().equals(component);
             }
             // 如果组件为文本，则判断文本是否相同
             if (component instanceof XEasyPdfText) {
                 // 判断是否相同
-                return this.param.getText()!=null&&this.param.getText().equals(component);
+                return this.param.getText() != null && this.param.getText().equals(component);
             }
         }
         return false;
@@ -219,6 +236,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */
@@ -227,7 +245,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
         // 初始化参数
         this.param.init(document, page);
         // 如果文本不为空，则进行文本绘制
-        if (this.param.getText()!=null) {
+        if (this.param.getText() != null) {
             // 获取文本
             XEasyPdfText text = this.param.getText();
             // 如果开启重置上下文，则设置文本开启重置上下文
@@ -237,7 +255,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
             }
             // 设置文本参数
             text.replaceAllPlaceholder(
-                    XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document)+""
+                    XEasyPdfHandler.Page.getCurrentPagePlaceholder(), page.getCurrentIndex(document) + ""
             ).setCheckPage(false);
             // 设置位置并绘制文本
             text.setPosition(
@@ -245,7 +263,7 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
             ).enableChildComponent().draw(document, page);
         }
         // 如果图片不为空，则进行图片绘制
-        if (this.param.getImage()!=null) {
+        if (this.param.getImage() != null) {
             // 获取图片
             XEasyPdfImage image = this.param.getImage();
             // 如果开启重置上下文，则设置图片开启重置上下文
@@ -257,11 +275,11 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
             image.setContentMode(XEasyPdfComponent.ContentMode.PREPEND)
                     .setPosition(
                             this.param.getImageBeginX(),
-                            this.param.getImageBeginY()-this.param.getImage().getHeight(document, page)
+                            this.param.getImageBeginY() - this.param.getImage().getHeight(document, page)
                     ).draw(document, page);
         }
         // 如果自定义组件不为空，则进行自定义组件绘制
-        if (this.param.getComponent()!=null) {
+        if (this.param.getComponent() != null) {
             // 绘制自定义组件
             this.param.getComponent().draw(document, page);
         }
@@ -284,9 +302,10 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
 
     /**
      * 初始化文本Y轴起始坐标
+     *
      * @param document pdf文档
-     * @param page pdf页面
-     * @param text pdf文本
+     * @param page     pdf页面
+     * @param text     pdf文本
      * @return 返回Y轴起始坐标
      */
     private float initYForText(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfText text) {
@@ -295,21 +314,21 @@ public class XEasyPdfDefaultHeader implements XEasyPdfHeader{
         // 获取文本高度
         float textHeight = text.getHeight(document, page);
         // 定义Y轴起始坐标为页面Y轴起始坐标+行间距/2
-        float y = this.param.getTextBeginY() + text.getLeading()/2;
+        float y = this.param.getTextBeginY() + text.getLeading() / 2;
         // 如果垂直样式为居上，则重置Y轴起始坐标为Y轴起始坐标-字体大小
-        if (text.getVerticalStyle()==XEasyPdfPositionStyle.TOP) {
+        if (text.getVerticalStyle() == XEasyPdfPositionStyle.TOP) {
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小
             y = y - text.getFontSize();
             return y;
         }
         // 如果垂直样式为居中，则重置Y轴起始坐标为Y轴起始坐标-字体大小-(页眉高度-文本高度)/2
-        if (text.getVerticalStyle()==XEasyPdfPositionStyle.CENTER) {
+        if (text.getVerticalStyle() == XEasyPdfPositionStyle.CENTER) {
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-(页眉高度-文本高度)/2
             y = y - text.getFontSize() - (height - textHeight) / 2;
             return y;
         }
         // 如果垂直样式为居下，则重置Y轴起始坐标为Y轴起始坐标-字体大小-页眉高度+文本高度
-        if (text.getVerticalStyle()==XEasyPdfPositionStyle.BOTTOM) {
+        if (text.getVerticalStyle() == XEasyPdfPositionStyle.BOTTOM) {
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-单元格高度+文本高度
             y = y - text.getFontSize() - height + textHeight;
         }

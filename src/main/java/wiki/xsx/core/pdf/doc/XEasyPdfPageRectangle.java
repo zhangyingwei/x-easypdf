@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * pdf页面尺寸
+ *
  * @author xsx
  * @date 2022/6/10
  * @since 1.8
@@ -49,7 +50,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * ************************************************** A类 ****************************************************
-     /**
+     * /**
      * A0（841 * 1189），单位：mm
      */
     public static final XEasyPdfPageRectangle A0 = new XEasyPdfPageRectangle(841 * POINTS_PER_MM, 1189 * POINTS_PER_MM);
@@ -88,7 +89,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * ************************************************** B类 ****************************************************
-     /**
+     * /**
      * B0（1030 * 1456），单位：mm
      */
     public static final XEasyPdfPageRectangle B0 = new XEasyPdfPageRectangle(1030 * POINTS_PER_MM, 1456 * POINTS_PER_MM);
@@ -127,6 +128,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param size pdfbox页面尺寸
      */
     XEasyPdfPageRectangle(PDRectangle size) {
@@ -137,7 +139,8 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 有参构造
-     * @param width 宽度
+     *
+     * @param width  宽度
      * @param height 高度
      */
     private XEasyPdfPageRectangle(float width, float height) {
@@ -148,20 +151,22 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 有参构造
-     * @param leftX 宽度
-     * @param rightX 高度
+     *
+     * @param leftX   宽度
+     * @param rightX  高度
      * @param bottomY 高度
-     * @param topY 高度
+     * @param topY    高度
      */
     private XEasyPdfPageRectangle(float leftX, float rightX, float bottomY, float topY) {
-        this.width = Math.abs(rightX-leftX);
-        this.height = Math.abs(topY-bottomY);
+        this.width = Math.abs(rightX - leftX);
+        this.height = Math.abs(topY - bottomY);
         this.size = new PDRectangle(new BoundingBox(leftX, bottomY, rightX, topY));
     }
 
     /**
      * 创建页面尺寸
-     * @param width 宽度
+     *
+     * @param width  宽度
      * @param height 高度
      * @return 返回页面尺寸
      */
@@ -171,10 +176,11 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 创建页面尺寸
-     * @param leftX X轴左坐标
-     * @param rightX X轴右坐标
+     *
+     * @param leftX   X轴左坐标
+     * @param rightX  X轴右坐标
      * @param bottomY Y轴下坐标
-     * @param topY Y轴上坐标
+     * @param topY    Y轴上坐标
      * @return 返回页面尺寸
      */
     public static XEasyPdfPageRectangle create(float leftX, float rightX, float bottomY, float topY) {
@@ -183,6 +189,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取每毫米像素点
+     *
      * @return 返回每毫米像素点
      */
     public static float getUnit() {
@@ -191,6 +198,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取宽度
+     *
      * @return 返回宽度
      */
     public float getWidth() {
@@ -199,6 +207,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取高度
+     *
      * @return 返回高度
      */
     public float getHeight() {
@@ -207,6 +216,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取X轴左坐标
+     *
      * @return 返回X轴左坐标
      */
     public float getLeftX() {
@@ -215,6 +225,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取X轴右坐标
+     *
      * @return 返回X轴右坐标
      */
     public float getRightX() {
@@ -223,6 +234,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取Y轴下坐标
+     *
      * @return 返回Y轴下坐标
      */
     public float getBottomY() {
@@ -231,6 +243,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取Y轴上坐标
+     *
      * @return 返回Y轴上坐标
      */
     public float getTopY() {
@@ -239,6 +252,7 @@ public class XEasyPdfPageRectangle implements Serializable {
 
     /**
      * 获取pdfbox页面尺寸
+     *
      * @return 返回pdfbox页面尺寸
      */
     PDRectangle getSize() {

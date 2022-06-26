@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 /**
  * pdf水印组件接口
+ *
  * @author xsx
  * @date 2020/6/7
  * @since 1.8
@@ -27,12 +28,14 @@ public interface XEasyPdfWatermark extends Serializable {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回水印组件
      */
     XEasyPdfWatermark enableResetContext();
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */

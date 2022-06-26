@@ -6,6 +6,7 @@ import wiki.xsx.core.pdf.component.XEasyPdfComponent;
 
 /**
  * pdf布局组件
+ *
  * @author xsx
  * @date 2022/3/17
  * @since 1.8
@@ -39,7 +40,8 @@ public class XEasyPdfLayoutComponent {
 
     /**
      * 有参构造
-     * @param width 宽度
+     *
+     * @param width  宽度
      * @param height 高度
      */
     public XEasyPdfLayoutComponent(Float width, Float height) {

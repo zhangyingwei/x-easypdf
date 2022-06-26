@@ -33,6 +33,7 @@ import java.util.List;
 
 /**
  * pdf文档签名器
+ *
  * @author xsx
  * @date 2021/12/7
  * @since 1.8
@@ -59,6 +60,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param pdfDocument pdf文档
      */
     XEasyPdfDocumentSigner(XEasyPdfDocument pdfDocument) {
@@ -68,9 +70,10 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 设置签名信息
-     * @param name 名称
-     * @param location 位置
-     * @param reason 原因
+     *
+     * @param name        名称
+     * @param location    位置
+     * @param reason      原因
      * @param contactInfo 联系信息
      * @return 返回pdf文档签名器
      */
@@ -89,7 +92,8 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 设置签名过滤器
-     * @param filter 过滤器
+     *
+     * @param filter    过滤器
      * @param subFilter 子过滤器
      * @return 返回pdf文档签名器
      */
@@ -97,10 +101,10 @@ public class XEasyPdfDocumentSigner implements Serializable {
             SignFilter.Filter filter,
             SignFilter.SubFilter subFilter
     ) {
-        if (filter!=null) {
+        if (filter != null) {
             this.param.getSignature().setFilter(filter.filter);
         }
-        if (subFilter!=null) {
+        if (subFilter != null) {
             this.param.getSignature().setSubFilter(subFilter.filter);
         }
         return this;
@@ -108,9 +112,10 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 设置签名图片
-     * @param image 图片
-     * @param marginLeft 图片左边距
-     * @param marginTop 图片上边距
+     *
+     * @param image        图片
+     * @param marginLeft   图片左边距
+     * @param marginTop    图片上边距
      * @param scalePercent 图片缩放比例
      * @return 返回pdf文档签名器
      */
@@ -123,15 +128,16 @@ public class XEasyPdfDocumentSigner implements Serializable {
         this.param.setImage(image)
                 .setImageMarginLeft(marginLeft)
                 .setImageMarginTop(marginTop)
-                .setImageScalePercent(scalePercent-100);
+                .setImageScalePercent(scalePercent - 100);
         return this;
     }
 
     /**
      * 设置签名证书
-     * @param signAlgorithm 签名算法
-     * @param keyStoreType 密钥库类型
-     * @param certificate 证书文件
+     *
+     * @param signAlgorithm       签名算法
+     * @param keyStoreType        密钥库类型
+     * @param certificate         证书文件
      * @param certificatePassword 证书密码
      * @return 返回pdf文档签名器
      */
@@ -150,6 +156,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 设置签名内存大小（默认：250K）
+     *
      * @param preferredSignatureSize 签名内存大小
      * @return 返回pdf文档签名器
      */
@@ -160,6 +167,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 设置自定义签名接口
+     *
      * @param customSignature 自定义pdfbox签名接口
      * @return 返回pdf文档签名器
      */
@@ -170,6 +178,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 设置签名后pdf访问权限
+     *
      * @param accessPermissions pdf访问权限
      * @return 返回pdf文档签名器
      */
@@ -180,7 +189,8 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 签名
-     * @param pageIndex 签名页面索引
+     *
+     * @param pageIndex    签名页面索引
      * @param outputStream 输出流
      */
     @SneakyThrows
@@ -202,7 +212,8 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 添加签名
-     * @param target 目标文档
+     *
+     * @param target       目标文档
      * @param outputStream 输出流
      */
     @SneakyThrows
@@ -227,13 +238,14 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 重置签名表单
+     *
      * @param target 目标文档
      */
     void resetSignForm(PDDocument target) {
         // 获取pdfbox表单
         PDAcroForm acroForm = target.getDocumentCatalog().getAcroForm();
         // 如果表单不为空且首次使用，则清除首次使用项
-        if (acroForm!=null&&acroForm.getNeedAppearances()) {
+        if (acroForm != null && acroForm.getNeedAppearances()) {
             // 如果表单字段为空，则清除首次使用项
             if (acroForm.getFields().isEmpty()) {
                 // 清除首次使用项
@@ -244,15 +256,17 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 获取签名接口
+     *
      * @return 返回签名接口
      */
     @SneakyThrows
     private SignatureInterface getSignatureInterface() {
-        return this.param.getCustomSignature()!=null?this.param.getCustomSignature():new DefaultSignatureImplement(this);
+        return this.param.getCustomSignature() != null ? this.param.getCustomSignature() : new DefaultSignatureImplement(this);
     }
 
     /**
      * 获取mdp权限
+     *
      * @param doc pdfbox文档
      * @return 返回mdp权限
      */
@@ -291,8 +305,9 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
     /**
      * 设置mdp权限
-     * @param doc pdfbox文档
-     * @param signature pdfbox签名
+     *
+     * @param doc               pdfbox文档
+     * @param signature         pdfbox签名
      * @param accessPermissions 签名后pdf访问权限
      */
     @SneakyThrows
@@ -354,6 +369,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
         /**
          * 有参构造
+         *
          * @param signer pdf签名器
          */
         DefaultSignatureImplement(XEasyPdfDocumentSigner signer) {
@@ -362,6 +378,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
         /**
          * 签名
+         *
          * @param content 内容
          * @return 返回字节数组
          */
@@ -416,6 +433,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 有参构造
+             *
              * @param is 输入流
              */
             CmsProcessableInputStream(InputStream is) {
@@ -424,8 +442,9 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 有参构造
+             *
              * @param type 内容类型
-             * @param is 输入流
+             * @param is   输入流
              */
             CmsProcessableInputStream(ASN1ObjectIdentifier type, InputStream is) {
                 this.contentType = type;
@@ -434,6 +453,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 获取内容
+             *
              * @return 返回输入流
              */
             @Override
@@ -443,6 +463,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 写出
+             *
              * @param out 输出流
              * @throws IOException IO异常
              */
@@ -454,6 +475,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 获取内容类型
+             *
              * @return 返回内容类型
              */
             @Override
@@ -513,6 +535,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
         /**
          * 有参构造
+         *
          * @param type 类型
          * @param name 名称
          */
@@ -555,6 +578,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 有参构造
+             *
              * @param filter 过滤器
              */
             Filter(COSName filter) {
@@ -563,6 +587,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 获取过滤器
+             *
              * @return 返回过滤器
              */
             public COSName getFilter() {
@@ -599,6 +624,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 有参构造
+             *
              * @param filter 过滤器
              */
             SubFilter(COSName filter) {
@@ -607,6 +633,7 @@ public class XEasyPdfDocumentSigner implements Serializable {
 
             /**
              * 获取过滤器
+             *
              * @return 返回过滤器
              */
             public COSName getFilter() {

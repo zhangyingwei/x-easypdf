@@ -10,6 +10,7 @@ import java.security.cert.X509Certificate;
 
 /**
  * pdf文档权限
+ *
  * @author xsx
  * @date 2020/4/1
  * @since 1.8
@@ -48,6 +49,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param document pdf文档
      */
     XEasyPdfDocumentPermission(XEasyPdfDocument document) {
@@ -56,6 +58,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否打印
+     *
      * @param allowPrinting 能否打印
      * @return 返回pdf权限
      */
@@ -66,6 +69,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否编辑
+     *
      * @param allowModifications 能否编辑
      * @return 返回pdf权限
      */
@@ -76,6 +80,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否修改批注
+     *
      * @param allowAnnotationModification 能否修改批注
      * @return 返回pdf权限
      */
@@ -86,6 +91,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否填充表单
+     *
      * @param allowFillingInForm 能否填充表单
      * @return 返回pdf权限
      */
@@ -96,6 +102,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否提取内容
+     *
      * @param allowExtraction 能否提取内容
      * @return 返回pdf权限
      */
@@ -106,6 +113,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否提取内容（在权限范围内）
+     *
      * @param allowExtraction 能否提取内容
      * @return 返回pdf权限
      */
@@ -116,6 +124,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否组装文档（新增/调整/删除页面）
+     *
      * @param allowAssembly 能否组装文档
      * @return 返回pdf权限
      */
@@ -126,6 +135,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置能否打印降级
+     *
      * @param canPrintDegraded 能否打印降级
      * @return 返回pdf权限
      */
@@ -136,6 +146,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 设置为只读（只读时，其他设置将失效）
+     *
      * @return 返回pdf权限
      */
     public XEasyPdfDocumentPermission setReadOnly() {
@@ -145,6 +156,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 完成权限设置（无密码）
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
@@ -154,10 +166,11 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 完成权限设置（标准策略）
-     * @param preferAES AES加密（密码长度为128位时生效）
-     * @param length 密码长度（40位，128位，256位）
+     *
+     * @param preferAES     AES加密（密码长度为128位时生效）
+     * @param length        密码长度（40位，128位，256位）
      * @param ownerPassword 拥有者密码
-     * @param userPassword 用户密码
+     * @param userPassword  用户密码
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finishWithStandardPolicy(boolean preferAES, PWLength length, String ownerPassword, String userPassword) {
@@ -181,6 +194,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 完成权限设置（公钥策略，仅支持"X.509"）
+     *
      * @param certificateInputStream 公钥证书数据流
      * @return 返回pdf文档
      */
@@ -205,6 +219,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
     /**
      * 获取pdfBox保护策略
+     *
      * @return 返回pdfBox保护策略
      */
     ProtectionPolicy getPolicy() {
@@ -214,7 +229,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
     /**
      * 密码长度枚举
      */
-    public enum  PWLength {
+    public enum PWLength {
         /**
          * 长度40
          */
@@ -234,6 +249,7 @@ public class XEasyPdfDocumentPermission implements Serializable {
 
         /**
          * 构造方法
+         *
          * @param length 长度
          */
         PWLength(int length) {

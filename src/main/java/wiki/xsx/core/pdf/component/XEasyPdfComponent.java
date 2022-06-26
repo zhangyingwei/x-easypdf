@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 /**
  * pdf组件接口
+ *
  * @author xsx
  * @date 2020/3/3
  * @since 1.8
@@ -28,6 +29,7 @@ public interface XEasyPdfComponent extends Serializable {
 
     /**
      * 设置坐标
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回pdf组件
@@ -36,6 +38,7 @@ public interface XEasyPdfComponent extends Serializable {
 
     /**
      * 设置宽度
+     *
      * @param width 宽度
      * @return 返回pdf组件
      */
@@ -43,6 +46,7 @@ public interface XEasyPdfComponent extends Serializable {
 
     /**
      * 设置高度
+     *
      * @param height 高度
      * @return 返回pdf组件
      */
@@ -50,6 +54,7 @@ public interface XEasyPdfComponent extends Serializable {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回pdf组件
      */
@@ -57,14 +62,16 @@ public interface XEasyPdfComponent extends Serializable {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回pdf组件
      */
     XEasyPdfComponent enableResetContext();
 
     /**
      * 绘制
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void draw(XEasyPdfDocument document, XEasyPdfPage page);
 
@@ -92,6 +99,7 @@ public interface XEasyPdfComponent extends Serializable {
 
         /**
          * 构造方法
+         *
          * @param appendMode pdfbox追加模式
          */
         ContentMode(PDPageContentStream.AppendMode appendMode) {
@@ -100,6 +108,7 @@ public interface XEasyPdfComponent extends Serializable {
 
         /**
          * 获取追加模式
+         *
          * @return 返回pdfbox追加模式
          */
         public PDPageContentStream.AppendMode getMode() {

@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 /**
  * pdf页面水印参数
+ *
  * @author xsx
  * @date 2020/3/25
  * @since 1.8
@@ -99,32 +100,33 @@ class XEasyPdfWatermarkParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果内容模式未初始化，则初始化为页面内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = page.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
         // 如果字体路径未初始化，则初始化为页面字体路径
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化为页面字体路径
             this.fontPath = page.getFontPath();
         }
         // 如果文本间隔未初始化，则进行初始化
-        if (this.wordSpace==null) {
+        if (this.wordSpace == null) {
             // 初始化文本间隔为6倍字体大小
             this.wordSpace = this.fontSize * 6;
         }
         // 如果文本行间距未初始化，则进行初始化
-        if (this.leading==null) {
+        if (this.leading == null) {
             // 初始化文本行间距为2倍字体大小
             this.leading = this.fontSize * 2;
         }

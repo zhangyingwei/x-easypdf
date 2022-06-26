@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.component.image;
 
 /**
  * 图片类型枚举
+ *
  * @author xsx
  * @date 2021/6/30
  * @since 1.8

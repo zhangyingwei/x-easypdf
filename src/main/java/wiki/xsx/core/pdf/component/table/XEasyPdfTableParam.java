@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * pdf表格组件参数
+ *
  * @author xsx
  * @date 2020/6/6
  * @since 1.8
@@ -124,47 +125,48 @@ class XEasyPdfTableParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果内容模式未初始化，则初始化
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = page.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
         // 如果字体路径未初始化，则初始化
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化为页面字体路径
             this.fontPath = page.getFontPath();
         }
         // 如果背景颜色未初始化，则初始化
-        if (this.backgroundColor==null) {
+        if (this.backgroundColor == null) {
             // 初始化背景颜色
             this.backgroundColor = page.getBackgroundColor();
         }
         // 如果边框颜色未初始化，则初始化
-        if (this.borderColor==null) {
+        if (this.borderColor == null) {
             // 初始化边框颜色
             this.borderColor = Color.BLACK;
         }
         // 如果左边距未初始化，则初始化
-        if (this.marginLeft==null) {
+        if (this.marginLeft == null) {
             // 初始化左边距
             this.marginLeft = 0F;
         }
         // 如果上边距未初始化，则初始化
-        if (this.marginTop==null) {
+        if (this.marginTop == null) {
             // 初始化上边距
             this.marginTop = 5F;
         }
         // 如果下边距未初始化，则初始化
-        if (this.marginBottom==null) {
+        if (this.marginBottom == null) {
             // 初始化下边距
             this.marginBottom = 0F;
         }
@@ -172,43 +174,44 @@ class XEasyPdfTableParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param param pdf表格参数
      */
     void init(XEasyPdfTableParam param) {
         // 初始化上边距
         this.marginTop = 0F;
         // 如果左边距未初始化，则初始化
-        if (this.marginLeft==null) {
+        if (this.marginLeft == null) {
             // 初始化左边距
             this.marginLeft = param.getMarginLeft();
         }
         // 如果最小行高未初始化，则初始化
-        if (this.minRowHeight==null) {
+        if (this.minRowHeight == null) {
             // 初始化最小行高
             this.minRowHeight = param.getMinRowHeight();
         }
         // 如果内容模式未初始化，则初始化
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化内容模式
             this.contentMode = param.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化是否重置上下文
             this.isResetContext = param.getIsResetContext();
         }
         // 如果字体路径未初始化，则初始化
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化为页面字体路径
             this.fontPath = param.getFontPath();
         }
         // 如果背景颜色未初始化，则初始化
-        if (this.backgroundColor==null) {
+        if (this.backgroundColor == null) {
             // 初始化背景颜色
             this.backgroundColor = param.getBackgroundColor();
         }
         // 如果边框颜色未初始化，则初始化
-        if (this.borderColor==null) {
+        if (this.borderColor == null) {
             // 初始化边框颜色
             this.borderColor = param.getBorderColor();
         }

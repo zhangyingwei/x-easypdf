@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * pdf字体映射助手
+ *
  * @author xsx
  * @date 2022/6/20
  * @since 1.8
@@ -57,6 +58,7 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 获取字体映射实例
+     *
      * @return 返回字体映射实例
      */
     public static XEasyPdfFontMapperHandler getInstance() {
@@ -65,8 +67,9 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 添加字体
+     *
      * @param fontPath 字体路径
-     * @param font 字体
+     * @param font     字体
      */
     @SneakyThrows
     public void addFont(String fontPath, FontBoxFont font) {
@@ -76,6 +79,7 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 根据字体路径获取字体
+     *
      * @param fontPath 字体路径
      * @return 返回字体
      */
@@ -86,16 +90,17 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 获取ttf字体
-     * @param baseFont 字体名称
+     *
+     * @param baseFont       字体名称
      * @param fontDescriptor 字体描述
      * @return 返回ttf字体
      */
     @Override
     public FontMapping<TrueTypeFont> getTrueTypeFont(String baseFont, PDFontDescriptor fontDescriptor) {
         // 查找字体
-        TrueTypeFont ttf = (TrueTypeFont)this.findFont(baseFont);
+        TrueTypeFont ttf = (TrueTypeFont) this.findFont(baseFont);
         // 如果字体不为空，则返回字体
-        if (ttf!=null) {
+        if (ttf != null) {
             // 返回字体
             return new FontMapping<>(ttf, false);
         }
@@ -105,7 +110,8 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 获取字体
-     * @param baseFont 字体名称
+     *
+     * @param baseFont       字体名称
      * @param fontDescriptor 字体描述
      * @return 返回字体
      */
@@ -114,7 +120,7 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
         // 查找字体
         FontBoxFont font = this.findFont(baseFont);
         // 如果字体不为空，则返回字体
-        if (font!=null) {
+        if (font != null) {
             // 返回字体
             return new FontMapping<>(font, false);
         }
@@ -124,9 +130,10 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 获取字体CID信息
-     * @param baseFont 字体名称
+     *
+     * @param baseFont       字体名称
      * @param fontDescriptor 字体描述
-     * @param cidSystemInfo CID系统信息
+     * @param cidSystemInfo  CID系统信息
      * @return 返回字体CID信息
      */
     @Override
@@ -136,7 +143,7 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
         // 如果字体为otf类型，则返回otf类型信息
         if (font instanceof OpenTypeFont) {
             // 返回otf类型信息
-            return new CIDFontMapping((OpenTypeFont)font, null, false);
+            return new CIDFontMapping((OpenTypeFont) font, null, false);
         }
         // 如果字体为ttf类型，则返回ttf类型信息
         if (font instanceof TrueTypeFont) {
@@ -149,13 +156,14 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 初始化
+     *
      * @param styles 字体样式
      */
-    private void init(XEasyPdfDefaultFontStyle ...styles) {
+    private void init(XEasyPdfDefaultFontStyle... styles) {
         // 遍历字体样式
         for (XEasyPdfDefaultFontStyle style : styles) {
             // 初始化输入流（从资源路径读取）
-            try(InputStream inputStream = new BufferedInputStream(XEasyPdfFontMapperHandler.class.getResourceAsStream(style.getPath()))) {
+            try (InputStream inputStream = new BufferedInputStream(XEasyPdfFontMapperHandler.class.getResourceAsStream(style.getPath()))) {
                 // 添加字体
                 addFont(style.getPath(), new TTFParser(true, true).parse(inputStream));
             } catch (IOException e) {
@@ -167,6 +175,7 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 查找字体
+     *
      * @param postScriptName 字体名称
      * @return 返回字体
      */
@@ -179,21 +188,21 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
         // 获取字体
         FontBoxFont info = this.getFont(postScriptName);
         // 如果字体不为空，则返回字体
-        if (info!=null) {
+        if (info != null) {
             // 返回字体
             return info;
         }
         // 重新获取字体（替换字体名称，移除“-”）
         info = this.getFont(postScriptName.replace("-", ""));
         // 如果字体不为空，则返回字体
-        if (info!=null) {
+        if (info != null) {
             // 返回字体
             return info;
         }
         // 重新获取字体（替换字体名称，替换“,”为“-”）
         info = this.getFont(postScriptName.replace(',', '-'));
         // 如果字体不为空，则返回字体
-        if (info!=null) {
+        if (info != null) {
             // 返回字体
             return info;
         }
@@ -203,6 +212,7 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
 
     /**
      * 获取字体
+     *
      * @param postScriptName 字体名称
      * @return 返回字体
      */

@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 转换工具
+ *
  * @author xsx
  * @date 2020/5/24
  * @since 1.8
@@ -27,12 +28,13 @@ public class XEasyPdfConvertUtil {
 
     /**
      * 转为基本类型数组
+     *
      * @param list 包装类型列表
      * @return 返回基本类型数组
      */
     public static int[] toInt(List<Integer> list) {
         // 如果列表为空，则返回空数组
-        if (list==null||list.isEmpty()) {
+        if (list == null || list.isEmpty()) {
             // 返回空数组
             return new int[0];
         }
@@ -51,12 +53,13 @@ public class XEasyPdfConvertUtil {
 
     /**
      * 转为包装类型列表
+     *
      * @param array 基本类型数组
      * @return 返回包装类型列表
      */
     public static List<Integer> toInteger(int[] array) {
         // 如果数组为空，则返回空列表
-        if (array==null||array.length==0) {
+        if (array == null || array.length == 0) {
             // 返回空列表
             return new ArrayList<>(0);
         }
@@ -75,8 +78,9 @@ public class XEasyPdfConvertUtil {
 
     /**
      * 转为列表
+     *
      * @param iterable 迭代器
-     * @param <T> 数据类型
+     * @param <T>      数据类型
      * @return 返回列表
      */
     public static <T> List<T> toList(Iterable<T> iterable) {
@@ -93,15 +97,16 @@ public class XEasyPdfConvertUtil {
 
     /**
      * 转为新对象（深拷贝）
+     *
      * @param object 源对象
-     * @param <T> 对象类型
+     * @param <T>    对象类型
      * @return 返回新对象
      */
     @SuppressWarnings("all")
     @SneakyThrows
     public static <T> T toNewObject(Serializable object) {
         // 如果源对象为空，则返回空
-        if (object==null) {
+        if (object == null) {
             // 返回空
             return null;
         }

@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * pdf水印组件
+ *
  * @author xsx
  * @date 2020/3/25
  * @since 1.8
@@ -46,6 +47,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 有参构造
+     *
      * @param text 水印文本
      */
     public XEasyPdfDefaultWatermark(String text) {
@@ -54,8 +56,9 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 有参构造
+     *
      * @param fontSize 字体大小
-     * @param text 水印文本
+     * @param text     水印文本
      */
     public XEasyPdfDefaultWatermark(float fontSize, String text) {
         this.param.setFontSize(Math.abs(fontSize)).setText(text);
@@ -63,6 +66,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置字体路径
+     *
      * @param fontPath 字体路径
      * @return 返回页面水印组件
      */
@@ -73,11 +77,12 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置默认字体样式
+     *
      * @param style 默认字体样式
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        if (style!=null) {
+        if (style != null) {
             this.param.setFontPath(style.getPath());
         }
         return this;
@@ -85,6 +90,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置字体大小
+     *
      * @param fontSize 字体大小
      * @return 返回页面水印组件
      */
@@ -95,11 +101,12 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置字体颜色
+     *
      * @param fontColor 字体颜色
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setFontColor(Color fontColor) {
-        if (fontColor!=null) {
+        if (fontColor != null) {
             this.param.setFontColor(fontColor);
         }
         return this;
@@ -107,11 +114,12 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置文本透明度
+     *
      * @param alpha 文本透明度
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setAlpha(float alpha) {
-        if (0<=alpha&&alpha<=1) {
+        if (0 <= alpha && alpha <= 1) {
             this.param.setAlpha(alpha);
         }
         return this;
@@ -119,6 +127,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置文本弧度
+     *
      * @param radians 文本弧度
      * @return 返回页面水印组件
      */
@@ -129,6 +138,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置水印文本
+     *
      * @param text 水印文本
      * @return 返回页面水印组件
      */
@@ -139,6 +149,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置水印文本间距
+     *
      * @param wordSpace 水印文本间距
      * @return 返回页面水印组件
      */
@@ -149,6 +160,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置水印单行文本数
+     *
      * @param wordCount 水印单行文本数
      * @return 返回页面水印组件
      */
@@ -159,6 +171,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置水印文本行数
+     *
      * @param wordLine 水印文本行数
      * @return 返回页面水印组件
      */
@@ -169,6 +182,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置水印文本字符间隔
+     *
      * @param characterSpacing 水印文本字符间隔
      * @return 返回页面水印组件
      */
@@ -179,6 +193,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置水印文本行间距
+     *
      * @param leading 水印文本行间距
      * @return 返回页面水印组件
      */
@@ -189,6 +204,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 设置坐标
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回页面水印组件
@@ -200,6 +216,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 开启外水印模式
+     *
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark enableOuterMode() {
@@ -209,6 +226,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 开启内水印模式
+     *
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark enableInnerMode() {
@@ -218,6 +236,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 开启重置上下文
+     *
      * @return 返回页面水印组件
      */
     @Override
@@ -228,6 +247,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */
@@ -272,9 +292,10 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 执行绘制
+     *
      * @param document pdfbox文档
-     * @param page pdfbox页面
-     * @param font pdfbox字体
+     * @param page     pdfbox页面
+     * @param font     pdfbox字体
      */
     @SneakyThrows
     private void doDraw(PDDocument document, PDPage page, PDFont font) {
@@ -283,12 +304,12 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 获取页面宽度
         float width = page.getMediaBox().getWidth();
         // 如果X轴起始坐标未初始化，则初始化X轴起始坐标为0
-        if (this.param.getBeginX()==null) {
+        if (this.param.getBeginX() == null) {
             // 初始化X轴起始坐标为0
             this.param.setBeginX(0F);
         }
         // 如果Y轴起始坐标未初始化，则初始化Y轴起始坐标为页面高度-字体大小
-        if (this.param.getBeginY()==null) {
+        if (this.param.getBeginY() == null) {
             // 初始化Y轴起始坐标 = 页面高度-字体大小
             this.param.setBeginY(height - this.param.getFontSize());
         }
@@ -317,19 +338,20 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
         // 设置字符间隔
         cs.setCharacterSpacing(this.param.getCharacterSpacing());
         // 写入文本
-        this.writeText(cs, width*2);
+        this.writeText(cs, width * 2);
         // 关闭内容流
         cs.close();
     }
 
     /**
      * 写入文本
-     * @param cs 内容流
+     *
+     * @param cs       内容流
      * @param mixWidth 最大宽度
      */
     private void writeText(PDPageContentStream cs, float mixWidth) {
         // 如果单行文本数不为空，则根据单行文本数写入
-        if (this.param.getWordCount()!=null) {
+        if (this.param.getWordCount() != null) {
             // 根据单行文本数写入
             this.writeTextWithCount(cs);
         }
@@ -342,6 +364,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
 
     /**
      * 根据单行文本数写入
+     *
      * @param cs 内容流
      */
     private void writeTextWithCount(PDPageContentStream cs) {
@@ -354,7 +377,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
                 // 写入文本
                 this.writeText(cs);
                 // 重置X轴起始坐标为X轴起始+文本间隔
-                this.param.setBeginX(this.param.getBeginX()+this.param.getWordSpace());
+                this.param.setBeginX(this.param.getBeginX() + this.param.getWordSpace());
                 // 文本数索引自增
                 index++;
             }
@@ -363,13 +386,14 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
             // 重置X轴起始坐标为0
             this.param.setBeginX(0F);
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
-            this.param.setBeginY(this.param.getBeginY()-this.param.getFontSize()-this.param.getLeading());
+            this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
         }
     }
 
     /**
      * 根据最大宽度写入文本
-     * @param cs 内容流
+     *
+     * @param cs       内容流
      * @param mixWidth 最大宽度
      */
     private void writeTextWithWidth(PDPageContentStream cs, Float mixWidth) {
@@ -380,19 +404,20 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
                 // 写入文本
                 this.writeText(cs);
                 // 重置X轴起始坐标为X轴起始+文本间隔
-                this.param.setBeginX(this.param.getBeginX()+this.param.getWordSpace());
+                this.param.setBeginX(this.param.getBeginX() + this.param.getWordSpace());
             }
             // 如果X轴起始坐标小于页面宽度，则继续
             while (this.param.getBeginX() < mixWidth);
             // 重置X轴起始坐标为0
             this.param.setBeginX(0F);
             // 重置Y轴起始坐标为Y轴起始坐标-字体大小-行间距
-            this.param.setBeginY(this.param.getBeginY()-this.param.getFontSize()-this.param.getLeading());
+            this.param.setBeginY(this.param.getBeginY() - this.param.getFontSize() - this.param.getLeading());
         }
     }
 
     /**
      * 写入文本
+     *
      * @param cs 内容流
      */
     @SneakyThrows

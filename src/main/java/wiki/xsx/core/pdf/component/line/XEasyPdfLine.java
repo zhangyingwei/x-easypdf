@@ -7,6 +7,7 @@ import java.awt.*;
 
 /**
  * pdf线条组件
+ *
  * @author xsx
  * @date 2020/12/8
  * @since 1.8
@@ -26,6 +27,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置字体路径
+     *
      * @param fontPath 字体路径
      * @return 返回线条组件
      */
@@ -33,6 +35,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置默认字体样式
+     *
      * @param style 默认字体样式
      * @return 返回线条组件
      */
@@ -40,6 +43,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回线条组件
      */
@@ -47,6 +51,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置右边距
+     *
      * @param margin 边距
      * @return 返回线条组件
      */
@@ -54,6 +59,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置线条宽度
+     *
      * @param lineWidth 线条宽度
      * @return 返回线条组件
      */
@@ -61,6 +67,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置线条颜色
+     *
      * @param color 线条颜色
      * @return 返回线条组件
      */
@@ -68,6 +75,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 设置线条线型
+     *
      * @param lineCapStyle 线条线型
      * @return 返回线条组件
      */
@@ -75,6 +83,7 @@ public interface XEasyPdfLine extends XEasyPdfComponent {
 
     /**
      * 获取线条宽度
+     *
      * @return 返回线条宽度
      */
     float getLineWidth();

@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.doc;
 
 /**
  * pdf打印形式
+ *
  * @author xsx
  * @date 2020/11/14
  * @since 1.8
@@ -37,6 +38,7 @@ public enum XEasyPdfPrintStyle {
 
     /**
      * 有参构造
+     *
      * @param orientation 方向
      */
     XEasyPdfPrintStyle(int orientation) {
@@ -45,6 +47,7 @@ public enum XEasyPdfPrintStyle {
 
     /**
      * 获取方向
+     *
      * @return 返回方向
      */
     public int getOrientation() {

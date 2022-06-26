@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * pdf条形码(一维码/二维码)组件
+ *
  * @author xsx
  * @date 2021/12/20
  * @since 1.8
@@ -47,8 +48,9 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param codeType 条形码类型
-     * @param content 条形码内容
+     * @param content  条形码内容
      */
     public XEasyPdfBarCode(CodeType codeType, String content) {
         this(codeType, content, null);
@@ -56,12 +58,13 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param codeType 条形码类型
-     * @param content 条形码内容
-     * @param words 条形码文字
+     * @param content  条形码内容
+     * @param words    条形码文字
      */
     public XEasyPdfBarCode(CodeType codeType, String content, String words) {
-        if (codeType!=null) {
+        if (codeType != null) {
             this.param.setCodeType(codeType);
         }
         this.param.setContent(content).setWords(words);
@@ -69,10 +72,11 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param codeType 条形码类型
-     * @param content 条形码内容
-     * @param beginX X轴起始坐标
-     * @param beginY Y轴起始坐标
+     * @param content  条形码内容
+     * @param beginX   X轴起始坐标
+     * @param beginY   Y轴起始坐标
      */
     public XEasyPdfBarCode(CodeType codeType, String content, float beginX, float beginY) {
         this(codeType, content, null, beginX, beginY);
@@ -80,14 +84,15 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 有参构造
+     *
      * @param codeType 条形码类型
-     * @param content 条形码内容
-     * @param words 条形码文字
-     * @param beginX X轴起始坐标
-     * @param beginY Y轴起始坐标
+     * @param content  条形码内容
+     * @param words    条形码文字
+     * @param beginX   X轴起始坐标
+     * @param beginY   Y轴起始坐标
      */
     public XEasyPdfBarCode(CodeType codeType, String content, String words, float beginX, float beginY) {
-        if (codeType!=null) {
+        if (codeType != null) {
             this.param.setCodeType(codeType);
         }
         this.param.setContent(content).setWords(words).setBeginX(beginX).setBeginY(beginY);
@@ -95,6 +100,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置定位
+     *
      * @param beginX X轴起始坐标
      * @param beginY Y轴起始坐标
      * @return 返回条形码组件
@@ -107,6 +113,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置宽度（图像显示宽度）
+     *
      * @param width 宽度
      * @return 返回条形码组件
      */
@@ -118,6 +125,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置高度（图像显示宽度）
+     *
      * @param height 高度
      * @return 返回条形码组件
      */
@@ -129,6 +137,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置最大宽度（图像实际宽度）
+     *
      * @param width 宽度
      * @return 返回条形码组件
      */
@@ -139,6 +148,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置最大高度（图像实际高度）
+     *
      * @param height 高度
      * @return 返回条形码组件
      */
@@ -149,12 +159,13 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回条形码组件
      */
     @Override
     public XEasyPdfBarCode setContentMode(ContentMode mode) {
-        if (mode!=null) {
+        if (mode != null) {
             this.param.setContentMode(mode);
         }
         return this;
@@ -162,6 +173,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码类型
+     *
      * @param codeType 条形码类型
      * @return 返回条形码组件
      */
@@ -172,11 +184,12 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置纠错级别
+     *
      * @param errorLevel 条形码纠错级别
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setErrorLevel(ErrorLevel errorLevel) {
-        if (errorLevel!=null) {
+        if (errorLevel != null) {
             this.param.setEncodeHints(EncodeHintType.ERROR_CORRECTION, errorLevel.level);
         }
         return this;
@@ -184,15 +197,16 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置二维码版本（仅二维码有效）
+     *
      * @param version 二维码版本
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setQrVersion(int version) {
         final int min = 0;
         final int max = 41;
-        if (version>min&&version<max) {
+        if (version > min && version < max) {
             this.param.setEncodeHints(EncodeHintType.QR_VERSION, version);
-        }else {
+        } else {
             throw new IllegalArgumentException("the version must be between 1 and 40");
         }
         return this;
@@ -200,6 +214,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码内容
+     *
      * @param content 条形码内容
      * @return 返回条形码组件
      */
@@ -210,11 +225,12 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码前景颜色
+     *
      * @param onColor 条形码前景颜色
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setOnColor(Color onColor) {
-        if (onColor!=null) {
+        if (onColor != null) {
             this.param.setOnColor(onColor);
         }
         return this;
@@ -222,11 +238,12 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码背景颜色
+     *
      * @param offColor 条形码背景颜色
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setOffColor(Color offColor) {
-        if (offColor!=null) {
+        if (offColor != null) {
             this.param.setOffColor(offColor);
         }
         return this;
@@ -234,6 +251,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码文字
+     *
      * @param words 条形码文字
      * @return 返回条形码组件
      */
@@ -244,11 +262,12 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码文字颜色
+     *
      * @param wordsColor 条形码文字颜色
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setWordsColor(Color wordsColor) {
-        if (wordsColor!=null) {
+        if (wordsColor != null) {
             this.param.setWordsColor(wordsColor);
         }
         return this;
@@ -256,11 +275,12 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码文字样式
+     *
      * @param wordsStyle 条形码文字样式
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setWordsStyle(WordsStyle wordsStyle) {
-        if (wordsStyle!=null) {
+        if (wordsStyle != null) {
             this.param.setWordsStyle(wordsStyle);
         }
         return this;
@@ -268,6 +288,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码文字大小
+     *
      * @param wordsSize 条形码文字大小
      * @return 返回条形码组件
      */
@@ -278,13 +299,14 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置条形码旋转弧度
+     *
      * @param radians 条形码旋转弧度
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode setRadians(double radians) {
-        radians = radians%360;
-        if (radians!=0) {
-            if (radians<0) {
+        radians = radians % 360;
+        if (radians != 0) {
+            if (radians < 0) {
                 radians += 360;
             }
             this.param.setRadians(radians);
@@ -294,6 +316,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置左边距
+     *
      * @param marginLeft 左边距
      * @return 返回条形码组件
      */
@@ -304,6 +327,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置右边距
+     *
      * @param marginRight 右边距
      * @return 返回条形码组件
      */
@@ -314,6 +338,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置上边距
+     *
      * @param marginTop 上边距
      * @return 返回条形码组件
      */
@@ -324,6 +349,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 设置下边距
+     *
      * @param marginBottom 下边距
      * @return 返回条形码组件
      */
@@ -334,6 +360,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 开启文字显示
+     *
      * @return 返回条形码组件
      */
     public XEasyPdfBarCode enableShowWords() {
@@ -343,6 +370,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回条形码组件
      */
     @Override
@@ -353,6 +381,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
      * @param page     pdf页面
      */
@@ -400,6 +429,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 获取条形码图片
+     *
      * @param matrix 位矩阵
      * @return 返回条形码图片
      */
@@ -423,6 +453,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 转图片
+     *
      * @param matrix 位矩阵
      * @return 返回图片
      */
@@ -449,7 +480,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
             // 循环宽度
             for (int x = 0; x < width; x++) {
                 // 初始化行像素
-                rowPixels[x] = row.get(x)?onColor:offColor;
+                rowPixels[x] = row.get(x) ? onColor : offColor;
             }
             // 设置RGB
             image.setRGB(0, y, width, 1, rowPixels, 0, width);
@@ -459,6 +490,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
     /**
      * 添加图像文字
+     *
      * @param image 图像
      * @return 返回添加文字后的图像
      */
@@ -468,7 +500,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         // 获取图像高度
         int height = image.getHeight();
         // 定义转换图像
-        BufferedImage out = new BufferedImage(width, height+this.param.getWordsSize()+1, BufferedImage.TYPE_4BYTE_ABGR);
+        BufferedImage out = new BufferedImage(width, height + this.param.getWordsSize() + 1, BufferedImage.TYPE_4BYTE_ABGR);
         // 创建图像图形
         Graphics2D graphics = out.createGraphics();
         // 设置插值
@@ -484,7 +516,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         // 设置条形码背景色
         graphics.setColor(this.param.getOffColor());
         // 填充矩形
-        graphics.fillRect(0,0, width,height+this.param.getWordsSize()+1);
+        graphics.fillRect(0, 0, width, height + this.param.getWordsSize() + 1);
         // 设置文字颜色
         graphics.setColor(this.param.getWordsColor());
         // 设置图像
@@ -582,8 +614,9 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
         /**
          * 有参构造
+         *
          * @param codeFormat 格式化类型
-         * @param margin 边距
+         * @param margin     边距
          */
         CodeType(BarcodeFormat codeFormat, int margin) {
             this.codeFormat = codeFormat;
@@ -592,6 +625,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
         /**
          * 是否二维码类型
+         *
          * @return 返回布尔值，是为true，否为false
          */
         boolean isQrType() {
@@ -600,8 +634,10 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
                 case AZTEC:
                 case DATA_MATRIX:
                 case MAXI_CODE:
-                case PDF_417: return true;
-                default: return false;
+                case PDF_417:
+                    return true;
+                default:
+                    return false;
             }
         }
     }
@@ -634,6 +670,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
         /**
          * 有参构造
+         *
          * @param level 纠错级别
          */
         ErrorLevel(ErrorCorrectionLevel level) {
@@ -664,6 +701,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
 
         /**
          * 有参构造
+         *
          * @param style 样式
          */
         WordsStyle(int style) {

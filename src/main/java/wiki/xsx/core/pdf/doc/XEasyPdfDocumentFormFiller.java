@@ -25,6 +25,7 @@ import java.util.Set;
 
 /**
  * pdf文档表单填写器
+ *
  * @author xsx
  * @date 2021/10/3
  * @since 1.8
@@ -75,6 +76,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 构造方法
+     *
      * @param pdfDocument pdf文档
      */
     XEasyPdfDocumentFormFiller(XEasyPdfDocument pdfDocument) {
@@ -85,6 +87,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 开启只读（填充后）
+     *
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableReadOnly() {
@@ -94,6 +97,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 开启表单修复（可能会更改原始内容）
+     *
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableFixForm() {
@@ -103,6 +107,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 开启外观（将使用原有字体）
+     *
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableAppearance() {
@@ -113,6 +118,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 开启压缩
+     *
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller enableCompress() {
@@ -122,6 +128,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 设置字体路径（开启外观后失效）
+     *
      * @param fontPath 字体路径
      * @return 返回pdf表单填写器
      */
@@ -132,11 +139,12 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 设置默认字体样式（开启外观后失效）
+     *
      * @param style 默认字体样式
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        if (style!=null) {
+        if (style != null) {
             this.fontPath = style.getPath();
         }
         return this;
@@ -144,14 +152,15 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 填充表单
+     *
      * @param formMap 表单字典
      * @return 返回pdf表单填写器
      */
     public XEasyPdfDocumentFormFiller fill(Map<String, String> formMap) {
         // 如果表单字典有内容，则进行填充
-        if (formMap!=null&&!formMap.isEmpty()) {
+        if (formMap != null && !formMap.isEmpty()) {
             // 如果pdfBox表单不为空，则进行填充
-            if (this.form!=null) {
+            if (this.form != null) {
                 // 如果需要外观，则使用外观填充模式
                 if (this.form.getNeedAppearances()) {
                     // 使用外观填充模式
@@ -169,6 +178,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 创建表单
+     *
      * @return 返回pdf表单
      */
     public XEasyPdfDocumentForm create() {
@@ -177,6 +187,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 文档签名器
+     *
      * @return 返回pdf文档签名器
      */
     public XEasyPdfDocumentSigner signer() {
@@ -185,6 +196,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 完成操作
+     *
      * @param outputPath 文件输出路径
      */
     @SneakyThrows
@@ -196,12 +208,13 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 完成操作
+     *
      * @param outputStream 文件输出流
      */
     @SneakyThrows
     public void finish(OutputStream outputStream) {
         // 如果开启压缩，则重置表单为空（可以减少文件大小）
-        if (this.isCompress&&!this.form.getNeedAppearances()) {
+        if (this.isCompress && !this.form.getNeedAppearances()) {
             // 重置表单为空
             this.document.getDocumentCatalog().setAcroForm(null);
         }
@@ -217,6 +230,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 获取pdfbox文档
+     *
      * @return 返回pdfbox文档
      */
     PDDocument getDocument() {
@@ -225,10 +239,11 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 获取pdfbox表单
+     *
      * @return 返回pdfbox表单
      */
     PDAcroForm getForm() {
-        if (this.form ==null) {
+        if (this.form == null) {
             this.form = new PDAcroForm(this.document);
         }
         return this.form;
@@ -236,7 +251,8 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 初始化表单
-     * @param document pdfbox文档
+     *
+     * @param document  pdfbox文档
      * @param isFixForm 是否修复表单
      * @return 返回pdfbox表单
      */
@@ -256,7 +272,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
             acroForm = documentCatalog.getAcroForm(null);
         }
         // 如果表单依然为空，则初始化空表单
-        if (acroForm==null) {
+        if (acroForm == null) {
             // 初始化空表单
             acroForm = new PDAcroForm(document);
         }
@@ -268,6 +284,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 普通填充模式
+     *
      * @param formMap 表单字典
      */
     @SneakyThrows
@@ -287,6 +304,7 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 外观填充模式
+     *
      * @param formMap 表单字典
      */
     private void fillForAppearance(Map<String, String> formMap) {
@@ -295,8 +313,9 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 填充表单
+     *
      * @param formMap 表单字典
-     * @param font pdfbox字体
+     * @param font    pdfbox字体
      * @return 返回布尔值，是为true，否为false
      */
     @SneakyThrows
@@ -316,11 +335,11 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
             // 获取新值
             newValue = entry.getValue();
             // 如果pdfBox表单字段不为空，则填充值
-            if (field!=null) {
+            if (field != null) {
                 // 如果新值不为空，则设置新值
                 if (XEasyPdfTextUtil.isNotBlank(newValue)) {
                     // 如果pdfbox字体不为空，则重置外观并添加文本关联
-                    if (font!=null) {
+                    if (font != null) {
                         // 重置外观
                         this.resetAppearance(field, font);
                         // 添加文本关联
@@ -343,11 +362,12 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 初始化字体
+     *
      * @return 返回pdfbox字体
      */
     private PDFont initFont() {
         // 如果字体路径为空，则初始化字体路径
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化字体路径为文档字体路径
             this.fontPath = this.pdfDocument.getFontPath();
         }
@@ -357,8 +377,9 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
 
     /**
      * 重置外观（字体）
+     *
      * @param field pdfbox表单字段
-     * @param font pdfbox字体
+     * @param font  pdfbox字体
      */
     private void resetAppearance(PDField field, PDFont font) {
         // 如果表单字段为文本字段，则重置字体

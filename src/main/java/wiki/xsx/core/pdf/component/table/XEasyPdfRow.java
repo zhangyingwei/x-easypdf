@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * pdf表格行组件
+ *
  * @author xsx
  * @date 2020/6/6
  * @since 1.8
@@ -39,31 +40,34 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param cells pdf单元格
      */
-    public XEasyPdfRow(XEasyPdfCell...cells) {
-        if (cells!=null) {
+    public XEasyPdfRow(XEasyPdfCell... cells) {
+        if (cells != null) {
             Collections.addAll(this.param.getCells(), cells);
         }
     }
 
     /**
      * 有参构造
+     *
      * @param cellList pdf单元格列表
      */
     public XEasyPdfRow(List<XEasyPdfCell> cellList) {
-        if (cellList!=null) {
+        if (cellList != null) {
             this.param.getCells().addAll(cellList);
         }
     }
 
     /**
      * 设置内容模式
+     *
      * @param mode 内容模式
      * @return 返回表格行组件
      */
     public XEasyPdfRow setContentMode(XEasyPdfComponent.ContentMode mode) {
-        if (mode!=null) {
+        if (mode != null) {
             this.param.setContentMode(mode);
         }
         return this;
@@ -71,6 +75,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置字体路径
+     *
      * @param fontPath 字体路径
      * @return 返回表格行组件
      */
@@ -81,11 +86,12 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置默认字体样式
+     *
      * @param style 默认字体样式
      * @return 返回表格行组件
      */
     public XEasyPdfRow setDefaultFontStyle(XEasyPdfDefaultFontStyle style) {
-        if (style!=null) {
+        if (style != null) {
             this.param.setFontPath(style.getPath());
         }
         return this;
@@ -93,6 +99,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置字体大小
+     *
      * @param fontSize 字体大小
      * @return 返回表格行组件
      */
@@ -103,11 +110,12 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置字体颜色
+     *
      * @param fontColor 字体颜色
      * @return 返回表格行组件
      */
     public XEasyPdfRow setFontColor(Color fontColor) {
-        if (fontColor!=null) {
+        if (fontColor != null) {
             this.param.setFontColor(fontColor);
         }
         return this;
@@ -115,11 +123,12 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置背景颜色
+     *
      * @param backgroundColor 背景颜色
      * @return 返回表格行组件
      */
     public XEasyPdfRow setBackgroundColor(Color backgroundColor) {
-        if (backgroundColor!=null) {
+        if (backgroundColor != null) {
             this.param.setBackgroundColor(backgroundColor);
         }
         return this;
@@ -127,6 +136,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 边框宽度
+     *
      * @param lineWidth 宽度
      * @return 返回表格行组件
      */
@@ -137,11 +147,12 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置边框颜色（开启边框时生效）
+     *
      * @param borderColor 边框颜色
      * @return 返回表格行组件
      */
     public XEasyPdfRow setBorderColor(Color borderColor) {
-        if (borderColor!=null) {
+        if (borderColor != null) {
             this.param.setBorderColor(borderColor);
         }
         return this;
@@ -149,6 +160,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置行高
+     *
      * @param height 行高
      * @return 返回表格行组件
      */
@@ -156,6 +168,7 @@ public class XEasyPdfRow implements Serializable {
         this.param.setHeight(Math.abs(height));
         return this;
     }
+
     /**
      * 设置最小行高
      *
@@ -169,6 +182,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置左边距
+     *
      * @param margin 边距
      * @return 返回表格行组件
      */
@@ -179,6 +193,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置上边距
+     *
      * @param margin 边距
      * @return 返回表格行组件
      */
@@ -189,14 +204,15 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置水平样式（居左、居中、居右）
+     *
      * @param style 样式
      * @return 返回表格行组件
      */
     public XEasyPdfRow setHorizontalStyle(XEasyPdfPositionStyle style) {
-        if (style!=null) {
-            if (style==XEasyPdfPositionStyle.LEFT||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.RIGHT) {
+        if (style != null) {
+            if (style == XEasyPdfPositionStyle.LEFT || style == XEasyPdfPositionStyle.CENTER || style == XEasyPdfPositionStyle.RIGHT) {
                 this.param.setHorizontalStyle(style);
-            }else {
+            } else {
                 throw new IllegalArgumentException("only set LEFT, CENTER or RIGHT style");
             }
         }
@@ -205,14 +221,15 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 设置垂直样式（居上、居中、居下）
+     *
      * @param style 样式
      * @return 返回表格行组件
      */
     public XEasyPdfRow setVerticalStyle(XEasyPdfPositionStyle style) {
-        if (style!=null) {
-            if (style==XEasyPdfPositionStyle.TOP||style==XEasyPdfPositionStyle.CENTER||style==XEasyPdfPositionStyle.BOTTOM) {
+        if (style != null) {
+            if (style == XEasyPdfPositionStyle.TOP || style == XEasyPdfPositionStyle.CENTER || style == XEasyPdfPositionStyle.BOTTOM) {
                 this.param.setVerticalStyle(style);
-            }else {
+            } else {
                 throw new IllegalArgumentException("only set TOP, CENTER or BOTTOM style");
             }
         }
@@ -221,6 +238,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 开启上下左右居中
+     *
      * @return 返回表格行组件
      */
     public XEasyPdfRow enableCenterStyle() {
@@ -230,6 +248,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 开启边框
+     *
      * @return 返回表格行组件
      */
     public XEasyPdfRow enableBorder() {
@@ -239,6 +258,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 关闭边框
+     *
      * @return 返回表格行组件
      */
     public XEasyPdfRow disableBorder() {
@@ -248,6 +268,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 开启分页
+     *
      * @return 返回表格行组件
      */
     public XEasyPdfRow enablePaging() {
@@ -257,6 +278,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 开启上下文重置
+     *
      * @return 返回表格行组件
      */
     public XEasyPdfRow enableResetContext() {
@@ -266,11 +288,12 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 添加单元格
+     *
      * @param cells pdf单元格
      * @return 返回表格行组件
      */
-    public XEasyPdfRow addCell(XEasyPdfCell...cells) {
-        if (cells!=null) {
+    public XEasyPdfRow addCell(XEasyPdfCell... cells) {
+        if (cells != null) {
             Collections.addAll(this.param.getCells(), cells);
         }
         return this;
@@ -278,11 +301,12 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 添加单元格
+     *
      * @param cellList pdf单元格列表
      * @return 返回表格行组件
      */
     public XEasyPdfRow addCell(List<XEasyPdfCell> cellList) {
-        if (cellList!=null) {
+        if (cellList != null) {
             this.param.getCells().addAll(cellList);
         }
         return this;
@@ -290,6 +314,7 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 获取pdf表格行参数
+     *
      * @return 返回表格行组件
      */
     XEasyPdfRowParam getParam() {
@@ -298,9 +323,10 @@ public class XEasyPdfRow implements Serializable {
 
     /**
      * 绘制
+     *
      * @param document pdf文档
-     * @param page pdf页面
-     * @param table pdf表格
+     * @param page     pdf页面
+     * @param table    pdf表格
      */
     void doDraw(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfTable table) {
         // 初始化参数
@@ -310,30 +336,30 @@ public class XEasyPdfRow implements Serializable {
         // 遍历单元格列表
         for (XEasyPdfCell cell : cells) {
             // 如果单元格不为空，则进行绘制
-            if (cell!=null) {
+            if (cell != null) {
                 // 如果单元格为垂直合并，则跳过绘制
                 if (cell.getParam().getIsVerticalMerge()) {
                     // 重置X轴起始坐标
-                    this.param.setBeginX(this.param.getBeginX()+cell.getParam().getWidth()+cell.getParam().getMarginLeft());
+                    this.param.setBeginX(this.param.getBeginX() + cell.getParam().getWidth() + cell.getParam().getMarginLeft());
                     // 跳过
                     continue;
                 }
                 // 设置X轴起始坐标
-                this.param.setBeginX(this.param.getBeginX()+cell.getParam().getMarginLeft());
+                this.param.setBeginX(this.param.getBeginX() + cell.getParam().getMarginLeft());
                 // 绘制单元格
                 cell.doDraw(document, page, table, this);
                 // 重置X轴起始坐标
-                this.param.setBeginX(this.param.getBeginX()+cell.getParam().getWidth());
+                this.param.setBeginX(this.param.getBeginX() + cell.getParam().getWidth());
             }
         }
         // 重置X轴起始坐标为空
         this.param.setBeginX(null);
         // 重置页面Y轴起始坐标
-        page.setPageY(this.param.getBeginY()-this.param.getHeight());
+        page.setPageY(this.param.getBeginY() - this.param.getHeight());
         // 获取拆分行
         XEasyPdfRow splitRow = this.param.getSplitRow();
         // 如果拆分行不为空，则绘制拆分行
-        if (splitRow!=null) {
+        if (splitRow != null) {
             // 绘制拆分行
             splitRow.doDraw(document, page, table);
         }

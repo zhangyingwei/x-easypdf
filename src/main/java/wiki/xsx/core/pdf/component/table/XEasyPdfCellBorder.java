@@ -11,6 +11,7 @@ import java.awt.*;
 
 /**
  * pdf单元格边框
+ *
  * @author xsx
  * @date 2022/2/1
  * @since 1.8
@@ -86,6 +87,7 @@ final class XEasyPdfCellBorder {
      * 是否带有右边框
      */
     private Boolean hasRightBorder = Boolean.TRUE;
+
     /**
      * 绘制边框
      */

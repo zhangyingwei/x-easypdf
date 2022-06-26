@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 /**
  * pdf线条参数
+ *
  * @author xsx
  * @date 2020/3/11
  * @since 1.8
@@ -99,22 +100,23 @@ class XEasyPdfLineParam implements Serializable {
 
     /**
      * 初始化参数
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果内容模式未初始化，则初始化为页面内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = page.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
         // 如果字体路径未初始化，则初始化为页面字体路径
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化为页面字体路径
             this.fontPath = page.getFontPath();
         }
@@ -122,19 +124,20 @@ class XEasyPdfLineParam implements Serializable {
 
     /**
      * 分页检查
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void checkPage(XEasyPdfDocument document, XEasyPdfPage page) {
         // 定义页脚高度
         float footerHeight = 0F;
         // 如果允许添加页脚，且页脚不为空则初始化页脚高度
-        if (page.isAllowFooter()&&page.getFooter()!=null) {
+        if (page.isAllowFooter() && page.getFooter() != null) {
             // 初始化页脚高度
             footerHeight = page.getFooter().getHeight(document, page);
         }
         // 如果当前页面Y轴坐标不为空，则进行分页判断
-        if (page.getPageY()!=null) {
+        if (page.getPageY() != null) {
             // 定义线宽
             float lineWidth = this.lineWidth / 2;
             // 分页判断，如果（当前Y轴坐标-上边距-线宽-页脚高度）小于下边距，则进行分页

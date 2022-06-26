@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * pdf页面参数
+ *
  * @author xsx
  * @date 2020/4/7
  * @since 1.8
@@ -147,22 +148,23 @@ class XEasyPdfPageParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果内容模式未初始化，则初始化为文档内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为文档内容模式
             this.contentMode = document.getParam().getContentMode();
         }
         // 如果重置上下文未初始化，则初始化为文档重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为文档重置上下文
             this.isResetContext = document.getParam().getIsResetContext();
         }
         // 如果字体路径未初始化，则初始化为文档字体路径
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化为文档字体路径
             this.fontPath = document.getFontPath();
         }

@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * pdf文档书签
+ *
  * @author xsx
  * @date 2020/10/23
  * @since 1.8
@@ -43,6 +44,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
     /**
      * 有参构造
+     *
      * @param document pdf文档
      */
     XEasyPdfDocumentBookmark(XEasyPdfDocument document) {
@@ -52,8 +54,9 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
     /**
      * 设置书签
+     *
      * @param pageIndex 页面索引
-     * @param title 标题
+     * @param title     标题
      * @return 返回pdf文档书签
      */
     public XEasyPdfDocumentBookmark setBookMark(Integer pageIndex, String title) {
@@ -74,6 +77,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
     /**
      * 设置书签
+     *
      * @param node 书签节点
      * @return 返回pdf文档书签
      */
@@ -84,6 +88,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
     /**
      * 获取书签
+     *
      * @return 返回pdfbox书签列表
      */
     public List<PDOutlineItem> getBookMark() {
@@ -92,6 +97,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
     /**
      * 完成书签设置
+     *
      * @return 返回pdf文档
      */
     public XEasyPdfDocument finish() {
@@ -115,6 +121,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 有参构造
+         *
          * @param outlineItem pdf书签节点
          */
         public BookmarkNode(PDOutlineItem outlineItem) {
@@ -125,6 +132,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 构建书签节点
+         *
          * @return 返回书签节点
          */
         public static BookmarkNode build() {
@@ -133,6 +141,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 添加子节点
+         *
          * @param childNode 子书签节点
          * @return 返回书签节点
          */
@@ -143,6 +152,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 设置pdfbox页面索引
+         *
          * @param pageIndex pdfbox页面索引
          * @return 返回书签节点
          */
@@ -153,6 +163,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 设置定位顶点坐标
+         *
          * @param pageY 页面y轴坐标
          * @return 返回书签节点
          */
@@ -163,6 +174,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 设置标题
+         *
          * @param title 标题
          * @return 返回书签节点
          */
@@ -173,6 +185,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 设置标题颜色
+         *
          * @param textColor 文本颜色
          * @return 返回书签节点
          */
@@ -183,6 +196,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 开启标题粗体
+         *
          * @return 返回书签节点
          */
         public BookmarkNode enableTitleBold() {
@@ -192,6 +206,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 开启标题斜体
+         *
          * @return 返回书签节点
          */
         public BookmarkNode enableTitleItalic() {
@@ -201,6 +216,7 @@ public class XEasyPdfDocumentBookmark implements Serializable {
 
         /**
          * 获取pdfbox书签节点
+         *
          * @return 返回pdfbox书签节点
          */
         PDOutlineItem getItem() {
@@ -215,11 +231,11 @@ public class XEasyPdfDocumentBookmark implements Serializable {
         // 获取源文档
         PDDocument source = this.document.getParam().getSource();
         // 如果源文档不为空，则获取书签
-        if (source!=null) {
+        if (source != null) {
             // 获取书签
             PDDocumentOutline documentOutline = source.getDocumentCatalog().getDocumentOutline();
             // 如果书签不为空，则获取书签节点
-            if (documentOutline!=null) {
+            if (documentOutline != null) {
                 // 获取书签节点
                 Iterable<PDOutlineItem> children = documentOutline.children();
                 // 遍历书签节点

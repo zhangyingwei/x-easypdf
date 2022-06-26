@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.doc;
 
 /**
  * 默认字体样式枚举
+ *
  * @author xsx
  * @date 2021/10/3
  * @since 1.8
@@ -43,6 +44,7 @@ public enum XEasyPdfDefaultFontStyle {
 
     /**
      * 有参构造
+     *
      * @param path 字体路径
      * @param name 字体名称
      */
@@ -53,6 +55,7 @@ public enum XEasyPdfDefaultFontStyle {
 
     /**
      * 获取字体路径
+     *
      * @return 返回字体路径
      */
     public String getPath() {
@@ -61,6 +64,7 @@ public enum XEasyPdfDefaultFontStyle {
 
     /**
      * 获取字体名称
+     *
      * @return 返回字体名称
      */
     public String getName() {

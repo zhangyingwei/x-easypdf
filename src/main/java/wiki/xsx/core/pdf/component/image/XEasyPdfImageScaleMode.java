@@ -4,6 +4,7 @@ import java.awt.*;
 
 /**
  * 图片压缩模式枚举
+ *
  * @author xsx
  * @date 2021/10/5
  * @since 1.8
@@ -40,6 +41,7 @@ public enum XEasyPdfImageScaleMode {
 
     /**
      * 有参构造
+     *
      * @param code 编码
      */
     XEasyPdfImageScaleMode(int code) {

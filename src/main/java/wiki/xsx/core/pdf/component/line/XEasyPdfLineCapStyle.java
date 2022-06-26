@@ -2,6 +2,7 @@ package wiki.xsx.core.pdf.component.line;
 
 /**
  * 线型样式枚举
+ *
  * @author xsx
  * @date 2020/3/4
  * @since 1.8
@@ -37,6 +38,7 @@ public enum XEasyPdfLineCapStyle {
 
     /**
      * 有参构造
+     *
      * @param type 类型
      */
     XEasyPdfLineCapStyle(int type) {
@@ -45,6 +47,7 @@ public enum XEasyPdfLineCapStyle {
 
     /**
      * 获取类型
+     *
      * @return 返回类型
      */
     public int getType() {

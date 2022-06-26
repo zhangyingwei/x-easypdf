@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 /**
  * pdf单元格参数
+ *
  * @author xsx
  * @date 2020/6/6
  * @since 1.8
@@ -134,27 +135,28 @@ class XEasyPdfCellParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
-     * @param row pdf表格行
+     * @param page     pdf页面
+     * @param row      pdf表格行
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) {
         // 获取pdf表格行参数
         XEasyPdfRowParam rowParam = row.getParam();
         // 如果边框标记为空，则初始化边框标记
-        if (this.hasBorder==null) {
+        if (this.hasBorder == null) {
             // 初始化边框标记
             this.hasBorder = rowParam.getHasBorder();
         }
         // 如果开启边框，则初始化边框宽度
         if (this.hasBorder) {
             // 如果边框宽度未初始化，则进行初始化
-            if (this.borderWidth==null) {
+            if (this.borderWidth == null) {
                 // 初始化边框宽度
                 this.borderWidth = rowParam.getBorderWidth();
             }
             // 如果边框颜色未初始化，则进行初始化
-            if (this.borderColor==null) {
+            if (this.borderColor == null) {
                 // 初始化边框颜色
                 this.borderColor = rowParam.getBorderColor();
             }
@@ -165,42 +167,42 @@ class XEasyPdfCellParam implements Serializable {
             this.borderWidth = 0F;
         }
         // 如果内容模式未初始化，则初始化为页面内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = rowParam.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = rowParam.getIsResetContext();
         }
         // 如果字体路径未初始化，则初始化为默认字体路径
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             // 初始化为默认字体路径
             this.fontPath = rowParam.getFontPath();
         }
         // 如果字体大小未初始化，则进行初始化
-        if (this.fontSize==null) {
+        if (this.fontSize == null) {
             // 初始化字体大小
             this.fontSize = rowParam.getFontSize();
         }
         // 如果字体颜色未初始化，则进行初始化
-        if (this.fontColor==null) {
+        if (this.fontColor == null) {
             // 初始化字体颜色
             this.fontColor = rowParam.getFontColor();
         }
         // 如果背景颜色未初始化，则进行初始化
-        if (this.backgroundColor==null) {
+        if (this.backgroundColor == null) {
             // 初始化背景颜色
             this.backgroundColor = rowParam.getBackgroundColor();
         }
         // 如果水平样式未初始化，则进行初始化
-        if (this.horizontalStyle ==null) {
+        if (this.horizontalStyle == null) {
             // 初始化水平样式
             this.horizontalStyle = rowParam.getHorizontalStyle();
         }
         // 如果垂直样式未初始化，则进行初始化
-        if (this.verticalStyle ==null) {
+        if (this.verticalStyle == null) {
             // 初始化垂直样式
             this.verticalStyle = rowParam.getVerticalStyle();
         }

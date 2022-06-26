@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 /**
  * pdf图片参数
+ *
  * @author xsx
  * @date 2020/3/30
  * @since 1.8
@@ -139,28 +140,29 @@ class XEasyPdfImageParam implements Serializable {
 
     /**
      * 初始化
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      * @return 返回pdfBox图片对象
      */
     @SneakyThrows
     PDImageXObject init(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfImage image) {
         // 如果pdfbox图片对象不为空，则返回该对象
-        if (this.imageXObject!=null) {
+        if (this.imageXObject != null) {
             // 返回该对象
             return this.imageXObject;
         }
         // 如果图片为空，则抛出异常信息
-        if (this.image==null) {
+        if (this.image == null) {
             throw new FileNotFoundException("the image can not be found");
         }
         // 如果内容模式未初始化，则初始化为页面内容模式
-        if (this.contentMode==null) {
+        if (this.contentMode == null) {
             // 初始化为页面内容模式
             this.contentMode = page.getContentMode();
         }
         // 如果是否重置上下文未初始化，则初始化为页面是否重置上下文
-        if (this.isResetContext==null) {
+        if (this.isResetContext == null) {
             // 初始化为页面是否重置上下文
             this.isResetContext = page.isResetContext();
         }
@@ -186,22 +188,22 @@ class XEasyPdfImageParam implements Serializable {
         // 获取图片高度
         int imageHeight = this.imageXObject.getHeight();
         // 如果自定义宽度为空，则将自定义宽度设置为图片宽度
-        if (this.width==null) {
+        if (this.width == null) {
             // 自定义宽度设置为图片宽度
             this.width = imageWidth;
         }
         // 如果自定义高度为空，则将自定义高度设置为图片高度
-        if (this.height==null) {
+        if (this.height == null) {
             // 自定义高度设置为图片高度
             this.height = imageHeight;
         }
         // 如果最大宽度未初始化，则进行初始化为页面宽度
-        if (this.maxWidth==null) {
+        if (this.maxWidth == null) {
             // 初始化最大宽度 = 页面宽度
             this.maxWidth = pageWidth;
         }
         // 如果最大高度未初始化，则进行初始化为页面高度
-        if (this.maxHeight==null) {
+        if (this.maxHeight == null) {
             // 初始化最大宽度 = 页面高度
             this.maxHeight = pageHeight;
         }
@@ -214,33 +216,33 @@ class XEasyPdfImageParam implements Serializable {
             // 定义页眉页脚高度
             float headerFooterHeight = 0F;
             // 如果页眉不为空，则加上页眉高度
-            if (header!=null&&!header.check(image)) {
+            if (header != null && !header.check(image)) {
                 // 重置页眉页脚高度为页眉页脚高度+页眉高度
                 headerFooterHeight += header.getHeight(document, page);
             }
             // 如果页脚不为空，则加上页脚高度
-            if (footer!=null&&!footer.check(image)) {
+            if (footer != null && !footer.check(image)) {
                 // 重置页眉页脚高度为页眉页脚高度+页脚高度
                 headerFooterHeight += footer.getHeight(document, page);
             }
             // 高度超过页面高度，则进行调整
-            if ((this.height + this.marginTop + this.marginBottom + headerFooterHeight)>pageHeight) {
+            if ((this.height + this.marginTop + this.marginBottom + headerFooterHeight) > pageHeight) {
                 // 获取页面Y轴坐标
                 Float pageY = page.getPageY();
                 // 如果页面Y轴坐标为空，则重置为页面高度
-                if (pageY==null) {
+                if (pageY == null) {
                     // 重置页面Y轴坐标为页面高度
                     pageY = pageHeight;
                 }
                 // 自定义高度 = 页面高度 - 上边距 - 下边距
                 this.height = (int) (pageY - this.marginTop - this.marginBottom - headerFooterHeight);
                 // 自定义宽度 = 自定义高度 * 图片宽度 / 图片高度
-                this.width = (int) (this.height * imageWidth / (double) imageHeight );
+                this.width = (int) (this.height * imageWidth / (double) imageHeight);
             }
             // 定义最大宽度为当前宽度+左边距+右边距
             float maxWidth = this.width + this.marginLeft + this.marginRight;
             // 宽度超过页面宽度，则进行调整
-            if (maxWidth>pageWidth) {
+            if (maxWidth > pageWidth) {
                 // 重置最大宽度为当前宽度-最大宽度-页面宽度
                 maxWidth = this.width - (maxWidth - pageWidth);
                 // 定义缩放比例
@@ -248,7 +250,7 @@ class XEasyPdfImageParam implements Serializable {
                 // 自定义宽度 = 最大宽度
                 this.width = (int) (maxWidth);
                 // 自定义高度 = 自定义高度 * 缩放比例
-                this.height = (int) (this.height * ratio );
+                this.height = (int) (this.height * ratio);
             }
         }
         return this.imageXObject;
@@ -256,14 +258,15 @@ class XEasyPdfImageParam implements Serializable {
 
     /**
      * 初始化定位
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     void initPosition(XEasyPdfDocument document, XEasyPdfPage page) {
         // 如果页面Y轴起始坐标为空，则初始化
-        if (this.beginY==null) {
+        if (this.beginY == null) {
             // 如果pdfBox最新页面当前Y轴坐标不为空，则不为新页面
-            if (page.getPageY()!=null) {
+            if (page.getPageY() != null) {
                 // 初始化Y轴坐标
                 this.initBeginY(document, page);
                 // 如果页面Y轴起始坐标-页脚高度小于下边距，则分页
@@ -309,32 +312,33 @@ class XEasyPdfImageParam implements Serializable {
 
     /**
      * 初始化Y轴坐标
+     *
      * @param document pdf文档
-     * @param page pdf页面
+     * @param page     pdf页面
      */
     private void initBeginY(XEasyPdfDocument document, XEasyPdfPage page) {
         // 获取页面Y轴坐标
         Float pageY = page.getPageY();
         // 如果垂直样式为居中，则重置Y轴坐标为居中
-        if (this.verticalStyle==XEasyPdfPositionStyle.CENTER) {
+        if (this.verticalStyle == XEasyPdfPositionStyle.CENTER) {
             // 如果页面Y轴坐标为空，则初始化Y轴起始坐标为y坐标
-            if (pageY==null) {
+            if (pageY == null) {
                 // 初始化Y轴起始坐标为(最大高度-图片高度)/2
                 this.beginY = (this.maxHeight - this.height) / 2;
             }
             // 否则初始化
             else {
                 // 如果页面Y轴起始坐标未初始化，则进行初始化
-                if (this.beginY==null) {
+                if (this.beginY == null) {
                     // 初始化Y轴起始坐标为(页面Y轴当前坐标-图片高度)/2
                     this.beginY = pageY - this.height - (pageY - this.height) / 2;
                 }
             }
         }
         // 如果为垂直居上，则重置为最大高度-上边距
-        else if (this.verticalStyle==XEasyPdfPositionStyle.TOP) {
+        else if (this.verticalStyle == XEasyPdfPositionStyle.TOP) {
             // 如果页面Y轴坐标不为空， 则重置为最大高度-上边距
-            if (pageY==null) {
+            if (pageY == null) {
                 // 初始化Y轴起始坐标重置为最大高度-上边距-图片高度
                 this.beginY = this.maxHeight - this.height;
             }
@@ -351,7 +355,7 @@ class XEasyPdfImageParam implements Serializable {
             // 获取页脚
             XEasyPdfFooter footer = page.getFooter();
             // 如果页脚不为空，则重置页面Y轴坐标为页面Y轴当前坐标+页脚高度
-            if (footer!=null) {
+            if (footer != null) {
                 // 重置页面Y轴坐标为页面Y轴当前坐标+页脚高度
                 this.beginY = this.beginY + footer.getHeight(document, page);
             }
@@ -360,9 +364,10 @@ class XEasyPdfImageParam implements Serializable {
 
     /**
      * 是否旋转
+     *
      * @return 返回布尔值，是为true，否为false
      */
     private boolean isRotate() {
-        return this.radians!=null&&this.radians%360!=0;
+        return this.radians != null && this.radians % 360 != 0;
     }
 }

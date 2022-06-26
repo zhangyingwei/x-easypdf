@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * pdf文档参数
+ *
  * @author xsx
  * @date 2020/4/7
  * @since 1.8
@@ -152,16 +153,18 @@ class XEasyPdfDocumentParam implements Serializable {
 
     /**
      * 获取临时存放路径
+     *
      * @return 返回临时存放路径
      */
     String getTempUrl() {
-        return (this.tempDir!=null?this.tempDir:"") + File.separatorChar + this.tempTargetList.size();
+        return (this.tempDir != null ? this.tempDir : "") + File.separatorChar + this.tempTargetList.size();
     }
 
     /**
      * 初始化
+     *
      * @param inputStream 输入流
-     * @param document pdf文档
+     * @param document    pdf文档
      */
     @SneakyThrows
     void init(InputStream inputStream, XEasyPdfDocument document) {
@@ -182,19 +185,20 @@ class XEasyPdfDocumentParam implements Serializable {
 
     /**
      * 初始化任务
+     *
      * @param document pdf文档
      */
     @SneakyThrows
     void initTarget(XEasyPdfDocument document) {
         // 如果任务文档不为空，则关闭
-        if (this.target!=null) {
+        if (this.target != null) {
             // 关闭文档
             this.target.close();
         }
         // 新建任务文档
         this.target = new PDDocument();
         // 如果源文档不为空，则设置文档表单
-        if (this.source!=null) {
+        if (this.source != null) {
             // 获取文档大纲
             PDDocumentCatalog documentCatalog = this.target.getDocumentCatalog();
             // 设置文档表单
@@ -210,6 +214,7 @@ class XEasyPdfDocumentParam implements Serializable {
 
     /**
      * 初始化页面
+     *
      * @param document pdf文档
      */
     @SneakyThrows
@@ -245,12 +250,13 @@ class XEasyPdfDocumentParam implements Serializable {
 
     /**
      * 嵌入字体
+     *
      * @param font pdfbox字体
      */
     @SuppressWarnings("all")
     @SneakyThrows
     void embedFont(Collection<PDFont> fonts) {
-        if (fonts!=null&&!fonts.isEmpty()) {
+        if (fonts != null && !fonts.isEmpty()) {
             Method method = this.target.getClass().getDeclaredMethod("getFontsToSubset");
             method.setAccessible(true);
             ((Set<PDFont>) method.invoke(this.target)).addAll(fonts);
@@ -259,14 +265,16 @@ class XEasyPdfDocumentParam implements Serializable {
 
     /**
      * 初始化总页数
+     *
      * @param count 加减数量
      */
     void initTotalPage(int count) {
-        this.totalPage+=count;
+        this.totalPage += count;
     }
 
     /**
      * 获取生产者
+     *
      * @return 返回生产者
      */
     String getProducer() {
@@ -275,10 +283,11 @@ class XEasyPdfDocumentParam implements Serializable {
 
     /**
      * 初始化字体
+     *
      * @param document pdf文档
      */
     private void initFont(XEasyPdfDocument document) {
-        if (this.fontPath==null) {
+        if (this.fontPath == null) {
             this.fontPath = this.defaultFontStyle.getPath();
         }
         this.font = XEasyPdfFontUtil.loadFont(document, this.fontPath, true);

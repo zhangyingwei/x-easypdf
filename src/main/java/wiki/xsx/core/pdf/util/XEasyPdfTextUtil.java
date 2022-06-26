@@ -199,7 +199,7 @@ public class XEasyPdfTextUtil {
             return "";
         }
         // 如果待替换字典为空，则返回待替换文本
-        if (replaceMap==null||replaceMap.isEmpty()) {
+        if (replaceMap == null || replaceMap.isEmpty()) {
             // 返回待替换文本
             return text;
         }
