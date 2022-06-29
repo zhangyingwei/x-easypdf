@@ -113,7 +113,23 @@ class XEasyPdfDocumentParam implements Serializable {
     /**
      * pdf页面列表
      */
-    private List<XEasyPdfPage> pageList = new ArrayList<>(256);
+    private List<XEasyPdfPage> pageList = new ArrayList<>(32);
+    /**
+     * 全局左边距
+     */
+    private Float globalMarginLeft;
+    /**
+     * 全局右边距
+     */
+    private Float globalMarginRight;
+    /**
+     * 全局上边距
+     */
+    private Float globalMarginTop;
+    /**
+     * 全局下边距
+     */
+    private Float globalMarginBottom;
     /**
      * 全局页面背景色
      */

@@ -98,6 +98,22 @@ class XEasyPdfPageParam implements Serializable {
      */
     private transient List<XEasyPdfComponent> componentList = new ArrayList<>(64);
     /**
+     * 左边距
+     */
+    private Float marginLeft;
+    /**
+     * 右边距
+     */
+    private Float marginRight;
+    /**
+     * 上边距
+     */
+    private Float marginTop;
+    /**
+     * 下边距
+     */
+    private Float marginBottom;
+    /**
      * 页面水印
      */
     private XEasyPdfWatermark watermark;
@@ -153,20 +169,42 @@ class XEasyPdfPageParam implements Serializable {
      * @param page     pdf页面
      */
     void init(XEasyPdfDocument document, XEasyPdfPage page) {
+        // 获取文档参数
+        XEasyPdfDocumentParam documentParam = document.getParam();
         // 如果内容模式未初始化，则初始化为文档内容模式
         if (this.contentMode == null) {
             // 初始化为文档内容模式
-            this.contentMode = document.getParam().getContentMode();
+            this.contentMode = documentParam.getContentMode();
         }
         // 如果重置上下文未初始化，则初始化为文档重置上下文
         if (this.isResetContext == null) {
             // 初始化为文档重置上下文
-            this.isResetContext = document.getParam().getIsResetContext();
+            this.isResetContext = documentParam.getIsResetContext();
         }
         // 如果字体路径未初始化，则初始化为文档字体路径
         if (this.fontPath == null) {
             // 初始化为文档字体路径
-            this.fontPath = document.getFontPath();
+            this.fontPath = documentParam.getFontPath();
+        }
+        // 如果左边距未初始化，则初始化为文档左边距
+        if (this.marginLeft == null) {
+            // 初始化为文档左边距
+            this.marginLeft = documentParam.getGlobalMarginLeft();
+        }
+        // 如果右边距未初始化，则初始化为文档右边距
+        if (this.marginRight == null) {
+            // 初始化为文档右边距
+            this.marginRight = documentParam.getGlobalMarginRight();
+        }
+        // 如果上边距未初始化，则初始化为文档上边距
+        if (this.marginTop == null) {
+            // 初始化为文档上边距
+            this.marginTop = documentParam.getGlobalMarginTop();
+        }
+        // 如果下边距未初始化，则初始化为文档下边距
+        if (this.marginBottom == null) {
+            // 初始化为文档下边距
+            this.marginBottom = documentParam.getGlobalMarginBottom();
         }
         // 初始化字体
         this.font = XEasyPdfFontUtil.loadFont(document, page, this.fontPath, true);
