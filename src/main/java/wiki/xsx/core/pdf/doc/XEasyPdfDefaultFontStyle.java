@@ -22,15 +22,15 @@ public enum XEasyPdfDefaultFontStyle {
     /**
      * 细体
      */
-    LIGHT("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Light.ttf", "SourceHanSansCN-Light"),
+    LIGHT("/wiki/xsx/core/pdf/ttf/HarmonyOS_Sans_SC_Light.ttf", "HarmonyOS_Sans_SC_Light"),
     /**
      * 正常
      */
-    NORMAL("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Normal.ttf", "SourceHanSansCN-Regular"),
+    NORMAL("/wiki/xsx/core/pdf/ttf/HarmonyOS_Sans_SC_Medium.ttf", "HarmonyOS_Sans_SC_Medium"),
     /**
      * 粗体
      */
-    BOLD("/wiki/xsx/core/pdf/ttf/SourceHanSansCN-Bold.ttf", "SourceHanSansCN-Bold");
+    BOLD("/wiki/xsx/core/pdf/ttf/HarmonyOS_Sans_SC_Bold.ttf", "/HarmonyOS_Sans_SC_Bold");
 
     /**
      * 字体路径
