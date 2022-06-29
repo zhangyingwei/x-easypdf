@@ -58,9 +58,21 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
      */
     private PDAcroForm form;
     /**
+     * 字体替换正则（未包含字体大小）
+     */
+    private static final String FONT_REGEX = "/\\S*";
+    /**
+     * 字体替换正则（包含字体大小）
+     */
+    private static final String FONT_SIZE_REGEX = "/.*Tf";
+    /**
      * 字体路径
      */
     private String fontPath;
+    /**
+     * 字体大小
+     */
+    private String fontSize;
     /**
      * 是否只读
      */
@@ -138,6 +150,17 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     }
 
     /**
+     * 设置字体大小（开启外观后失效）
+     *
+     * @param fontSize 字体大小
+     * @return 返回pdf表单填写器
+     */
+    public XEasyPdfDocumentFormFiller setFontSize(int fontSize) {
+        this.fontSize = String.valueOf(Math.abs(fontSize));
+        return this;
+    }
+
+    /**
      * 设置默认字体样式（开启外观后失效）
      *
      * @param style 默认字体样式
@@ -171,6 +194,8 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
                     // 使用普通填充模式
                     this.fillForNormal(formMap);
                 }
+                // 重置字体大小
+                this.fontSize = null;
             }
         }
         return this;
@@ -338,15 +363,8 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
             if (field != null) {
                 // 如果新值不为空，则设置新值
                 if (XEasyPdfTextUtil.isNotBlank(newValue)) {
-                    // 如果pdfbox字体不为空，则重置外观并添加文本关联
-                    if (font != null) {
-                        // 重置外观
-                        this.resetAppearance(field, font);
-                        // 添加文本关联
-                        XEasyPdfFontUtil.addToSubset(font, newValue);
-                    }
-                    // 设置新值
-                    field.setValue(newValue);
+                    // 重置新值
+                    this.resetValue(font, field, newValue);
                     // 重置填充标记
                     flag = true;
                 }
@@ -376,26 +394,47 @@ public class XEasyPdfDocumentFormFiller implements Serializable {
     }
 
     /**
-     * 重置外观（字体）
+     * 重置新值
      *
-     * @param field pdfbox表单字段
-     * @param font  pdfbox字体
+     * @param font     pdfbox字体
+     * @param field    pdfbox表单字段
+     * @param newValue 字段新值
      */
-    private void resetAppearance(PDField field, PDFont font) {
-        // 如果表单字段为文本字段，则重置字体
-        if (field instanceof PDTextField) {
-            // 转换为文本字体
-            PDTextField textField = (PDTextField) field;
-            // 获取默认外观
-            String defaultAppearance = textField.getDefaultAppearance();
-            // 重置默认外观
-            textField.setDefaultAppearance(
-                    XEasyPdfTextUtil.join(
-                            "/",
-                            font.getName(),
-                            defaultAppearance.substring(defaultAppearance.indexOf(' '))
-                    )
-            );
+    @SneakyThrows
+    private void resetValue(PDFont font, PDField field, String newValue) {
+        // 如果字体不为空，则替换与嵌入字体
+        if (font != null) {
+            // 如果表单字段为文本字段，则重置默认外观
+            if (field instanceof PDTextField) {
+                // 转换为文本字体
+                PDTextField textField = (PDTextField) field;
+                // 获取默认外观
+                String defaultAppearance = textField.getDefaultAppearance();
+                // 如果字体大小为空，则重置默认外观（使用原字体大小）
+                if (this.fontSize == null) {
+                    // 重置默认外观（使用原字体大小）
+                    textField.setDefaultAppearance(
+                            defaultAppearance.replaceFirst(
+                                    FONT_REGEX,
+                                    XEasyPdfTextUtil.join("", "/", font.getName())
+                            )
+                    );
+                }
+                // 否则重置默认外观（包含字体大小）
+                else {
+                    // 重置默认外观（包含字体大小）
+                    textField.setDefaultAppearance(
+                            defaultAppearance.replaceFirst(
+                                    FONT_SIZE_REGEX,
+                                    XEasyPdfTextUtil.join(" ", "/", font.getName(), this.fontSize, "Tf")
+                            )
+                    );
+                }
+            }
+            // 添加文本关联
+            XEasyPdfFontUtil.addToSubset(font, newValue);
         }
+        // 设置新值
+        field.setValue(newValue);
     }
 }

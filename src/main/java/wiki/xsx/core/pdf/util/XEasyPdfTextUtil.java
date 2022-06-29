@@ -239,10 +239,11 @@ public class XEasyPdfTextUtil {
     /**
      * 拼接字符串
      *
-     * @param texts 字符串列表
+     * @param delimiter 分隔符
+     * @param texts     字符串列表
      * @return 返回拼接后的字符串
      */
-    public static String join(String... texts) {
+    public static String join(CharSequence delimiter, String... texts) {
         // 如果字符串列表为空，则返回空串
         if (texts == null || texts.length == 0) {
             // 返回空串
@@ -254,8 +255,15 @@ public class XEasyPdfTextUtil {
         for (String text : texts) {
             // 添加字符串
             builder.append(text);
+            // 添加分隔符
+            builder.append(delimiter);
         }
-        // 返回拼接后的字符串
+        // 如果分隔符不为空，则返回少一位
+        if (delimiter != null && delimiter.length() > 0) {
+            // 返回拼接后的字符串
+            return builder.substring(0, builder.length() - 1);
+        }
+        // 返回拼接后的完整字符串
         return builder.toString();
     }
 }
