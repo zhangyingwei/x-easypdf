@@ -45,11 +45,7 @@ class XEasyPdfTableParam implements Serializable {
      */
     private Boolean isResetContext;
     /**
-     * 单元格边框列表
-     */
-    private transient List<XEasyPdfCellBorder> cellBorderList = new ArrayList<>(256);
-    /**
-     * 自动拆分行
+     * 是否自动拆分行
      */
     private Boolean isAutoSplit = Boolean.TRUE;
     /**
@@ -57,9 +53,13 @@ class XEasyPdfTableParam implements Serializable {
      */
     private XEasyPdfTable title;
     /**
+     * 单元格边框列表
+     */
+    private transient List<XEasyPdfCellBorder> cellBorderList = new ArrayList<>(64);
+    /**
      * 行列表
      */
-    private transient List<XEasyPdfRow> rows = new ArrayList<>(256);
+    private transient List<XEasyPdfRow> rows = new ArrayList<>(64);
     /**
      * 是否带有边框
      */
@@ -180,40 +180,33 @@ class XEasyPdfTableParam implements Serializable {
     void init(XEasyPdfTableParam param) {
         // 初始化上边距
         this.marginTop = 0F;
-        // 如果左边距未初始化，则初始化
-        if (this.marginLeft == null) {
-            // 初始化左边距
-            this.marginLeft = param.getMarginLeft();
-        }
-        // 如果最小行高未初始化，则初始化
-        if (this.minRowHeight == null) {
-            // 初始化最小行高
-            this.minRowHeight = param.getMinRowHeight();
-        }
-        // 如果内容模式未初始化，则初始化
-        if (this.contentMode == null) {
-            // 初始化内容模式
-            this.contentMode = param.getContentMode();
-        }
-        // 如果是否重置上下文未初始化，则初始化
-        if (this.isResetContext == null) {
-            // 初始化是否重置上下文
-            this.isResetContext = param.getIsResetContext();
-        }
-        // 如果字体路径未初始化，则初始化
-        if (this.fontPath == null) {
-            // 初始化为页面字体路径
-            this.fontPath = param.getFontPath();
-        }
-        // 如果背景颜色未初始化，则初始化
-        if (this.backgroundColor == null) {
-            // 初始化背景颜色
-            this.backgroundColor = param.getBackgroundColor();
-        }
-        // 如果边框颜色未初始化，则初始化
-        if (this.borderColor == null) {
-            // 初始化边框颜色
-            this.borderColor = param.getBorderColor();
-        }
+        // 初始化左边距
+        this.marginLeft = param.getMarginLeft();
+        // 初始化最小行高
+        this.minRowHeight = param.getMinRowHeight();
+        // 初始化为页面字体路径
+        this.fontPath = param.getFontPath();
+        // 初始化字体大小
+        this.fontSize = param.getFontSize();
+        // 初始化字体颜色
+        this.fontColor = param.getFontColor();
+        // 初始化背景颜色
+        this.backgroundColor = param.getBackgroundColor();
+        // 初始化边框颜色
+        this.borderColor = param.getBorderColor();
+        // 初始化边框宽度
+        this.borderWidth = param.getBorderWidth();
+        // 初始化内容模式
+        this.contentMode = param.getContentMode();
+        // 初始化是否重置上下文
+        this.isResetContext = param.getIsResetContext();
+        // 初始化是否自动拆分行
+        this.isAutoSplit = param.getIsAutoSplit();
+        // 初始化是否带有边框
+        this.hasBorder = param.getHasBorder();
+        // 初始化水平样式
+        this.horizontalStyle = param.getHorizontalStyle();
+        // 初始化垂直样式
+        this.verticalStyle = param.getVerticalStyle();
     }
 }
