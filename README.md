@@ -37,7 +37,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 > 只需实现框架提供的接口，即可完成自定义的组件扩展
 11. 组件构建
 > 页面所有内容均采用组件化的形式进行构建
-
+ 
 #### 软件架构
 
 ![软件架构](https://oscimg.oschina.net/oscnet/up-4639789b72131924e62650113e6cf80597c.png "x-easypdf整体架构")
