@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.List;
+
 
 /**
  * 图片工具
@@ -119,23 +121,15 @@ public class XEasyPdfImageUtil {
         // 获取缩放后的图片
         Image temp = sourceImage.getScaledInstance(width, height, scaleMode);
         // 创建图片
-        BufferedImage image = new BufferedImage(
-                width,
-                height,
-                sourceImage.getColorModel().hasAlpha() ? BufferedImage.TYPE_4BYTE_ABGR : BufferedImage.TYPE_3BYTE_BGR
-        );
+        BufferedImage image = new BufferedImage(width, height, sourceImage.getType());
         // 创建2d图像
-        Graphics2D graphics = image.createGraphics();
-        // 设置插值
-        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        // 设置抗锯齿
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // 设置文本抗锯齿
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        Graphics2D graphics = createGraphics(image);
         // 绘制图像
         graphics.drawImage(temp, 0, 0, null);
         // 关闭资源
         graphics.dispose();
+        // 刷新图片
+        sourceImage.flush();
         // 返回图片
         return image;
     }
@@ -206,19 +200,9 @@ public class XEasyPdfImageUtil {
         // 获取旋转尺寸
         Rectangle rectangle = getRotateRectangle(imageWidth, imageHeight, radians);
         // 创建图片
-        BufferedImage image = new BufferedImage(
-                rectangle.width,
-                rectangle.height,
-                sourceImage.getColorModel().hasAlpha() ? BufferedImage.TYPE_4BYTE_ABGR : BufferedImage.TYPE_3BYTE_BGR
-        );
+        BufferedImage image = new BufferedImage(rectangle.width, rectangle.height, sourceImage.getType());
         // 创建2d图像
-        Graphics2D graphics = image.createGraphics();
-        // 设置插值
-        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        // 设置抗锯齿
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // 设置文本抗锯齿
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        Graphics2D graphics = createGraphics(image);
         // 转换
         graphics.translate((rectangle.width - imageWidth) / 2D, (rectangle.height - imageHeight) / 2D);
         // 旋转
@@ -227,8 +211,93 @@ public class XEasyPdfImageUtil {
         graphics.drawImage(sourceImage, 0, 0, null);
         // 关闭资源
         graphics.dispose();
+        // 刷新图片
+        sourceImage.flush();
         // 返回图片
         return image;
+    }
+
+    /**
+     * 拼接图片
+     * @param sourceImageList 图片列表
+     * @param isHorizontal 是否水平拼接
+     * @return 返回拼接后的图片对象
+     */
+    public static BufferedImage join(List<BufferedImage> sourceImageList, boolean isHorizontal) {
+        // 获取首张源图片
+        BufferedImage firstImage = sourceImageList.get(0);
+        // 定义图片宽度
+        int imageWidth = 0;
+        // 定义图片高度
+        int imageHeight = 0;
+        // 如果为水平拼接，则累计宽度
+        if (isHorizontal) {
+            // 重置图片高度
+            imageHeight = firstImage.getHeight();
+            // 遍历源图片列表
+            for (BufferedImage sourceImage : sourceImageList) {
+                // 累计宽度
+                imageWidth = imageWidth + sourceImage.getWidth();
+            }
+        }
+        // 否则累计高度
+        else {
+            // 重置图片宽度
+            imageWidth = firstImage.getWidth();
+            // 遍历源图片列表
+            for (BufferedImage sourceImage : sourceImageList) {
+                // 累计高度
+                imageHeight = imageHeight + sourceImage.getHeight();
+            }
+        }
+        // 创建图片
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight, firstImage.getType());
+        // 创建2d图像
+        Graphics2D graphics = createGraphics(image);
+        // 定义x轴坐标
+        int x = 0;
+        // 定义y轴坐标
+        int y = 0;
+        // 遍历源图片列表
+        for (BufferedImage sourceImage : sourceImageList) {
+            // 绘制图片
+            graphics.drawImage(sourceImage, x, y, null);
+            // 如果为水平拼接，则累计x轴坐标
+            if (isHorizontal) {
+                // 累计x轴坐标
+                x = x + sourceImage.getWidth();
+            }
+            // 否则累计y轴坐标
+            else {
+                // 累计y轴坐标
+                y = y + sourceImage.getHeight();
+            }
+            // 释放源图片
+            sourceImage.flush();
+        }
+        // 关闭资源
+        graphics.dispose();
+        // 返回图片
+        return image;
+    }
+
+    /**
+     * 创建图形
+     *
+     * @param image 图片
+     * @return 返回图形
+     */
+    private static Graphics2D createGraphics(BufferedImage image) {
+        // 创建2d图像
+        Graphics2D graphics = image.createGraphics();
+        // 设置插值
+        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        // 设置抗锯齿
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // 设置文本抗锯齿
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        // 返回图像
+        return graphics;
     }
 
     /**
@@ -240,20 +309,13 @@ public class XEasyPdfImageUtil {
      * @return 返回旋转后的尺寸
      */
     private static Rectangle getRotateRectangle(int width, int height, double radians) {
-        // 创建尺寸
         Rectangle src = new Rectangle(new Dimension(width, height));
-        // 定义角度
         final int angle = 90;
-        // 定义倍数
         final int num = 2;
-        // 如果旋转角度大于等于90度，则重置旋转角度
         if (radians >= angle) {
-            // 如果旋转角度为90度的整数倍，则宽度与高度互换
             if (radians / angle % num == 1) {
-                // 返回尺寸
                 return new Rectangle((int) src.getHeight(), (int) src.getWidth());
             }
-            // 重置旋转角度为90度的余数
             radians = radians % angle;
         }
         double radius = Math.sqrt(src.getHeight() * src.getHeight() + src.getWidth() * src.getWidth()) / num;

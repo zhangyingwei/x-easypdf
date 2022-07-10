@@ -534,7 +534,7 @@ public class XEasyPdfBarCode implements XEasyPdfComponent {
         // 资源释放
         graphics.dispose();
         // 刷新图像
-        out.flush();
+        image.flush();
         return out;
     }
 
