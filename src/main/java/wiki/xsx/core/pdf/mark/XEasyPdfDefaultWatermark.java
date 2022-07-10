@@ -115,7 +115,7 @@ public class XEasyPdfDefaultWatermark implements XEasyPdfWatermark {
     /**
      * 设置文本透明度
      *
-     * @param alpha 文本透明度
+     * @param alpha 文本透明度（0.0-1.0之间）
      * @return 返回页面水印组件
      */
     public XEasyPdfDefaultWatermark setAlpha(float alpha) {
