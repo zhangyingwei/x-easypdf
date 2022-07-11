@@ -188,6 +188,15 @@ public class XEasyPdfPageRectangle implements Serializable {
     }
 
     /**
+     * 切换横向
+     *
+     * @return 返回页面尺寸
+     */
+    public XEasyPdfPageRectangle changeLandscape() {
+        return new XEasyPdfPageRectangle(this.height, this.width);
+    }
+
+    /**
      * 获取每毫米像素点
      *
      * @return 返回每毫米像素点

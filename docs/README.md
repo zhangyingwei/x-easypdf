@@ -14,7 +14,7 @@
 ---
 
 #### 当前版本
-> <font size=3>v2.9.3</font>
+> <font size=3>v2.9.4</font>
 
 ---
 
