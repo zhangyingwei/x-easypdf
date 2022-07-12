@@ -24,7 +24,7 @@
 ---
 
 #### API文档
-> <font size=3>https://apidoc.gitee.com/xsxgit/x-easypdf</font>
+> <font size=3>https://apidoc.gitee.com/dromara/x-easypdf</font>
 
 ---
 
