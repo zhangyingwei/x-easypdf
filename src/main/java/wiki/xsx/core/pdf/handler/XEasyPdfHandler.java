@@ -761,4 +761,27 @@ public class XEasyPdfHandler {
             }
         }
     }
+
+    /**
+     * pdf字体映射策略
+     */
+    public enum FontMappingPolicy {
+        /**
+         * 默认
+         */
+        DEFAULT,
+        /**
+         * 全部
+         */
+        ALL;
+
+        /**
+         * 获取key
+         *
+         * @return 返回key
+         */
+        public static String key() {
+            return "x-easypdf.font.mapping";
+        }
+    }
 }

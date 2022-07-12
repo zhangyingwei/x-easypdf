@@ -52,8 +52,6 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
     private XEasyPdfFontMapperHandler() {
         // 初始化
         this.init(XEasyPdfDefaultFontStyle.LIGHT, XEasyPdfDefaultFontStyle.NORMAL, XEasyPdfDefaultFontStyle.BOLD);
-        // 设置字体映射
-        FontMappers.set(this);
     }
 
     /**
@@ -170,6 +168,24 @@ public class XEasyPdfFontMapperHandler implements FontMapper {
                 // 提示异常信息
                 throw new RuntimeException(e);
             }
+        }
+        // 初始化字体映射
+        initFontMapper();
+    }
+
+    /**
+     * 初始化字体映射
+     */
+    private void initFontMapper() {
+        // 获取字体映射策略
+        String fontMappingPolicy = System.getProperty(
+                XEasyPdfHandler.FontMappingPolicy.key(),
+                XEasyPdfHandler.FontMappingPolicy.DEFAULT.name()
+        );
+        // 如果字体映射策略为默认，则设置字体映射
+        if (fontMappingPolicy.equals(XEasyPdfHandler.FontMappingPolicy.DEFAULT.name())) {
+            // 设置字体映射
+            FontMappers.set(this);
         }
     }
 

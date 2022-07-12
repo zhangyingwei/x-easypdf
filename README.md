@@ -6,7 +6,7 @@
 </p>
 
 #### 更新说明
-master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.9.4，QQ交流群：15018726
+master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.9.5，QQ交流群：15018726
 
 #### 项目主页
 https://xsxgit.gitee.io/x-easypdf
@@ -50,7 +50,7 @@ https://apidoc.gitee.com/xsxgit/x-easypdf
 <dependency>
     <groupId>wiki.xsx</groupId>
     <artifactId>x-easypdf</artifactId>
-    <version>2.9.3</version>
+    <version>2.9.5</version>
 </dependency>
 ```
 
