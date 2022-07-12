@@ -9,13 +9,13 @@
 master分支将作为稳定版本发布，develop分支将会不定期进行更新，欢迎大家提供宝贵意见，目前稳定版本 v2.9.5，QQ交流群：15018726
 
 #### 项目主页
-https://xsxgit.gitee.io/x-easypdf
+https://dromara.gitee.io/x-easypdf
 
 #### 介绍
 x-easypdf基于pdfbox二次封装，极大降低使用门槛，以组件化的形式进行pdf的构建。简单易用，仅需一行代码，便可完成pdf的相关操作
 
 #### API文档
-https://apidoc.gitee.com/xsxgit/x-easypdf
+https://apidoc.gitee.com/dromara/x-easypdf
 
 #### 特性
 1. 体积轻量
