@@ -60,6 +60,10 @@ class XEasyPdfRowParam implements Serializable {
      */
     private Boolean hasBorder;
     /**
+     * 是否带有上边框
+     */
+    private XEasyPdfRow.BorderPolicy borderPolicy;
+    /**
      * 背景颜色
      */
     private Color backgroundColor;
@@ -146,6 +150,8 @@ class XEasyPdfRowParam implements Serializable {
             }
             // 如果开启边框，则初始化边框宽度
             if (this.hasBorder) {
+                // 初始化边框
+                this.initBorder();
                 // 如果边框宽度为空，则初始化边框宽度
                 if (this.borderWidth == null) {
                     // 初始化边框宽度
@@ -251,6 +257,103 @@ class XEasyPdfRowParam implements Serializable {
                         this.beginX = tableParam.getMarginLeft();
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * 初始化边框
+     */
+    private void initBorder() {
+        // 如果边框策略不为空，则初始化边框
+        if (this.borderPolicy != null) {
+            // 判断边框策略
+            switch (this.borderPolicy) {
+                // 仅左右边框
+                case ONLY_LEFT_RIGHT: {
+                    // 初始化左右边框
+                    this.initBorder(false, false, true, true);
+                    // 结束
+                    break;
+                }
+                // 仅上下边框
+                case ONLY_TOP_BOTTOM: {
+                    // 初始化上下边框
+                    this.initBorder(true, true, false, false);
+                    // 结束
+                    break;
+                }
+                // 仅上左右边框
+                case ONLY_TOP_LEFT_RIGHT: {
+                    // 初始化上左右边框
+                    this.initBorder(true, false, true, true);
+                    // 结束
+                    break;
+                }
+                // 仅下左右边框
+                case ONLY_BOTTOM_LEFT_RIGHT: {
+                    // 初始化下左右边框
+                    this.initBorder(false, true, true, true);
+                    // 结束
+                    break;
+                }
+                // 仅上边框
+                case ONLY_TOP: {
+                    // 初始化上边框
+                    this.initBorder(true, false, false, false);
+                    // 结束
+                    break;
+                }
+                // 仅下边框
+                case ONLY_BOTTOM: {
+                    // 初始化下边框
+                    this.initBorder(false, true, false, false);
+                    // 结束
+                    break;
+                }
+                // 无边框
+                default: this.initBorder(false, false, false, false);
+            }
+        }
+    }
+
+    /**
+     * 初始化边框
+     *
+     * @param hasTop    是否包含上边框
+     * @param hasBottom 是否包含下边框
+     * @param hasLeft   是否包含左边框
+     * @param hasRight  是否包含右边框
+     */
+    private void initBorder(boolean hasTop, boolean hasBottom, boolean hasLeft, boolean hasRight) {
+        /**
+         * 如果单元格列表不为空，则初始化边框
+         */
+        if (!this.cells.isEmpty()) {
+            // 遍历单元格列表
+            for (XEasyPdfCell cell : this.cells) {
+                // 关闭边框
+                cell.disableBorder();
+                // 如果有上边框，则开启上边框
+                if (hasTop) {
+                    // 开启上边框
+                    cell.enableTopBorder();
+                }
+                // 如果有下边框，则开启下边框
+                if (hasBottom) {
+                    // 开启下边框
+                    cell.enableBottomBorder();
+                }
+            }
+            // 如果有左边框，则开启第一列左边框
+            if (hasLeft) {
+                // 开启第一列左边框
+                this.cells.get(0).enableLeftBorder();
+            }
+            // 如果有右边框，则开启最后一列右边框
+            if (hasRight) {
+                // 开启最后一列右边框
+                this.cells.get(this.cells.size() - 1).enableRightBorder();
             }
         }
     }

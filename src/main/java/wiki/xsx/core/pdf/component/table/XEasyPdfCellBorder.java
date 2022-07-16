@@ -64,9 +64,21 @@ final class XEasyPdfCellBorder {
      */
     private Float beginY;
     /**
-     * 边框颜色
+     * 左边框颜色
      */
-    private Color borderColor;
+    private Color leftBorderColor;
+    /**
+     * 右边框颜色
+     */
+    private Color rightBorderColor;
+    /**
+     * 上边框颜色
+     */
+    private Color topBorderColor;
+    /**
+     * 下边框颜色
+     */
+    private Color bottomBorderColor;
     /**
      * 边框宽度
      */
@@ -95,8 +107,6 @@ final class XEasyPdfCellBorder {
     void drawBorder() {
         // 新建内容流
         PDPageContentStream contentStream = new PDPageContentStream(this.document, this.page, this.contentMode, true, this.isResetContext);
-        // 设置颜色
-        contentStream.setStrokingColor(this.borderColor);
         // 设置线宽
         contentStream.setLineWidth(this.borderWidth);
         // 设置线帽样式
@@ -121,6 +131,8 @@ final class XEasyPdfCellBorder {
         float beginY = this.beginY;
         // 如果包含上边框，则绘制上边框
         if (this.hasTopBorder) {
+            // 设置颜色
+            contentStream.setStrokingColor(this.topBorderColor);
             // 移动到x,y坐标点
             contentStream.moveTo(beginX, beginY);
             // 重置X轴坐标为X轴坐标+宽度
@@ -132,6 +144,8 @@ final class XEasyPdfCellBorder {
         }
         // 如果包含下边框，则绘制下边框
         if (this.hasBottomBorder) {
+            // 设置颜色
+            contentStream.setStrokingColor(this.bottomBorderColor);
             // 重置X轴坐标为起始坐标
             beginX = this.beginX;
             // 重置Y轴坐标为Y轴坐标-高度
@@ -147,6 +161,8 @@ final class XEasyPdfCellBorder {
         }
         // 如果包含左边框，则绘制左边框
         if (this.hasLeftBorder) {
+            // 设置颜色
+            contentStream.setStrokingColor(this.leftBorderColor);
             // 重置X轴坐标为起始坐标
             beginX = this.beginX;
             // 重置Y轴坐标为起始坐标
@@ -162,6 +178,8 @@ final class XEasyPdfCellBorder {
         }
         // 如果包含右边框，则绘制右边框
         if (this.hasRightBorder) {
+            // 设置颜色
+            contentStream.setStrokingColor(this.rightBorderColor);
             // 重置X轴坐标为X轴坐标+宽度
             beginX = this.beginX + this.width;
             // 重置Y轴坐标为起始坐标

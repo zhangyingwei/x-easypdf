@@ -546,6 +546,48 @@ public class XEasyPdfTableTest {
 
     @Test
     public void testTable10() {
+        String filePath = OUTPUT_PATH + "testTable10.pdf";
+        XEasyPdfHandler.Document.build(
+                XEasyPdfHandler.Page.build(
+                        XEasyPdfHandler.Table.build(
+                                XEasyPdfHandler.Table.Row.build(
+                                        XEasyPdfHandler.Table.Row.Cell.build(100f, 30f).addContent(
+                                                XEasyPdfHandler.Text.build("1")
+                                        ),
+                                        XEasyPdfHandler.Table.Row.Cell.build(100f, 30f).addContent(
+                                                XEasyPdfHandler.Text.build("2")
+                                        ),
+                                        XEasyPdfHandler.Table.Row.Cell.build(100f, 30f).addContent(
+                                                XEasyPdfHandler.Text.build("3")
+                                        ),
+                                        XEasyPdfHandler.Table.Row.Cell.build(100f, 30f).addContent(
+                                                XEasyPdfHandler.Text.build("4")
+                                        ).setLeftBorderColor(Color.RED).setRightBorderColor(Color.YELLOW).setTopBorderColor(Color.BLUE).setBottomBorderColor(Color.GREEN)
+                                )
+                        ).setTitle(
+                                XEasyPdfHandler.Table.build(
+                                        XEasyPdfHandler.Table.Row.build(
+                                                XEasyPdfHandler.Table.Row.Cell.build(100.5f, 30f).addContent(
+                                                        XEasyPdfHandler.Text.build("T1")
+                                                ),
+                                                XEasyPdfHandler.Table.Row.Cell.build(100f, 30f).addContent(
+                                                        XEasyPdfHandler.Text.build("T2")
+                                                ),
+                                                XEasyPdfHandler.Table.Row.Cell.build(100f, 30f).addContent(
+                                                        XEasyPdfHandler.Text.build("T3")
+                                                ),
+                                                XEasyPdfHandler.Table.Row.Cell.build(100.5f, 30f).addContent(
+                                                        XEasyPdfHandler.Text.build("T4")
+                                                )
+                                        ).setBorderPolicy(XEasyPdfRow.BorderPolicy.NONE).setBackgroundColor(Color.GRAY).setMarginLeft(49.5F)
+                                )
+                        ).setMarginLeft(50F)
+                )
+        ).save(filePath).close();
+    }
+
+    @Test
+    public void testTable12() {
         TestDemo.testWritePdf();
     }
 

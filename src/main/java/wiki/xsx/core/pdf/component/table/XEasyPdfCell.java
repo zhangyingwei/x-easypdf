@@ -134,6 +134,50 @@ public class XEasyPdfCell implements Serializable {
     }
 
     /**
+     * 设置左边框颜色（开启边框时生效）
+     *
+     * @param borderColor 边框颜色
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setLeftBorderColor(Color borderColor) {
+        this.param.setLeftBorderColor(borderColor);
+        return this;
+    }
+
+    /**
+     * 设置右边框颜色（开启边框时生效）
+     *
+     * @param borderColor 边框颜色
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setRightBorderColor(Color borderColor) {
+        this.param.setRightBorderColor(borderColor);
+        return this;
+    }
+
+    /**
+     * 设置上边框颜色（开启边框时生效）
+     *
+     * @param borderColor 边框颜色
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setTopBorderColor(Color borderColor) {
+        this.param.setTopBorderColor(borderColor);
+        return this;
+    }
+
+    /**
+     * 设置下边框颜色（开启边框时生效）
+     *
+     * @param borderColor 边框颜色
+     * @return 返回单元格组件
+     */
+    public XEasyPdfCell setBottomBorderColor(Color borderColor) {
+        this.param.setBottomBorderColor(borderColor);
+        return this;
+    }
+
+    /**
      * 设置左边距
      *
      * @param margin 边距
@@ -171,7 +215,11 @@ public class XEasyPdfCell implements Serializable {
      * @return 返回单元格组件
      */
     public XEasyPdfCell disableBorder() {
-        this.param.setHasBorder(Boolean.FALSE);
+        this.param.setHasBorder(Boolean.FALSE)
+                .setHasTopBorder(Boolean.FALSE)
+                .setHasBottomBorder(Boolean.FALSE)
+                .setHasLeftBorder(Boolean.FALSE)
+                .setHasRightBorder(Boolean.FALSE);
         return this;
     }
 
@@ -452,10 +500,10 @@ public class XEasyPdfCell implements Serializable {
             // 初始化列高
             this.param.setHeight(row.getParam().getHeight());
         }
-        // 写入边框
-        this.writeBorder(document, page, table, row);
         // 填充背景色
         this.fillBackgroundColor(document, page, row);
+        // 写入边框
+        this.writeBorder(document, page, table, row);
         // 如果开启组件自动换行，则开启页面自动定位
         if (this.param.getIsNewLine()) {
             // 开启页面自动定位
@@ -504,6 +552,34 @@ public class XEasyPdfCell implements Serializable {
     }
 
     /**
+     * 开启左边框
+     */
+    void enableLeftBorder() {
+        this.param.setHasLeftBorder(Boolean.TRUE).setHasBorder(Boolean.TRUE);
+    }
+
+    /**
+     * 开启右边框
+     */
+    void enableRightBorder() {
+        this.param.setHasRightBorder(Boolean.TRUE).setHasBorder(Boolean.TRUE);
+    }
+
+    /**
+     * 开启上边框
+     */
+    void enableTopBorder() {
+        this.param.setHasTopBorder(Boolean.TRUE).setHasBorder(Boolean.TRUE);
+    }
+
+    /**
+     * 开启下边框
+     */
+    void enableBottomBorder() {
+        this.param.setHasBottomBorder(Boolean.TRUE).setHasBorder(Boolean.TRUE);
+    }
+
+    /**
      * 填充背景色
      *
      * @param document pdf文档
@@ -513,14 +589,12 @@ public class XEasyPdfCell implements Serializable {
     private void fillBackgroundColor(XEasyPdfDocument document, XEasyPdfPage page, XEasyPdfRow row) {
         // 如果背景色不为白色，则填充背景色
         if (!Color.WHITE.equals(this.param.getBackgroundColor())) {
-            // 获取边框宽度
-            float borderWidth = this.param.getBorderWidth();
             // 绘制矩形填充背景色
             XEasyPdfRect rect = XEasyPdfHandler.Rect.build(
-                    this.param.getWidth() - borderWidth * 2,
-                    this.param.getHeight() - borderWidth * 2,
-                    row.getParam().getBeginX() + borderWidth,
-                    row.getParam().getBeginY() - this.param.getHeight() - this.param.getMarginTop() + borderWidth
+                    this.param.getWidth(),
+                    this.param.getHeight(),
+                    row.getParam().getBeginX(),
+                    row.getParam().getBeginY() - this.param.getHeight() - this.param.getMarginTop()
             );
             // 如果重置上下文，则开启重置上下文
             if (this.param.getIsResetContext()) {
@@ -556,7 +630,10 @@ public class XEasyPdfCell implements Serializable {
                     .setIsResetContext(this.param.getIsResetContext())
                     .setWidth(this.param.getWidth())
                     .setHeight(this.param.getHeight())
-                    .setBorderColor(this.param.getBorderColor())
+                    .setLeftBorderColor(this.param.getLeftBorderColor())
+                    .setRightBorderColor(this.param.getRightBorderColor())
+                    .setTopBorderColor(this.param.getTopBorderColor())
+                    .setBottomBorderColor(this.param.getBottomBorderColor())
                     .setBorderWidth(this.param.getBorderWidth())
                     .setBeginX(row.getParam().getBeginX())
                     .setBeginY(row.getParam().getBeginY() - this.param.getMarginTop())

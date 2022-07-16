@@ -237,6 +237,17 @@ public class XEasyPdfRow implements Serializable {
     }
 
     /**
+     * 设置边框策略（仅上下、仅左右、仅上左右、仅下左右）
+     *
+     * @param policy 边框策略
+     * @return 返回表格行组件
+     */
+    public XEasyPdfRow setBorderPolicy(BorderPolicy policy) {
+        this.param.setBorderPolicy(policy);
+        return this;
+    }
+
+    /**
      * 开启上下左右居中
      *
      * @return 返回表格行组件
@@ -363,5 +374,40 @@ public class XEasyPdfRow implements Serializable {
             // 绘制拆分行
             splitRow.doDraw(document, page, table);
         }
+    }
+
+    /**
+     * 表格行边框策略
+     */
+    public enum BorderPolicy {
+        /**
+         * 仅左右边框
+         */
+        ONLY_LEFT_RIGHT,
+        /**
+         * 仅上下边框
+         */
+        ONLY_TOP_BOTTOM,
+        /**
+         * 仅上左右边框
+         */
+        ONLY_TOP_LEFT_RIGHT,
+        /**
+         * 仅下左右边框
+         */
+        ONLY_BOTTOM_LEFT_RIGHT,
+        /**
+         * 仅上边框
+         */
+        ONLY_TOP,
+        /**
+         * 仅下边框
+         */
+        ONLY_BOTTOM,
+        /**
+         * 无边框
+         */
+        NONE;
+
     }
 }
